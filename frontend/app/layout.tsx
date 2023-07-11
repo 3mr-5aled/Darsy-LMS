@@ -1,10 +1,11 @@
 import "./globals.css"
-// import Navbar from "@/components/Navbar"
-// import Footer from "@/components/Footer"
+import Navbar from "@/components/Navbar"
+import Footer from "@/components/Footer"
+import { WebsiteDetails } from "@/constant"
 
 export const metadata = {
-  title: "Darsy",
-  description: "lessons online",
+  title: WebsiteDetails.name,
+  description: WebsiteDetails.description,
 }
 
 export default function RootLayout({
@@ -13,11 +14,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="ar">
       <body>
-        {/* <Navbar /> */}
+        <Navbar />
         <main>{children}</main>
-        {/* <Footer /> */}
+        <Footer />
       </body>
     </html>
   )

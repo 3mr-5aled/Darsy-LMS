@@ -1,9 +1,17 @@
+export const WebsiteDetails = {
+  name: "Darsy" as string,
+  description: "" as string,
+  logo: "Logo" as string,
+  keywords: "" as string,
+  author: "Mr.Unknown" as string,
+  email: "test@gmail.com" as string,
+  phone: "0101234568" as string,
+}
+
 export const NavLinks = [
-  { href: "/", key: "Inspiration", text: "Inspiration" },
-  { href: "/", key: "Find Projects", text: "Find Projects" },
-  { href: "/", key: "Learn Development", text: "Learn Development" },
-  { href: "/", key: "Career Advancement", text: "Career Advancement" },
-  { href: "/", key: "Hire Developers", text: "Hire Developers" },
+  { href: "/courses", key: "Courses", text: "Courses" },
+  { href: "/about", key: "About", text: "About" },
+  { href: "/", key: "Contact", text: "Contact" },
 ]
 
 export const categoryFilters = [
