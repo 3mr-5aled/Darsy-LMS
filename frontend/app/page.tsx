@@ -4,9 +4,8 @@ import { useEffect } from "react"
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen items-center justify-between p-24">
+    <main className="flex flex-col min-h-screen items-center justify-center p-24 porse">
       <h1>Home</h1>
-      <button>CLick me</button>
     </main>
   )
 }

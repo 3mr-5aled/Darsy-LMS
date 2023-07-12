@@ -13,6 +13,20 @@ export const NavLinks = [
   { href: "/about", key: "About", text: "About" },
   { href: "/", key: "Contact", text: "Contact" },
 ]
+export const GenderOption = {
+  title: "النوع" as string,
+  options: ["ذكر", "أنثى"] as Array<string>,
+}
+export const CityOption = {
+  title: "المدينة" as string,
+  options: [
+    "مدينة نصر",
+   "الزيتون",
+   "المهندسين",
+   "المعادي",
+   "الزمالك",
+  ] as Array<string>,
+}
 
 export const categoryFilters = [
   "Frontend",

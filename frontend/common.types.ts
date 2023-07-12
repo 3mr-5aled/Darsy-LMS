@@ -1,10 +1,17 @@
-export type FormState = {
-  title: string
-  description: string
-  image: string
-  liveSiteUrl: string
-  githubUrl: string
-  category: string
+export type RegisterFormState = {
+  name: string
+  avatar: string
+  gender: string
+  phone: string
+  dateOfBirth: string
+  city: string
+  email: string
+  password: string
+  confirmPassword: string
+}
+export type LoginFormState = {
+  email: string
+  password: string
 }
 
 export interface ProjectInterface {
@@ -27,19 +34,11 @@ export interface UserProfile {
   id: string
   name: string
   email: string
-  description: string | null
-  avatarUrl: string
-  phone: string | null
-  country: string | null
-  // projects: {
-  //   edges: { node: ProjectInterface }[]
-  //   pageInfo: {
-  //     hasPreviousPage: boolean
-  //     hasNextPage: boolean
-  //     startCursor: string
-  //     endCursor: string
-  //   }
-  // }
+  avatar: string
+  gender: string
+  phone: string
+  dateOfBirth: string
+  city: string
 }
 
 // export interface SessionInterface extends Session {
