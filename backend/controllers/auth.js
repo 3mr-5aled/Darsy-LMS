@@ -93,4 +93,4 @@ const profile =async(req,res)=>{
     }
     res.status(200).json(user)
 }
-module.exports={login,register,profile}
+module.exports={login,register,profile,signout}
