@@ -29,17 +29,17 @@ export interface UserProfile {
   email: string
   description: string | null
   avatarUrl: string
-  githubUrl: string | null
-  linkedInUrl: string | null
-  projects: {
-    edges: { node: ProjectInterface }[]
-    pageInfo: {
-      hasPreviousPage: boolean
-      hasNextPage: boolean
-      startCursor: string
-      endCursor: string
-    }
-  }
+  phone: string | null
+  country: string | null
+  // projects: {
+  //   edges: { node: ProjectInterface }[]
+  //   pageInfo: {
+  //     hasPreviousPage: boolean
+  //     hasNextPage: boolean
+  //     startCursor: string
+  //     endCursor: string
+  //   }
+  // }
 }
 
 // export interface SessionInterface extends Session {
