@@ -17,6 +17,10 @@ const User =new mongoose.Schema({
         required: true,
         type: String,
     },
+    parentsPhone:{
+        required: true,
+        type: String
+    },
     phone: {
         required: true,
         type: String
@@ -34,6 +38,12 @@ const User =new mongoose.Schema({
     role:{
         type:String,
         default:"student"
+    },
+    gender:{
+        type:String,
+    },
+    grade:{
+        type:String,
     },
     enrolledCourse: {
         courseid: {
