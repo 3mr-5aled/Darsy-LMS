@@ -17,6 +17,10 @@ const User =new mongoose.Schema({
         required: true,
         type: String,
     },
+    parentsPhone:{
+        required: true,
+        type: String
+    },
     phone: {
         required: true,
         type: String

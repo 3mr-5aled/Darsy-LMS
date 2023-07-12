@@ -4,7 +4,6 @@ const bcrypt = require('bcryptjs')
 require('dotenv').config()
 
 
-
 const login=async(req,res)=>{
     // get email and password from request body
    const useremail = req.body.email
@@ -18,7 +17,7 @@ const login=async(req,res)=>{
             error.code = 400
             throw error
         }
-        const {name,email,password,city,phone,dateOfBirth,_id,role,gender,grade} =user
+        const {name,email,password,city,phone,dateOfBirth,_id,role,gender,grade,parentsPhone} =user
         // compare password (comes from body ) and password (come from database)
         const isvalid =await bcrypt.compare(userpassword,password)
 
@@ -31,7 +30,7 @@ const login=async(req,res)=>{
 
         const secret = process.env.JWT
         // use jsonwebtoken to get token
-        const token = jwt.sign({_id,name,email,password,city,phone,dateOfBirth,role,gender,grade},secret)
+        const token = jwt.sign({_id,name,email,password,city,phone,dateOfBirth,role,gender,grade,parentsPhone},secret)
         // send response with all user details and token as cookie
         res.status(201).cookie('token',token).json(user)
      } catch (error) {
@@ -43,7 +42,7 @@ const login=async(req,res)=>{
 const register=async(req,res)=>{
     // get all data from request body
     
-    let {name,email,password,city,phone,dateOfBirth,role,gender,grade} = req.body
+    let {name,email,password,city,phone,dateOfBirth,role,gender,grade,parentsPhone} = req.body
     try {
         // throw error (400) if name isn't between 4 and 30
         if (name.length < 4 || name.length > 30) {
@@ -62,10 +61,10 @@ const register=async(req,res)=>{
         // hash password
         password =await bcrypt.hash(password,salt) 
 
-        const user =await User.create({name,email,password,city,phone,dateOfBirth,role,gender,grade})
+        const user =await User.create({name,email,password,city,phone,dateOfBirth,role,gender,grade,parentsPhone})
         const {_id}=user
         // use jsonwebtoken to get token
-        const token =jwt.sign({_id,name,email,password,city,phone,dateOfBirth,role,gender,grade},process.env.JWT)
+        const token =jwt.sign({_id,name,email,password,city,phone,dateOfBirth,role,gender,grade,parentsPhone},process.env.JWT)
         // send response with all user details and token as cookie
         res.status(201).cookie('token',token).json(user)
     } catch (error) {
@@ -78,6 +77,11 @@ const register=async(req,res)=>{
         }
         res.status(400).json({message:error.errors.email.properties.message})
     }
+}
+const signout=async(req,res)=>{
+    // extract token
+    const {token} = req.cookies
+    res.status(200).cookie('token'," ").json({msg:"signout is done"})
 }
 const profile =async(req,res)=>{
     // extract token
