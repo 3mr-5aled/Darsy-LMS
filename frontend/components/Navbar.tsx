@@ -1,7 +1,10 @@
+"use client"
 import Image from "next/image"
 import Link from "next/link"
 
 import { NavLinks, WebsiteDetails } from "@/constant"
+import { useRouter } from "next/navigation"
+import DarkModeButton from "./DarkModeButton"
 // import { getCurrentUser } from "@/lib/session"
 
 // import AuthProviders from "./AuthProviders"
@@ -10,6 +13,7 @@ import { NavLinks, WebsiteDetails } from "@/constant"
 
 const Navbar = async () => {
   // const session = await getCurrentUser()
+  const router = useRouter()
 
   return (
     <nav className="flexBetween navbar">
@@ -32,7 +36,15 @@ const Navbar = async () => {
       </ul>
 
       <div className="gap-4 flexCenter">
-        <button className="btn btn-primary">Sign in</button>
+        <div>
+          <DarkModeButton />
+        </div>
+        <button
+          className="btn btn-primary"
+          onClick={() => router.push("/login")}
+        >
+          Sign in
+        </button>
         {/* {session?.user ? (
           <>
             <ProfileMenu session={session} />
