@@ -35,6 +35,12 @@ const User =new mongoose.Schema({
         type:String,
         default:"student"
     },
+    gender:{
+        type:String,
+    },
+    grade:{
+        type:String,
+    },
     enrolledCourse: {
         courseid: {
             type: mongoose.Schema.ObjectId,
