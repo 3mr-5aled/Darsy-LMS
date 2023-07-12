@@ -1,7 +1,3 @@
-"use client"
-
-import { useEffect } from "react"
-
 export default function Home() {
   return (
     <main className="flex flex-col min-h-screen items-center justify-center p-24 porse">

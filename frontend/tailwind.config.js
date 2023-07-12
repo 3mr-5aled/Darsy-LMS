@@ -17,7 +17,6 @@ module.exports = {
   plugins: [require("@tailwindcss/typography"), require("daisyui")],
   // daisyUI config (optional - here are the default values)
   daisyui: {
-    themes: false, // true: all themes | false: only light + dark | array: specific themes like this ["light", "dark", "cupcake"]
     darkTheme: "dark", // name of one of the included themes for dark mode
     base: true, // applies background color and foreground color for root element by default
     styled: true, // include daisyUI colors and design decisions for all components
@@ -38,6 +37,7 @@ module.exports = {
           neutral: "#1d283a",
 
           "base-100": "#f3f4f6",
+          "base-200": "#FAFAFB",
 
           info: "#0ca6e9",
 
@@ -47,7 +47,13 @@ module.exports = {
 
           error: "#ef4444",
         },
+        // dark: {
+        //   ...require("daisyui/src/theming/themes")["[data-theme=dark]"],
+        //   //   // "base-100": "#f3f4f6",
+        //   //   //   "base-200": "#FAFAFB",
+        // },
       },
+      "dark",
     ],
   },
 }

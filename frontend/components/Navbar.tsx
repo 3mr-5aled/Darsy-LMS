@@ -4,6 +4,7 @@ import Link from "next/link"
 
 import { NavLinks, WebsiteDetails } from "@/constant"
 import { useRouter } from "next/navigation"
+import DarkModeButton from "./DarkModeButton"
 // import { getCurrentUser } from "@/lib/session"
 
 // import AuthProviders from "./AuthProviders"
@@ -35,6 +36,9 @@ const Navbar = async () => {
       </ul>
 
       <div className="gap-4 flexCenter">
+        <div>
+          <DarkModeButton />
+        </div>
         <button
           className="btn btn-primary"
           onClick={() => router.push("/login")}

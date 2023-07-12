@@ -41,7 +41,7 @@ body {
 }
 
 .footer {
-  @apply flex-col w-full gap-20 paddings bg-[#FAFAFB];
+  @apply flex-col w-full gap-20 paddings bg-base-200;
 }
 
 .footer_copyright {
@@ -54,7 +54,7 @@ body {
 
 /* Navbar */
 .navbar {
-  @apply gap-4 px-8 py-5 border-b bg-[#FAFAFB];
+  @apply gap-4 px-8 py-5 border-b bg-base-200;
 }
 
 /* Profile Menu */
