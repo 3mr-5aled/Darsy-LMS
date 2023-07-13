@@ -2,6 +2,7 @@
 
 import axiosInstance from "@/axios.config"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import React from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 
@@ -19,6 +20,7 @@ type FormValues = {
 }
 
 export default function Register() {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -30,6 +32,7 @@ export default function Register() {
     try {
       const response = await axiosInstance.post("/auth/register", data)
       console.log(response.data)
+      router.push("/")
     } catch (error) {
       console.error(error)
     }

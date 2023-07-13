@@ -5,6 +5,8 @@ import Link from "next/link"
 import { NavLinks, WebsiteDetails } from "@/constant"
 import { useRouter } from "next/navigation"
 import DarkModeButton from "./DarkModeButton"
+import { useEffect } from "react"
+import axiosInstance from "@/axios.config"
 // import { getCurrentUser } from "@/lib/session"
 
 // import AuthProviders from "./AuthProviders"
@@ -14,6 +16,18 @@ import DarkModeButton from "./DarkModeButton"
 const Navbar = async () => {
   // const session = await getCurrentUser()
   const router = useRouter()
+  const fetchUser = async () => {
+    try {
+      const response = await axiosInstance.get("/auth/profile")
+      console.log(response.data)
+      router.push("/")
+    } catch (error) {
+      console.error(error)
+    }
+  }
+  useEffect(() => {
+    fetchUser()
+  }, [])
 
   return (
     <nav className="flexBetween navbar">

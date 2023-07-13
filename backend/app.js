@@ -9,7 +9,11 @@ require('dotenv').config()
 const app = express()
 
 const corssettings = {
+<<<<<<< HEAD
   origin: "http://localhost:8080/",
+=======
+  origin: "http://localhost:8080",
+>>>>>>> 49d3835ff83cfd2b21875c2eea8f59776a05742c
   credential: true,
 }
 // middlewares
@@ -17,7 +21,12 @@ const corssettings = {
 // axios.defaults.withcredintials=true
 
 app.use(express.json())
-app.use(cors(corssettings))
+app.use(
+  cors({
+    origin: "http://localhost:8080",
+    credentials: true,
+  })
+)
 app.use(cookie())
 
 // routes
