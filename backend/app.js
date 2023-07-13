@@ -1,9 +1,10 @@
 const express = require('express')
 const cors = require('cors')
 const cookie =require('cookie-parser')
-const authrouter = require('./routers/auth')
+const authRrouter = require('./routers/auth')
 const errorhandler = require('./middlewares/errorhandler')
 const { connect } = require('mongoose')
+const courseRouter = require('./routers/course')
 require('dotenv').config()
 
 const app=express()
@@ -13,6 +14,8 @@ const corssettings={
     Credential:true
 }
 // middlewares
+// axios.defaults.baseurl=
+// axios.defaults.withcredintials=true
 
 app.use(express.json())
 app.use(cors())
@@ -20,7 +23,8 @@ app.use(cookie())
 
 // routes 
 
-app.use('/api/v1/auth',authrouter)
+app.use('/api/v1/auth',authRrouter)
+app.use('/api/v1/course',courseRouter)
 app.use(errorhandler)
 
 const start=async()=>{

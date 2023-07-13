@@ -1,6 +1,6 @@
 const {check}= require('express-validator')
 const User = require('../../models/user')
-const usermiddleware=require('../../middlewares/uservalidators')
+const usermiddleware=require('../../middlewares/validator')
 const ApiError = require('../apierror')
 
 
