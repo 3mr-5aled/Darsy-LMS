@@ -48,7 +48,7 @@ const User =new mongoose.Schema({
     grade:{
         type:String,
     },
-    enrolledCourse: {
+    enrolledCourse: [{
         courseid: {
             type: mongoose.Schema.ObjectId,
             ref: 'courses'
@@ -56,7 +56,7 @@ const User =new mongoose.Schema({
         progress: {
             type: String
         }
-    }
+    }]
 }, { timestamps: true });
 
 module.exports = mongoose.model('users', User);

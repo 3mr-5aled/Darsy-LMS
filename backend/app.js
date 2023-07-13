@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const cookie =require('cookie-parser')
 const authrouter = require('./routers/auth')
+const errorhandler = require('./middlewares/errorhandler')
 const { connect } = require('mongoose')
 require('dotenv').config()
 
@@ -20,7 +21,7 @@ app.use(cookie())
 // routes 
 
 app.use('/auth',authrouter)
-
+app.use(errorhandler)
 
 const start=async()=>{
     try {
