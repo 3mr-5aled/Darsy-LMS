@@ -27,7 +27,7 @@ const Navbar = async () => {
           />
         </Link>
       </div>
-      <ul className="hidden xl:flex text-small gap-7">
+      <ul className="hidden xl:flex text-small font-bold gap-7">
         {NavLinks.map((link) => (
           <Link href={link.href} key={link.text}>
             {link.text}
@@ -41,7 +41,7 @@ const Navbar = async () => {
         </div>
         <button
           className="btn btn-primary"
-          onClick={() => router.push("/login")}
+          onClick={() => router.push("/auth/login")}
         >
           Sign in
         </button>

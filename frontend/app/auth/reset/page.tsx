@@ -1,10 +1,10 @@
 "use client"
 import Link from "next/link"
-import { useForm } from "react-hook-form"
+import { SubmitHandler, useForm } from "react-hook-form"
+import axios from "axios"
 
 interface IFormInput {
   EmailOrPhone: string
-  Password: string
 }
 
 const Reset = () => {
@@ -14,10 +14,17 @@ const Reset = () => {
     formState: { errors },
   } = useForm<IFormInput>()
 
-  const onSubmit = (data: IFormInput) => {
-    console.log(data)
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/auth/reset",
+        data
+      )
+      console.log(response.data)
+    } catch (error) {
+      console.error(error)
+    }
   }
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flexCenter flex-col p-8">
       <div className="card flexCenter w-96 bg-base-300 shadow-xl prose py-5">

@@ -1,7 +1,9 @@
 "use client"
+import axios from "axios"
+
 import Link from "next/link"
 import React from "react"
-import { useForm } from "react-hook-form"
+import { SubmitHandler, useForm } from "react-hook-form"
 
 interface IFormInput {
   EmailOrPhone: string
@@ -15,8 +17,16 @@ const Login = () => {
     formState: { errors },
   } = useForm<IFormInput>()
 
-  const onSubmit = (data: IFormInput) => {
-    console.log(data)
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/auth/login",
+        data
+      )
+      console.log(response.data)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (

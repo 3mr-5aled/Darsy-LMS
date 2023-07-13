@@ -1,5 +1,6 @@
 "use client"
 
+import axios from "axios"
 import Link from "next/link"
 import React from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
@@ -24,8 +25,18 @@ export default function App() {
     formState: { errors },
     watch,
   } = useForm<FormValues>()
-  const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data)
-  console.log(errors)
+
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/auth/register",
+        data
+      )
+      console.log(response.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   const password = React.useRef({})
   password.current = watch("Password", "")
