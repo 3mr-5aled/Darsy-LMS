@@ -5,15 +5,16 @@ const authRrouter = require('./routers/auth')
 const errorhandler = require('./middlewares/errorhandler')
 const { connect } = require('mongoose')
 const courseRouter = require('./routers/course')
+const sectionRouter = require('./routers/section')
+const lessonRouter = require('./routers/lesson')
 require('dotenv').config()
 const app = express()
 
 const corssettings = {
-<<<<<<< HEAD
+
   origin: "http://localhost:8080/",
-=======
+
   origin: "http://localhost:8080",
->>>>>>> 49d3835ff83cfd2b21875c2eea8f59776a05742c
   credential: true,
 }
 // middlewares
@@ -33,6 +34,8 @@ app.use(cookie())
 
 app.use('/api/v1/auth',authRrouter)
 app.use('/api/v1/course',courseRouter)
+app.use('/api/v1/section',sectionRouter)
+app.use('/api/v1/lesson',lessonRouter)
 app.use(errorhandler)
 
 const start = async () => {
