@@ -1,3 +1,10 @@
+import {
+  BsFillArrowUpCircleFill,
+  BsFingerprint,
+  BsFillLockFill,
+} from "react-icons/bs"
+import { FaRoute } from "react-icons/fa"
+
 export const WebsiteDetails = {
   name: "Darsy" as string,
   description: "" as string,
@@ -21,12 +28,42 @@ export const CityOption = {
   title: "المدينة" as string,
   options: [
     "مدينة نصر",
-   "الزيتون",
-   "المهندسين",
-   "المعادي",
-   "الزمالك",
+    "الزيتون",
+    "المهندسين",
+    "المعادي",
+    "الزمالك",
   ] as Array<string>,
 }
+export const GradeOption = {
+  title: "الصف الدراسي" as string,
+  options: ["أولى ثانوي", "تانية ثانوي", "تالتة ثانوي"] as Array<string>,
+}
+export const features = [
+  {
+    name: "Push to deploy",
+    description:
+      "Morbi viverra dui mi arcu sed. Tellus semper adipiscing suspendisse semper morbi. Odio urna massa nunc massa.",
+    icon: BsFillArrowUpCircleFill,
+  },
+  {
+    name: "SSL certificates",
+    description:
+      "Sit quis amet rutrum tellus ullamcorper ultricies libero dolor eget. Sem sodales gravida quam turpis enim lacus amet.",
+    icon: BsFillLockFill,
+  },
+  {
+    name: "Simple queues",
+    description:
+      "Quisque est vel vulputate cursus. Risus proin diam nunc commodo. Lobortis auctor congue commodo diam neque.",
+    icon: FaRoute,
+  },
+  {
+    name: "Advanced security",
+    description:
+      "Arcu egestas dolor vel iaculis in ipsum mauris. Tincidunt mattis aliquet hac quis. Id hac maecenas ac donec pharetra eget.",
+    icon: BsFingerprint,
+  },
+]
 
 export const categoryFilters = [
   "Frontend",
