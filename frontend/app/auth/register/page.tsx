@@ -18,7 +18,7 @@ type FormValues = {
   DateOfBirth: string
 }
 
-export default function App() {
+export default function Register() {
   const {
     register,
     handleSubmit,
