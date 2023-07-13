@@ -66,7 +66,11 @@ const profile = asynchandler(async (req, res,next) => {
     if (!user) {
       return next(new ApiError('un authorized',401))
     }
-    res.status(200).json(user);
+    const userFromDB = User.findById(user._id)
+    if (!userFromDB) {
+      return next(new ApiError('un user is found',400))
+    }
+    res.status(200).json(user)
   }
    next(new ApiError('un authorized',401))
 });

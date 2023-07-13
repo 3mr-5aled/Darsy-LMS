@@ -1,24 +1,24 @@
 "use client"
 
-import axios from "axios"
+import axiosInstance from "@/axios.config"
 import Link from "next/link"
 import React from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 
 type FormValues = {
-  Name: string
-  Email: string
-  MobileNumber: string
-  ParentNumber: string
+  name: string
+  email: string
+  phone: string
+  parentsPhone: string
   gender: string
   city: string
   grade: string
-  Password: string
-  ConfirmPassword: string
-  DateOfBirth: string
+  password: string
+  confirmPassword: string
+  dateOfBirth: string
 }
 
-export default function App() {
+export default function Register() {
   const {
     register,
     handleSubmit,
@@ -28,10 +28,7 @@ export default function App() {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/v1/auth/register",
-        data
-      )
+      const response = await axiosInstance.post("/auth/register", data)
       console.log(response.data)
     } catch (error) {
       console.error(error)
@@ -39,7 +36,7 @@ export default function App() {
   }
 
   const password = React.useRef({})
-  password.current = watch("Password", "")
+  password.current = watch("password", "")
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flexCenter flex-col p-8">
@@ -53,7 +50,7 @@ export default function App() {
               id="Name"
               type="text"
               placeholder="Name"
-              {...register("Name", {
+              {...register("name", {
                 required: true,
                 maxLength: { value: 80, message: "Name is too long" },
                 minLength: { value: 3, message: "Name is too short" },
@@ -64,8 +61,8 @@ export default function App() {
                 },
               })}
             />
-            {errors.Name && (
-              <p className="text-error text-sm">{errors.Name.message}</p>
+            {errors.name && (
+              <p className="text-error text-sm">{errors.name.message}</p>
             )}
           </div>
           <div className="form-control py-3 w-full">
@@ -75,7 +72,7 @@ export default function App() {
               id="Email"
               type="text"
               placeholder="Email"
-              {...register("Email", {
+              {...register("email", {
                 required: true,
                 pattern: {
                   value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/i,
@@ -83,8 +80,8 @@ export default function App() {
                 },
               })}
             />
-            {errors.Email && (
-              <p className="text-error text-sm">{errors.Email.message}</p>
+            {errors.email && (
+              <p className="text-error text-sm">{errors.email.message}</p>
             )}
           </div>
           <div className="form-control py-3 w-full">
@@ -94,7 +91,7 @@ export default function App() {
               id="MobileNumber"
               type="tel"
               placeholder="Mobile number"
-              {...register("MobileNumber", {
+              {...register("phone", {
                 required: true,
                 minLength: { value: 10, message: "Mobile number is too short" },
                 maxLength: { value: 11, message: "Mobile number is too long" },
@@ -103,14 +100,12 @@ export default function App() {
                   message: "Invalid mobile number",
                 },
                 validate: (value) =>
-                  value !== watch("ParentNumber") ||
+                  value !== watch("parentsPhone") ||
                   "Mobile number should not be the same as parent number",
               })}
             />
-            {errors.MobileNumber && (
-              <p className="text-error text-sm">
-                {errors.MobileNumber.message}
-              </p>
+            {errors.phone && (
+              <p className="text-error text-sm">{errors.phone.message}</p>
             )}
           </div>
           <div className="form-control py-3 w-full">
@@ -120,20 +115,20 @@ export default function App() {
               id="ParentNumber"
               type="tel"
               placeholder="Parent number"
-              {...register("ParentNumber", {
+              {...register("parentsPhone", {
                 required: true,
                 pattern: {
                   value: /^\d{11}$/i,
                   message: "Invalid parent number",
                 },
                 validate: (value) =>
-                  value !== watch("MobileNumber") ||
+                  value !== watch("phone") ||
                   "Parent number should not be the same as mobile number",
               })}
             />
-            {errors.ParentNumber && (
+            {errors.parentsPhone && (
               <p className="text-error text-sm">
-                {errors.ParentNumber.message}
+                {errors.parentsPhone.message}
               </p>
             )}
           </div>
@@ -190,7 +185,7 @@ export default function App() {
               id="Password"
               type="password"
               placeholder="Password"
-              {...register("Password", {
+              {...register("password", {
                 required: true,
                 pattern: {
                   value:
@@ -200,8 +195,8 @@ export default function App() {
                 },
               })}
             />
-            {errors.Password && (
-              <p className="text-error text-sm">{errors.Password.message}</p>
+            {errors.password && (
+              <p className="text-error text-sm">{errors.password.message}</p>
             )}
           </div>
           <div className="form-control py-3 w-full">
@@ -211,7 +206,7 @@ export default function App() {
               id="ConfirmPassword"
               type="password"
               placeholder="Confirm Password"
-              {...register("ConfirmPassword", {
+              {...register("confirmPassword", {
                 required: true,
                 pattern: {
                   value:
@@ -223,9 +218,9 @@ export default function App() {
                   "The confirm password does not match the password",
               })}
             />
-            {errors.ConfirmPassword && (
+            {errors.confirmPassword && (
               <p className="text-error text-sm">
-                {errors.ConfirmPassword.message}
+                {errors.confirmPassword.message}
               </p>
             )}
           </div>
@@ -238,9 +233,9 @@ export default function App() {
               min="2000-01-01"
               max="2020-01-01"
               placeholder="Date of Birth"
-              {...register("DateOfBirth", { required: true })}
+              {...register("dateOfBirth", { required: true })}
             />
-            {errors.DateOfBirth && (
+            {errors.dateOfBirth && (
               <p className="text-error text-sm">Date of Birth is required</p>
             )}
           </div>

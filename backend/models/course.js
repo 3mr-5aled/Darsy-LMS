@@ -17,10 +17,6 @@ const Courses =new mongoose.Schema({
         type:String,
         required:true
     },
-    lastUpdate:{
-        type:Date,
-        required:true
-    },
     price:{
         type:String,
         required:true
