@@ -15,7 +15,7 @@ const corssettings = {
 // middlewares
 
 app.use(express.json())
-app.use(cors())
+app.use(cors(corssettings))
 app.use(cookie())
 
 // routes
