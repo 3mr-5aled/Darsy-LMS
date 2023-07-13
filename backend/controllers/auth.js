@@ -81,6 +81,7 @@ const forgetpassword = asynchandler(async (req, res, next) => {
   }
   // generate vefication code
   const resetcode = Math.floor(100000 + Math.random() * 900000).toString();
+  console.log(resetcode);
   const salt = await bcrypt.genSalt(10);
   const hashedresetcode = await bcrypt.hash(resetcode, salt);
 
@@ -90,6 +91,7 @@ const forgetpassword = asynchandler(async (req, res, next) => {
   user.save();
   // send email
   try {
+    console.log('innnn');
     await sendemail({
       email: req.body.email,
       message: "Your paswword reset code (valid for 10 min)",
@@ -140,8 +142,9 @@ const resetpassword = asynchandler(async (req, res,next) => {
   user.forgetpasswordexpired = undefined;
   await user.save();
   const { _doc } = user;
+  console.log(user);
   // use jsonwebtoken to get token
-  const token = jwt.sign({..._doc,},process.env.JWT );
+  const token = jwt.sign({..._doc},process.env.JWT );
   // send response with all user details and token as cookie
   res.status(201).cookie("token", token).json({ msg: "password reset" });
 });

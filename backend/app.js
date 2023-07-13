@@ -20,7 +20,7 @@ app.use(cookie())
 
 // routes 
 
-app.use('/auth',authrouter)
+app.use('/api/v1/auth',authrouter)
 app.use(errorhandler)
 
 const start=async()=>{
