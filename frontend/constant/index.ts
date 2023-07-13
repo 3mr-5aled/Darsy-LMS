@@ -21,11 +21,15 @@ export const CityOption = {
   title: "المدينة" as string,
   options: [
     "مدينة نصر",
-   "الزيتون",
-   "المهندسين",
-   "المعادي",
-   "الزمالك",
+    "الزيتون",
+    "المهندسين",
+    "المعادي",
+    "الزمالك",
   ] as Array<string>,
+}
+export const GradeOption = {
+  title: "الصف الدراسي" as string,
+  options: ["أولى ثانوي", "تانية ثانوي", "تالتة ثانوي"] as Array<string>,
 }
 
 export const categoryFilters = [

@@ -18,7 +18,7 @@ const Navbar = async () => {
   return (
     <nav className="flexBetween navbar">
       <div className="gap-10 flexStart">
-        <Link href="/" className="prose">
+        <Link href="/" className="prose bg-white rounded-md p-3">
           <Image
             src="/next.svg"
             width={115}

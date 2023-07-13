@@ -33,7 +33,7 @@ const FormField = ({
   return (
     <div className="form-control w-full max-w-xs">
       <label htmlFor="" className="label">
-        <span className="label-text text-gray-900">{title}</span>
+        <span className="label-text text-gray-600">{title}</span>
       </label>
       {isTextArea ? (
         <textarea

@@ -28,12 +28,14 @@ const Footer = async () => {
     <footer className="flexStart footer">
       <div className="flex flex-col gap-12 w-full">
         <div className="flex items-start flex-col prose">
-          <Image
-            src="/next.svg"
-            width={115}
-            height={38}
-            alt={WebsiteDetails.name}
-          />
+          <div className=" bg-white rounded-md p-3 h-fit">
+            <Image
+              src="/next.svg"
+              width={115}
+              height={38}
+              alt={WebsiteDetails.name}
+            />
+          </div>
           <p className="text-start text-sm font-normal mt-5 max-w-xs">
             {WebsiteDetails.name} is the world's leading community for creatives
             to share, grow, and get hired.
