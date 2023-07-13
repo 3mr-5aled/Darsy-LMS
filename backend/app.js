@@ -9,13 +9,18 @@ require("dotenv").config()
 const app = express()
 
 const corssettings = {
-  origin: "http://localhost:8080/",
-  Credential: true,
+  origin: "http://localhost:8080",
+  credential: true,
 }
 // middlewares
 
 app.use(express.json())
-app.use(cors(corssettings))
+app.use(
+  cors({
+    origin: "http://localhost:8080",
+    credentials: true,
+  })
+)
 app.use(cookie())
 
 // routes
