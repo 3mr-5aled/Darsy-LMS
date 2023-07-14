@@ -28,8 +28,11 @@ yarn-error.log*
 .env*.local
 
 # vercel
-.vercel
+.vercels
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# vscode
+.vscode
