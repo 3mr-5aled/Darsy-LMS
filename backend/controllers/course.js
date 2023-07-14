@@ -4,7 +4,7 @@ const ApiError = require('../utils/apierror')
 
 const createCourse=aynchandler(async(req,res,next)=>{
      // @api   post api/v1/course/createcourse
-    //  you will send name ,description,courseImg,duration,price,language  inn body
+    //  you will send name ,description,courseImg,duration,price,language in body
     const {body}=req
      const course = await Course.create({...body})
      res.status(200).json(course)

@@ -78,6 +78,7 @@ const forgetpassword = asynchandler(async (req, res, next) => {
   // @desc  reset password
   // @api   Post /auth/forgetpassword
   // check if email is exist
+  // send me email of user that (gmail) and i will send email for rest code
   const user = await User.findOne({ email: req.body.email });
   console.log(user);
   if (!user) {
@@ -95,7 +96,6 @@ const forgetpassword = asynchandler(async (req, res, next) => {
   user.save();
   // send email
   try {
-    console.log('innnn');
     await sendemail({
       email: req.body.email,
       message: "Your paswword reset code (valid for 10 min)",
@@ -113,6 +113,7 @@ const forgetpassword = asynchandler(async (req, res, next) => {
 const verifycode = asynchandler(async (req, res, next) => {
   // @desc  verifycode
   // @api   Post /auth/verifycode
+  // send email and reset code 
   const user = await User.findOne({
     email: req.body.email,
     forgetpasswordexpired: { $gt: Date.now() },
@@ -131,6 +132,7 @@ const verifycode = asynchandler(async (req, res, next) => {
 
 const resetpassword = asynchandler(async (req, res,next) => {
   // @api   Put /auth/resetcode
+  // send new password
   // get user from db
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
