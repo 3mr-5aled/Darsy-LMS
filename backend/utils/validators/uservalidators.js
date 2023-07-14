@@ -26,7 +26,7 @@ const loginvalidator=[
 ]
 const resetpasswordvalidator=[
     check('email').notEmpty().withMessage('email is required').isEmail().withMessage("invalid email address"),
-    check('password').notEmpty().withMessage('passsword is required').isLength({max:16,min:8}).withMessage("passsword must be between 8 and 16"),
+    check('newpassword').notEmpty().withMessage('passsword is required').isLength({max:16,min:8}).withMessage("passsword must be between 8 and 16"),
     usermiddleware
 ]
 

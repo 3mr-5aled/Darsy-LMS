@@ -13,8 +13,7 @@ const login = asynchandler(async (req, res, next) => {
   const userpassword = req.body.password;
 
   // find a user by email
-  console.log(useremail);
-  const user =useremail !== undefined ? await User.findOne({ email: useremail }) : await User.findOne({ phone: req.body.phone });
+  const user = useremail !== undefined ? await User.findOne({ email: useremail }) : await User.findOne({ phone: req.body.phone });
   // if user isn't found ,server send response ("no email is found")
   if (!user) {
     return next(new ApiError("no user is found", 404));
@@ -30,7 +29,8 @@ const login = asynchandler(async (req, res, next) => {
   // use jsonwebtoken to get token
   const token = jwt.sign({..._doc,},process.env.JWT );
   // send response with all user details and token as cookie
-  res.status(201).cookie("token", token).json(user);
+  const {name,email,phone,parentsPhone,grade,city,gender} = user
+  res.status(201).cookie("token", token).json({user:email,name,phone,parentsPhone,grade,city,gender});
 });
 
 const register = asynchandler(async (req, res, next) => {
@@ -49,7 +49,8 @@ const register = asynchandler(async (req, res, next) => {
   // use jsonwebtoken to get token
     const token = jwt.sign({..._doc,},process.env.JWT );
     // send response with all user details and token as cookie
-    res.status(201).cookie("token", token).json(user);
+    const {name,email,grade,city,gender} = user
+    res.status(201).cookie("token", token).json({user:name,email,phone,parentsPhone,grade,city,gender});
 });
 const signout = asynchandler(async (req, res,next) => {
   // @api   Get /auth/signout
@@ -70,7 +71,8 @@ const profile = asynchandler(async (req, res,next) => {
     if (!userFromDB) {
       return next(new ApiError('un user is found',400))
     }
-    res.status(200).json(user)
+    const {name,email,phone,parentsPhone,grade,city,gender} = user
+    res.status(200).json({user:email,name,phone,parentsPhone,grade,city,gender})
   }
    next(new ApiError('un authorized',401))
 });
@@ -132,7 +134,7 @@ const verifycode = asynchandler(async (req, res, next) => {
 
 const resetpassword = asynchandler(async (req, res,next) => {
   // @api   Put /auth/resetcode
-  // send new password
+  // send new password and email
   // get user from db
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
@@ -142,7 +144,10 @@ const resetpassword = asynchandler(async (req, res,next) => {
   if (!user.forgetpasswordvalidation) {
     return next(new ApiError("reset code not verficated", 400));
   }
-  user.password = req.body.newpassword;
+  const salt = await bcrypt.genSalt(10);
+  // hash password
+  const hashedpassword = await bcrypt.hash(req.body.newpassword, salt);
+  user.password = hashedpassword;
   user.forgetpasswordcode = undefined;
   user.forgetpasswordvalidation = undefined;
   user.forgetpasswordexpired = undefined;
