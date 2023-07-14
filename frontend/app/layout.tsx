@@ -2,6 +2,8 @@ import "./globals.css"
 import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import { WebsiteDetails } from "@/constant"
+  import { ToastContainer } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata = {
   title: WebsiteDetails.name,
@@ -16,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="ar">
       <body>
+        <ToastContainer />
         <Navbar />
         <main>{children}</main>
         <Footer />

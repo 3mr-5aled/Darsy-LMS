@@ -19,7 +19,7 @@ type FormValues = {
   dateOfBirth: string
 }
 
-export default function Register() {
+export default async function Register() {
   const router = useRouter()
   const {
     register,
@@ -31,8 +31,10 @@ export default function Register() {
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       const response = await axiosInstance.post("/auth/register", data)
-      console.log(response.data)
+      const user = response.data // Assuming the response data is the user object
       router.push("/")
+      // @ts-ignore
+      router.reload()
     } catch (error) {
       console.error(error)
     }

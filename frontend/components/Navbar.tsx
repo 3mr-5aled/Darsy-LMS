@@ -1,33 +1,28 @@
 "use client"
 import Image from "next/image"
 import Link from "next/link"
-
-import { NavLinks, WebsiteDetails } from "@/constant"
 import { useRouter } from "next/navigation"
-import DarkModeButton from "./DarkModeButton"
 import { useEffect } from "react"
 import axiosInstance from "@/axios.config"
-// import { getCurrentUser } from "@/lib/session"
+import { NavLinks, WebsiteDetails } from "@/constant"
+import DarkModeButton from "./DarkModeButton"
+import { toast } from "react-toastify"
+import useUser from "@/lib/FetchUser"
 
-// import AuthProviders from "./AuthProviders"
-// import Button from "./Button"
-// import ProfileMenu from "./ProfileMenu"
-
-const Navbar = async () => {
-  // const session = await getCurrentUser()
+const Navbar = () => {
   const router = useRouter()
-  const fetchUser = async () => {
+  const [user, isLoading, setUser] = useUser()
+
+  const signOut = async () => {
     try {
-      const response = await axiosInstance.get("/auth/profile")
-      console.log(response.data)
+      await axiosInstance.get("/auth/signout")
+      setUser(null)
+      toast.success("Signed out successfully")
       router.push("/")
-    } catch (error) {
-      console.error(error)
+    } catch (error: any) {
+      toast.error(error.message)
     }
   }
-  useEffect(() => {
-    fetchUser()
-  }, [])
 
   return (
     <nav className="flexBetween navbar">
@@ -41,35 +36,47 @@ const Navbar = async () => {
           />
         </Link>
       </div>
-      <ul className="hidden xl:flex text-small font-bold gap-7">
+      <ul className="hidden xl:flex items-center space-x-4 font-bold">
         {NavLinks.map((link) => (
-          <Link href={link.href} key={link.text}>
-            {link.text}
-          </Link>
+          <li key={link.text}>
+            <Link href={link.href}>{link.text}</Link>
+          </li>
         ))}
       </ul>
-
-      <div className="gap-4 flexCenter">
-        <div>
-          <DarkModeButton />
-        </div>
-        <button
-          className="btn btn-primary"
-          onClick={() => router.push("/auth/login")}
-        >
-          Sign in
-        </button>
-        {/* {session?.user ? (
-          <>
-            <ProfileMenu session={session} />
-
-            <Link href="/create-project">
-              <Button title="Share work" />
-            </Link>
-          </>
+      <div className="flex items-center space-x-4">
+        <DarkModeButton />
+        {user ? (
+          <div className="dropdown">
+            <label tabIndex={0} className="btn m-1">
+              {user?.name}
+            </label>
+            <ul
+              tabIndex={0}
+              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <Link href="/profile">My Profile</Link>
+              </li>
+              <li>
+                <button onClick={signOut}>
+                  {isLoading ? "Signing out..." : "Sign out"}
+                </button>
+              </li>
+              {user.role && (
+                <li>
+                  <Link href="/admin/dashboard">Dashboard</Link>
+                </li>
+              )}
+            </ul>
+          </div>
         ) : (
-          <AuthProviders />
-        )} */}
+          <button
+            className="btn btn-primary"
+            onClick={() => router.push("/auth/login")}
+          >
+            Sign in
+          </button>
+        )}
       </div>
     </nav>
   )

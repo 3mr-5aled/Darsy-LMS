@@ -1,29 +1,51 @@
 "use client"
-import axios from "axios"
-
+import axiosInstance from "@/axios.config"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import React from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
+import { toast } from "react-toastify"
 
 interface IFormInput {
-  EmailOrPhone: string
-  Password: string
+  email: string
+  password: string
 }
 
 const Login = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<IFormInput>()
+
+  const router = useRouter()
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/v1/auth/login",
-        data
-      )
-      console.log(response.data)
+      if (isSubmitting) {
+        return
+      }
+
+      handleSubmit(async () => {
+        try {
+          const response = await axiosInstance.post(
+            "http://localhost:3000/api/v1/auth/login",
+            data
+          )
+          if (response?.data) {
+            toast.success(response.data.message)
+            router.push("/")
+            router.refresh()
+          } else {
+            toast.error("An error occurred during login")
+          }
+        } catch (error: any) {
+          console.error(error)
+          toast.error(
+            error.response?.data?.message || "An error occurred during login"
+          )
+        }
+      })()
     } catch (error) {
       console.error(error)
     }
@@ -35,24 +57,25 @@ const Login = () => {
         <h1>تسجيل دخول</h1>
         <div className="w-2/3">
           <div className="form-control">
-            <label htmlFor="EmailOrPhone" className="label">
+            <label htmlFor="email" className="label">
               <span className="label-text">Email or Phone</span>
             </label>
             <input
               className="input input-bordered w-full"
-              id="EmailOrPhone"
+              id="email"
               type="text"
-              placeholder="Email, Phone"
-              {...register("EmailOrPhone", {
-                required: "Email or phone is required",
+              placeholder="Email"
+              {...register("email", {
+                required: true,
                 pattern: {
-                  value: /^(?:[\w-.]+@([\w-]+\.)+[\w-]{2,4})$|^\d{11}$/,
-                  message: "Invalid email or phone",
+                  value: /^(?:[\w-.]+@([\w-]+\.)+[\w-]{2,4})$/,
+                  message: "Invalid email",
                 },
               })}
+              disabled={isSubmitting}
             />
-            {errors.EmailOrPhone && (
-              <p className="text-error">{errors.EmailOrPhone.message}</p>
+            {errors.email && (
+              <p className="text-error">{errors.email.message}</p>
             )}
           </div>
 
@@ -65,8 +88,8 @@ const Login = () => {
               id="Password"
               type="password"
               placeholder="Password"
-              {...register("Password", {
-                required: "Password is required",
+              {...register("password", {
+                required: true,
                 pattern: {
                   value:
                     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
@@ -74,6 +97,7 @@ const Login = () => {
                     "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one digit, and one special character.",
                 },
               })}
+              disabled={isSubmitting}
             />
             <label htmlFor="Password" className="label">
               <span></span>
@@ -84,14 +108,18 @@ const Login = () => {
                 هل نسيت كلمة المرور؟
               </Link>
             </label>
-            {errors.Password && (
-              <p className="text-error">{errors.Password.message}</p>
+            {errors.password && (
+              <p className="text-error">{errors.password.message}</p>
             )}
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary">
-          Submit
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={isSubmitting}
+        >
+          Log in
         </button>
         <p>
           ليس لديك حساب؟{" "}
