@@ -23,38 +23,13 @@ const Courses = new mongoose.Schema(
       required: true,
     },
     total: {
-      
       type: String,
     },
     language: {
       required: true,
       type: String,
     },
-    sections: [
-      {
-        title: {
-          type: String,
-        },
-        lectures: [
-          {
-            title: {
-              type: String,
-            },
-            video: {
-              type: String,
-            },
-            material: {
-              type: String,
-            },
-            duration: {
-              type: String,
-            },
-          },
-          { timestamps: true },
-        ],
-      },
-      { timestamps: true },
-    ],
+    sections: [ {type:mongoose.Types.ObjectId,ref:'sections'}],
   },
   { timestamps: true }
 );

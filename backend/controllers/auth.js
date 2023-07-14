@@ -78,7 +78,7 @@ const forgetpassword = asynchandler(async (req, res, next) => {
   // @desc  reset password
   // @api   Post /auth/forgetpassword
   // check if email is exist
-  // send me email of user that (gmail) and i will send email for rest code
+  // send me email of user that (gmail) and i will send mail contain resثt code
   const user = await User.findOne({ email: req.body.email });
   console.log(user);
   if (!user) {
