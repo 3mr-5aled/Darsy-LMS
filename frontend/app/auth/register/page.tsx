@@ -31,10 +31,7 @@ export default async function Register() {
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       const response = await axiosInstance.post("/auth/register", data)
-      const user = response.data // Assuming the response data is the user object
-      router.push("/")
-      // @ts-ignore
-      router.reload()
+      router.push("/auth/login")
     } catch (error) {
       console.error(error)
     }

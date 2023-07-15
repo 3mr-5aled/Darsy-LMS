@@ -8,3 +8,11 @@ export type UserType = {
   city: string
   role: string
 }
+export interface UserState {
+  user: UserType | null
+}
+
+export enum UserActionTypes {
+  SET_USER = "SET_USER",
+  CLEAR_USER = "CLEAR_USER",
+}
