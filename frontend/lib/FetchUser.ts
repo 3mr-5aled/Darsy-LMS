@@ -1,9 +1,9 @@
-import { toast } from "react-toastify"
+import { useState, useEffect } from "react"
 import axiosInstance from "@/axios.config"
+import { toast } from "react-toastify"
 import { UserType } from "@/common.types"
-import { useEffect, useState } from "react"
 
-const useUser = (): [UserType | null, boolean, any] => {
+const useUser = (): [UserType | null, boolean] => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [user, setUser] = useState<UserType | null>(null)
 
@@ -11,8 +11,8 @@ const useUser = (): [UserType | null, boolean, any] => {
     setIsLoading(true)
     try {
       const response = await axiosInstance.get("/auth/profile")
-      const user = response.data // Assuming the response data is the user object
-      setUser(user)
+      const userData = response.data // Assuming the response data is the user object
+      setUser(userData)
       setIsLoading(false)
     } catch (error: any) {
       toast.error(error)
@@ -24,7 +24,7 @@ const useUser = (): [UserType | null, boolean, any] => {
     fetchUser()
   }, [])
 
-  return [user, isLoading, setUser]
+  return [user, isLoading]
 }
 
 export default useUser

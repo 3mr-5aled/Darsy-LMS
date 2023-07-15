@@ -1,10 +1,12 @@
 "use client"
+import { toast } from "react-toastify"
 import axiosInstance from "@/axios.config"
+import useUser from "@/lib/FetchUser"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import React from "react"
+import React, { useEffect } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { toast } from "react-toastify"
+import { useUserContext } from "@/contexts/userContext"
 
 interface IFormInput {
   email: string
@@ -19,6 +21,7 @@ const Login = () => {
   } = useForm<IFormInput>()
 
   const router = useRouter()
+  const { state, setUser, clearUser } = useUserContext()
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
@@ -34,8 +37,8 @@ const Login = () => {
           )
           if (response?.data) {
             toast.success(response.data.message)
+            setUser(response.data)
             router.push("/")
-            router.refresh()
           } else {
             toast.error("An error occurred during login")
           }
