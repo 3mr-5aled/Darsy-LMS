@@ -71,6 +71,6 @@ body {
   transition: transform 0.3s;
 }
 
-.swap-rotate.dark {
+.swap-rotate.switch {
   transform: rotate(360deg);
 }

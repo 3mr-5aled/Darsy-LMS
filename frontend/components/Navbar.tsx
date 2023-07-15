@@ -72,7 +72,7 @@ const Navbar = () => {
           <div className="animate-pulse w-16 h-6 m-1" /> // Placeholder skeleton for username
         ) : user ? (
           <div className="dropdown">
-            <label tabIndex={0} className="btn m-1">
+            <label tabIndex={0} className="btn m-1 border border-gray-500">
               {user?.name}
             </label>
             <ul

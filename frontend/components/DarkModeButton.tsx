@@ -7,26 +7,32 @@ const DarkModeButton = () => {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme")
-    setIsDarkMode(savedTheme === "dark")
+    if (savedTheme === "dark") {
+      setIsDarkMode(true)
+      document.documentElement.setAttribute("data-theme", "dark")
+    } else {
+      setIsDarkMode(false)
+      document.documentElement.setAttribute("data-theme", "mytheme")
+    }
   }, [])
 
   const toggleDarkMode = () => {
-    const theme = isDarkMode ? "mytheme" : "dark"
+    const newTheme = isDarkMode ? "mytheme" : "dark"
     setIsDarkMode(!isDarkMode)
-    localStorage.setItem("theme", theme)
-    document.documentElement.setAttribute("data-theme", theme)
+    localStorage.setItem("theme", newTheme)
+    document.documentElement.setAttribute("data-theme", newTheme)
   }
 
   return (
-    <label className={`swap swap-rotate ${isDarkMode ? "dark" : ""}`}>
+    <label className={`swap swap-rotate ${isDarkMode ? "switch" : ""}`}>
       <button onClick={toggleDarkMode}>
         {/* sun icon */}
-        <div className={`swap-on text-gray-500 ${isDarkMode ? "hidden" : ""}`}>
-          <BsFillSunFill />
+        <div className={`${isDarkMode ? "hidden" : "block"}`}>
+          <BsFillSunFill size={20} />
         </div>
         {/* moon icon */}
-        <div className={`swap-off ${isDarkMode ? "" : "hidden"}`}>
-          <BsMoonFill />
+        <div className={`${isDarkMode ? "block" : "hidden"}`}>
+          <BsMoonFill size={20} />
         </div>
       </button>
     </label>
