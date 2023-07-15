@@ -4,25 +4,24 @@ const Course = require('../models/course')
 const ApiError = require('../utils/apierror')
 const addSection =asynchandler(async(req,res,next)=>{
     // @api   post api/v1/:courseId/addsection
-    // send courseId as params and title in body
-    const {title} = req.body
+    // send courseId as params and title sectionImg , description in body
+    const {title,sectionImg,description} = req.body
     const {courseId} = req.params
     const course =await Course.findOne({_id:courseId})
     if (!course) {
         return next(new ApiError('no course with this id',400))
     }
-    const section = await Section.create({title,courseId})
+    const section = await Section.create({title,courseId,sectionImg,description})
     course.total = course.total + 1 
     course.sections.push(section._id)
     course.save()
-    console.log(course);
     res.status(200).json(section)
 })
 const getSection =asynchandler(async(req,res,next)=>{
     // @api   get api/v1/getsection/:sectionId
     // send sectionId as params 
     const {sectionId} = req.params
-    const section = await Section.findById(sectionId)
+    const section = await Section.findById(sectionId).populate('lessons')
     if (!section) {
         return next(new ApiError('no section with this id',404))
     }
@@ -30,7 +29,7 @@ const getSection =asynchandler(async(req,res,next)=>{
 })
 const getAllSections =asynchandler(async(req,res,next)=>{
     // @api   get api/v1/getallsections
-    const section = await Section.find({})
+    const section = await Section.find({}).populate('lessons')
     res.status(200).json(section)
 })
 const deleteSection =asynchandler(async(req,res,next)=>{

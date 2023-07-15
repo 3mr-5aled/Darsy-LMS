@@ -7,6 +7,7 @@ const { connect } = require('mongoose')
 const courseRouter = require('./routers/course')
 const sectionRouter = require('./routers/section')
 const lessonRouter = require('./routers/lesson')
+const paymentRouter = require('./routers/payment')
 require('dotenv').config()
 const app = express()
 
@@ -36,6 +37,7 @@ app.use('/api/v1/auth',authRrouter)
 app.use('/api/v1/course',courseRouter)
 app.use('/api/v1/section',sectionRouter)
 app.use('/api/v1/lesson',lessonRouter)
+app.use('/api/v1/payment',paymentRouter)
 app.use(errorhandler)
 
 const start = async () => {

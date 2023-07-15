@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const Lesson = new mongoose.Schema(
 {
     title: {
-          type: String,
-          required:true
+        type: String,
+        required:true
         },
     video:{
         type: String, 

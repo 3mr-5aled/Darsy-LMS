@@ -27,10 +27,10 @@ const login = asynchandler(async (req, res, next) => {
   }
   const { _doc } = user;
   // use jsonwebtoken to get token
-  const token = jwt.sign({..._doc,},process.env.JWT );
+  const token = jwt.sign({..._doc},process.env.JWT );
   // send response with all user details and token as cookie
-  const {name,email,phone,parentsPhone,grade,city,gender} = user
-  res.status(201).cookie("token", token).json({user:email,name,phone,parentsPhone,grade,city,gender});
+  const {name,email,phone,parentsPhone,grade,city,gender,role} = user
+  res.status(201).cookie("token", token).json({email,name,phone,parentsPhone,grade,city,gender,role})
 });
 
 const register = asynchandler(async (req, res, next) => {
@@ -49,8 +49,8 @@ const register = asynchandler(async (req, res, next) => {
   // use jsonwebtoken to get token
     const token = jwt.sign({..._doc,},process.env.JWT );
     // send response with all user details and token as cookie
-    const {name,email,grade,city,gender} = user
-    res.status(201).cookie("token", token).json({user:name,email,phone,parentsPhone,grade,city,gender});
+    const {name,email,grade,city,gender,role} = user
+    res.status(201).cookie("token", token).json({email,name,phone,parentsPhone,grade,city,gender,role})
 });
 const signout = asynchandler(async (req, res,next) => {
   // @api   Get /auth/signout
@@ -69,10 +69,10 @@ const profile = asynchandler(async (req, res,next) => {
     }
     const userFromDB = User.findById(user._id)
     if (!userFromDB) {
-      return next(new ApiError('un user is found',400))
+      return next(new ApiError('no user is found',400))
     }
-    const {name,email,phone,parentsPhone,grade,city,gender} = user
-    res.status(200).json({user:email,name,phone,parentsPhone,grade,city,gender})
+    const {name,email,phone,parentsPhone,grade,city,gender,role} = user
+    res.status(200).json({email,name,phone,parentsPhone,grade,city,gender,role})
   }
    next(new ApiError('un authorized',401))
 });
@@ -82,7 +82,6 @@ const forgetpassword = asynchandler(async (req, res, next) => {
   // check if email is exist
   // send me email of user that (gmail) and i will send mail contain resثt code
   const user = await User.findOne({ email: req.body.email });
-  console.log(user);
   if (!user) {
     return next(new ApiError("no user is found", 404));
   }

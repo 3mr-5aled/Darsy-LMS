@@ -3,6 +3,8 @@ const validator=require('../../middlewares/validator')
 const Course = require('../../models/course')
 const addSectionValidator=[
     check('title').notEmpty().withMessage('title is required'),
+    check('description').notEmpty().withMessage('description is required'),
+    check('sectionImg').notEmpty().withMessage('courseImg is required'),
     check('courseId').notEmpty().withMessage('courseId is required').isMongoId().withMessage('courseId is invalid id'),
     validator
 ]
@@ -17,7 +19,6 @@ const getSectionValidator=[
 ]
 const updateSectionValidator=[
     check('sectionId').notEmpty().withMessage('sectionId is required').isMongoId().withMessage('sectionId is invalid id'),
-    check('title').notEmpty().withMessage('title is required'),
     validator
 ]
 module.exports={addSectionValidator,deleteSectionValidator,getSectionValidator,updateSectionValidator}

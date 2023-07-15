@@ -9,6 +9,14 @@ const Sections = new mongoose.Schema(
     total:{
         type: String, 
     },
+    description: {
+      type: String,
+      required: true,
+    },
+    sectionImg: {
+      type: String,
+      required: true,
+    },
     courseId:{type:mongoose.Types.ObjectId,ref:'courses'},
     lessons: [{type:mongoose.Types.ObjectId,ref:'lessons'}]
 },

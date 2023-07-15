@@ -11,7 +11,7 @@ const createCourse=aynchandler(async(req,res,next)=>{
     //  you will recieve course object
 })
 const updateCourse=aynchandler(async(req,res,next)=>{
-     // @api   post api/v1/course/updatecourse/:id
+     // @api   put api/v1/course/updatecourse/:id
      // you will send data to update inn  body and id ass params
     const {body}=req
     const {id} = req.params
@@ -20,15 +20,15 @@ const updateCourse=aynchandler(async(req,res,next)=>{
     // you recieve the new course object
 })
 const getAllCourses=aynchandler(async(req,res,next)=>{
-     // @api   post api/v1/course/getallcourses
-    const course = await Course.find({})
+     // @api   get api/v1/course/getallcourses
+    const course = await Course.find({}).populate('sections')
     res.status(200).json(course)
 })
 const getCourse=aynchandler(async(req,res,next)=>{
-     // @api   post api/v1/course/getcourse/:id
+     // @api   get api/v1/course/getcourse/:id
     //  send id as params
     const {id} = req.params
-    const course = await Course.findById(id)
+    const course = await Course.findById(id).populate('sections')
     if (!course) {
        return next(new ApiError('no course with this id',400))
     }
@@ -36,7 +36,7 @@ const getCourse=aynchandler(async(req,res,next)=>{
     // get specific course
 })
 const deleteCourse=aynchandler(async(req,res,next)=>{
-     // @api   post api/v1/course/deletecourse/:id
+     // @api   delete api/v1/course/deletecourse/:id
     //  send id as params
     const {id} = req.params
     const course = await Course.findByIdAndDelete(id)

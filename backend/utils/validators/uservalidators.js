@@ -21,7 +21,7 @@ const registervalidator=[
 const loginvalidator=[
     check('email').optional().isEmail().withMessage("invalid email address"),
     check('phone').optional().isMobilePhone('ar-EG').withMessage('invalid phone number only egyption is accepted'),
-    check('password').notEmpty().withMessage('passsword is required'),
+    check('password').notEmpty().withMessage('passsword is required').isLength({max:16,min:8}).withMessage("passsword must be between 8 and 16"),
     usermiddleware
 ]
 const resetpasswordvalidator=[
