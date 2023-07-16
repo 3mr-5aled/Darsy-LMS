@@ -7,7 +7,7 @@ const Sections = new mongoose.Schema(
           required:true
         },
     total:{
-        type: String, 
+        type: Number, 
     },
     description: {
       type: String,

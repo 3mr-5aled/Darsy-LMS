@@ -3,13 +3,13 @@ const User = require('../models/user')
 const ApiError = require('../utils/apierror')
 require('dotenv').config()
 const authintication =async(req,res,next)=>{
-    const {token}=req.cookies
-    const user = jwt.verify(token,process.env.JWT)
+    const {user} = req 
     const userFromDB =await User.findById(user._id)
-    if (!userFromDB) {
-        return next(new ApiError('un authorized',401)) 
+    if (userFromDB.role === 'tutor') {
+        req.user = userFromDB
+        return next()
+    }else{
+        return next(new ApiError('you are not admin',401))
     }
-    req.user = userFromDB
-    next()
 }
 module.exports=authintication

@@ -6,7 +6,6 @@ const createCourseValidator=[
     check('description').notEmpty().withMessage('description is required'),
     check('courseImg').notEmpty().withMessage('courseImg is required'),
     check('price').notEmpty().withMessage('price is required'),
-    check('language').notEmpty().withMessage('language is required'),
     check('total').notEmpty().withMessage('total is required'),
     validator
 ]

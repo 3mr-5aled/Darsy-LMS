@@ -22,11 +22,7 @@ const Courses = new mongoose.Schema(
       required: true,
     },
     total: {
-      type: String,
-    },
-    language: {
-      required: true,
-      type: String,
+      type: Number,
     },
     sections: [ {type:mongoose.Types.ObjectId,ref:'sections'}],
   },
