@@ -30,7 +30,7 @@ const getSection =asynchandler(async(req,res,next)=>{
 const getAllSections =asynchandler(async(req,res,next)=>{
     // @api   get api/v1/getallsections
     const section = await Section.find({}).populate('lessons')
-    res.status(200).json(section)
+    res.status(200).json({total:section.length,section})
 })
 const deleteSection =asynchandler(async(req,res,next)=>{
     // @api   delete api/v1/section/:courseId/deletesection/:sectionId
@@ -40,7 +40,7 @@ const deleteSection =asynchandler(async(req,res,next)=>{
     if (!course) {
         return next(new ApiError('no course with this id',404))
     }
-    const section = await Section.findByIdAndDelete(sectionId)
+    const section = await Section.deleteMany({_id:sectionId})
     if (!section) {
         return next(new ApiError('no section with this id',404))
     }

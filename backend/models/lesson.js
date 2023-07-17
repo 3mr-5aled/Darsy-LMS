@@ -15,13 +15,44 @@ const Lesson = new mongoose.Schema(
         required:true
     },
     material:{
-        type: String, 
+        name:{
+            type: String,
+            required:true
+        },
+        link:{
+            type: String,
+            required:true
+        }
     },
     courseId:{type:mongoose.Types.ObjectId,ref:'courses'},
     sectionId: {type:mongoose.Types.ObjectId,ref:'lessons'},
-    exams:[]
+    exams:[
+        {
+            question:{
+                type:String,
+            },
+            answers:[
+                {
+                    type:String
+                }
+            ],
+            correctAnswer:{
+                type:String,
+            }
+    },{timestamps:true}
+]
 },
   { timestamps: true }
 );
-
+Lesson.pre('deleteMany', async function (next) {
+    console.log('inn');
+    try {
+      // Delete all sections associated with this course
+      // Assuming you have a 'sections' model defined in your code
+      await mongoose.model('users').updateMany({}, { $pull: { exams: { lessonId: this.getQuery()._id } } });
+      next();
+    } catch (error) {
+      next(new ApiError(error,500));
+    }
+  }); 
 module.exports = mongoose.model("lessons", Lesson);

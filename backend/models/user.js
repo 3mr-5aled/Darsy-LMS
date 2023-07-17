@@ -52,11 +52,20 @@ const User =new mongoose.Schema({
         courseid: {
             type: mongoose.Schema.ObjectId,
             ref: 'courses'
-        },
-        progress: {
-            type: String
         }
-    }]
+    }],
+    exams:[
+        {
+            lessonId:{
+                type: mongoose.Schema.ObjectId,
+                ref: 'lessons'
+            },
+            degree:{
+                type:String
+            }
+        }
+        ,{timestamps:true}
+    ]
 }, { timestamps: true });
 
 module.exports = mongoose.model('users', User);

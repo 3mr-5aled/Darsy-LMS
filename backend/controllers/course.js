@@ -39,7 +39,7 @@ const deleteCourse=aynchandler(async(req,res,next)=>{
      // @api   delete api/v1/course/deletecourse/:id
     //  send id as params
     const {id} = req.params
-    const course = await Course.findByIdAndDelete(id)
+    const course = await Course.findOneAndDelete({_id:id})
     if (!course) {
         return next(new ApiError('no course with this id',400))
      }

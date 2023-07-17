@@ -12,11 +12,29 @@ const Sections = new mongoose.Schema(
     },
     total: {
       type: Number,
+      default:0
     },
     courseId: { type: mongoose.Types.ObjectId, ref: 'courses' },
     lessons: [{ type: mongoose.Types.ObjectId, ref: 'lessons' }]
   },
   { timestamps: true }
 );
+Sections.pre('deleteMany', async function (next) {
+  console.log('innnn');
+  const section = await this.model.findOne({ _id: this.getQuery()._id })// Get the section ids associated with the course
+  console.log(section);
+  if (section.lessons.length === 0) {
+    // No sections to delete, move on
+    return next();
+  }
+  try {
+    // Delete all sections associated with this course
+    // Assuming you have a 'sections' model defined in your code
+    await mongoose.model('lessons').deleteMany({ _id: { $in: section.lessons } });
+    next();
+  } catch (error) {
+    next(new ApiError(error,500));
+}
+});
 
 module.exports = mongoose.model("sections", Sections);

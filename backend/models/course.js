@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const ApiError = require("../utils/apierror");
 
 const Courses = new mongoose.Schema(
   {
@@ -30,4 +31,21 @@ const Courses = new mongoose.Schema(
   { timestamps: true }
 );
 
+Courses.pre('findOneAndDelete', async function (next) {
+  console.log('inn');
+  const course = await this.model.findOne({ _id: this.getQuery()._id })// Get the section ids associated with the course
+  console.log(course);
+  if (course.sections.length === 0) {
+    // No sections to delete, move on
+    return next();
+  }
+  try {
+    // Delete all sections associated with this course
+    // Assuming you have a 'sections' model defined in your code
+    await mongoose.model('sections').deleteMany({ _id: { $in: course.sections } });
+    next();
+  } catch (error) {
+    next(new ApiError(error,500));
+  }
+});
 module.exports = mongoose.model("courses", Courses);
