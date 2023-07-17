@@ -13,7 +13,7 @@ const addLesson = asynchandler(async (req, res, next) => {
   if (!course || !section) {
     return next(new ApiError("no course or section is found", 404));
   }
-  const lesson = await Lesson.create(req.body);
+  const lesson = await Lesson.create({...req.body,...req.videoUrl});
   section.lessons.push(lesson._id);
   section.save();
   res.status(200).json(lesson);

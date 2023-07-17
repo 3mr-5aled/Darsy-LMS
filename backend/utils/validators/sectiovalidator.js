@@ -3,8 +3,7 @@ const validator=require('../../middlewares/validator')
 const Course = require('../../models/course')
 const addSectionValidator=[
     check('title').notEmpty().withMessage('title is required'),
-         check('duration').notEmpty().withMessage('duration is required'),
-    
+    check('duration').notEmpty().withMessage('duration is required'),
     check('courseId').notEmpty().withMessage('courseId is required').isMongoId().withMessage('courseId is invalid id'),
     validator
 ]

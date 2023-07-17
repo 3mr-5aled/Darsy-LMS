@@ -4,7 +4,7 @@ const validator=require('../../middlewares/validator')
 const createCourseValidator=[
     check('name').notEmpty().withMessage('name is required'),
     check('description').notEmpty().withMessage('description is required'),
-    check('courseImg').notEmpty().withMessage('courseImg is required'),
+    check('image').notEmpty().withMessage('image is required'),
     check('price').notEmpty().withMessage('price is required'),
     check('total').notEmpty().withMessage('total is required'),
     validator
