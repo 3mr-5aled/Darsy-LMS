@@ -8,6 +8,7 @@ const courseRouter = require('./routers/course')
 const sectionRouter = require('./routers/section')
 const lessonRouter = require('./routers/lesson')
 const paymentRouter = require('./routers/payment')
+const uploadImage = require('./middlewares/imageupload')
 require('dotenv').config()
 const app = express()
 
@@ -38,6 +39,7 @@ app.use('/api/v1/course',courseRouter)
 app.use('/api/v1/section',sectionRouter)
 app.use('/api/v1/lesson',lessonRouter)
 app.use('/api/v1/payment',paymentRouter)
+app.post('/upload',uploadImage)
 app.use(errorhandler)
 
 const start = async () => {

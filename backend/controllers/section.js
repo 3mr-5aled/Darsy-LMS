@@ -35,7 +35,7 @@ const getAllSections =asynchandler(async(req,res,next)=>{
 const deleteSection =asynchandler(async(req,res,next)=>{
     // @api   delete api/v1/section/:courseId/deletesection/:sectionId
     // send courseId and sectionId as params
-    const {sectionId,courseId} = req.params
+    const {sectionId , courseId} = req.params
     const course =await Course.findOne({_id:courseId})
     if (!course) {
         return next(new ApiError('no course with this id',404))
