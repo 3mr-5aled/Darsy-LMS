@@ -6,7 +6,6 @@ const createCourseValidator=[
     check('description').notEmpty().withMessage('description is required'),
     check('image').notEmpty().withMessage('image is required'),
     check('price').notEmpty().withMessage('price is required'),
-    check('total').notEmpty().withMessage('total is required'),
     validator
 ]
 module.exports={createCourseValidator}

@@ -6,7 +6,6 @@ const authintications = require('../middlewares/authintication')
 const uploadImage = require('../middlewares/imageupload')
 
 const router = express.Router()
-
 router.post('/createcourse',authintications,authintication,createCourseValidator,uploadImage,createCourse)
 router.get('/getallcourses',getAllCourses)
 router.get('/getcourse/:id',getCourse)
