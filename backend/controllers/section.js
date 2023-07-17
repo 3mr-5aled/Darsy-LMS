@@ -5,13 +5,13 @@ const ApiError = require('../utils/apierror')
 const addSection =asynchandler(async(req,res,next)=>{
     // @api   post api/v1/:courseId/addsection
     // send courseId as params and title sectionImg , description in body
-    const {title,sectionImg,description} = req.body
+    const {title,duration} = req.body
     const {courseId} = req.params
     const course =await Course.findOne({_id:courseId})
     if (!course) {
         return next(new ApiError('no course with this id',400))
     }
-    const section = await Section.create({title,courseId,sectionImg,description})
+    const section = await Section.create({title,courseId, duration})
     course.total = course.total + 1 
     course.sections.push(section._id)
     course.save()

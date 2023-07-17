@@ -6,17 +6,14 @@ const Sections = new mongoose.Schema(
           type: String,
           required:true
         },
+        duration: {
+          type: String,
+          required:true
+        },
     total:{
         type: Number, 
     },
-    description: {
-      type: String,
-      required: true,
-    },
-    sectionImg: {
-      type: String,
-      required: true,
-    },
+
     courseId:{type:mongoose.Types.ObjectId,ref:'courses'},
     lessons: [{type:mongoose.Types.ObjectId,ref:'lessons'}]
 },
