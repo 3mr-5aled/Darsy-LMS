@@ -8,6 +8,7 @@ import DarkModeButton from "./DarkModeButton"
 import { toast } from "react-toastify"
 import { useUserContext } from "@/contexts/userContext"
 import { useEffect, useState } from "react"
+import { AdminOnlyLink } from "./AdminOnlyRoutes"
 
 const Navbar = () => {
   const router = useRouter()
@@ -38,7 +39,7 @@ const Navbar = () => {
           const userData = response.data
           setUser(userData)
         } catch (error: any) {
-          toast.error(error.message)
+          console.error(error.message)
         }
       }
       setIsLoadingUser(false)
@@ -87,11 +88,11 @@ const Navbar = () => {
                   {isSigningOut ? "Signing out..." : "Sign out"}
                 </button>
               </li>
-              {user.role === "tutor" && (
+              <AdminOnlyLink>
                 <li>
                   <Link href="/admin/dashboard">Dashboard</Link>
                 </li>
-              )}
+              </AdminOnlyLink>
             </ul>
           </div>
         ) : (

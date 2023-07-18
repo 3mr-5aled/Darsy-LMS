@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from "react"
 import { BsFillSunFill, BsMoonFill } from "react-icons/bs"
 import "@/app/globals.css" // Import the CSS file for styling

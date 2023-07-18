@@ -18,7 +18,13 @@ export const WebsiteDetails = {
 export const NavLinks = [
   { href: "/courses", key: "Courses", text: "Courses" },
   { href: "/about", key: "About", text: "About" },
-  { href: "/", key: "Contact", text: "Contact" },
+  { href: "/contact", key: "Contact", text: "Contact" },
+]
+export const AdminNavLinks = [
+  { href: "/admin/students", key: "Manage Students", text: "Manage Students" },
+  { href: "/admin/create-course", key: "Create Course", text: "Create Course" },
+  { href: "/admin/courses", key: "Manage Courses", text: "Manage Courses" },
+  { href: "/", key: "Back to Homepage", text: "Back to Homepage" },
 ]
 export const GenderOption = {
   title: "النوع" as string,
