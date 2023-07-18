@@ -1,14 +1,15 @@
 const express=require('express')
 const authintication = require('../middlewares/authorization')
 const authintications = require('../middlewares/authintication')
-const { addLesson,getLesson, updateLesson, deleteLesson, getAllLesson } = require('../controllers/lesson')
-const { getlessonValidator, deletelessonValidator, updatelessonValidator, addlessonValidator, getAlllessonValidator } = require('../utils/validators/lesson')
+const { addLesson,getLesson, updateLesson, deleteLesson, getAllLesson ,completeLesson} = require('../controllers/lesson')
+const { getlessonValidator, deletelessonValidator, updatelessonValidator, addlessonValidator, getAlllessonValidator, completelessonValidator } = require('../utils/validators/lesson')
 const uploadVideo = require('../middlewares/videouploader')
 
 const router = express.Router()
-router.post('/:sectionId/addlesson',authintications,authintication,addlessonValidator,addLesson)
+router.post('/addlesson',authintications,authintication,addlessonValidator,uploadVideo,addLesson)
 router.get('/getlesson/:lessonId',getlessonValidator,getLesson)
 router.get('/:sectionId/getalllesson/',getAlllessonValidator,getAllLesson)
 router.delete('/:sectionId/deletelesson/:lessonId',authintications,authintication,deletelessonValidator,deleteLesson)
 router.put('/updatelesson/:lessonId',authintications,authintication,updatelessonValidator,updateLesson)
+router.put('/commpletelesson/:lessonId',authintications,completelessonValidator,completeLesson)
 module.exports=router

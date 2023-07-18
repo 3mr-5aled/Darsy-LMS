@@ -21,15 +21,13 @@ const Lesson = new mongoose.Schema(
     material:{
         name:{
             type: String,
-            required:true
         },
         link:{
             type: String,
-            required:true
         }
     },
     courseId:{type:mongoose.Types.ObjectId,ref:'courses',required:true},
-    sectionId: {type:mongoose.Types.ObjectId,ref:'lessons',required:true},
+    sectionId: {type:mongoose.Types.ObjectId,ref:'sections',required:true},
     exams:[
         {
             question:{

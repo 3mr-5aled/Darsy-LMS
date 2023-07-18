@@ -52,7 +52,11 @@ const User =new mongoose.Schema({
         courseid: {
             type: mongoose.Schema.ObjectId,
             ref: 'courses'
-        }
+        },
+        lessonsDone:[{
+            type: mongoose.Schema.ObjectId,
+            ref: 'lessons'
+        }]
     }],
     exams:[
         {

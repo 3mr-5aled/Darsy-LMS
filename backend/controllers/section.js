@@ -12,7 +12,6 @@ const addSection =asynchandler(async(req,res,next)=>{
         return next(new ApiError('no course with this id',400))
     }
     const section = await Section.create({title,courseId, duration})
-    course.total = course.total + 1 
     course.sections.push(section._id)
     course.save()
     res.status(200).json(section)
@@ -45,7 +44,6 @@ const deleteSection =asynchandler(async(req,res,next)=>{
         return next(new ApiError('no section with this id',404))
     }
     course.sections = course.sections.filter(section => section !== sectionId)
-    course.total = course.total - 1
     course.save()
     res.status(200).json({msg:'section is deleted'})
 })

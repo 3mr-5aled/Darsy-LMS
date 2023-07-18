@@ -11,7 +11,6 @@ const login = asynchandler(async (req, res, next) => {
   // get email and password from request body
   const useremail = req.body.email;
   const userpassword = req.body.password;
-
   // find a user by email
   const user = useremail !== undefined ? await User.findOne({ email: useremail }) : await User.findOne({ phone: req.body.phone });
   // if user isn't found ,server send response ("no email is found")
@@ -87,10 +86,8 @@ const forgetpassword = asynchandler(async (req, res, next) => {
   }
   // generate vefication code
   const resetcode = Math.floor(100000 + Math.random() * 900000).toString();
-  console.log(resetcode);
   const salt = await bcrypt.genSalt(10);
   const hashedresetcode = await bcrypt.hash(resetcode, salt);
-
   user.forgetpasswordcode = hashedresetcode;
   user.forgetpasswordvalidation = false;
   user.forgetpasswordexpired = Date.now() + 5 * 60 * 1000;
