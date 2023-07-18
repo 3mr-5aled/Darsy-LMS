@@ -5,7 +5,7 @@ const Lesson = new mongoose.Schema(
     title: {
         type: String,
         required:true
-        },
+    },
     video:{
         type: String, 
         required:true
@@ -28,8 +28,8 @@ const Lesson = new mongoose.Schema(
             required:true
         }
     },
-    courseId:{type:mongoose.Types.ObjectId,ref:'courses'},
-    sectionId: {type:mongoose.Types.ObjectId,ref:'lessons'},
+    courseId:{type:mongoose.Types.ObjectId,ref:'courses',required:true},
+    sectionId: {type:mongoose.Types.ObjectId,ref:'lessons',required:true},
     exams:[
         {
             question:{

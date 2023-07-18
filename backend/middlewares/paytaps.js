@@ -3,21 +3,16 @@ const axios = require('axios')
 require('dotenv').config()
 const payment = asynchandler(async (req, res, next) => {
     const paytabs = require('paytabs_pt2');
-
     const
         profileID = "124773",
         serverKey = "SJJ9LJWDDR-J6NJ9GHDMD-MJ2JNLHZHG",
         region = "EGY";
-
     paytabs.setConfig(profileID, serverKey, region);
-
     let paymentMethods = ['all'];
-
     let transaction_details = [
         "sale",
         "ecom"
     ];
-
     let cart_details = [
         "100001",
         "EGP",
@@ -45,7 +40,6 @@ const payment = asynchandler(async (req, res, next) => {
         customer.zip,
         
     ];
-
     let shipping_address = customer_details;
     let url = {
         callback:"http://localhost:3000/api/v1/pay",
@@ -55,14 +49,11 @@ const payment = asynchandler(async (req, res, next) => {
         url.response,
         url.callback
     ];
-
     let lang = "ar";
     paymentPageCreated = function ($results) {
         return res.status(200).json({url:$results.redirect_url})
     }
-
     let frameMode = true;
-
     paytabs.createPaymentPage(
         paymentMethods,
         transaction_details,
@@ -74,6 +65,5 @@ const payment = asynchandler(async (req, res, next) => {
         paymentPageCreated,
         frameMode
     );
-    
 })
 module.exports = payment;

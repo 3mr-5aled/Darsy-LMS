@@ -12,7 +12,7 @@ const addLesson = asynchandler(async (req, res, next) => {
   if (!section) {
     return next(new ApiError("no course or section is found", 404));
   }
-  const lesson = await Lesson.create({...req.body,video:req.videoUrl});
+  const lesson = await Lesson.create({...req.body,courseId:section.courseId,sectionId});
   section.lessons.push(lesson._id);
   section.total = section.total + 1
   section.save();
@@ -21,12 +21,14 @@ const addLesson = asynchandler(async (req, res, next) => {
 
 const getLesson = asynchandler(async (req, res, next) => {
   // @api get    /getlesson/:lessonId
-  // send sectionId and courseId and lessonId in params
-  const {  lessonId } = req.params;
-  const lesson = await Lesson.findById(lessonId);
+  // send lessonId in params
+  const { lessonId } = req.params;
+  const lesson = await Lesson.findById(lessonId).populate('courseId')
   if (!lesson ) {
     return next(new ApiError("no lesson is found", 404));
   }
+  // let aboutLesson =await lesson.populate('courseId')
+  // console.log(aboutLesson)
   res.status(200).json(lesson);
 });
 
