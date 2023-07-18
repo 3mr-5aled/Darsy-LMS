@@ -1,7 +1,7 @@
-import React from "react"
+"use client"
 
-const CreateCourse = () => {
-  return <div>CreateCourse</div>
+import CourseForm from "@/components/CourseForm"
+
+export default function CreateCourse() {
+  return <CourseForm title="Create Course" type="create" />
 }
-
-export default CreateCourse

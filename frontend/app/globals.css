@@ -74,3 +74,17 @@ body {
 .swap-rotate.switch {
   transform: rotate(360deg);
 }
+
+/* course form */
+
+.form_image-container {
+  @apply w-full lg:min-h-[400px] min-h-[200px] relative;
+}
+
+.form_image-label {
+  @apply z-10 w-full h-full p-20 text-center text-gray-500 border-2 border-dashed border-gray-500;
+}
+
+.form_image-input {
+  @apply absolute z-30 w-full h-full opacity-0 cursor-pointer;
+}

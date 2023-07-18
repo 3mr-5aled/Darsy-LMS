@@ -1,15 +1,16 @@
 "use client"
 import { toast } from "react-toastify"
 import axiosInstance from "@/axios.config"
-import useUser from "@/lib/FetchUser"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import React, { useEffect } from "react"
+import React from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useUserContext } from "@/contexts/userContext"
 
 interface IFormInput {
-  email: string
+  email?: string
+  phone?: string
+  emailOrPhone: string
   password: string
 }
 
@@ -18,23 +19,30 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setValue,
   } = useForm<IFormInput>()
 
   const router = useRouter()
-  const { state, setUser, clearUser } = useUserContext()
+  const { setUser } = useUserContext()
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
+      const value = data.emailOrPhone
+      const isEmail = /^(?:[\w-.]+@([\w-]+\.)+[\w-]{2,4})$/i.test(value)
+      const formData: IFormInput = {
+        email: isEmail ? value : undefined,
+        phone: !isEmail ? value : undefined,
+        emailOrPhone: value,
+        password: data.password,
+      }
+
       if (isSubmitting) {
         return
       }
 
-      handleSubmit(async () => {
-        try {
-          const response = await axiosInstance.post(
-            "http://localhost:3000/api/v1/auth/login",
-            data
-          )
+      try {
+        await handleSubmit(async () => {
+          const response = await axiosInstance.post("/auth/login", formData)
           if (response?.data) {
             toast.success(response.data.message)
             setUser(response.data)
@@ -42,13 +50,13 @@ const Login = () => {
           } else {
             toast.error("An error occurred during login")
           }
-        } catch (error: any) {
-          console.error(error)
-          toast.error(
-            error.response?.data?.message || "An error occurred during login"
-          )
-        }
-      })()
+        })()
+      } catch (error: any) {
+        console.error(error)
+        toast.error(
+          error.response?.data?.message || "An error occurred during login"
+        )
+      }
     } catch (error) {
       console.error(error)
     }
@@ -60,25 +68,25 @@ const Login = () => {
         <h1>تسجيل دخول</h1>
         <div className="w-2/3">
           <div className="form-control">
-            <label htmlFor="email" className="label">
+            <label htmlFor="emailOrPhone" className="label">
               <span className="label-text">Email or Phone</span>
             </label>
             <input
               className="input input-bordered w-full"
-              id="email"
+              id="emailOrPhone"
               type="text"
-              placeholder="Email"
-              {...register("email", {
+              placeholder="Email or Phone"
+              {...register("emailOrPhone", {
                 required: true,
                 pattern: {
-                  value: /^(?:[\w-.]+@([\w-]+\.)+[\w-]{2,4})$/,
-                  message: "Invalid email",
+                  value: /^(?:[\w-.]+@([\w-]+\.)+[\w-]{2,4})$|^\d{11}$/,
+                  message: "Invalid email or phone number",
                 },
               })}
               disabled={isSubmitting}
             />
-            {errors.email && (
-              <p className="text-error">{errors.email.message}</p>
+            {errors.emailOrPhone && (
+              <p className="text-error">{errors.emailOrPhone.message}</p>
             )}
           </div>
 
@@ -102,15 +110,6 @@ const Login = () => {
               })}
               disabled={isSubmitting}
             />
-            <label htmlFor="Password" className="label">
-              <span></span>
-              <Link
-                href="/auth/reset"
-                className="label-text-alt text-secondary"
-              >
-                هل نسيت كلمة المرور؟
-              </Link>
-            </label>
             {errors.password && (
               <p className="text-error">{errors.password.message}</p>
             )}
@@ -119,7 +118,7 @@ const Login = () => {
 
         <button
           type="submit"
-          className="btn btn-primary"
+          className="btn btn-primary mt-5"
           disabled={isSubmitting}
         >
           Log in

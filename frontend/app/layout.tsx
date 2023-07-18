@@ -5,6 +5,7 @@ import { WebsiteDetails } from "@/constant"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { UserProvider } from "@/contexts/userContext"
+import ClientOnlyRoute from "@/components/ClientOnlyRoute"
 
 export const metadata = {
   title: WebsiteDetails.name,
@@ -21,10 +22,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body>
         <ToastContainer />
         <UserProvider>
-          <Navbar />
+          <ClientOnlyRoute>
+            <Navbar />
+          </ClientOnlyRoute>
           <main>{children}</main>
         </UserProvider>
-        <Footer />
+        <ClientOnlyRoute>
+          <Footer />
+        </ClientOnlyRoute>
       </body>
     </html>
   )

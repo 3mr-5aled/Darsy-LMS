@@ -1,13 +1,13 @@
 "use client"
 import { useEffect } from "react"
 import useCourses from "@/lib/FetchCourses"
-import Loading from "../loading"
+import Loading from "@/app/loading"
 import { CourseType } from "@/common.types"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import NotFoundComponent from "@/components/NotFoundComponent"
 
-const Courses = () => {
+const CoursesAdminView = () => {
   const [courses, isLoading, error] = useCourses()
   const router = useRouter()
 
@@ -59,4 +59,4 @@ const Courses = () => {
   )
 }
 
-export default Courses
+export default CoursesAdminView
