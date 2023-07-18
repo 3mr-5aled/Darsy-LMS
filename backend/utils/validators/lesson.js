@@ -17,11 +17,14 @@ const deletelessonValidator=[
     check('sectionId').notEmpty().withMessage('sectionId is required').isMongoId().withMessage('sectionId is invalid id'),
     check('lessonId').notEmpty().withMessage('lessonId is required').isMongoId().withMessage('lessonId is invalid id'),
     validator
-
 ]
 const updatelessonValidator=[
     check('lessonId').notEmpty().withMessage('lessonId is required').isMongoId().withMessage('lessonId is invalid id'),
     validator
 ]
 
-module.exports={addlessonValidator,getlessonValidator,deletelessonValidator,updatelessonValidator}
+const getAlllessonValidator=[
+    check('sectionId').notEmpty().withMessage('sectionId is required').isMongoId().withMessage('sectionId is invalid id'),
+    validator
+]
+module.exports={addlessonValidator,getlessonValidator,deletelessonValidator,updatelessonValidator,getAlllessonValidator}
