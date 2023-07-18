@@ -11,22 +11,17 @@ type Props = {
   type: "create" | "edit"
   section?: SectionType
   courseId: string | undefined
+  onClose: () => void // Function to close the modal
 }
 
-const SectionForm = ({ title, type, section, courseId }: Props) => {
+const SectionForm = ({ title, type, section, courseId, onClose }: Props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SectionType>() // Specify the generic type for useForm
 
-  const [form, setForm] = useState<SectionType>({
-    title: "",
-    duration: "",
-  })
-
   const router = useRouter()
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const onSubmit: SubmitHandler<SectionType> = async (data) => {
     try {
@@ -35,22 +30,22 @@ const SectionForm = ({ title, type, section, courseId }: Props) => {
       }
 
       try {
-        await handleSubmit(async () => {
-          const response = await axiosInstance.post(
-            `/section/${courseId}/addsection`,
-            data
-          )
-          if (response?.data) {
-            toast.success(response.data.message)
-            router.push("/admin/manage-course")
-          } else {
-            toast.error("An error occurred during login")
-          }
-        })()
+        const response = await axiosInstance.post(
+          `/section/${courseId}/addsection`,
+          data
+        )
+        if (response?.data) {
+          toast.success("Section created") // Update the success message
+          router.push(`/admin/manage-course/${courseId}`)
+          onClose() // Close the modal
+        } else {
+          toast.error("An error occurred during section creation") // Update the error message
+        }
       } catch (error: any) {
         console.error(error)
         toast.error(
-          error.response?.data?.message || "An error occurred during login"
+          error.response?.data?.message ||
+            "An error occurred during section creation" // Update the error message
         )
       }
     } catch (error) {
@@ -59,10 +54,7 @@ const SectionForm = ({ title, type, section, courseId }: Props) => {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flexCenter card w-full p-5 m-5 bg-base-300 prose"
-    >
+    <div className="flex flex-col items-center w-full p-5 prose">
       <h1>{title}</h1>
       <div className="flexCenter flex-col gap-5">
         <div className="flex justify-around flex-wrap gap-5 w-full">
@@ -73,18 +65,20 @@ const SectionForm = ({ title, type, section, courseId }: Props) => {
               id="title"
               className="input input-bordered"
               placeholder="Title"
+              disabled={isSubmitting}
               {...register("title", { required: true })}
             />
             {errors.title && <span>This field is required</span>}
-            {/* Display error message if the "name" field is not filled */}
+            {/* Display error message if the "title" field is not filled */}
           </div>
 
           <div className="form-control">
-            <label htmlFor="duration">Duration in hours:</label>
+            <label htmlFor="duration">Duration in minutes:</label>
             <input
               type="number"
               id="duration"
-              placeholder="Duration in hours"
+              placeholder="Duration in minutes"
+              disabled={isSubmitting}
               className="input input-bordered"
               min={0}
               {...register("duration", { required: true })}
@@ -96,13 +90,17 @@ const SectionForm = ({ title, type, section, courseId }: Props) => {
       </div>
 
       <div className="w-full flexCenter my-5">
-        <button type="submit" className="btn btn-primary">
+        <button
+          type="submit"
+          className="btn btn-primary"
+          onClick={handleSubmit(onSubmit)} // Pass the onSubmit function to the onClick event
+        >
           {isSubmitting
             ? `${type === "create" ? "Creating" : "Editing"}`
             : `${type === "create" ? "Create" : "Edit"}`}
         </button>
       </div>
-    </form>
+    </div>
   )
 }
 

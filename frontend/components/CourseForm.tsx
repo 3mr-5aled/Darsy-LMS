@@ -16,21 +16,21 @@ const CourseForm = ({ title, type, course }: Props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<CourseType>() // Specify the generic type for useForm
 
-  const [form, setForm] = useState<CourseType>({
-    name: "",
-    description: "",
-    courseImg: "",
-    duration: "",
-    price: "",
-  })
+  const [imageBase64, setImageBase64] = useState<string | null>(null)
 
   const router = useRouter()
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const onSubmit: SubmitHandler<CourseType> = async (data) => {
+    const formData: CourseType = {
+      name: data.name,
+      description: data.description,
+      image: imageBase64!,
+      duration: data.duration,
+      price: data.price,
+    }
     try {
       if (isSubmitting) {
         return
@@ -40,11 +40,11 @@ const CourseForm = ({ title, type, course }: Props) => {
         await handleSubmit(async () => {
           const response = await axiosInstance.post(
             "/course/createcourse",
-            data
+            formData
           )
           if (response?.data) {
-            toast.success(response.data.message)
-            router.push("/admin/manage-course")
+            toast.success("course Created")
+            router.push(`/admin/manage-course/${response.data._id}`)
           } else {
             toast.error("An error occurred during login")
           }
@@ -78,7 +78,7 @@ const CourseForm = ({ title, type, course }: Props) => {
 
     reader.onload = () => {
       const result = reader.result as string
-      setForm({ ...form, courseImg: result })
+      setImageBase64(result)
     }
   }
 
@@ -90,9 +90,9 @@ const CourseForm = ({ title, type, course }: Props) => {
       <h1>{title}</h1>
       <div className="flexCenter flex-col gap-5">
         <div className="flexStart form_image-container">
-          {!form.courseImg && (
+          {!imageBase64 && (
             <label htmlFor="image" className="flexCenter form_image-label">
-              {!form.courseImg && "Choose a poster for your project"}
+              {!imageBase64 && "Choose a poster for your project"}
             </label>
           )}
           <input
@@ -103,9 +103,9 @@ const CourseForm = ({ title, type, course }: Props) => {
             className="form_image-input"
             onChange={(e) => handleChangeImage(e)}
           />
-          {form.courseImg && (
+          {imageBase64 && (
             <img
-              src={form?.courseImg}
+              src={imageBase64}
               className="z-20 object-contain sm:p-10 p-3 border-2 border-dashed border-gray-500"
               alt="image"
             />
@@ -119,6 +119,7 @@ const CourseForm = ({ title, type, course }: Props) => {
               id="name"
               className="input input-bordered"
               placeholder="Name"
+              disabled={isSubmitting}
               {...register("name", { required: true })}
             />
             {errors.name && <span>This field is required</span>}
@@ -131,6 +132,7 @@ const CourseForm = ({ title, type, course }: Props) => {
               className="textarea textarea-bordered w-full min-w-[16rem] max-w-xs"
               {...register("description", { required: true })}
               placeholder="Description"
+              disabled={isSubmitting}
             />
             {errors.description && <span>This field is required</span>}
             {/* Display error message if the "description" field is not filled */}
@@ -141,6 +143,7 @@ const CourseForm = ({ title, type, course }: Props) => {
               type="number"
               id="duration"
               placeholder="Duration in hours"
+              disabled={isSubmitting}
               className="input input-bordered"
               min={0}
               {...register("duration", { required: true })}
@@ -155,6 +158,7 @@ const CourseForm = ({ title, type, course }: Props) => {
               id="price"
               className="input input-bordered"
               placeholder="Price"
+              disabled={isSubmitting}
               {...register("price", { required: true })}
             />
             {errors.price && <span>This field is required</span>}
