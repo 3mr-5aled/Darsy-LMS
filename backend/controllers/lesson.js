@@ -47,7 +47,8 @@ const deleteLesson = asynchandler(async (req, res, next) => {
 const getAllLesson = asynchandler(async (req, res, next) => {
   // @api get    /getalllesson
   // send sectionId and courseId in params
-  const lesson = await Lesson.find({});
+  const {sectionId} =req.params;
+  const lesson = await Lesson.find({sectionId});
   res.status(200).json(lesson);
 });
 const updateLesson = asynchandler(async (req, res, next) => {
