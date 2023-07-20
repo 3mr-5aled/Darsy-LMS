@@ -23,7 +23,7 @@ const checkOrder =asynchandler(async(req,res,next)=>{
     }
     console.log(order);
     const user = await User.findById(order.userId)
-    user.enrolledCourse = user.enrolledCourse.push({courseId:order.courseId,lessonsDone:[]})
+    user.enrolledCourse.push({ courseId: order.courseId, lessonsDone: [] });
     user.save()
     order.status = 'paid'
     order.save()

@@ -35,7 +35,7 @@ let customer = {
     name:req.user.name,
     email:req.user.email,
     phone:req.user.phone,
-    street1:req.body.address,
+    street1:"",
     city:req.user.city,
     state:"CAI",
     country:"EG",

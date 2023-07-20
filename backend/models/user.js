@@ -56,7 +56,7 @@ const User =new mongoose.Schema({
         lessonsDone:[{
             type: mongoose.Schema.ObjectId,
             ref: 'lessons'
-        },{timestamps:true}]
+        }]
     }],
     exams:[
         {
