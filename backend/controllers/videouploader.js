@@ -14,7 +14,6 @@ const uploadVideo = asynchandler(async (req, res, next) => {
         resource_type: "video"
     }
     const video =req.file.path
-    console.log(video);
         const uploadedVideo = await new Promise((resolve, reject) => {
             cloudinary.uploader.upload_large(video, opts, (err, result) => {
             if (err) {
@@ -23,8 +22,7 @@ const uploadVideo = asynchandler(async (req, res, next) => {
             resolve(result)
             })
         })
-        req.videoUrl = uploadedVideo
         console.log(uploadedVideo.secure_url);
-        next()
+        res.status(200).json(uploadedVideo)
 })
 module.exports = uploadVideo
