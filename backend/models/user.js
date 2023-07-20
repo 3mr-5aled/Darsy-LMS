@@ -49,14 +49,14 @@ const User =new mongoose.Schema({
         type:String,
     },
     enrolledCourse: [{
-        courseid: {
+        courseId: {
             type: mongoose.Schema.ObjectId,
             ref: 'courses'
         },
         lessonsDone:[{
             type: mongoose.Schema.ObjectId,
             ref: 'lessons'
-        }]
+        },{timestamps:true}]
     }],
     exams:[
         {

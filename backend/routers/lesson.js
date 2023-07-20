@@ -6,7 +6,7 @@ const { getlessonValidator, deletelessonValidator, updatelessonValidator, addles
 const uploadVideo = require('../middlewares/videouploader')
 
 const router = express.Router()
-router.post('/addlesson',authintications,authintication,addlessonValidator,uploadVideo,addLesson)
+router.post('/:sectionId/addlesson',authintications,authintication,addlessonValidator,uploadVideo,addLesson)
 router.get('/getlesson/:lessonId',getlessonValidator,getLesson)
 router.get('/:sectionId/getalllesson/',getAlllessonValidator,getAllLesson)
 router.delete('/:sectionId/deletelesson/:lessonId',authintications,authintication,deletelessonValidator,deleteLesson)

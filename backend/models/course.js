@@ -7,6 +7,9 @@ const Courses = new mongoose.Schema(
       type: String,
       required: true,
     },
+    discount:{
+      type: Number,
+    },
     description: {
       type: String,
       required: true,
