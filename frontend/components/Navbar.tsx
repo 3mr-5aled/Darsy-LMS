@@ -48,9 +48,19 @@ const Navbar = () => {
     fetchUserOnLoad()
   }, [])
 
+  const getUserInitials = (userName: string) => {
+    const nameArray = userName.split(" ")
+    const firstNameInitial = nameArray[0].charAt(0).toUpperCase()
+    const lastNameInitial =
+      nameArray.length > 1 ? nameArray[1].charAt(0).toUpperCase() : ""
+    return firstNameInitial + lastNameInitial
+  }
+
   return (
     <nav className="flexBetween navbar">
-      <div className="gap-10 flexStart">
+      <div className="container gap-10 flexStart">
+        {" "}
+        {/* Container for the logo */}
         <Link href="/" className="prose bg-white rounded-md p-3">
           <Image
             src="/next.svg"
@@ -60,21 +70,37 @@ const Navbar = () => {
           />
         </Link>
       </div>
-      <ul className="hidden xl:flex items-center space-x-4 font-bold">
+      <ul className="hidden xl:flex items-center space-x-4 font-bold container justify-center">
+        {" "}
+        {/* Container for the links */}
         {NavLinks.map((link) => (
-          <li key={link.text}>
+          <li
+            key={link.text}
+            className="hover:text-secondary transition-colors"
+          >
+            {/* Apply transition to the hover state */}
             <Link href={link.href}>{link.text}</Link>
           </li>
         ))}
       </ul>
-      <div className="flex items-center space-x-4">
+      <div className="container flex items-center justify-end space-x-4">
+        {" "}
+        {/* Container for the user avatar/sign-in button */}
         <DarkModeButton />
         {isLoadingUser ? (
           <div className="animate-pulse w-16 h-6 m-1" /> // Placeholder skeleton for username
         ) : user ? (
-          <div className="dropdown">
-            <label tabIndex={0} className="btn m-1 border border-gray-500">
-              {user?.name}
+          <div className="dropdown dropdown-end">
+            <label tabIndex={0} className="">
+              <div className="avatar placeholder">
+                <div className="bg-neutral-focus text-neutral-content rounded-full w-12 border-2 cursor-pointer border-gray-800 hover:border-2 hover:border-secondary transition-all">
+                  {" "}
+                  {/* Apply transition to the border color */}
+                  <span className="font-bold">
+                    {getUserInitials(user.name)}
+                  </span>
+                </div>
+              </div>
             </label>
             <ul
               tabIndex={0}

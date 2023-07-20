@@ -25,7 +25,11 @@ const DarkModeButton = () => {
   }
 
   return (
-    <label className={`swap swap-rotate ${isDarkMode ? "switch" : ""}`}>
+    <label
+      className={`swap swap-rotate hover:text-secondary ${
+        isDarkMode ? "switch" : ""
+      }`}
+    >
       <button onClick={toggleDarkMode}>
         {/* sun icon */}
         <div className={`${isDarkMode ? "hidden" : "block"}`}>

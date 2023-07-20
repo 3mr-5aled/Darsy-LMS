@@ -88,3 +88,9 @@ body {
 .form_image-input {
   @apply absolute z-30 w-full h-full opacity-0 cursor-pointer;
 }
+
+.video-item {
+  margin: 1em;
+  border-radius: 16px;
+  overflow: hidden;
+}

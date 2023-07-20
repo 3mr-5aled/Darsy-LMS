@@ -1,4 +1,5 @@
 import { features } from "@/constant"
+import Link from "next/link"
 
 const Home = () => {
   return (
@@ -19,7 +20,9 @@ const Home = () => {
               excepturi exercitationem quasi. In deleniti eaque aut repudiandae
               et a id nisi.
             </p>
-            <button className="btn btn-primary">Get Started</button>
+            <Link href="/auth/login" className="btn btn-primary">
+              Get Started
+            </Link>
           </div>
         </div>
       </main>

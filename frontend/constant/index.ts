@@ -7,12 +7,20 @@ import { FaRoute } from "react-icons/fa"
 
 export const WebsiteDetails = {
   name: "Darsy" as string,
-  description: "" as string,
+  description:
+    "this is the description for the website where you can find all you need" as string,
   logo: "Logo" as string,
   keywords: "" as string,
   author: "Mr.Unknown" as string,
   email: "test@gmail.com" as string,
   phone: "0101234568" as string,
+  whatsappLink: "https://wa.me/phoneNumber" as string,
+  youtubeLink: "https://www.youtube.com/@UserName" as string,
+  facebookLink: "https://www.facebook.com/UserName" as string,
+  instagramLink: "https://www.instagram.com/UserName" as string,
+  twitterLink: "https://www.twitter.com/UserName" as string,
+  linkedinLink: "https://www.linkedin.com/UserName" as string,
+  githubLink: "https://www.github.com/UserName" as string,
 }
 
 export const NavLinks = [

@@ -6,6 +6,8 @@ import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { UserProvider } from "@/contexts/userContext"
 import ClientOnlyRoute from "@/components/ClientOnlyRoute"
+import { Suspense } from "react"
+import Loading from "./loading"
 
 export const metadata = {
   title: WebsiteDetails.name,
@@ -25,7 +27,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <ClientOnlyRoute>
             <Navbar />
           </ClientOnlyRoute>
-          <main>{children}</main>
+          <Suspense fallback={<Loading />}>
+            <main>{children}</main>
+          </Suspense>
         </UserProvider>
         <ClientOnlyRoute>
           <Footer />
