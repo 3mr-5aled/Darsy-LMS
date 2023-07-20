@@ -14,9 +14,9 @@ const payment = asynchandler(async (req, res, next) => {
         "ecom"
     ];
     let cart_details = [
-        "100001",
+        req.cart_id,
         "EGP",
-        "550",
+        req.amount,
         "dummy description"
     ];
     let customer = {
@@ -38,12 +38,12 @@ const payment = asynchandler(async (req, res, next) => {
         customer.state,
         customer.country,
         customer.zip,
-        
+        customer.id
     ];
     let shipping_address = customer_details;
     let url = {
-        callback:"http://localhost:3000/api/v1/pay",
-        response:"http://localhost:3000/api/v1/pay"
+        callback:"https://webhook.site/e027fdcd-ff77-49da-b75b-dc1635dc987f",
+        response:"https://e1e2-41-236-216-101.ngrok-free.app/api/v1/payment/checkorder"
     }
     let response_URLs = [
         url.response,
@@ -63,7 +63,8 @@ const payment = asynchandler(async (req, res, next) => {
         response_URLs,
         lang,
         paymentPageCreated,
-        frameMode
+        frameMode,
+        data
     );
 })
 module.exports = payment;

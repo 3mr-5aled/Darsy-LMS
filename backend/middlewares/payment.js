@@ -47,14 +47,14 @@ const payment = asynchandler(async(req,res,next)=>{
         "integration_id": 4029317
       }
     const thirdResponse = await axios.post( "https://accept.paymob.com/api/acceptance/payment_keys",thirdData)  
-    const walletpayment ={
-      "source": {
-        "identifier": "wallet mobile number", 
-        "subtype": "WALLET"
-      },
-      "payment_token": thirdResponse.data.token
-    }
-    const fourthresponse = await axios.post(" https://accept.paymob.com/api/acceptance/payments/pay",walletpayment)
-    res.status(200).json({URL:`https://accept.paymobsolutions.com/api/acceptance/wallet_other_test/wallet_template?token=${thirdResponse.data.token}`})
+    // const walletpayment ={
+    //   "source": {
+    //     "identifier": "wallet mobile number", 
+    //     "subtype": "WALLET"
+    //   },
+    //   "payment_token": thirdResponse.data.token
+    // }
+    // const fourthresponse = await axios.post(" https://accept.paymob.com/api/acceptance/payments/pay",walletpayment)
+    res.status(200).json({URL:`https://accept.paymob.com/api/acceptance/iframes/774211?payment_token=${thirdResponse.data.token}`})
 })
 module.exports=payment;
