@@ -5,9 +5,10 @@ const { addLesson,getLesson, updateLesson, deleteLesson, getAllLesson ,completeL
 const { getLessonValidator, deleteLessonValidator, updateLessonValidator, addLessonValidator, getAllLessonValidator, completeLessonValidator} = require('../utils/validators/lesson')
 const uploadVideo = require('../middlewares/videouploader')
 const { enrolledCourse } = require('../middlewares/enrolledcourses')
+const upload = require('../middlewares/multer')
 
 const router = express.Router()
-router.post('/:sectionId/addlesson',authintications,authintication,addLessonValidator,uploadVideo,addLesson)
+router.post('/:sectionId/addlesson',authintications,authintication,addLessonValidator,upload.single("video"),uploadVideo,addLesson)
 router.get('/getlesson/:lessonId',getLessonValidator,authintications,enrolledCourse,getLesson)
 router.get('/:sectionId/getalllesson/',getAllLessonValidator,getAllLesson)
 router.delete('/:sectionId/deletelesson/:lessonId',authintications,authintication,deleteLessonValidator,deleteLesson)

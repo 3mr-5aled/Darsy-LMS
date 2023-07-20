@@ -20,7 +20,7 @@ const addLesson = asynchandler(async (req, res, next) => {
   section.save();
   course.total = course.total + 1
   course.save();
-  res.status(200).json(lesson);
+  res.status(200).json(lesson)
 });
 const getLesson = asynchandler(async (req, res, next) => {
   // @api get    /getlesson/:lessonId
@@ -83,6 +83,7 @@ const completeLesson = asynchandler(async (req, res, next) => {
   const userFromDB = await User.findById(user._id)
   userFromDB.enrolledCourse.map((course) => course.courseId === lesson.courseId ?  course.lessonsDone.push(lessonId) : course)
   userFromDB.save();
+  
   res.status(200).json({})
 })
 module.exports = {
