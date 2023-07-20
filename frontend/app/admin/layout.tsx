@@ -5,6 +5,8 @@ import "react-toastify/dist/ReactToastify.css"
 import Link from "next/link"
 import AdminOnlyRoute from "@/components/AdminOnlyRoutes"
 import DarkModeButton from "@/components/DarkModeButton"
+import { useUserContext } from "@/contexts/userContext"
+import UserComponent from "@/components/UserComponent"
 
 export const metadata = {
   title: WebsiteDetails.name,
@@ -22,7 +24,7 @@ export default function RootLayout({
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col items-center justify-center">
-          <div className="card bg-base-300">{children}</div>
+          <div className="card min-w-96 bg-base-300">{children}</div>
           <label
             htmlFor="my-drawer-2"
             className="btn btn-primary drawer-button lg:hidden"
@@ -46,6 +48,9 @@ export default function RootLayout({
               </li>
             ))}
           </ul>
+          <div className="p-4">
+            <UserComponent />
+          </div>
         </div>
       </div>
     </AdminOnlyRoute>

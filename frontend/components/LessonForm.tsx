@@ -1,8 +1,7 @@
 "use client"
-import React, { ChangeEvent, useState } from "react"
 import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { CourseType, LessonType } from "@/common.types"
+import { LessonType } from "@/common.types"
 import axiosInstance from "@/axios.config"
 import { toast } from "react-toastify"
 
@@ -11,49 +10,48 @@ type Props = {
   type: "create" | "edit"
   lesson?: LessonType
   sectionId: string | undefined
+  courseId: string | undefined
+  onClose: () => void // Function to close the modal
 }
 
-const LessonForm = ({ title, type, lesson, sectionId }: Props) => {
+const LessonForm = ({
+  title,
+  type,
+  lesson,
+  sectionId,
+  courseId,
+  onClose,
+}: Props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LessonType>() // Specify the generic type for useForm
 
-  const [form, setForm] = useState<LessonType>({
-    title: "",
-    duration: "",
-    material: "",
-    video: "",
-  })
-
   const router = useRouter()
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const onSubmit: SubmitHandler<LessonType> = async (data) => {
+    console.log(data)
     try {
       if (isSubmitting) {
         return
       }
 
       try {
-        await handleSubmit(async () => {
-          const response = await axiosInstance.post(
-            `/lesson/${sectionId}/addlesson`,
-            data
-          )
-          if (response?.data) {
-            toast.success(response.data.message)
-            router.push("/admin/manage-course")
-          } else {
-            toast.error("An error occurred during login")
-          }
-        })()
+        const response = await axiosInstance.post(
+          `/lesson/${sectionId}/addlesson`,
+          data
+        )
+        if (response?.data) {
+          toast.success(response.data.message)
+          router.push(`/admin/manage-course/${courseId}}`)
+          onClose() // Close the modal
+        } else {
+          throw errors
+        }
       } catch (error: any) {
         console.error(error)
-        toast.error(
-          error.response?.data?.message || "An error occurred during login"
-        )
+        toast.error(error.response?.data?.message || "An error occurred")
       }
     } catch (error) {
       console.error(error)
@@ -61,10 +59,7 @@ const LessonForm = ({ title, type, lesson, sectionId }: Props) => {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flexCenter card w-full p-5 m-5 bg-base-300 prose"
-    >
+    <div className="flexCenter flex-col w-full p-5 prose">
       <h1>{title}</h1>
       <div className="flexCenter flex-col gap-5">
         <div className="flex justify-around flex-wrap gap-5 w-full">
@@ -75,18 +70,44 @@ const LessonForm = ({ title, type, lesson, sectionId }: Props) => {
               id="title"
               className="input input-bordered"
               placeholder="Title"
+              disabled={isSubmitting}
               {...register("title", { required: true })}
             />
             {errors.title && <span>This field is required</span>}
             {/* Display error message if the "name" field is not filled */}
           </div>
-
           <div className="form-control">
-            <label htmlFor="duration">Duration in hours:</label>
+            <label htmlFor="description">Description:</label>
+            <textarea
+              id="description"
+              className="textarea textarea-bordered w-full min-w-[16rem] max-w-xs"
+              {...register("description", { required: true })}
+              placeholder="Description"
+              disabled={isSubmitting}
+            />
+            {errors.description && <span>This field is required</span>}
+            {/* Display error message if the "description" field is not filled */}
+          </div>
+          <div className="form-control">
+            <label htmlFor="video">Video:</label>
+            <input
+              type="text"
+              id="video"
+              className="input input-bordered"
+              placeholder="Video"
+              disabled={isSubmitting}
+              {...register("video", { required: true })}
+            />
+            {errors.video && <span>This field is required</span>}
+            {/* Display error message if the "name" field is not filled */}
+          </div>
+          <div className="form-control">
+            <label htmlFor="duration">Duration in minutes:</label>
             <input
               type="number"
               id="duration"
-              placeholder="Duration in hours"
+              placeholder="Duration in minutes"
+              disabled={isSubmitting}
               className="input input-bordered"
               min={0}
               {...register("duration", { required: true })}
@@ -94,17 +115,51 @@ const LessonForm = ({ title, type, lesson, sectionId }: Props) => {
             {errors.duration && <span>This field is required</span>}
             {/* Display error message if the "duration" field is not filled */}
           </div>
+
+          <div>
+            <label htmlFor="material">Material</label>
+            <div className="mx-3">
+              <div className="form-control">
+                <label htmlFor="material">Name:</label>
+                <input
+                  type="text"
+                  id="materialName"
+                  className="input input-bordered"
+                  placeholder="Material Name"
+                  {...register("material.name", { required: true })}
+                />
+                {errors.material?.name && <span>This field is required</span>}
+                {/* Display error message if the "name" field is not filled */}
+              </div>
+              <div className="form-control">
+                <label htmlFor="MaterialUrl">Url:</label>
+                <input
+                  type="text"
+                  id="materialUrl"
+                  className="input input-bordered"
+                  placeholder="Material Url"
+                  {...register("material.link", { required: true })}
+                />
+                {errors.material?.link && <span>This field is required</span>}
+                {/* Display error message if the "name" field is not filled */}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div className="w-full flexCenter my-5">
-        <button type="submit" className="btn btn-primary">
+        <button
+          type="submit"
+          className="btn btn-primary"
+          onClick={handleSubmit(onSubmit)}
+        >
           {isSubmitting
             ? `${type === "create" ? "Creating" : "Editing"}`
             : `${type === "create" ? "Create" : "Edit"}`}
         </button>
       </div>
-    </form>
+    </div>
   )
 }
 

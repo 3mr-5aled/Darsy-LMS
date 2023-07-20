@@ -27,7 +27,8 @@ export type CourseType = {
   _id?: string
   name: string
   description: string
-  courseImg: string
+  image: string
+  courseImg?: string
   duration: string
   price: string
   sections?: Section[]
@@ -39,11 +40,27 @@ export type SectionType = {
   duration: string
   courseId?: string
 }
-export type LessonType = {
+
+export type Material = {
+  name: string
+  link: string
+}
+
+export interface LessonType {
   _id?: string
   title: string
+  video: string
   duration: string
-  material?: string
-  video?: string
+  description: string
+  material?: {
+    name: string
+    link: string
+  }
+  courseId?: string
   sectionId?: string
+  exams?: {
+    question: string
+    answers: string[]
+    correctAnswer: string
+  }[]
 }

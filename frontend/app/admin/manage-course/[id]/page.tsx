@@ -4,12 +4,12 @@ import Loading from "@/app/loading"
 import axiosInstance from "@/axios.config"
 import { CourseType } from "@/common.types"
 import CourseSections from "@/components/CourseSections"
-import SectionForm from "@/components/SectionForm"
-import { useParams } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 
 const Course = () => {
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [course, setCourse] = useState<CourseType | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -32,6 +32,21 @@ const Course = () => {
     fetchCourse()
   }, [])
 
+  const deleteCourse = async () => {
+    try {
+      if (window.confirm("Are you sure you want to delete this course?")) {
+        setIsLoading(true)
+        await axiosInstance.delete(`/course/deletecourse/${id}`)
+        toast.success("Course deleted successfully")
+        router.push("/admin/courses") // Redirect to the courses page after deletion
+      }
+    } catch (error: any) {
+      setError(error)
+      toast.error(error)
+      setIsLoading(false)
+    }
+  }
+
   if (!course) {
     return <Loading />
   }
@@ -53,7 +68,18 @@ const Course = () => {
             <p>Duration: {course.duration} hours</p>
             <p>Price: {course.price}$</p>
 
-            <button className="btn btn-primary my-5">Enroll Now</button>
+            <button
+              className="btn btn-primary btn-outline mt-5 mb-3"
+              onClick={() => router.push(`/course/${course._id}`)}
+            >
+              View Course
+            </button>
+            <button
+              className="btn btn-error btn-outline mb-5 mt-3"
+              onClick={deleteCourse}
+            >
+              Delete course
+            </button>
           </div>
         </div>
         <CourseSections
@@ -62,11 +88,6 @@ const Course = () => {
           isAdmin={true}
         />
       </div>
-      <SectionForm
-        type="create"
-        courseId={course._id}
-        title="create a section"
-      />
     </>
   )
 }

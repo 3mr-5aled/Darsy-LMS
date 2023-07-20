@@ -29,11 +29,11 @@ const CoursesAdminView = () => {
     <div className="m-5 grid grid-flow-col md:grid-cols-4 gap-5 overflow-x-hidden">
       {courses.map((item: CourseType, index: number) => (
         <div key={index} className="card bg-base-300 p-5">
-          <Link href={`/course/${item._id}`}>
+          <Link href={`/admin/manage-course/${item._id}`}>
             <div>
               <img
                 className="rounded-lg"
-                src={/*item.courseImg ||*/ "https://picsum.photos/350/350"}
+                src={item.courseImg || "https://picsum.photos/350/350"}
                 alt={item.name}
                 width={350}
                 height={350}
