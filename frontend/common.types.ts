@@ -49,7 +49,7 @@ export type Material = {
 export interface LessonType {
   _id?: string
   title: string
-  video: string
+  video: any
   duration: string
   description: string
   material?: {

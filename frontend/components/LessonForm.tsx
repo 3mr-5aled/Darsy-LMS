@@ -31,16 +31,16 @@ const LessonForm = ({
   const router = useRouter()
 
   const onSubmit: SubmitHandler<LessonType> = async (data) => {
-    console.log(data)
+    const formData = new FormData()
+    formData.append("video", data.file[0])
     try {
       if (isSubmitting) {
         return
       }
-
       try {
         const response = await axiosInstance.post(
           `/lesson/${sectionId}/addlesson`,
-          data
+          formData
         )
         if (response?.data) {
           toast.success(response.data.message)
@@ -88,7 +88,7 @@ const LessonForm = ({
             {errors.description && <span>This field is required</span>}
             {/* Display error message if the "description" field is not filled */}
           </div>
-          <div className="form-control">
+          {/* <div className="form-control">
             <label htmlFor="video">Video:</label>
             <input
               type="text"
@@ -99,8 +99,22 @@ const LessonForm = ({
               {...register("video", { required: true })}
             />
             {errors.video && <span>This field is required</span>}
+            // Display error message if the "name" field is not filled 
+          </div> */}
+          <div className="form-control">
+            <label htmlFor="video">Video:</label>
+            <input
+              type="file"
+              id="video"
+              className="input input-bordered"
+              placeholder="Video"
+              disabled={isSubmitting}
+              {...register("video", { required: true })}
+            />
+            {errors.video && <span>This field is required</span>}
             {/* Display error message if the "name" field is not filled */}
           </div>
+
           <div className="form-control">
             <label htmlFor="duration">Duration in minutes:</label>
             <input
