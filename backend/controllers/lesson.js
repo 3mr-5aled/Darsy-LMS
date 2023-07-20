@@ -25,13 +25,7 @@ const addLesson = asynchandler(async (req, res, next) => {
 const getLesson = asynchandler(async (req, res, next) => {
   // @api get    /getlesson/:lessonId
   // send lessonId in params
-  const { lessonId } = req.params;
-  const lesson = await Lesson.findById(lessonId)
-  if (!lesson ) {
-    return next(new ApiError("no lesson is found", 404));
-  }
-  await lesson.populate('sectionId')
-  await lesson.populate('courseId')
+  const {lesson} = req
   const {title,duration,material,video,_id,exams,description} = lesson
   const sectionTitle = lesson.sectionId.title
   const sectionDuration = lesson.sectionId.duration
@@ -82,14 +76,14 @@ const updateLesson = asynchandler(async (req, res, next) => {
 });
 const completeLesson = asynchandler(async (req, res, next) => {
   // @api put    /completelesson/:lessonId
-  // send lessonId in params and courseId in body
+  // send lessonId in params 
   const { lessonId } = req.params;
   const {user} = req
+  const lesson = await Lesson.findById(lessonId);
   const userFromDB = await User.findById(user._id)
-  userFromDB.enrolledCourse = userFromDB.enrolledCourse.map((course) => course.courseid === req.body.courseId && course.lessonsDone.push(lessonId))
+  userFromDB.enrolledCourse.map((course) => course.courseId === lesson.courseId ?  course.lessonsDone.push(lessonId) : course)
   userFromDB.save();
-
-  
+  res.status(200).json({})
 })
 module.exports = {
   addLesson,
