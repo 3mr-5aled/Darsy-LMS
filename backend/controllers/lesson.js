@@ -81,8 +81,9 @@ const completeLesson = asynchandler(async (req, res, next) => {
   const { user } = req
   const lesson = await Lesson.findById(lessonId)
   const userFromDB = await User.findById(user._id)
+
   userFromDB.enrolledCourse.map((course) => {
-     if(course.courseId.toString() === lesson.courseId.toString() ) {
+     if(course.courseId.toString() === lesson.courseId.toString() && !course.lessonsDone.includes(lessonId) ) {
        course.lessonsDone.push(lessonId)
        return course
       }else{
