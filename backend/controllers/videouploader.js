@@ -22,7 +22,6 @@ const uploadVideo = asynchandler(async (req, res, next) => {
             resolve(result)
             })
         })
-        console.log(uploadedVideo.secure_url);
         res.status(200).json(uploadedVideo)
 })
 module.exports = uploadVideo
