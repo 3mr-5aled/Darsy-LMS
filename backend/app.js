@@ -46,6 +46,7 @@ app.use('/api/v1/payment',paymentRouter)
 app.use('/api/v1/exam',examRouter)
 app.use('/api/v1/upload',uploaderRouter)
 app.use('/api/v1/user',userRouter)
+app.use((req,res,next)=>{res.status(404).json({message:"This api is not found"})})
 app.use(errorhandler)
 
 const start = async () => {

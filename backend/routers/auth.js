@@ -1,6 +1,6 @@
 const express=require('express')
 const { login, register, profile, signout, resetpassword, verifycode, forgetpassword } = require('../controllers/auth')
-const { loginvalidator, registervalidator, resetpasswordvalidator } = require('../utils/validators/uservalidators')
+const { loginvalidator, registervalidator, resetpasswordvalidator } = require('../utils/validators/authvalidators')
 
 const router = express.Router()
 
