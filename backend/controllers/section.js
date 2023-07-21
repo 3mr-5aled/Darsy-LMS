@@ -13,7 +13,7 @@ const addSection =asynchandler(async(req,res,next)=>{
     }
     const section = await Section.create({title,courseId, duration})
     course.sections.push(section._id)
-    course.save()
+    await course.save()
     res.status(200).json(section)
 })
 const getSection =asynchandler(async(req,res,next)=>{
@@ -44,7 +44,7 @@ const deleteSection =asynchandler(async(req,res,next)=>{
         return next(new ApiError('no section with this id',404))
     }
     course.sections = course.sections.filter(section => section !== sectionId)
-    course.save()
+    await course.save()
     res.status(200).json({msg:'section is deleted'})
 })
 const updateSection =asynchandler(async(req,res,next)=>{

@@ -12,6 +12,7 @@ const uploadImage = require('./middlewares/imageupload')
 const examRouter = require('./routers/exam')
 const payment = require('./middlewares/paytaps')
 const uploaderRouter = require('./routers/uploader')
+const userRouter = require('./routers/user')
 require('dotenv').config()
 const app = express()
 
@@ -44,6 +45,7 @@ app.use('/api/v1/lesson',lessonRouter)
 app.use('/api/v1/payment',paymentRouter)
 app.use('/api/v1/exam',examRouter)
 app.use('/api/v1/upload',uploaderRouter)
+app.use('/api/v1/user',userRouter)
 app.use(errorhandler)
 
 const start = async () => {

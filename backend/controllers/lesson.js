@@ -13,13 +13,13 @@ const addLesson = asynchandler(async (req, res, next) => {
   if (!section) {
     return next(new ApiError("no course or section is found", 404));
   }
-  const lesson = await Lesson.create({ ...req.body, courseId: section.courseId, sectionId, video: req.videoUrl });
+  const lesson = await Lesson.create({ ...req.body, courseId: section.courseId, sectionId});
   const course = await Course.findById(section.courseId);
   section.lessons.push(lesson._id)
   section.total = section.total + 1
-  section.save();
+  await section.save();
   course.total = course.total + 1
-  course.save();
+  await course.save();
   res.status(200).json(lesson)
 });
 const getLesson = asynchandler(async (req, res, next) => {
@@ -49,10 +49,10 @@ const deleteLesson = asynchandler(async (req, res, next) => {
   }
   section.lessons = section.lessons.filter((lesson) => lesson !== lessonId);
   section.total = section.total - 1
-  section.save();
+  await section.save();
   const course = await Course.findById(section.courseId);
   course.total = course.total - 1
-  course.save();
+  await course.save();
   res.status(200).json({ msg: "lesson is removed" });
 });
 const getAllLesson = asynchandler(async (req, res, next) => {
@@ -81,12 +81,17 @@ const completeLesson = asynchandler(async (req, res, next) => {
   const { user } = req
   const lesson = await Lesson.findById(lessonId)
   const userFromDB = await User.findById(user._id)
-  userFromDB.enrolledCourse.map((course) => course.courseId === lesson.courseId ? course.lessonsDone.push(lessonId) : course)
-  userFromDB.save();
+  userFromDB.enrolledCourse.map((course) => {
+     if(course.courseId.toString() === lesson.courseId.toString() ) {
+       course.lessonsDone.push(lessonId)
+       return course
+      }else{
+        return course
+      } 
+    })
+  await userFromDB.save();
   await lesson.populate('sectionId')
-  console.log(lesson.sectionId.lessons);
   const lessonIndex = lesson.sectionId.lessons.indexOf(lesson._id)
-  console.log(lessonIndex);
   if (lesson.sectionId.lessons.length - 1 === lessonIndex) {
     await lesson.populate('courseId')
     const sectionIndex = lesson.courseId.sections.indexOf(lesson.sectionId._id)

@@ -7,8 +7,12 @@ const Lesson = new mongoose.Schema(
         required:true
     },
     video:{
-        type: String, 
-        required:true
+        src:{
+            type: String,
+        },
+        provider:{
+            type: String,
+        }
     },
     duration:{
         type: String, 

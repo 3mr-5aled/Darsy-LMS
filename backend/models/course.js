@@ -35,7 +35,6 @@ const Courses = new mongoose.Schema(
 );
 
 Courses.pre('findOneAndDelete', async function (next) {
-  console.log('inn');
   const course = await this.model.findOne({ _id: this.getQuery()._id })// Get the section ids associated with the course
   console.log(course);
   if (course.sections.length === 0) {

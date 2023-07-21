@@ -24,9 +24,9 @@ const checkOrder =asynchandler(async(req,res,next)=>{
     console.log(order);
     const user = await User.findById(order.userId)
     user.enrolledCourse.push({ courseId: order.courseId, lessonsDone: [] });
-    user.save()
+    await user.save()
     order.status = 'paid'
-    order.save()
+    await order.save()
     res.status(200).json(order)
 })
 module.exports={createOrder,checkOrder}
