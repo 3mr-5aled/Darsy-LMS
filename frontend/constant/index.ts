@@ -38,9 +38,15 @@ export const GenderOption = {
   title: "النوع" as string,
   options: ["ذكر", "أنثى"] as Array<string>,
 }
+export const RoleOption = {
+  title: "role" as string,
+  options: ["student", "tutor"] as Array<string>,
+}
 export const CityOption = {
   title: "المدينة" as string,
   options: [
+    "القاهرة",
+    "الجيزة",
     "مدينة نصر",
     "الزيتون",
     "المهندسين",

@@ -1,5 +1,5 @@
 "use client"
-import React, { ChangeEvent, useState } from "react"
+import React, { ChangeEvent, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { CourseType } from "@/common.types"
@@ -9,7 +9,15 @@ import { toast } from "react-toastify"
 type Props = {
   title: string
   type: string
-  course?: CourseType
+  course?: CourseType | null
+}
+
+type FormValues = {
+  name: string
+  description: string
+  duration: number
+  price: number
+  discount?: number
 }
 
 const CourseForm = ({ title, type, course }: Props) => {
@@ -17,19 +25,32 @@ const CourseForm = ({ title, type, course }: Props) => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<CourseType>() // Specify the generic type for useForm
+    setValue,
+  } = useForm<FormValues>() // Specify the generic type for useForm
 
   const [imageBase64, setImageBase64] = useState<string | null>(null)
 
   const router = useRouter()
 
-  const onSubmit: SubmitHandler<CourseType> = async (data) => {
+  useEffect(() => {
+    if (course) {
+      setValue("name", course?.name)
+      setValue("description", course?.description)
+      setValue("duration", course?.duration)
+      setValue("price", course?.price)
+      setValue("discount", course?.discount)
+      setImageBase64(course?.courseImg)
+    }
+  }, [course, setValue])
+
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formData: CourseType = {
       name: data.name,
       description: data.description,
       image: imageBase64!,
       duration: data.duration,
       price: data.price,
+      discount: data?.discount,
     }
     try {
       if (isSubmitting) {
@@ -38,22 +59,29 @@ const CourseForm = ({ title, type, course }: Props) => {
 
       try {
         await handleSubmit(async () => {
-          const response = await axiosInstance.post(
-            "/course/createcourse",
-            formData
-          )
-          if (response?.data) {
-            toast.success("course Created")
-            router.push(`/admin/manage-course/${response.data._id}`)
-          } else {
-            toast.error("An error occurred during login")
+          if (type === "create") {
+            const response = await axiosInstance.post(
+              "/course/createcourse",
+              formData
+            )
+            if (response?.data) {
+              toast.success("Course Created")
+              router.push(`/admin/courses/manage-course/${response.data._id}`)
+            } else {
+              toast.error("An error occurred during course creation")
+            }
+          } else if (type === "edit" && course?._id) {
+            await axiosInstance.put(
+              `/course/updatecourse/${course._id}`,
+              formData
+            )
+            toast.success("Course updated successfully")
+            router.push(`/admin/manage-course/${course._id}`)
           }
         })()
       } catch (error: any) {
         console.error(error)
-        toast.error(
-          error.response?.data?.message || "An error occurred during login"
-        )
+        toast.error(error.response?.data?.message || "An error occurred")
       }
     } catch (error) {
       console.error(error)
@@ -85,10 +113,10 @@ const CourseForm = ({ title, type, course }: Props) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flexCenter card w-full p-5 m-5 bg-base-300 prose"
+      className="w-full p-5 m-5 prose flexCenter card bg-base-300"
     >
       <h1>{title}</h1>
-      <div className="flexCenter flex-col gap-5">
+      <div className="flex-col gap-5 flexCenter">
         <div className="flexStart form_image-container">
           {!imageBase64 && (
             <label htmlFor="image" className="flexCenter form_image-label">
@@ -106,12 +134,12 @@ const CourseForm = ({ title, type, course }: Props) => {
           {imageBase64 && (
             <img
               src={imageBase64}
-              className="z-20 object-contain sm:p-10 p-3 border-2 border-dashed border-gray-500"
+              className="z-20 object-contain p-3 border-2 border-gray-500 border-dashed sm:p-10"
               alt="image"
             />
           )}
         </div>
-        <div className="flex justify-around flex-wrap gap-5 w-full">
+        <div className="flex flex-wrap justify-around w-full gap-5">
           <div className="form-control">
             <label htmlFor="name">Name:</label>
             <input
@@ -158,16 +186,31 @@ const CourseForm = ({ title, type, course }: Props) => {
               id="price"
               className="input input-bordered"
               placeholder="Price"
+              min={0}
               disabled={isSubmitting}
               {...register("price", { required: true })}
             />
             {errors.price && <span>This field is required</span>}
             {/* Display error message if the "price" field is not filled */}
           </div>
+          <div className="form-control">
+            <label htmlFor="discount">discount:</label>
+            <input
+              type="number"
+              id="discount"
+              className="input input-bordered"
+              placeholder="Discount (optional)"
+              min={0}
+              disabled={isSubmitting}
+              {...register("discount", { required: false })}
+            />
+            {errors.discount && <span>This field is required</span>}
+            {/* Display error message if the "discount" field is not filled */}
+          </div>
         </div>
       </div>
 
-      <div className="w-full flexCenter my-5">
+      <div className="w-full my-5 flexCenter">
         <button type="submit" className="btn btn-primary">
           {isSubmitting
             ? `${type === "create" ? "Creating" : "Editing"}`

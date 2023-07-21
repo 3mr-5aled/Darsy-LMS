@@ -1,5 +1,5 @@
 "use client"
-import React, { ChangeEvent, useState } from "react"
+import React, { ChangeEvent, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { CourseType, SectionType } from "@/common.types"
@@ -19,9 +19,17 @@ const SectionForm = ({ title, type, section, courseId, onClose }: Props) => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setValue,
   } = useForm<SectionType>() // Specify the generic type for useForm
 
   const router = useRouter()
+
+  useEffect(() => {
+    if (section) {
+      setValue("title", section?.title)
+      setValue("duration", section?.duration)
+    }
+  }, [section, setValue])
 
   const onSubmit: SubmitHandler<SectionType> = async (data) => {
     try {
@@ -30,22 +38,29 @@ const SectionForm = ({ title, type, section, courseId, onClose }: Props) => {
       }
 
       try {
-        const response = await axiosInstance.post(
-          `/section/${courseId}/addsection`,
-          data
-        )
-        if (response?.data) {
-          toast.success("Section created") // Update the success message
-          router.push(`/admin/manage-course/${courseId}`)
-          onClose() // Close the modal
-        } else {
-          toast.error("An error occurred during section creation") // Update the error message
+        if (type === "create") {
+          const response = await axiosInstance.post(
+            `/section/${courseId}/addsection`,
+            data
+          )
+          if (response?.data) {
+            toast.success("Section created")
+            router.push(`/admin/courses/manage-course/${courseId}`)
+            onClose()
+          } else {
+            toast.error("An error occurred during section creation")
+          }
+        } else if (type === "edit" && section?._id) {
+          await axiosInstance.put(`/section/updatesection/${section._id}`, data)
+          toast.success("Section updated successfully")
+          router.push(`/admin/courses/manage-course/${courseId}`)
+          onClose()
         }
       } catch (error: any) {
         console.error(error)
         toast.error(
           error.response?.data?.message ||
-            "An error occurred during section creation" // Update the error message
+            "An error occurred during section creation"
         )
       }
     } catch (error) {
@@ -69,7 +84,6 @@ const SectionForm = ({ title, type, section, courseId, onClose }: Props) => {
               {...register("title", { required: true })}
             />
             {errors.title && <span>This field is required</span>}
-            {/* Display error message if the "title" field is not filled */}
           </div>
 
           <div className="form-control">
@@ -84,7 +98,6 @@ const SectionForm = ({ title, type, section, courseId, onClose }: Props) => {
               {...register("duration", { required: true })}
             />
             {errors.duration && <span>This field is required</span>}
-            {/* Display error message if the "duration" field is not filled */}
           </div>
         </div>
       </div>
@@ -93,12 +106,21 @@ const SectionForm = ({ title, type, section, courseId, onClose }: Props) => {
         <button
           type="submit"
           className="btn btn-primary"
-          onClick={handleSubmit(onSubmit)} // Pass the onSubmit function to the onClick event
+          onClick={handleSubmit(onSubmit)}
         >
           {isSubmitting
             ? `${type === "create" ? "Creating" : "Editing"}`
             : `${type === "create" ? "Create" : "Edit"}`}
         </button>
+        {/* {type === "edit" && (
+          <button
+            type="button"
+            className="btn btn-error ml-3"
+            onClick={() => deleteSection(section?._id)}
+          >
+            Delete
+          </button>
+        )} */}
       </div>
     </div>
   )

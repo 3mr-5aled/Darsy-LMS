@@ -1,4 +1,5 @@
 export type UserType = {
+  _id: string
   name: string
   email: string
   phone: string
@@ -6,6 +7,7 @@ export type UserType = {
   gender: string
   grade: string
   city: string
+  dateOfBirth: string
   role: string
 }
 export interface UserState {
@@ -29,8 +31,9 @@ export type CourseType = {
   description: string
   image: string
   courseImg?: string
-  duration: string
-  price: string
+  duration: number
+  price: number
+  discount?: number
   sections?: Section[]
 }
 
@@ -50,6 +53,8 @@ export interface LessonType {
   _id?: string
   title: string
   video: any
+  file: any
+  videotype: string
   duration: string
   description: string
   material?: {

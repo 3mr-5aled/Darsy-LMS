@@ -1,28 +1,53 @@
+"use client"
 import Link from "next/link"
-import React from "react"
+import { useEffect, useState } from "react"
+import axiosInstance from "@/axios.config"
+import { UserType } from "@/common.types"
+import Loading from "@/app/loading"
 
 const Students = () => {
-  const users = [
-    { _id: "37", name: "Rebecca Richardson", status: "good" },
-    { _id: "14", name: "Sean Porter", status: "good" },
-    { _id: "54", name: "Leo Gibbs", status: "good" },
-    { _id: "74", name: "Adeline Keller", status: "good" },
-  ]
-  // get all user
+  const [users, setUsers] = useState<any>([]) // Corrected the type annotation
+  const [isLoading, setIsLoading] = useState<boolean>(true) // Added type annotation
+  const [error, setError] = useState<string | null>(null) // Added type annotation
+
+  useEffect(() => {
+    // Fetch users from the API
+    const fetchUsers = async () => {
+      try {
+        const response = await axiosInstance.get<any>("/user/getallusers") // Corrected the response data type annotation
+        setUsers(response.data)
+        setIsLoading(false)
+      } catch (error: any) {
+        setError("An error occurred while fetching users.")
+        setIsLoading(false)
+      }
+    }
+
+    fetchUsers()
+  }, [])
+
+  if (isLoading) {
+    return <Loading />
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>
+  }
+
   return (
-    <div className=" m-5 p-5">
-      <div className="prose mb-8 text-center">
+    <div className="p-5 m-5">
+      <div className="mb-8 prose text-center">
         <h1>Students</h1>
       </div>
-      {users.map((user, index) => {
+      {users?.map((user: any) => {
         return (
           <Link
-            key={index}
-            href={`/admin/student/${user._id}`}
-            className="flex flex-row items-center justify-between w-full hover:bg-base-100 rounded-md min-w-lg p-3"
+            key={user._id}
+            href={`/admin/students/manage-student/${user._id}`}
+            className="flex flex-row items-center justify-between w-full p-3 rounded-md hover:bg-base-100 min-w-lg"
           >
-            <h3 className="text-lg font-bold pr-5">{user.name}</h3>
-            <p className="text-success">{user.status}</p>
+            <h3 className="pr-5 text-lg font-bold">{user.name}</h3>
+            <p className="text-success">{user.email}</p>
           </Link>
         )
       })}

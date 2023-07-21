@@ -1,6 +1,7 @@
 "use client"
 
 import axiosInstance from "@/axios.config"
+import { CityOption, GenderOption, GradeOption } from "@/constant"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import React from "react"
@@ -41,14 +42,14 @@ export default async function Register() {
   password.current = watch("password", "")
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flexCenter flex-col p-8">
-      <div className="card flexCenter w-96 bg-base-300 shadow-xl prose py-5">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex-col p-8 flexCenter">
+      <div className="py-5 prose shadow-xl card flexCenter w-96 bg-base-300">
         <h1>تسجيل دخول</h1>
         <div className="w-2/3">
-          <div className="form-control py-3">
+          <div className="py-3 form-control">
             <label htmlFor="Name">Name</label>
             <input
-              className="input input-bordered w-full"
+              className="w-full input input-bordered"
               id="Name"
               type="text"
               placeholder="Name"
@@ -64,13 +65,13 @@ export default async function Register() {
               })}
             />
             {errors.name && (
-              <p className="text-error text-sm">{errors.name.message}</p>
+              <p className="text-sm text-error">{errors.name.message}</p>
             )}
           </div>
-          <div className="form-control py-3 w-full">
+          <div className="w-full py-3 form-control">
             <label htmlFor="Email">Email</label>
             <input
-              className="input input-bordered w-full"
+              className="w-full input input-bordered"
               id="Email"
               type="text"
               placeholder="Email"
@@ -83,13 +84,13 @@ export default async function Register() {
               })}
             />
             {errors.email && (
-              <p className="text-error text-sm">{errors.email.message}</p>
+              <p className="text-sm text-error">{errors.email.message}</p>
             )}
           </div>
-          <div className="form-control py-3 w-full">
+          <div className="w-full py-3 form-control">
             <label htmlFor="MobileNumber">Mobile number</label>
             <input
-              className="input input-bordered w-full"
+              className="w-full input input-bordered"
               id="MobileNumber"
               type="tel"
               placeholder="Mobile number"
@@ -107,13 +108,13 @@ export default async function Register() {
               })}
             />
             {errors.phone && (
-              <p className="text-error text-sm">{errors.phone.message}</p>
+              <p className="text-sm text-error">{errors.phone.message}</p>
             )}
           </div>
-          <div className="form-control py-3 w-full">
+          <div className="w-full py-3 form-control">
             <label htmlFor="ParentNumber">Parent number</label>
             <input
-              className="input input-bordered w-full"
+              className="w-full input input-bordered"
               id="ParentNumber"
               type="tel"
               placeholder="Parent number"
@@ -129,61 +130,69 @@ export default async function Register() {
               })}
             />
             {errors.parentsPhone && (
-              <p className="text-error text-sm">
+              <p className="text-sm text-error">
                 {errors.parentsPhone.message}
               </p>
             )}
           </div>
-          <div className="form-control py-3 w-full">
+          <div className="w-full py-3 form-control">
             <label htmlFor="gender">Gender</label>
             <select
-              className="select select-bordered w-full max-w-xs"
+              className="w-full max-w-xs select select-bordered"
               id="gender"
               {...register("gender", { required: true })}
             >
               <option value="">Choose Gender</option>
-              <option value="ذكر">ذكر</option>
-              <option value="أنثي">أنثي</option>
+              {GenderOption.options.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
             </select>
             {errors.gender && (
-              <p className="text-error text-sm">Gender is required</p>
+              <p className="text-sm text-error">Gender is required</p>
             )}
           </div>
-          <div className="form-control py-3 w-full">
+          <div className="w-full py-3 form-control">
             <label htmlFor="city">City</label>
             <select
-              className="select select-bordered w-full max-w-xs"
+              className="w-full max-w-xs select select-bordered"
               id="city"
               {...register("city", { required: true })}
             >
               <option value="">Choose City</option>
-              <option value="القاهرة">القاهرة</option>
-              <option value="الجيزة">الجيزة</option>
+              {CityOption.options.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
             </select>
             {errors.city && (
-              <p className="text-error text-sm">City is required</p>
+              <p className="text-sm text-error">City is required</p>
             )}
           </div>
-          <div className="form-control py-3 w-full">
+          <div className="w-full py-3 form-control">
             <label htmlFor="grade">Grade</label>
             <select
-              className="select select-bordered w-full max-w-xs"
+              className="w-full max-w-xs select select-bordered"
               id="grade"
               {...register("grade", { required: true })}
             >
               <option value="">Choose Grade</option>
-              <option value="أولى ثانوي">أولى ثانوي</option>
-              <option value="تانية ثانوي">تانية ثانوي</option>
-              <option value="تالتة ثانوي">تالتة ثانوي</option>
+              {GradeOption.options.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
             </select>
             {errors.grade && (
-              <p className="text-error text-sm">Grade is required</p>
+              <p className="text-sm text-error">Grade is required</p>
             )}
           </div>
-          <div className="form-control py-3 w-full">
+          <div className="w-full py-3 form-control">
             <label htmlFor="Password">Password</label>
             <input
-              className="input input-bordered w-full"
+              className="w-full input input-bordered"
               id="Password"
               type="password"
               placeholder="Password"
@@ -198,13 +207,13 @@ export default async function Register() {
               })}
             />
             {errors.password && (
-              <p className="text-error text-sm">{errors.password.message}</p>
+              <p className="text-sm text-error">{errors.password.message}</p>
             )}
           </div>
-          <div className="form-control py-3 w-full">
+          <div className="w-full py-3 form-control">
             <label htmlFor="ConfirmPassword">Confirm Password</label>
             <input
-              className="input input-bordered w-full"
+              className="w-full input input-bordered"
               id="ConfirmPassword"
               type="password"
               placeholder="Confirm Password"
@@ -221,15 +230,15 @@ export default async function Register() {
               })}
             />
             {errors.confirmPassword && (
-              <p className="text-error text-sm">
+              <p className="text-sm text-error">
                 {errors.confirmPassword.message}
               </p>
             )}
           </div>
-          <div className="form-control py-3 w-full">
+          <div className="w-full py-3 form-control">
             <label htmlFor="DateOfBirth">Date of Birth</label>
             <input
-              className="input input-bordered w-full"
+              className="w-full input input-bordered"
               id="DateOfBirth"
               type="date"
               min="2000-01-01"
@@ -238,11 +247,11 @@ export default async function Register() {
               {...register("dateOfBirth", { required: true })}
             />
             {errors.dateOfBirth && (
-              <p className="text-error text-sm">Date of Birth is required</p>
+              <p className="text-sm text-error">Date of Birth is required</p>
             )}
           </div>
 
-          <button type="submit" className="btn btn-primary w-full my-3">
+          <button type="submit" className="w-full my-3 btn btn-primary">
             Submit
           </button>
         </div>

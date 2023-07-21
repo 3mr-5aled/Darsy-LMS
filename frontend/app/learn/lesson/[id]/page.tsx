@@ -82,6 +82,7 @@ const LessonPage = () => {
       const percent: number = Math.floor(progressed / data.totalLessons) * 100
       return percent
     }
+    return 0
   }
 
   // next lesson logic
@@ -218,19 +219,21 @@ const LessonPage = () => {
                         type="checkbox"
                         name={`my-accordion-${index}`}
                       />
-                      <div className="collapse-title text-xl font-medium">
+                      <div className="collapse-title text-lg font-medium">
                         {index + 1}
                         {". "}
                         {section.title}
                         {section.duration}
                       </div>
-                      <div className="collapse-content">
+                      <div className="collapse-content flex flex-col gap-3">
                         {/* Display lessons in each section */}
-                        {section.lessons.map((lesson) => (
+                        {section.lessons.map((lesson, index) => (
                           <Link
                             href={`/learn/lesson/${lesson._id}`}
                             key={lesson._id}
                           >
+                            {index + 1}
+                            {". "}
                             {lesson.title}
                           </Link>
                         ))}

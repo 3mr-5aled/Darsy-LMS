@@ -53,7 +53,7 @@ const Course = () => {
 
   return (
     <>
-      <div className="flex flex-col m-5 bg-base-300 card p-5 ">
+      <div className="flex flex-col p-5 m-5 bg-base-300 card ">
         <div className="flex flex-row flex-wrap gap-5">
           <img
             className="rounded-lg"
@@ -63,19 +63,27 @@ const Course = () => {
             height={350}
           />
           <div className="flex flex-col justify-center">
-            <h1 className="text-2xl font-bold my-5">{course.name}</h1>
+            <h1 className="my-5 text-2xl font-bold">{course.name}</h1>
             <p>Description: {course.description}</p>
             <p>Duration: {course.duration} hours</p>
             <p>Price: {course.price}$</p>
 
             <button
-              className="btn btn-primary btn-outline mt-5 mb-3"
+              className="mt-5 mb-3 btn btn-primary btn-outline"
               onClick={() => router.push(`/course/${course._id}`)}
             >
               View Course
             </button>
             <button
-              className="btn btn-error btn-outline mb-5 mt-3"
+              className="mt-5 mb-3 btn btn-secondary btn-outline"
+              onClick={() =>
+                router.push(`/admin/courses/edit-course/${course._id}`)
+              }
+            >
+              Edit Course
+            </button>
+            <button
+              className="mt-3 mb-5 btn btn-error btn-outline"
               onClick={deleteCourse}
             >
               Delete course
