@@ -115,6 +115,27 @@ const completeLesson = asynchandler(async (req, res, next) => {
   await userFromDB.save();
   res.status(200).json({ newLessonId , msg : "same section"})
 })
+const previousLesson = asynchandler(async (req, res, next) => {
+  // @api put    /previous-lesson/:lessonId
+  // send lessonId in params 
+  const { lessonId } = req.params;
+  const lesson = await Lesson.findById(lessonId)
+  await lesson.populate('sectionId')
+  const lessonIndex = lesson.sectionId.lessons.indexOf(lesson._id)
+  if ( lessonIndex === 0) {
+    await lesson.populate('courseId')
+    const sectionIndex = lesson.courseId.sections.indexOf(lesson.sectionId._id)
+    if (sectionIndex === 0) {
+      return res.status(200).json({ msg : "this is first lesson of course" })
+    } 
+    const newSectionId = lesson.courseId.sections[sectionIndex - 1]
+    const section  = await Section.findById(newSectionId)
+    const previousLessonId = section.lessons[ section.lessons.length - 1 ]
+    return res.status(200).json({ previousLessonId , msg : "another section of course"})
+  }
+  const previousLessonId = lesson.sectionId.lessons[lessonIndex - 1]
+  res.status(200).json({ previousLessonId , msg : "same section"})
+})
 const continueLessons = asynchandler(async (req, res, next) => {
   // @api get /api/v1/lesson/:courseId/continue-lesson
   const { user } = req
@@ -137,5 +158,6 @@ module.exports = {
   updateLesson,
   getAllLesson,
   completeLesson,
-  continueLessons
+  continueLessons,
+  previousLesson
 };
