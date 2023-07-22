@@ -1,4 +1,5 @@
 const asynchandler = require('express-async-handler');
+const ApiError = require('../utils/apierror');
 const cloudinary = require('cloudinary').v2
 require('dotenv').config()
 const uploadVideo = asynchandler(async (req, res, next) => {
@@ -13,15 +14,18 @@ const uploadVideo = asynchandler(async (req, res, next) => {
         chunk_size: 6000000,
         resource_type: "video"
     }
-    const video =req.file.path
-        const uploadedVideo = await new Promise((resolve, reject) => {
-            cloudinary.uploader.upload_large(video, opts, (err, result) => {
+    if(!req.file){
+        return next(new ApiError('file uploaded failed',500))
+    }
+    const path =req.file.path
+    const uploadedVideo = await new Promise((resolve, reject) => {
+            cloudinary.uploader.upload_large(path, opts, (err, result) => {
             if (err) {
                 reject(err)
             }
             resolve(result)
             })
         })
-        res.status(200).json(uploadedVideo)
+    res.status(200).json(uploadedVideo)
 })
 module.exports = uploadVideo
