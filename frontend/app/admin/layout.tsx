@@ -24,7 +24,7 @@ export default function RootLayout({
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col items-center justify-center">
-          <div className="card min-w-96 bg-base-300">{children}</div>
+          <div className="card w-11/12 bg-base-300">{children}</div>
           <label
             htmlFor="my-drawer-2"
             className="btn btn-primary drawer-button lg:hidden"

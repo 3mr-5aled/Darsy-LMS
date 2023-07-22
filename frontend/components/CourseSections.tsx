@@ -119,6 +119,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
     const modal = document.getElementById(modalId) as HTMLDialogElement | null
     if (modal) {
       modal.showModal() // Show the modal if it exists
+      modal.onclose = closeSectionEditModal // Set the onclose event to call closeSectionEditModal when the modal is closed
     }
   }
 
@@ -127,6 +128,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
     const modal = document.getElementById(modalId) as HTMLDialogElement | null
     if (modal) {
       modal.showModal() // Show the modal if it exists
+      modal.onclose = closeLessonEditModal // Set the onclose event to call closeLessonEditModal when the modal is closed
     }
   }
 
@@ -135,6 +137,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
     const modal = document.getElementById(modalId) as HTMLDialogElement | null
     if (modal) {
       modal.showModal() // Show the modal if it exists
+      modal.onclose = closeLessonModal // Set the onclose event to call closeLessonModal when the modal is closed
     }
   }
 
@@ -155,6 +158,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
             <dialog id="my_modal_3" className="modal">
               <form method="dialog" className="modal-box">
                 <button
+                  title="close"
                   className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
                   onClick={closeModal}
                 >
@@ -207,6 +211,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                     >
                       <form method="dialog" className="modal-box">
                         <button
+                          title="close"
                           className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
                           onClick={closeSectionEditModal}
                         >
@@ -246,6 +251,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                 {isAdmin && (
                   <>
                     <button
+                      title="add lesson"
                       className="btn btn-primary"
                       onClick={() => showLessonModal(index)}
                     >
@@ -254,13 +260,14 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                     <dialog id={`modal_${index}`} className="modal">
                       <form method="dialog" className="modal-box">
                         <button
+                          title="close"
                           className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
                           onClick={closeLessonModal}
                         >
                           ✕
                         </button>
                         <LessonForm
-                          title="Add Lesson"
+                          PageTitle="Add Lesson"
                           sectionId={section._id}
                           courseId={courseId}
                           type="create"
@@ -275,7 +282,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                 <p>No Lessons available</p>
               ) : (
                 lessons.map((lesson, index) => (
-                  <button
+                  <div
                     className="bg-base-200 text-start p-3 flex flex-row justify-between items-center my-3 rounded-md"
                     key={lesson._id}
                   >
@@ -295,6 +302,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                             data-tip="Edit Lesson"
                           >
                             <button
+                              title="edit"
                               type="button"
                               className="text-warning cursor-pointer"
                               onClick={() => showLessonEditModal(index)}
@@ -321,13 +329,14 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                         <dialog id={`edit_modal_${index}`} className="modal">
                           <form method="dialog" className="modal-box">
                             <button
+                              title="close"
                               className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
                               onClick={closeLessonEditModal}
                             >
                               ✕
                             </button>
                             <LessonForm
-                              title="Edit Lesson"
+                              PageTitle="Edit Lesson"
                               sectionId={section._id}
                               courseId={courseId}
                               lesson={lesson}
@@ -338,7 +347,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                         </dialog>
                       </>
                     )}
-                  </button>
+                  </div>
                 ))
               )}
             </div>
