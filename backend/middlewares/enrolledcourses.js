@@ -9,7 +9,6 @@ const enrolledCourse =async(req,res,next)=>{
     if (!lesson ) {
       return next(new ApiError("no lesson is found", 404));
     }
-
     const userFromDB = await User.findById(user._id)
     const enrolledCourses = userFromDB.enrolledCourse.filter(course => course.courseId.toString() === lesson.courseId.toString())
     if (enrolledCourses.length === 0) {

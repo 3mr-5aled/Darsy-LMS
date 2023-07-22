@@ -27,7 +27,7 @@ const getLesson = asynchandler(async (req, res, next) => {
   // send lessonId in params
   // you must be enrolled in this lesson to get lesson
   const { lesson } = req
-  const { title, duration, material, video, _id, exams, description } = lesson
+  const { title, duration, material, video, _id, exams, description , courseId } = lesson
   const sectionTitle = lesson.sectionId.title
   const sectionDuration = lesson.sectionId.duration
   const courseTitle = lesson.courseId.name
@@ -36,7 +36,7 @@ const getLesson = asynchandler(async (req, res, next) => {
     path: "lessons",
     select: "title", // Include only the 'title' property from the lessons object
   }).select("title duration total")
-  res.status(200).json({ lesson: { title, duration, material, video, _id, exams, description }, sections, sectionTitle, sectionDuration, courseTitle, totalLessons });
+  res.status(200).json({ lesson: { title, duration, material, video, _id, exams, description }, sections, sectionTitle, sectionDuration, courseTitle,courseId, totalLessons });
 });
 
 const deleteLesson = asynchandler(async (req, res, next) => {
@@ -79,7 +79,7 @@ const updateLesson = asynchandler(async (req, res, next) => {
   res.status(200).json(lesson);
 });
 const completeLesson = asynchandler(async (req, res, next) => {
-  // @api put    /completelesson/:lessonId
+  // @api put    /complete-lesson/:lessonId
   // send lessonId in params 
   const { lessonId } = req.params;
   const { user } = req
@@ -105,23 +105,30 @@ const completeLesson = asynchandler(async (req, res, next) => {
     const newSectionId = lesson.courseId.sections[sectionIndex + 1]
     const section  = await Section.findById(newSectionId)
     const newLessonId = section.lessons[0]
-    userFromDB.lastLesson = newLessonId
+    // userFromDB.nextLesson = newLessonId
+    userFromDB.enrolledCourse.map(course => course.courseId.toString() === lesson.courseId._id.toString() ? {...course,nextLesson:newLessonId} : course)
     await userFromDB.save();
     return res.status(200).json({ newLessonId , msg : "another section of course"})
   }
   const newLessonId = lesson.sectionId.lessons[lessonIndex + 1]
-  userFromDB.lastLesson = newLessonId
+  userFromDB.enrolledCourse.map(course => course.courseId.toString() === lesson.courseId._id.toString() ? {...course,nextLesson:newLessonId} : course)
   await userFromDB.save();
   res.status(200).json({ newLessonId , msg : "same section"})
 })
 const continueLessons = asynchandler(async (req, res, next) => {
-  // @api get /api/v1/lesson/continue-lesson
+  // @api get /api/v1/lesson/:courseId/continue-lesson
   const { user } = req
+  const {courseId} = req.params
   const userFromDB = await User.findById(user._id)
-  if (!userFromDB.lastLesson) {
+  const courseFromDB = await Course.findById(courseId)
+  if(!courseFromDB){
+    return next(new ApiError('no coursse is found',404))
+  }
+  const course = userFromDB.enrolledCourse.filter(course => course.courseId === courseId)
+  if (!course.nextLesson) {
     return next(new ApiError("no lesson is found", 404));
   } 
-  res.status(200).json({nextLesson:userFromDB.lastLesson})
+  res.status(200).json({nextLesson:course.nextLesson,courseTitle:courseFromDB.name,coureseImg:courseFromDB.courseImg})
 })
 module.exports = {
   addLesson,

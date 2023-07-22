@@ -66,12 +66,12 @@ const profile = asynchandler(async (req, res,next) => {
     if (!user) {
       return next(new ApiError('un authorized',401))
     }
-    const userFromDB = User.findById(user._id)
+    const userFromDB =await User.findById(user._id).select("-password")
     if (!userFromDB) {
       return next(new ApiError('no user is found',400))
     }
-    const {name,email,phone,parentsPhone,grade,city,gender,role} = user
-    return res.status(200).json({email,name,phone,parentsPhone,grade,city,gender,role})
+    
+    return res.status(200).json(userFromDB)
   }
    next(new ApiError('un authorized',401))
 });

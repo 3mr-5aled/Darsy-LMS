@@ -29,4 +29,8 @@ const getAllLessonValidator=[
     check('sectionId').notEmpty().withMessage('sectionId is required').isMongoId().withMessage('sectionId is invalid id'),
     validator
 ]
-module.exports={addLessonValidator,getLessonValidator,completeLessonValidator,deleteLessonValidator,updateLessonValidator,getAllLessonValidator}
+const continueLessonValidator=[
+    check('courseId').notEmpty().withMessage('courseId is required').isMongoId().withMessage('courseId is invalid id'),
+    validator
+]
+module.exports={addLessonValidator,continueLessonValidator,getLessonValidator,completeLessonValidator,deleteLessonValidator,updateLessonValidator,getAllLessonValidator}

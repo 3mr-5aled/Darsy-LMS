@@ -56,7 +56,11 @@ const User =new mongoose.Schema({
         lessonsDone:[{
             type: mongoose.Schema.ObjectId,
             ref: 'lessons'
-        }]
+        }],
+        nextLesson:{
+            type: mongoose.Schema.ObjectId,
+            ref: 'lessons'
+        }
     }],
     exams:[
         {
@@ -70,10 +74,6 @@ const User =new mongoose.Schema({
         }
         ,{timestamps:true}
     ],
-    lastLesson:{
-        type: mongoose.Schema.ObjectId,
-        ref: 'lessons'
-    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('users', User);
