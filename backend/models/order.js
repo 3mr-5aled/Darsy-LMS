@@ -5,6 +5,10 @@ const Order =new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         required:true
     },
+    adminId:{
+        type:mongoose.Schema.Types.ObjectId,
+
+    },
     amount:{
         type:String,
         required:true

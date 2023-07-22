@@ -7,6 +7,10 @@ const Courses = new mongoose.Schema(
       type: String,
       required: true,
     },
+    expiredTime:{
+      type:Number,
+      required:true
+    },
     discount:{
       type: Number,
     },

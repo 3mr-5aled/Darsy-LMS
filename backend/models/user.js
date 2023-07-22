@@ -60,6 +60,9 @@ const User =new mongoose.Schema({
         nextLesson:{
             type: mongoose.Schema.ObjectId,
             ref: 'lessons'
+        },
+        expiredDate:{
+            type:Date
         }
     }],
     exams:[

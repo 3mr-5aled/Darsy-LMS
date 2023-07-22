@@ -12,4 +12,10 @@ const updateUserValidator=[
     check('userId').notEmpty().withMessage('userId is required').isMongoId().withMessage('userId is invalid id'),
     validator
 ]
-module.exports={deleteUserValidator,getUserValidator,updateUserValidator}
+const addCourseToUserValidator=[
+    check('userId').notEmpty().withMessage('userId is required').isMongoId().withMessage('userId is invalid id'),
+    check('amount').notEmpty().withMessage('amount is required').isNumeric().withMessage('amount must be string of number'),
+    check('courseId').notEmpty().withMessage('courseId is required').isMongoId().withMessage('courseId is invalid id'),
+    validator
+]
+module.exports={deleteUserValidator,getUserValidator,updateUserValidator,addCourseToUserValidator}
