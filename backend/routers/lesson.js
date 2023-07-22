@@ -7,7 +7,7 @@ const { enrolledCourse } = require('../middlewares/enrolledcourses')
 
 const router = express.Router()
 router.post('/:sectionId/add-lesson',authintications,authintication,addLessonValidator,addLesson)
-router.get('/get-lesson/:lessonId',getLessonValidator,authintications,enrolledCourse,getLesson)
+router.get('/get-lesson/:lessonId',authintications,getLessonValidator,enrolledCourse,getLesson)
 router.get('/:sectionId/get-all-lessons/',getAllLessonValidator,getAllLesson)
 router.delete('/:sectionId/delete-lesson/:lessonId',authintications,authintication,deleteLessonValidator,deleteLesson)
 router.put('/update-lesson/:lessonId',authintications,authintication,updateLessonValidator,updateLesson)

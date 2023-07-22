@@ -11,8 +11,11 @@ const enrolledCourse =async(req,res,next)=>{
     }
     const userFromDB = await User.findById(user._id)
     const enrolledCourses = userFromDB.enrolledCourse.filter(course => course.courseId.toString() === lesson.courseId.toString())
-    if (enrolledCourses.length === 0) {
+    if (enrolledCourses.length === 0 ) {
       return next(new ApiError("you are not enrolled in this course", 400));
+    }
+    if( enrolledCourses[0].expiredDate < Date.now()){
+      return next(new ApiError("your course enrollment is expired", 400));
     }
     await lesson.populate('sectionId')
     await lesson.populate('courseId')
