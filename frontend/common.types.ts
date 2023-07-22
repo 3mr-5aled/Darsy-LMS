@@ -30,7 +30,7 @@ export type CourseType = {
   name: string
   description: string
   image: string
-  courseImg?: string
+  courseImg?: string | undefined
   duration: number
   price: number
   discount?: number
@@ -49,10 +49,15 @@ export type Material = {
   link: string
 }
 
+export type VideoType = "normal" | "youtube"
+
 export interface LessonType {
   _id?: string
   title: string
-  video: any
+  video?: {
+    src: string
+    provider: VideoType
+  }
   file: any
   videotype: string
   duration: string

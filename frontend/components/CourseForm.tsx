@@ -17,7 +17,7 @@ type FormValues = {
   description: string
   duration: number
   price: number
-  discount?: number
+  discount?: number | undefined // Make sure 'discount' is allowed to be 'undefined'
 }
 
 const CourseForm = ({ title, type, course }: Props) => {
@@ -28,7 +28,9 @@ const CourseForm = ({ title, type, course }: Props) => {
     setValue,
   } = useForm<FormValues>() // Specify the generic type for useForm
 
-  const [imageBase64, setImageBase64] = useState<string | null>(null)
+  const [imageBase64, setImageBase64] = useState<string | null | undefined>(
+    null
+  )
 
   const router = useRouter()
 
@@ -39,7 +41,7 @@ const CourseForm = ({ title, type, course }: Props) => {
       setValue("duration", course?.duration)
       setValue("price", course?.price)
       setValue("discount", course?.discount)
-      setImageBase64(course?.courseImg)
+      setImageBase64(course?.courseImg || null) // Handle undefined case here
     }
   }, [course, setValue])
 

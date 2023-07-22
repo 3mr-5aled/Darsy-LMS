@@ -1,15 +1,13 @@
 "use client"
 import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { LessonType } from "@/common.types"
+import { LessonType, VideoType } from "@/common.types"
 import axiosInstance from "@/axios.config"
 import { toast } from "react-toastify"
-import { useState } from "react"
-
-type VideoType = "normal" | "youtube"
+import { useEffect, useState } from "react"
 
 type Props = {
-  title: string
+  PageTitle: string
   type: "create" | "edit"
   lesson?: LessonType
   sectionId: string | undefined
@@ -18,7 +16,7 @@ type Props = {
 }
 
 const LessonForm = ({
-  title,
+  PageTitle,
   type,
   lesson,
   sectionId,
@@ -29,6 +27,7 @@ const LessonForm = ({
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setValue,
   } = useForm<LessonType>() // Specify the generic type for useForm
 
   const [videoType, setVideoType] = useState<VideoType>("normal")
@@ -41,58 +40,114 @@ const LessonForm = ({
     }
   }
 
+  const VideoTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value === "youtube") {
+      setValue("video.provider", "youtube")
+    } else {
+      setValue("video.provider", "normal")
+    }
+    setVideoType(e.target.value as VideoType)
+  }
+
+  //  const [videoSrc , seVideoSrc] = useState("");
+  //     const handleChange = ({file}) => {
+  //       var reader = new FileReader();
+  //       console.log(file)
+  //       var url = URL.createObjectURL(file.originFileObj);
+  //       seVideoSrc(url);
+  //   };
+
+  useEffect(() => {
+    if (lesson) {
+      setValue("title", lesson.title)
+      setValue("description", lesson.description)
+      setValue("duration", lesson.duration)
+      setValue("material.name", lesson.material?.name || "")
+      setValue("material.link", lesson.material?.link || "")
+      if (lesson.video) {
+        setValue("video.provider", lesson.video?.provider || "")
+        setValue("video.src", lesson.video?.src || "") // Use "video.src" instead of "video"
+        setVideoType(lesson.video?.provider || "normal")
+      }
+    }
+  }, [])
+
+  const uploadVideo = async () => {
+    if (videoType === "normal" && file) {
+      const uploadResponse = await axiosInstance.post("/upload", file)
+      return uploadResponse.data.url
+    }
+    return null
+  }
+
   const onSubmit: SubmitHandler<LessonType> = async (data) => {
     try {
+      var videoUrl
       if (isSubmitting) {
         return
       }
-      const formData = new FormData()
-      formData.append("title", data.title)
-      formData.append("description", data.description)
-      formData.append("duration", data.duration.toString())
-      formData.append("material.name", data.material?.name || "")
-      formData.append("material.link", data.material?.link || "")
-      formData.append("videoType", videoType)
       if (videoType === "normal") {
-        if (!file) {
-          toast.error("Please select a file to upload.")
-          return
+        videoUrl = await uploadVideo()
+
+        if (videoUrl === null) {
+          if (videoType === "normal" && type === "create") {
+            toast.error("Please select a file to upload.")
+            return
+          }
         }
-
-        formData.append("video", file) // Append the file to the formData
-
-        // If it's a normal video, upload the file to /upload to get the URL
-        const uploadResponse = await axiosInstance.post("/upload", formData)
-        toast.info("Uploading....")
-        const videoUrl = uploadResponse.data.url
-
-        // Upload the lesson with the video URL to /lesson/${sectionId}/addlesson
-        const lessonData = { ...data, video: videoUrl }
-        const response = await axiosInstance.post(
-          `/lesson/${sectionId}/addlesson`,
-          lessonData
-        )
-        toast.success("Lesson added")
-        router.push(`/admin/manage-course/${courseId}`)
-        onClose() // Close the modal
-      } else if (videoType === "youtube") {
-        // If it's a YouTube video, directly upload the lesson to /lesson/${sectionId}/addlesson
-        const response = await axiosInstance.post(
-          `/lesson/${sectionId}/addlesson`,
-          data
-        )
-        toast.success("Lesson added")
-        router.push(`/admin/manage-course/${courseId}`)
-        onClose() // Close the modal
       }
+      console.log(data)
+
+      setValue("title", data.title)
+      setValue("description", data.description)
+      setValue("duration", data.duration.toString())
+      setValue("material.name", data.material?.name || "")
+      setValue("material.link", data.material?.link || "")
+      setValue("courseId", courseId || "")
+      setValue("sectionId", sectionId || "")
+      setValue("video.provider", videoType)
+      setValue("video.src", videoUrl)
+
+      console.log(data)
+
+      if (videoType === "normal") {
+        if (type === "create") {
+          const response = await axiosInstance.post(
+            `/lesson/${sectionId}/addlesson`,
+            data
+          )
+          toast.success("Lesson added")
+          router.push(`/admin/courses/manage-course/${courseId}`)
+        } else if (type === "edit" && lesson?._id) {
+          await axiosInstance.put(`/lesson/updatelesson/${lesson._id}`, data)
+          toast.success("Lesson updated successfully")
+          router.push(`/admin/courses/manage-course/${courseId}`)
+        }
+      } else if (videoType === "youtube") {
+        if (type === "create") {
+          const response = await axiosInstance.post(
+            `/lesson/${sectionId}/addlesson`,
+            data
+          )
+          toast.success("Lesson added")
+          router.push(`/admin/courses/manage-course/${courseId}`)
+        } else if (type === "edit" && lesson?._id) {
+          await axiosInstance.put(`/lesson/updatelesson/${lesson._id}`, data)
+          toast.success("Lesson updated successfully")
+          router.push(`/admin/courses/manage-course/${courseId}`)
+        }
+      }
+
+      onClose() // Close the modal
     } catch (error: any) {
-      // ... (existing error handling code)
+      console.error(error)
+      toast.error(error.response?.data?.message || "An error occurred")
     }
   }
 
   return (
     <div className="flexCenter flex-col w-full p-5 prose">
-      <h1>{title}</h1>
+      <h1>{PageTitle}</h1>
       <div className="flexCenter flex-col gap-5">
         <div className="flex justify-around flex-wrap gap-5 w-full">
           <div className="form-control">
@@ -106,7 +161,6 @@ const LessonForm = ({
               {...register("title", { required: true })}
             />
             {errors.title && <span>This field is required</span>}
-            {/* Display error message if the "name" field is not filled */}
           </div>
           <div className="form-control">
             <label htmlFor="description">Description:</label>
@@ -118,28 +172,14 @@ const LessonForm = ({
               disabled={isSubmitting}
             />
             {errors.description && <span>This field is required</span>}
-            {/* Display error message if the "description" field is not filled */}
           </div>
-          {/* <div className="form-control">
-            <label htmlFor="video">Video:</label>
-            <input
-              type="text"
-              id="video"
-              className="input input-bordered"
-              placeholder="Video"
-              disabled={isSubmitting}
-              {...register("video", { required: true })}
-            />
-            {errors.video && <span>This field is required</span>}
-            // Display error message if the "name" field is not filled 
-          </div> */}
           <div className="form-control">
             <label htmlFor="videoType">Video Type:</label>
             <select
               id="videoType"
               className="select select-bordered"
               value={videoType}
-              onChange={(e) => setVideoType(e.target.value as VideoType)}
+              onChange={VideoTypeChange}
             >
               <option value="normal">Normal Video</option>
               <option value="youtube">YouTube Video</option>
@@ -151,12 +191,10 @@ const LessonForm = ({
               <input
                 type="file"
                 id="video"
-                className="input input-bordered"
+                className="file-input file-input-bordered w-full max-w-xs"
                 placeholder="Video"
                 disabled={isSubmitting}
                 onChange={onFileChange}
-                required={type == "create"}
-                // {...register("file", { required: true })}
               />
               {errors.file && <span>This field is required</span>}
             </div>
@@ -169,7 +207,7 @@ const LessonForm = ({
                 className="input input-bordered"
                 placeholder="YouTube Video URL"
                 disabled={isSubmitting}
-                {...register("video", { required: true })}
+                {...register("video.src")}
               />
               {errors.video && <span>This field is required</span>}
             </div>
@@ -187,7 +225,6 @@ const LessonForm = ({
               {...register("duration", { required: true })}
             />
             {errors.duration && <span>This field is required</span>}
-            {/* Display error message if the "duration" field is not filled */}
           </div>
 
           <div>
@@ -203,7 +240,6 @@ const LessonForm = ({
                   {...register("material.name", { required: true })}
                 />
                 {errors.material?.name && <span>This field is required</span>}
-                {/* Display error message if the "name" field is not filled */}
               </div>
               <div className="form-control">
                 <label htmlFor="MaterialUrl">Url:</label>
@@ -215,7 +251,6 @@ const LessonForm = ({
                   {...register("material.link", { required: true })}
                 />
                 {errors.material?.link && <span>This field is required</span>}
-                {/* Display error message if the "name" field is not filled */}
               </div>
             </div>
           </div>
@@ -224,7 +259,7 @@ const LessonForm = ({
 
       <div className="w-full flexCenter my-5">
         <button
-          type="submit"
+          type="button"
           className="btn btn-primary"
           onClick={handleSubmit(onSubmit)}
         >
