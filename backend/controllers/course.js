@@ -3,19 +3,24 @@ const Course = require('../models/course')
 const ApiError = require('../utils/apierror')
 
 const createCourse=aynchandler(async(req,res,next)=>{
-     // @api   post api/v1/course/createcourse
-    //  you will send name ,description,courseImg,duration,price,language in body
-    const {name,description,duration,price,image}=req.body
+     // @api   post api/v1/course/create-course
+    //  you will send name ,description,duration,price,(discount => (optional)) in body
+    const {name,description,duration,price}=req.body
+    // image must be base 64 to upload on cloudinary
      const course = await Course.create({name,description,duration,price,courseImg:req.imageUrl})
      res.status(200).json(course)
     //  you will recieve course object
 })
 const updateCourse=aynchandler(async(req,res,next)=>{
-     // @api   put api/v1/course/updatecourse/:id
-     // you will send data to update inn  body and id ass params
+     // @api   put api/v1/course/update-course/:id
+     // you will send data to update in  body and id as params
     const {body}=req
     const {id} = req.params
+    
     const course = await Course.findByIdAndUpdate(id,{...body},{new:true})
+    if(!course){
+        return next(new ApiError("no course found to updated",404))
+    }
     res.status(200).json(course)
     // you recieve the new course object
 })
@@ -25,7 +30,7 @@ const getAllCourses=aynchandler(async(req,res,next)=>{
     res.status(200).json(course)
 })
 const getCourse=aynchandler(async(req,res,next)=>{
-     // @api   get api/v1/course/getcourse/:id
+     // @api   get api/v1/course/get-course/:id
     //  send id as params
     const {id} = req.params
     const course = await Course.findById(id).populate('sections')
@@ -36,7 +41,7 @@ const getCourse=aynchandler(async(req,res,next)=>{
     // get specific course
 })
 const deleteCourse=aynchandler(async(req,res,next)=>{
-     // @api   delete api/v1/course/deletecourse/:id
+     // @api   delete api/v1/course/delete-course/:id
     //  send id as params
     const {id} = req.params
     const course = await Course.findOneAndDelete({_id:id})

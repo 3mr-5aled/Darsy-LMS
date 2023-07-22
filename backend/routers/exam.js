@@ -5,6 +5,6 @@ const authintications = require('../middlewares/authintication')
 const { createExam, addExamDegree } = require('../controllers/exam')
 const router = express.Router()
 
-router.post('/:lessonId/addexam',authintications,authintication,createExam)
-router.post('/:lessonId',authintications,authintication,addExamDegree)
+router.put('/:lessonId/add-exam',authintications,authintication,createExam)
+router.put('/:lessonId',authintications,authintication,addExamDegree)
 module.exports=router

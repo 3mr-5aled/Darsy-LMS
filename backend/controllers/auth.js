@@ -71,13 +71,13 @@ const profile = asynchandler(async (req, res,next) => {
       return next(new ApiError('no user is found',400))
     }
     const {name,email,phone,parentsPhone,grade,city,gender,role} = user
-    res.status(200).json({email,name,phone,parentsPhone,grade,city,gender,role})
+    return res.status(200).json({email,name,phone,parentsPhone,grade,city,gender,role})
   }
    next(new ApiError('un authorized',401))
 });
 const forgetpassword = asynchandler(async (req, res, next) => {
   // @desc  reset password
-  // @api   Post /auth/forgetpassword
+  // @api   Post /auth/forget-password
   // check if email is exist
   // send me email of user that (gmail) and i will send mail contain resثt code
   const user = await User.findOne({ email: req.body.email });
@@ -109,15 +109,15 @@ const forgetpassword = asynchandler(async (req, res, next) => {
   }
 })
 const verifycode = asynchandler(async (req, res, next) => {
-  // @desc  verifycode
+  // @desc  verify-code
   // @api   Post /auth/verifycode
-  // send email and reset code 
+  // send email and resetCode 
   const user = await User.findOne({
     email: req.body.email,
     forgetpasswordexpired: { $gt: Date.now() },
   });
   const isvalid =  bcrypt.compare(
-    req.body.resetcode,
+    req.body.resetCode,
     user.forgetpasswordcode
   );
   if (!user || !isvalid) {
@@ -129,8 +129,8 @@ const verifycode = asynchandler(async (req, res, next) => {
 });
 
 const resetpassword = asynchandler(async (req, res,next) => {
-  // @api   Put /auth/resetcode
-  // send new password and email
+  // @api   Put /auth/reset-password
+  // send newPassword and email
   // get user from db
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
@@ -142,7 +142,7 @@ const resetpassword = asynchandler(async (req, res,next) => {
   }
   const salt = await bcrypt.genSalt(10);
   // hash password
-  const hashedpassword = await bcrypt.hash(req.body.newpassword, salt);
+  const hashedpassword = await bcrypt.hash(req.body.newPassword, salt);
   user.password = hashedpassword;
   user.forgetpasswordcode = undefined;
   user.forgetpasswordvalidation = undefined;

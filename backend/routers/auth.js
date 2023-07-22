@@ -9,9 +9,9 @@ router.post('/register',registervalidator,register)
 router.get('/profile',profile)
 router.get('/signout',signout)
 // routers for reset password
-router.post('/forgetpassword',forgetpassword) // to send email that contain verrfication code
-router.post('/verifycode',verifycode)    // to check if the reset code is valid from user
-router.put('/resetpassword',resetpasswordvalidator,resetpassword) // to reset password after validating reset code
+router.post('/forget-password',forgetpassword) // to send email that contain verrfication code
+router.post('/verify-code',verifycode)    // to check if the reset code is valid from user
+router.put('/reset-password',resetpasswordvalidator,resetpassword) // to reset password after validating reset code
 
 
 module.exports=router

@@ -8,7 +8,6 @@ const addSectionValidator=[
     validator
 ]
 const deleteSectionValidator=[
-    check('courseId').notEmpty().withMessage('courseId is required').isMongoId().withMessage('courseId is invalid id'),
     check('sectionId').notEmpty().withMessage('sectionId is required').isMongoId().withMessage('sectionId is invalid id'),
     validator
 ]
@@ -20,4 +19,8 @@ const updateSectionValidator=[
     check('sectionId').notEmpty().withMessage('sectionId is required').isMongoId().withMessage('sectionId is invalid id'),
     validator
 ]
-module.exports={addSectionValidator,deleteSectionValidator,getSectionValidator,updateSectionValidator}
+const getAllSectionsValidator=[
+    check('courseId').notEmpty().withMessage('courseId is required').isMongoId().withMessage('courseId is invalid id'),
+    validator
+]
+module.exports={addSectionValidator,deleteSectionValidator,getSectionValidator,getAllSectionsValidator,updateSectionValidator}
