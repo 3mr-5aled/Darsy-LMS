@@ -61,6 +61,7 @@ const User =new mongoose.Schema({
             type: mongoose.Schema.ObjectId,
             ref: 'lessons'
         },
+        name:String,
         lessonTotal:Number,
         courseImg:String,
         expiredDate:{

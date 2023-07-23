@@ -28,8 +28,8 @@ const login = asynchandler(async (req, res, next) => {
   // use jsonwebtoken to get token
   const token = jwt.sign({..._doc},process.env.JWT );
   // send response with all user details and token as cookie
-  const {name,email,phone,parentsPhone,grade,city,gender,role} = user
-  res.status(201).cookie("token", token).json({email,name,phone,parentsPhone,grade,city,gender,role})
+  const {name,email,phone,parentsPhone,grade,city,gender,role,enrolledCourse} = user
+  res.status(201).cookie("token", token).json({email,name,phone,parentsPhone,grade,city,gender,role,enrolledCourse})
 });
 
 const register = asynchandler(async (req, res, next) => {
@@ -73,9 +73,7 @@ const profile = asynchandler(async (req, res,next) => {
       return next(new ApiError('no user is found',400))
     }
     return res.status(200).json(userFromDB)
-  
-   next(new ApiError('un authorized',401))
-});
+  });
 const forgetpassword = asynchandler(async (req, res, next) => {
   // @desc  reset password
   // @api   Post /auth/forget-password

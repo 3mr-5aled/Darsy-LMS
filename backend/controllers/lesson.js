@@ -14,7 +14,7 @@ const addLesson = asynchandler(async (req, res, next) => {
     return next(new ApiError("no course or section is found", 404));
   }
   const lesson = await Lesson.create({ ...req.body, courseId: section.courseId, sectionId});
-  const course = await Course.findById(section.courseId);
+  const course = await Course.findOne({_id:section.courseId});
   section.lessons.push(lesson._id)
   section.total = section.total + 1
   await section.save();
@@ -51,7 +51,7 @@ const deleteLesson = asynchandler(async (req, res, next) => {
   section.lessons = section.lessons.filter((lesson) => lesson !== lessonId);
   section.total = section.total - 1
   await section.save();
-  const course = await Course.findById(section.courseId);
+  const course = await Course.findOne({_id:section.courseId});
   course.total = course.total - 1
   await course.save();
   res.status(200).json({ msg: "lesson is removed" });

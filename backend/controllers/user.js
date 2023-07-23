@@ -43,7 +43,7 @@ const addCourseToUser = aynchandler(async(req,res,next)=>{
         return res.status(200).json({user,order})
     }
     const expiredDate = Date.now() + course.expiredTime * 24 * 60 * 60 * 1000
-    user.enrolledCourse.push({courseId,lessonsDone:[],expiredDate,courseImg:course.courseImg,lessonTotal:course.total})
+    user.enrolledCourse.push({courseId,lessonsDone:[],name:course.name,expiredDate,courseImg:course.courseImg,lessonTotal:course.total})
     await user.save()
     const order = await Order.create({userId,courseId,status:'paid',amount,adminId:admin._id})
     console.log(new Date(expiredDate));
