@@ -9,10 +9,11 @@ const Courses = new mongoose.Schema(
     },
     expiredTime:{
       type:Number,
-      required:true
+      default:0
     },
     discount:{
       type: Number,
+      default:0
     },
     description: {
       type: String,
