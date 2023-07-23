@@ -23,7 +23,7 @@ const StudentPage = () => {
     const fetchUser = async () => {
       try {
         const response = await axiosInstance.get<UserType>(
-          `/user/getuser/${id}`
+          `/user/get-user/${id}`
         )
         // @ts-ignore
         setUser(response.data.user)
@@ -41,7 +41,7 @@ const StudentPage = () => {
     try {
       setIsLoading(true)
       // Make an API call to delete the user based on the ID
-      await axiosInstance.delete(`/user/deleteuser/${id}`)
+      await axiosInstance.delete(`/user/delete-user/${id}`)
       toast.success("user deleted successfully")
       router.push("/admin/students")
       // Redirect to a different page or show a success message

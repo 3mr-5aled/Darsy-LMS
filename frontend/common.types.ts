@@ -1,3 +1,10 @@
+interface EnrolledCourse {
+  courseId: string
+  lessonsDone: string[]
+  nextLesson: string
+  expiredDate: Date
+}
+
 export type UserType = {
   _id: string
   name: string
@@ -9,6 +16,7 @@ export type UserType = {
   city: string
   dateOfBirth: string
   role: string
+  enrolledCourse: EnrolledCourse[]
 }
 export interface UserState {
   user: UserType | null
@@ -23,6 +31,7 @@ type Section = {
   _id: string
   title: string
   duration: string
+  lessons: string[]
 }
 
 export type CourseType = {
@@ -35,6 +44,9 @@ export type CourseType = {
   price: number
   discount?: number
   sections?: Section[]
+}
+export type CoursesType = {
+  courses: CourseType[]
 }
 
 export type SectionType = {

@@ -21,7 +21,7 @@ const Courses = () => {
     return <Loading />
   }
 
-  if (!courses || !Array.isArray(courses)) {
+  if (!Array.isArray(courses) || courses.length === 0) {
     return <NotFoundComponent message="No Courses available" />
   }
 
@@ -29,7 +29,7 @@ const Courses = () => {
     <div className="m-5 grid grid-flow-col md:grid-cols-4 gap-5 overflow-x-hidden">
       {courses.map((item: CourseType, index: number) => (
         <div key={index} className="card bg-base-300 p-5">
-          <Link href={`/course/${item._id}`}>
+          <Link href={`/courses/view-course/${item._id}`}>
             <div>
               <img
                 className="rounded-lg"
@@ -47,7 +47,7 @@ const Courses = () => {
               </div>
               <button
                 className="btn btn-primary"
-                onClick={() => router.push(`/course/${item._id}`)}
+                onClick={() => router.push(`/courses/view-course/${item._id}`)}
               >
                 Enroll Now
               </button>

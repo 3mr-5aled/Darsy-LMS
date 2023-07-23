@@ -16,7 +16,7 @@ export default function EditCourse() {
     const fetchCourse = async () => {
       try {
         const response = await axiosInstance.get<CourseType>(
-          `/course/getcourse/${id}`
+          `/course/get-course/${id}`
         )
         setCourse(response.data)
         setIsLoading(false)

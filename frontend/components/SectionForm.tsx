@@ -40,7 +40,7 @@ const SectionForm = ({ title, type, section, courseId, onClose }: Props) => {
       try {
         if (type === "create") {
           const response = await axiosInstance.post(
-            `/section/${courseId}/addsection`,
+            `/section/${courseId}/add-section`,
             data
           )
           if (response?.data) {
@@ -51,7 +51,7 @@ const SectionForm = ({ title, type, section, courseId, onClose }: Props) => {
             toast.error("An error occurred during section creation")
           }
         } else if (type === "edit" && section?._id) {
-          await axiosInstance.put(`/section/updatesection/${section._id}`, data)
+          await axiosInstance.put(`/section/update-section/${section._id}`, data)
           toast.success("Section updated successfully")
           router.push(`/admin/courses/manage-course/${courseId}`)
           onClose()

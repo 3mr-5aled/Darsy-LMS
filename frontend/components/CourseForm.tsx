@@ -17,7 +17,8 @@ type FormValues = {
   description: string
   duration: number
   price: number
-  discount?: number | undefined // Make sure 'discount' is allowed to be 'undefined'
+  discount?: number | undefined
+  expiredTime?: Date
 }
 
 const CourseForm = ({ title, type, course }: Props) => {
@@ -31,6 +32,14 @@ const CourseForm = ({ title, type, course }: Props) => {
   const [imageBase64, setImageBase64] = useState<string | null | undefined>(
     null
   )
+  const [minDate, setMinDate] = useState<string | number | undefined>(undefined)
+
+  useEffect(() => {
+    // Get tomorrow's date and set it as the minimum date for the date picker
+    const tomorrow = new Date()
+    tomorrow.setDate(tomorrow.getDate() + 1) // Add one day to today's date
+    setMinDate(tomorrow.toISOString().split("T")[0])
+  }, [])
 
   const router = useRouter()
 
@@ -63,7 +72,7 @@ const CourseForm = ({ title, type, course }: Props) => {
         await handleSubmit(async () => {
           if (type === "create") {
             const response = await axiosInstance.post(
-              "/course/createcourse",
+              "/course/create-course",
               formData
             )
             if (response?.data) {
@@ -74,11 +83,11 @@ const CourseForm = ({ title, type, course }: Props) => {
             }
           } else if (type === "edit" && course?._id) {
             await axiosInstance.put(
-              `/course/updatecourse/${course._id}`,
+              `/course/update-course/${course._id}`,
               formData
             )
             toast.success("Course updated successfully")
-            router.push(`/admin/manage-course/${course._id}`)
+            router.push(`/admin/courses/manage-course/${course._id}`)
           }
         })()
       } catch (error: any) {
@@ -208,6 +217,21 @@ const CourseForm = ({ title, type, course }: Props) => {
             />
             {errors.discount && <span>This field is required</span>}
             {/* Display error message if the "discount" field is not filled */}
+          </div>
+          <div className="form-control w-full">
+            <label htmlFor="expiredTime">Date of expire</label>
+            <input
+              className="w-full input input-bordered"
+              id="expiredTime"
+              type="date"
+              min={minDate}
+              max="2050-01-01"
+              placeholder="Expiry Date"
+              {...register("expiredTime")}
+            />
+            {errors.expiredTime && (
+              <p className="text-sm text-error">Error in Date of expire</p>
+            )}
           </div>
         </div>
       </div>

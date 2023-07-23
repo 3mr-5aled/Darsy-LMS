@@ -18,7 +18,7 @@ const Course = () => {
   const fetchCourse = async () => {
     setIsLoading(true)
     try {
-      const response = await axiosInstance.get(`/course/getcourse/${id}`)
+      const response = await axiosInstance.get(`/course/get-course/${id}`)
       setCourse(response.data)
       setIsLoading(false)
     } catch (error: any) {
@@ -36,7 +36,7 @@ const Course = () => {
     try {
       if (window.confirm("Are you sure you want to delete this course?")) {
         setIsLoading(true)
-        await axiosInstance.delete(`/course/deletecourse/${id}`)
+        await axiosInstance.delete(`/course/delete-course/${id}`)
         toast.success("Course deleted successfully")
         router.push("/admin/courses") // Redirect to the courses page after deletion
       }
@@ -70,7 +70,7 @@ const Course = () => {
 
             <button
               className="mt-5 mb-3 btn btn-primary btn-outline"
-              onClick={() => router.push(`/course/${course._id}`)}
+              onClick={() => router.push(`/courses/view-course/${course._id}`)}
             >
               View Course
             </button>

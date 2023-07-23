@@ -26,7 +26,7 @@ const Reset = () => {
   const onSubmitEmail: SubmitHandler<IFormInput> = async (data) => {
     setIsLoading(true) // Start loading state
     try {
-      await axiosInstance.post("/auth/forgetpassword", data)
+      await axiosInstance.post("/auth/forget-password", data)
       setCurrentStep(2)
     } catch (error) {
       console.error(error)
@@ -38,7 +38,7 @@ const Reset = () => {
   const onSubmitVerification: SubmitHandler<IFormInput> = async (data) => {
     setIsLoading(true) // Start loading state
     try {
-      await axiosInstance.post("/auth/verifycode", data)
+      await axiosInstance.post("/auth/verify-code", data)
       setCurrentStep(3)
     } catch (error) {
       console.error(error)
@@ -50,7 +50,7 @@ const Reset = () => {
   const onSubmitPassword: SubmitHandler<IFormInput> = async (data) => {
     setIsLoading(true) // Start loading state
     try {
-      await axiosInstance.put("/auth/resetpassword", data)
+      await axiosInstance.put("/auth/reset-password", data)
       console.log("Password reset successful")
       router.push("/auth/login")
     } catch (error) {

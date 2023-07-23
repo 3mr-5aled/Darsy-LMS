@@ -113,26 +113,26 @@ const LessonForm = ({
       if (videoType === "normal") {
         if (type === "create") {
           const response = await axiosInstance.post(
-            `/lesson/${sectionId}/addlesson`,
+            `/lesson/${sectionId}/add-lesson`,
             data
           )
           toast.success("Lesson added")
           router.push(`/admin/courses/manage-course/${courseId}`)
         } else if (type === "edit" && lesson?._id) {
-          await axiosInstance.put(`/lesson/updatelesson/${lesson._id}`, data)
+          await axiosInstance.put(`/lesson/update-lesson/${lesson._id}`, data)
           toast.success("Lesson updated successfully")
           router.push(`/admin/courses/manage-course/${courseId}`)
         }
       } else if (videoType === "youtube") {
         if (type === "create") {
           const response = await axiosInstance.post(
-            `/lesson/${sectionId}/addlesson`,
+            `/lesson/${sectionId}/add-lesson`,
             data
           )
           toast.success("Lesson added")
           router.push(`/admin/courses/manage-course/${courseId}`)
         } else if (type === "edit" && lesson?._id) {
-          await axiosInstance.put(`/lesson/updatelesson/${lesson._id}`, data)
+          await axiosInstance.put(`/lesson/update-lesson/${lesson._id}`, data)
           toast.success("Lesson updated successfully")
           router.push(`/admin/courses/manage-course/${courseId}`)
         }

@@ -40,9 +40,10 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
     setIsLoading(true)
     try {
       const response = await axiosInstance.get(
-        `/lesson/${sectionId}/getalllesson`
+        `/lesson/${sectionId}/get-all-lessons`
       )
       setLessons(response.data)
+      console.log(response.data)
       setIsLoading(false)
     } catch (error: any) {
       setError(error.message)
@@ -64,7 +65,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
     setIsLoading(true)
     try {
       await axiosInstance.delete(
-        `/section/${courseId}/deletesection/${sectionId}`
+        `/section/${courseId}/delete-section/${sectionId}`
       )
       toast.success("Section Deleted")
       setIsLoading(false)
@@ -83,7 +84,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
       if (window.confirm("Are you sure you want to delete this lesson?")) {
         setIsLoading(true)
         await axiosInstance.delete(
-          `/lesson/${sectionId}/deletelesson/${lessonId}`
+          `/lesson/${sectionId}/delete-lesson/${lessonId}`
         )
         toast.success("Lesson Deleted")
         setIsLoading(false)
@@ -143,7 +144,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
 
   return (
     <div>
-      <div className="flex flex-row items-center justify-between bg-base-200 p-3 my-3">
+      <div className="flex flex-row items-center justify-between p-3 my-3 bg-base-200">
         <h2 className="text-xl font-bold">Sections</h2>
         {isAdmin && (
           <>
@@ -159,7 +160,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
               <form method="dialog" className="modal-box">
                 <button
                   title="close"
-                  className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                  className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2"
                   onClick={closeModal}
                 >
                   ✕
@@ -176,9 +177,9 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
         )}
       </div>
       {filteredSections.map((section, index) => (
-        <div key={index} className="join join-vertical w-full">
+        <div key={index} className="w-full join join-vertical">
           <div
-            className="collapse collapse-arrow join-item border border-base-300"
+            className="border collapse collapse-arrow join-item border-base-300"
             onClick={() => handleSectionClick(section._id)}
           >
             <input
@@ -187,9 +188,9 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
               name="my-accordion-4"
               readOnly
             />
-            <div className="collapse-title text-xl font-medium flex flex-row justify-between">
+            <div className="flex flex-row justify-between text-xl font-medium collapse-title">
               <p>{section.title}</p>
-              <div className="flex flex-row items-center gap-4  z-20">
+              <div className="z-20 flex flex-row items-center gap-4">
                 {isAdmin && (
                   <>
                     <div
@@ -199,7 +200,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                       <button
                         title="edit"
                         type="button"
-                        className="text-warning cursor-pointer"
+                        className="cursor-pointer text-warning"
                         onClick={() => showSectionEditModal(index)}
                       >
                         <BsPencilFill />
@@ -212,7 +213,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                       <form method="dialog" className="modal-box">
                         <button
                           title="close"
-                          className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                          className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2"
                           onClick={closeSectionEditModal}
                         >
                           ✕
@@ -233,7 +234,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                       <button
                         title="delete"
                         type="button"
-                        className="text-warning cursor-pointer "
+                        className="cursor-pointer text-warning "
                         onClick={() => deleteSection(section._id)}
                       >
                         <BsTrashFill />
@@ -245,8 +246,8 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                 <p>{section.duration} min</p>
               </div>
             </div>
-            <div className="collapse-content flex flex-col">
-              <div className="flex flex-row justify-between items-center bg-base-100 p-3 my-3 rounded-md">
+            <div className="flex flex-col collapse-content">
+              <div className="flex flex-row items-center justify-between p-3 my-3 rounded-md bg-base-100">
                 <h2 className="text-xl font-bold">Lessons</h2>
                 {isAdmin && (
                   <>
@@ -261,7 +262,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                       <form method="dialog" className="modal-box">
                         <button
                           title="close"
-                          className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                          className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2"
                           onClick={closeLessonModal}
                         >
                           ✕
@@ -283,13 +284,12 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
               ) : (
                 lessons.map((lesson, index) => (
                   <div
-                    className="bg-base-200 text-start p-3 flex flex-row justify-between items-center my-3 rounded-md"
+                    className="flex flex-row items-center justify-between p-3 my-3 rounded-md bg-base-200 text-start"
                     key={lesson._id}
                   >
                     <div
-                      onClick={() =>
-                        router.push(`/lecture/lesson/${lesson._id}`)
-                      }
+                      onClick={() => router.push(`/learn/lesson/${lesson._id}`)}
+                      className="cursor-pointer"
                     >
                       {index + 1}. {lesson.title}
                     </div>
@@ -304,7 +304,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                             <button
                               title="edit"
                               type="button"
-                              className="text-warning cursor-pointer"
+                              className="cursor-pointer text-warning"
                               onClick={() => showLessonEditModal(index)}
                             >
                               <BsPencilFill />
@@ -317,7 +317,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                             <button
                               title="delete"
                               type="button"
-                              className="text-error cursor-pointer "
+                              className="cursor-pointer text-error "
                               onClick={() =>
                                 deleteLesson(lesson._id, section._id)
                               }
@@ -330,7 +330,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                           <form method="dialog" className="modal-box">
                             <button
                               title="close"
-                              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+                              className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2"
                               onClick={closeLessonEditModal}
                             >
                               ✕

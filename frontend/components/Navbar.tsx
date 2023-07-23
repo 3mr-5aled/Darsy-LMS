@@ -57,11 +57,11 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="flexBetween navbar">
+    <nav className="flexBetween relative navbar z-20">
       <div className="container gap-10 flexStart">
         {" "}
         {/* Container for the logo */}
-        <Link href="/" className="prose bg-white rounded-md p-3">
+        <Link href="/" className="p-3 prose bg-white rounded-md">
           <Image
             src="/next.svg"
             width={115}
@@ -70,13 +70,13 @@ const Navbar = () => {
           />
         </Link>
       </div>
-      <ul className="hidden xl:flex items-center space-x-4 font-bold container justify-center">
+      <ul className="container items-center justify-center hidden space-x-4 font-bold xl:flex">
         {" "}
         {/* Container for the links */}
         {NavLinks.map((link) => (
           <li
             key={link.text}
-            className="hover:text-secondary transition-colors"
+            className="transition-colors hover:text-secondary"
           >
             {/* Apply transition to the hover state */}
             <Link href={link.href}>{link.text}</Link>
@@ -88,12 +88,12 @@ const Navbar = () => {
         {/* Container for the user avatar/sign-in button */}
         <DarkModeButton />
         {isLoadingUser ? (
-          <div className="animate-pulse w-16 h-6 m-1" /> // Placeholder skeleton for username
+          <div className="w-16 h-6 m-1 animate-pulse" /> // Placeholder skeleton for username
         ) : user ? (
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="">
               <div className="avatar placeholder">
-                <div className="bg-neutral-focus text-neutral-content rounded-full w-12 border-2 cursor-pointer border-gray-800 hover:border-2 hover:border-secondary transition-all">
+                <div className="w-12 transition-all border-2 border-gray-800 rounded-full cursor-pointer bg-neutral-focus text-neutral-content hover:border-2 hover:border-secondary">
                   {" "}
                   {/* Apply transition to the border color */}
                   <span className="font-bold">
@@ -107,18 +107,29 @@ const Navbar = () => {
               className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <Link href="/profile">My Profile</Link>
+                <Link href="/account/profile">My Profile</Link>
               </li>
+              <li>
+                <Link href="/account/my-courses">My Courses</Link>
+              </li>
+              <AdminOnlyLink>
+                <li>
+                  <Link
+                    className="flex flex-row justify-between"
+                    href="/admin/dashboard"
+                  >
+                    <span>Dashboard</span>{" "}
+                    <div className="badge badge-accent badge-outline">
+                      Admin
+                    </div>
+                  </Link>
+                </li>
+              </AdminOnlyLink>
               <li>
                 <button onClick={signOut}>
                   {isSigningOut ? "Signing out..." : "Sign out"}
                 </button>
               </li>
-              <AdminOnlyLink>
-                <li>
-                  <Link href="/admin/dashboard">Dashboard</Link>
-                </li>
-              </AdminOnlyLink>
             </ul>
           </div>
         ) : (

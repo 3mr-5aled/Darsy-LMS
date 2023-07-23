@@ -14,7 +14,7 @@ const Students = () => {
     // Fetch users from the API
     const fetchUsers = async () => {
       try {
-        const response = await axiosInstance.get<any>("/user/getallusers") // Corrected the response data type annotation
+        const response = await axiosInstance.get<any>("/user/get-all-users") // Corrected the response data type annotation
         setUsers(response.data)
         setIsLoading(false)
       } catch (error: any) {
