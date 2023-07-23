@@ -61,6 +61,8 @@ const User =new mongoose.Schema({
             type: mongoose.Schema.ObjectId,
             ref: 'lessons'
         },
+        lessonTotal:Number,
+        courseImg:String,
         expiredDate:{
             type:Date
         }
@@ -78,5 +80,4 @@ const User =new mongoose.Schema({
         ,{timestamps:true}
     ],
 }, { timestamps: true });
-
 module.exports = mongoose.model('users', User);

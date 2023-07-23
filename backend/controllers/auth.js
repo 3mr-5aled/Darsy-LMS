@@ -54,25 +54,26 @@ const register = asynchandler(async (req, res, next) => {
 const signout = asynchandler(async (req, res,next) => {
   // @api   Get /auth/signout
   // extract token
-  res.status(200).cookie("token", " ").json({ msg: "signout is done" });
+  res.status(200).cookie("token", "").json({ msg: "signout is done" });
 });
 const profile = asynchandler(async (req, res,next) => {
   // @api   Get /auth/profile
   // extract token
   const { token } = req.cookies;
   // check the token, the user variable contain all details
-  if (token.length > 2) {
+    if (!token) {
+      return next(new ApiError('un authorized',401))
+    }
     const user = jwt.verify(token, process.env.JWT);
     if (!user) {
       return next(new ApiError('un authorized',401))
     }
-    const userFromDB =await User.findById(user._id).select("-password")
+    const userFromDB =await User.findOne({_id:user._id}).select("-password")
     if (!userFromDB) {
       return next(new ApiError('no user is found',400))
     }
-    
     return res.status(200).json(userFromDB)
-  }
+  
    next(new ApiError('un authorized',401))
 });
 const forgetpassword = asynchandler(async (req, res, next) => {
