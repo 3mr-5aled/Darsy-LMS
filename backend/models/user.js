@@ -64,9 +64,6 @@ const User =new mongoose.Schema({
         name:String,
         lessonTotal:Number,
         courseImg:String,
-        expiredDate:{
-            type:Date
-        }
     }],
     exams:[
         {
