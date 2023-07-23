@@ -89,7 +89,7 @@ const getAllLesson = asynchandler(async (req, res, next) => {
   const { sectionId } = req.params;
   const lesson = await Lesson.find({ sectionId });
   if (lesson.length === 0) {
-    return res.status(200).json({ errCode:1234 });
+    return res.status(200).json({ errCode:9483 });
   }
   res.status(200).json(lesson);
 });
