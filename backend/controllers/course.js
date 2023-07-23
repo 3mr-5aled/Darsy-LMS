@@ -7,7 +7,6 @@ const createCourse = aynchandler(async (req, res, next) => {
     //  you will send name ,description,duration,price,(discount => (optional)) in body
     const {body} = req
     // image must be base 64 to upload on cloudinary
-    expiredTime = expiredTime === undefined ? 0 : expiredTime
     const course = await Course.create({ ...body , courseImg: req.imageUrl })
     res.status(200).json(course)
     //  you will recieve course object
