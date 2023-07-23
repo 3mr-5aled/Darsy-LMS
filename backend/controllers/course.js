@@ -5,9 +5,9 @@ const ApiError = require('../utils/apierror')
 const createCourse=aynchandler(async(req,res,next)=>{
      // @api   post api/v1/course/create-course
     //  you will send name ,description,duration,price,(discount => (optional)) in body
-    const {name,description,duration,price}=req.body
+    const {name,description,duration,price,expiredTime}=req.body
     // image must be base 64 to upload on cloudinary
-     const course = await Course.create({name,description,duration,price,courseImg:req.imageUrl})
+     const course = await Course.create({name,description,duration,price,courseImg:req.imageUrl,expiredTime})
      res.status(200).json(course)
     //  you will recieve course object
 })
