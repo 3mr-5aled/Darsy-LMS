@@ -5,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css"
 import Link from "next/link"
 import AdminOnlyRoute from "@/components/AdminOnlyRoutes"
 import DarkModeButton from "@/components/DarkModeButton"
-import { useUserContext } from "@/contexts/userContext"
 import UserComponent from "@/components/UserComponent"
 
 export const metadata = {
@@ -36,7 +35,9 @@ export default function RootLayout({
           <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
           <ul className="menu p-4 w-80 h-full bg-base-200 text-base-content">
             <div className="flex  flex-row justify-between items-center mb-5">
-              <div className="text-2xl font-bold">{WebsiteDetails.name}</div>
+              <div className="text-2xl font-bold">
+                <Link href="/">{WebsiteDetails.name}</Link>
+              </div>
               <DarkModeButton />
             </div>
             {/* Sidebar content here */}

@@ -31,7 +31,7 @@ const EditStudent = () => {
     const fetchUser = async () => {
       try {
         const response = await axiosInstance.get<UserType>(
-          `/user/getuser/${id}`
+          `/user/get-user/${id}`
         )
         // @ts-ignore
         setUser(response.data.user)
@@ -75,7 +75,7 @@ const EditStudent = () => {
 
   const onSubmit: SubmitHandler<UserType> = async (data) => {
     try {
-      await axiosInstance.put(`/user/updateuser/${id}`, data)
+      await axiosInstance.put(`/user/update-user/${id}`, data)
       // Redirect to the user details page or show a success message
       toast.success("User updated successfully")
       router.push(`/admin/students/manage-student/${id}`)

@@ -21,7 +21,7 @@ const CoursesAdminView = () => {
     return <Loading />
   }
 
-  if (!courses || !Array.isArray(courses)) {
+  if (!Array.isArray(courses) || courses.length === 0) {
     return <NotFoundComponent message="No Courses available" />
   }
 
@@ -47,9 +47,11 @@ const CoursesAdminView = () => {
               </div>
               <button
                 className="btn btn-primary"
-                onClick={() => router.push(`/course/${item._id}`)}
+                onClick={() =>
+                  router.push(`/admin/courses/manage-course/${item._id}`)
+                }
               >
-                Enroll Now
+                Manage course
               </button>
             </div>
           </Link>

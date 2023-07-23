@@ -30,7 +30,11 @@ export const NavLinks = [
 ]
 export const AdminNavLinks = [
   { href: "/admin/students", key: "Manage Students", text: "Manage Students" },
-  { href: "/admin/create-course", key: "Create Course", text: "Create Course" },
+  {
+    href: "/admin/courses/create-course",
+    key: "Create Course",
+    text: "Create Course",
+  },
   { href: "/admin/courses", key: "Manage Courses", text: "Manage Courses" },
   { href: "/", key: "Back to Homepage", text: "Back to Homepage" },
 ]

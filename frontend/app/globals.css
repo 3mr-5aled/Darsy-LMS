@@ -54,7 +54,7 @@ body {
 
 /* Navbar */
 .navbar {
-  @apply gap-4 px-8 py-5 border-b bg-base-200;
+  @apply gap-4 px-8 py-5 border-b bg-base-200 bg-opacity-50;
 }
 
 /* Profile Menu */
