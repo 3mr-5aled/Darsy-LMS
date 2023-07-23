@@ -45,8 +45,11 @@ Courses.pre('findOneAndDelete', async function (next) {
   }
   try {
     // Delete all sections associated with this course
-    // Assuming you have a 'sections' model defined in your code
-    const users =await mongoose.model('users').find({['enrolledCourse.courseId']:course._id})
+    // Assuming you have a 'sections' model defined in your code    
+    const users =await mongoose.model('users').find({['enrolledCourse.courseId']: course._id})
+    if(users.length === 0 ){
+      return next();
+    }
     users.map(async (user)=>{
       user.enrolledCourse.filter((userCourse)=>userCourse.courseId.toString() !== course._id.toString() )  
       await user.save()
