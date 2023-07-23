@@ -55,7 +55,7 @@ const getLesson = asynchandler(async (req, res, next) => {
 });
 
 const deleteLesson = asynchandler(async (req, res, next) => {
-  // @api delete /:courseId/:sectionId/deletelesson/:lessonId
+  // @api delete /:sectionId/delete-lesson/:lessonId
   // send sectionId and courseId and lessonId in params
   const { sectionId, lessonId } = req.params;
   const lesson = await Lesson.deleteMany({ _id: lessonId });
@@ -73,7 +73,6 @@ const deleteLesson = asynchandler(async (req, res, next) => {
   users.map(async (user) => {
     user.enrolledCourse.map(userCourse => {
       if (userCourse.courseId.toString() === section.courseId.toString()) {
-        console.log('inn');
         userCourse.lessonTotal = course.total
         return userCourse
       } else {
