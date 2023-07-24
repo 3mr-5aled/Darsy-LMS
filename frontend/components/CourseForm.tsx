@@ -50,6 +50,7 @@ const CourseForm = ({ title, type, course }: Props) => {
       setValue("duration", course?.duration)
       setValue("price", course?.price)
       setValue("discount", course?.discount)
+      // setValue("expiredTime", course?.expiredTime)
       setImageBase64(course?.courseImg || null) // Handle undefined case here
     }
   }, [course, setValue])
@@ -62,6 +63,7 @@ const CourseForm = ({ title, type, course }: Props) => {
       duration: data.duration,
       price: data.price,
       discount: data?.discount,
+      // expiredTime: data?.expiredTime,
     }
     try {
       if (isSubmitting) {
@@ -204,21 +206,22 @@ const CourseForm = ({ title, type, course }: Props) => {
             {errors.price && <span>This field is required</span>}
             {/* Display error message if the "price" field is not filled */}
           </div>
-          <div className="form-control">
+          <div className="form-control w-full">
             <label htmlFor="discount">discount:</label>
             <input
               type="number"
               id="discount"
-              className="input input-bordered"
-              placeholder="Discount (optional)"
+              className="input input-bordered w-1/2"
+              placeholder="Default value zero %"
               min={0}
+              max={100}
               disabled={isSubmitting}
-              {...register("discount", { required: false })}
+              {...register("discount", { required: true })}
             />
             {errors.discount && <span>This field is required</span>}
             {/* Display error message if the "discount" field is not filled */}
           </div>
-          <div className="form-control w-full">
+          {/* <div className="form-control w-full">
             <label htmlFor="expiredTime">Date of expire</label>
             <input
               className="w-full input input-bordered"
@@ -232,7 +235,7 @@ const CourseForm = ({ title, type, course }: Props) => {
             {errors.expiredTime && (
               <p className="text-sm text-error">Error in Date of expire</p>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
 

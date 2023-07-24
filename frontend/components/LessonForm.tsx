@@ -28,6 +28,7 @@ const LessonForm = ({
     handleSubmit,
     formState: { errors, isSubmitting },
     setValue,
+    reset,
   } = useForm<LessonType>() // Specify the generic type for useForm
 
   const [videoType, setVideoType] = useState<VideoType>("normal")
@@ -116,10 +117,12 @@ const LessonForm = ({
             `/lesson/${sectionId}/add-lesson`,
             data
           )
+          reset()
           toast.success("Lesson added")
           router.push(`/admin/courses/manage-course/${courseId}`)
         } else if (type === "edit" && lesson?._id) {
           await axiosInstance.put(`/lesson/update-lesson/${lesson._id}`, data)
+          reset()
           toast.success("Lesson updated successfully")
           router.push(`/admin/courses/manage-course/${courseId}`)
         }
@@ -129,10 +132,12 @@ const LessonForm = ({
             `/lesson/${sectionId}/add-lesson`,
             data
           )
+          reset()
           toast.success("Lesson added")
           router.push(`/admin/courses/manage-course/${courseId}`)
         } else if (type === "edit" && lesson?._id) {
           await axiosInstance.put(`/lesson/update-lesson/${lesson._id}`, data)
+          reset()
           toast.success("Lesson updated successfully")
           router.push(`/admin/courses/manage-course/${courseId}`)
         }

@@ -70,7 +70,7 @@ type ApiResponseType = {
   sectionTitle: string
   sectionDuration: string
   courseTitle: string
-  courseId: CourseType
+  course: CourseType
   totalLessons: number
 }
 
@@ -136,6 +136,7 @@ const LessonPage = () => {
         console.error(error)
         toast.error(error.response.message)
         setIsLoading(false)
+        return <p>{error.response.message}</p>
         // Handle error, e.g., show an error message or redirect to an error page
       }
     }
@@ -146,7 +147,7 @@ const LessonPage = () => {
   const percentage = () => {
     if (data && user && user.enrolledCourse.length > 0) {
       const courseWithProgress = user.enrolledCourse.find(
-        (enrolledCourse) => enrolledCourse.courseId === data.courseId._id
+        (enrolledCourse) => enrolledCourse.courseId === data.course._id
       )
 
       if (courseWithProgress) {
@@ -187,46 +188,38 @@ const LessonPage = () => {
   }, [lesson, sections])
 
   // next lesson logic
-  const handleNextLesson = () => {
-    // Check if there's a next lesson available within the current section
-    if (currentLessonIndex + 1 < sections[currentLessonIndex].lessons.length) {
-      const nextLesson =
-        sections[currentLessonIndex].lessons[currentLessonIndex + 1]
-      // Navigate to the next lesson within the same section
-      router.push(`/learn/lesson/${nextLesson._id}`)
-    } else {
-      // If there's no next lesson in the current section, check if there's a next section
-      if (currentLessonIndex + 1 < sections.length) {
-        const nextLesson = sections[currentLessonIndex + 1].lessons[0]
-        // Navigate to the first lesson of the next section
-        router.push(`/learn/lesson/${nextLesson._id}`)
-      } else {
-        // You may handle the case where there's no next lesson (e.g., show a message or redirect to a different page)
-        toast.info("Congratulations! You've completed all the lessons.")
+  const handleNextLesson = async () => {
+    try {
+      const response = await axiosInstance.put(
+        `/lesson/complete-lesson/${lesson?._id}`
+      )
+      toast.success("Lesson Completed")
+      router.push(`/learn/lesson/${response.data.newLessonId}`)
+    } catch (error: any) {
+      if (error.response.data.errCode === 5241) {
+        if (lessonsDone === data.totalLessons) {
+          toast.info("you Have finished the course")
+        } else {
+          toast.info("this the last lesson in the course")
+        }
       }
+      // console.log(error)
+      // toast.error(error)
     }
   }
 
-  const handlePreviousLesson = () => {
-    // Check if there's a previous lesson available within the current section
-    if (currentLessonIndex - 1 >= 0) {
-      const previousLesson =
-        sections[currentLessonIndex].lessons[currentLessonIndex - 1]
-      // Navigate to the previous lesson within the same section
-      router.push(`/learn/lesson/${previousLesson._id}`)
-    } else {
-      // If there's no previous lesson in the current section, check if there's a previous section
-      if (currentLessonIndex - 1 >= 0) {
-        const previousLesson =
-          sections[currentLessonIndex - 1].lessons[
-            sections[currentLessonIndex - 1].lessons.length - 1
-          ]
-        // Navigate to the last lesson of the previous section
-        router.push(`/learn/lesson/${previousLesson._id}`)
-      } else {
-        // You may handle the case where there's no previous lesson (e.g., show a message or redirect to a different page)
-        toast.info("You're already at the first lesson.")
+  const handlePreviousLesson = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `/lesson/previous-lesson/${lesson?._id}`
+      )
+      router.push(`/learn/lesson/${response.data.previousLessonId}`)
+    } catch (error: any) {
+      if (error.response.data.errCode === 5241) {
+        toast.info("you are currently in the first lesson")
       }
+      // console.log(error)
+      // toast.error(error)
     }
   }
 
@@ -239,15 +232,13 @@ const LessonPage = () => {
     // Add a loading state or a message while the data is being fetched
     return <Loading /> // Assuming you have a Loading component to display loading state
   }
-  if (!data.courseId) {
+  if (!data.course) {
     // Handle the case where data.courseId is null or undefined
     return <p>No course data found</p>
   }
 
   if (
-    !user.enrolledCourse.some(
-      (course) => course.courseId === data.courseId?._id
-    )
+    !user.enrolledCourse.some((course) => course.courseId === data.course?._id)
   ) {
     return <p>Please enroll in the course first to access the lesson</p>
   }
@@ -276,7 +267,7 @@ const LessonPage = () => {
         <>
           {data && (
             <div className="flex flex-row items-center justify-between w-full h-20 p-5 bg-base-300">
-              <div>
+              <div className="flex flex-row gap-5">
                 <label
                   htmlFor="my-drawer-2"
                   className="btn btn-primary drawer-button lg:hidden"
@@ -291,7 +282,7 @@ const LessonPage = () => {
                     <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
                   </svg>
                 </label>
-                <Link href={`/courses/view-course/${data.courseId._id}`}>
+                <Link href={`/courses/view-course/${data.course._id}`}>
                   <h1 className="text-2xl font-extrabold">
                     {data.courseTitle}
                   </h1>
@@ -310,7 +301,7 @@ const LessonPage = () => {
               </div>
             </div>
           )}
-          <div className="drawer lg:drawer-open">
+          <div className="drawer lg:drawer-open z-50">
             <input
               title="drawer-toggle"
               id="my-drawer-2"
@@ -324,7 +315,9 @@ const LessonPage = () => {
                   <VideoPlayer video={lesson.video} />
                   {/* <VideoPlayer videoId="LH7LPMXv8Lg" /> */}
                   {/* Only render Plyr in the browser environment */}
-                  <div className="flex flex-row justify-between w-full paddings">
+                  <div
+                    className={`flex flex-row justify-between w-full paddings `}
+                  >
                     <h1 className="text-2xl font-bold flex flex-row gap-x-3 items-center">
                       <span>{lesson.title}</span>
                       {renderDoneIcon(lesson._id)}
@@ -388,15 +381,19 @@ const LessonPage = () => {
                       </div>
                       <div className="flex flex-col gap-3 collapse-content">
                         {/* Display lessons in each section */}
-                        {section.lessons.map((lesson, index) => (
+                        {section.lessons.map((lessonItem, lessonIndex) => (
                           <div
-                            key={lesson._id}
-                            className="flex flex-row justify-between items-center"
+                            key={lessonItem._id}
+                            className={`flex flex-row justify-between items-center rounded-lg p-3 ${
+                              lessonItem._id === lesson?._id
+                                ? "bg-base-100"
+                                : ""
+                            }`}
                           >
-                            <Link href={`/learn/lesson/${lesson._id}`}>
-                              {index + 1}. {lesson.title}
+                            <Link href={`/learn/lesson/${lessonItem._id}`}>
+                              {lessonIndex + 1}. {lessonItem.title}
                             </Link>
-                            {renderDoneIcon(lesson._id)}
+                            {renderDoneIcon(lessonItem._id)}
                           </div>
                         ))}
                       </div>

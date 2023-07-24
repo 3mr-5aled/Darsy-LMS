@@ -6,7 +6,13 @@ import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import LessonForm from "./LessonForm"
 import SectionForm from "./SectionForm"
-import { BsPencilFill, BsTrashFill } from "react-icons/bs"
+import {
+  BsCheckCircle,
+  BsCheckCircleFill,
+  BsPencilFill,
+  BsTrashFill,
+} from "react-icons/bs"
+import { useUserContext } from "@/contexts/userContext"
 
 type Section = {
   _id: string
@@ -29,6 +35,8 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isLessonModalOpen, setIsLessonModalOpen] = useState<boolean>(false)
   const [modalIndex, setModalIndex] = useState<number | null>(null)
+  const { state, setUser, clearUser } = useUserContext()
+  const { user } = state
 
   useEffect(() => {
     if (sections) {
@@ -42,11 +50,17 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
       const response = await axiosInstance.get(
         `/lesson/${sectionId}/get-all-lessons`
       )
-      setLessons(response.data)
-      console.log(response.data)
+
+      if (Array.isArray(response.data)) {
+        setLessons(response.data)
+      } else {
+        setLessons([])
+      }
+
       setIsLoading(false)
     } catch (error: any) {
       setError(error.message)
+      setLessons([]) // Set lessons to an empty array in case of an error
       setIsLoading(false)
     }
   }
@@ -142,8 +156,24 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
     }
   }
 
+  const isLessonDone = (lessonId: string) => {
+    return user?.enrolledCourse[0]?.lessonsDone?.includes(lessonId) ?? false
+  }
+  const renderDoneIcon = (lessonId: string) => {
+    const isDone = isLessonDone(lessonId)
+    return isDone ? (
+      <span className="text-green-500">
+        <BsCheckCircleFill />
+      </span>
+    ) : (
+      <span className="text-gray-500">
+        <BsCheckCircle />
+      </span>
+    )
+  }
+
   return (
-    <div>
+    <div className="bg-base-200 rounded-md">
       <div className="flex flex-row items-center justify-between p-3 my-3 bg-base-200">
         <h2 className="text-xl font-bold">Sections</h2>
         {isAdmin && (
@@ -246,7 +276,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                 <p>{section.duration} min</p>
               </div>
             </div>
-            <div className="flex flex-col collapse-content">
+            <div className="flex flex-col collapse-content bg-base-200">
               <div className="flex flex-row items-center justify-between p-3 my-3 rounded-md bg-base-100">
                 <h2 className="text-xl font-bold">Lessons</h2>
                 {isAdmin && (
@@ -279,6 +309,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                   </>
                 )}
               </div>
+              {/* Check if lessons array is empty */}
               {lessons.length === 0 ? (
                 <p>No Lessons available</p>
               ) : (
@@ -289,9 +320,10 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                   >
                     <div
                       onClick={() => router.push(`/learn/lesson/${lesson._id}`)}
-                      className="cursor-pointer"
+                      className="cursor-pointer flex flex-row gap-x-3 items-center"
                     >
                       {index + 1}. {lesson.title}
+                      {renderDoneIcon(lesson._id)}
                     </div>
 
                     {isAdmin && (

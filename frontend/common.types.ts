@@ -1,8 +1,12 @@
 interface EnrolledCourse {
   courseId: string
+  name: string
+  courseImg: string
+  duration: number
   lessonsDone: string[]
   nextLesson: string
   expiredDate: Date
+  lessonTotal: string
 }
 
 export type UserType = {

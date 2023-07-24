@@ -40,6 +40,34 @@ const Course = () => {
     return <Loading />
   }
 
+  const calculateDiscountedPrice = () => {
+    // Add a null check for course.discount
+    if (course.discount !== undefined && course.discount > 0) {
+      const originalPrice = parseFloat(course.price)
+      const discountPercentage = course.discount / 100
+      const discountedPrice = originalPrice - originalPrice * discountPercentage
+      return discountedPrice.toFixed(2)
+    }
+    return course.price
+  }
+
+  // Render the price with discount if applicable
+  const renderPrice = () => {
+    if (course.discount > 0) {
+      const discountedPrice = calculateDiscountedPrice()
+      return (
+        <div>
+          <p>
+            Price: <del className="text-gray-500">{course.price}$</del>
+            <span className="text-success px-2">{discountedPrice}$</span>
+          </p>
+          <p className="text-warning">Discount : {course.discount}%</p>
+        </div>
+      )
+    }
+    return <p>Price: {course.price}$</p>
+  }
+
   const handleEnrollCourse = async () => {
     try {
       if (!user) {
@@ -47,37 +75,38 @@ const Course = () => {
         router.push("/login")
         return
       }
-      if (course.price === 0) {
-        // Course price is 0, add the course to the user
-        const response = await axiosInstance.put(
-          `/user/add-course-to-user/${user?._id}`,
-          {
-            courseId: course._id,
-            amount: 0,
-          }
-        )
-        // const { order } = response.data
-        toast.success("Course enrolled successfully")
-        // Navigate to the Learn page passing the courseId as a query parameter
-        router.push(`/account/my-courses`)
-      } else if (
-        !user?.enrolledCourse.some(
-          (enrolledCourse) => enrolledCourse.courseId === course._id
-        )
-      ) {
-        // Course has a price and the user is not enrolled, call payment API
-        // You should replace the payment API endpoint below with your actual endpoint
-        const paymentResponse = await axiosInstance.post("/payment/pay", {
+      // Course price is 0, add the course to the user
+      const response = await axiosInstance.put(
+        `/user/add-course-to-user/${user?._id}`,
+        {
           courseId: course._id,
-          // amount: course.price,
-        })
-        // Handle the payment response and navigation accordingly
-        // For example, you can redirect to the payment gateway or show a payment form
-      } else {
-        // User is already enrolled in the course
-        // Redirect to the course learning page
-        router.push(`/courses/view-course/${course._id}`)
+          amount: 0,
+        }
+      )
+      // const { order } = response.data
+      toast.success("Course enrolled successfully")
+      // Navigate to the Learn page passing the courseId as a query parameter
+      router.push(`/account/my-courses`)
+    } catch (error) {
+      console.error(error)
+      // Handle errors if necessary
+    }
+  }
+  const handlePayment = async () => {
+    try {
+      if (!user) {
+        // User is not logged in, navigate to the login page
+        router.push("/login")
+        return
       }
+
+      // You should replace the payment API endpoint below with your actual endpoint
+      const paymentResponse = await axiosInstance.post("/payment/pay", {
+        courseId: course._id,
+        // amount: course.price,
+      })
+      router.push(paymentResponse.data.url)
+      console.log(paymentResponse.data.url)
     } catch (error) {
       console.error(error)
       // Handle errors if necessary
@@ -85,8 +114,8 @@ const Course = () => {
   }
 
   return (
-    <div className="flex flex-col p-5 m-5 bg-base-300 card ">
-      <div className="flex flex-row flex-wrap gap-5">
+    <div className="flex flex-col p-5 m-5 bg-base-300 card">
+      <div className="flex flex-row flex-wrap md:flex-nowrap gap-5 w-full my-5">
         {course.courseImg ? (
           <Image
             className="rounded-lg"
@@ -103,16 +132,20 @@ const Course = () => {
             Course Image
           </div>
         )}
-        <div className="flex flex-col justify-center">
-          <h1 className="my-5 text-2xl font-bold">{course.name}</h1>
+        <div className="flex flex-col justify-center w-full">
+          <div className="flex flex-row justify-between items-center">
+            <h1 className="my-5 text-2xl font-bold">{course.name}</h1>
+            <div>
+              <p className="whitespace-nowrap">{renderPrice()}</p>
+            </div>
+          </div>
           <p>Description: {course.description}</p>
           <p>Duration: {course.duration} hours</p>
-          <p>Price: {course.price}$</p>
           {user?.enrolledCourse.some(
             (enrolledCourse) => enrolledCourse.courseId === course._id
           ) ? (
             <button
-              className="my-5 btn btn-primary"
+              className="my-5 btn btn-primary w-fit"
               onClick={() =>
                 router.push(`/learn/lesson/${course.sections?.[0]?.lessons[0]}`)
               }
@@ -120,12 +153,23 @@ const Course = () => {
               Continue Learning
             </button>
           ) : (
-            <button
-              className="my-5 btn btn-primary"
-              onClick={handleEnrollCourse}
-            >
-              Enroll Now
-            </button>
+            <>
+              {course.price === 0 ? (
+                <button
+                  className="my-5 btn btn-primary w-fit"
+                  onClick={handleEnrollCourse}
+                >
+                  Enroll Now
+                </button>
+              ) : (
+                <button
+                  className="my-5 btn btn-primary w-fit"
+                  onClick={handlePayment}
+                >
+                  Pay and Enroll Now
+                </button>
+              )}
+            </>
           )}
         </div>
       </div>
