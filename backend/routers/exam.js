@@ -6,5 +6,5 @@ const { createExam, addExamDegree } = require('../controllers/exam')
 const router = express.Router()
 
 router.put('/:lessonId/add-exam',authintications,authintication,createExam)
-router.put('/:lessonId',authintications,authintication,addExamDegree)
+router.put('/:lessonId',authintications,addExamDegree)
 module.exports=router

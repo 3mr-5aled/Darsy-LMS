@@ -4,7 +4,7 @@ const User = require('../models/user')
 const ApiError = require('../utils/apierror')
 
 const createExam = aynchandler(async(req,res,next)=>{
-    // @api   post api/v1/exam/:lessonId/addexam
+    // @api   post api/v1/exam/:lessonId/add-exam
     // you will send lessonId in params and exam object of array in body
     const lesson = await Lesson.findById(req.params.lessonId)
     if(!lesson){
@@ -18,9 +18,20 @@ const createExam = aynchandler(async(req,res,next)=>{
 })
 
 const addExamDegree = aynchandler(async(req,res,next)=>{
-    // @api   post api/v1/exam/:lessonId
-    // you will send lessonId in params and degree  in body
-    const {degree} = req.body
+    const {exam} = req.body
+    // [{
+            // question: 'question',
+            // selectedAnswer: 'selecteddAnswer',
+            // correctAnswer: 'correctAnswer',
+    // }]
+    let degree = 0
+    exam.map(item=>{
+        if(item.selectedAnswer === item.correctAnswer){
+            degree++
+        }
+        return degree 
+    })
+    degree = (degree/exam.length) * 100
     const user = await User.findById(req.user._id)
     user.exams.push({degree,lessonId:req.params.lessonId})
     await user.save()

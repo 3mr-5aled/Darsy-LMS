@@ -109,7 +109,6 @@ const completeLesson = asynchandler(async (req, res, next) => {
   // send lessonId in params 
   const { lessonId } = req.params;
   const { user } = req
-  console.log(user)
   const lesson = await Lesson.findById(lessonId)
   const userFromDB = await User.findById(user._id)
   userFromDB.enrolledCourse.map((course) => {
@@ -125,9 +124,13 @@ const completeLesson = asynchandler(async (req, res, next) => {
   const lessonIndex = lesson.sectionId.lessons.indexOf(lesson._id)
   if (lesson.sectionId.lessons.length - 1 === lessonIndex) {
     await lesson.populate('courseId')
+    await lesson.populate('courseId.sections')
     const sectionIndex = lesson.courseId.sections.indexOf(lesson.sectionId._id)
     if (lesson.courseId.sections.length - 1 === sectionIndex) {
-      return res.status(200).json({ msg: "this is last lesson of course" })
+      const newLessonId = lesson.courseId.sections[0].lessons[0]
+      userFromDB.enrolledCourse.map(course => course.courseId.toString() === lesson.courseId._id.toString() ? { ...course, nextLesson: newLessonId } : course)
+      await userFromDB.save();
+      return res.status(200).json({ msg: "lest lesson of course" })
     }
     const newSectionId = lesson.courseId.sections[sectionIndex + 1]
     const section = await Section.findById(newSectionId)
@@ -153,7 +156,7 @@ const previousLesson = asynchandler(async (req, res, next) => {
     await lesson.populate('courseId')
     const sectionIndex = lesson.courseId.sections.indexOf(lesson.sectionId._id)
     if (sectionIndex === 0) {
-      return res.status(200).json({ msg: "this is first lesson of course" })
+      return next(new ApiError("no previous lesson",5241, 404));
     }
     const newSectionId = lesson.courseId.sections[sectionIndex - 1]
     const section = await Section.findById(newSectionId)
@@ -168,17 +171,18 @@ const continueLessons = asynchandler(async (req, res, next) => {
   const { user } = req
   const { courseId } = req.params
   const userFromDB = await User.findById(user._id)
-  const courseFromDB = await Course.findById(courseId)
-
+  const courseFromDB = await Course.findById(courseId) 
   if (!courseFromDB) {
     return next(new ApiError('no coursse is found', 404))
   }
   const course = userFromDB.enrolledCourse.filter(course => course.courseId === courseId)
   await courseFromDB.populate('sections')
   if (!course.nextLesson) {
-    return res.status(200).json({ nextLesson:courseFromDB.sections[0].lessons[0]})
-  
+    return res.status(200).json({ nextLesson:courseFromDB.sections[0].lessons[0],courseTitle: courseFromDB.name, coureseImg: courseFromDB.courseImg })
   }
+  if (course.lessonsDone.lengtht === course.lessonTotal) {
+    return res.status(200).json({nextLesson:course.nextLesson,courseTitle: courseFromDB.name, coureseImg: courseFromDB.courseImg })
+  } 
   res.status(200).json({ nextLesson: course.nextLesson, courseTitle: courseFromDB.name, coureseImg: courseFromDB.courseImg })
 })
 module.exports = {
