@@ -169,12 +169,15 @@ const continueLessons = asynchandler(async (req, res, next) => {
   const { courseId } = req.params
   const userFromDB = await User.findById(user._id)
   const courseFromDB = await Course.findById(courseId)
+
   if (!courseFromDB) {
     return next(new ApiError('no coursse is found', 404))
   }
   const course = userFromDB.enrolledCourse.filter(course => course.courseId === courseId)
+  await courseFromDB.populate('sections')
   if (!course.nextLesson) {
-    return next(new ApiError("no lesson is found", 404));
+    return res.status(200).json({ nextLesson:courseFromDB.sections[0].lessons[0]})
+  
   }
   res.status(200).json({ nextLesson: course.nextLesson, courseTitle: courseFromDB.name, coureseImg: courseFromDB.courseImg })
 })

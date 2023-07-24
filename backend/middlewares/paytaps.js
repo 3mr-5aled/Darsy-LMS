@@ -57,8 +57,8 @@ let customer_details = [
 let shipping_address = customer_details;
 
 let url = {
-    callback:"https://webhook.site/e027fdcd-ff77-49da-b75b-dc1635dc987f",
-    response:"https://f2e0-197-58-42-53.ngrok-free.app/api/v1/payment/checkorder"
+    callback:"https://webhook.site/b0328eaf-3c6f-4bcf-858b-747d95d8bf8b",
+    response:"https://ec1b-197-58-241-107.ngrok-free.app/api/v1/payment/checkorder"
 }
 let response_URLs = [
     url.response,

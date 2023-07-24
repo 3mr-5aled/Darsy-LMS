@@ -36,11 +36,9 @@ const checkOrder = asynchandler(async (req, res, next) => {
     await order.save()
     return res.status(200).json({ user, order })
   }
-  const expiredDate = Date.now() + course.expiredTime * 24 * 60 * 60 * 1000
   user.enrolledCourse.push({
     courseId: order.courseId,
     lessonsDone: [],
-    expiredDate,
     name: course.name,
     courseImg: course.courseImg,
     lessonTotal: course.total,
