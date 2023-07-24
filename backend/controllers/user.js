@@ -18,7 +18,7 @@ const updateUser = aynchandler(async(req,res,next)=>{
     const {userId} = req.params
     const user  = await User.findByIdAndUpdate(userId,req.body,{new:true}).select('-password')
     if(!user){
-        return next(new ApiError('user not found',404))
+        return next(new ApiError('user not found',1341,404))
     }
     res.status(200).json({user})
 })
@@ -30,7 +30,7 @@ const addCourseToUser = aynchandler(async(req,res,next)=>{
     const {courseId , amount} = req.body
     const user  = await User.findById(userId)
     if(!user){
-        return next(new ApiError('user not found',404))
+        return next(new ApiError('user not found',1341,404))
     }
     const courses = user.enrolledCourse.filter(course => course.courseId.toString() === courseId.toString())
     const course = await Course.findById(courseId)
@@ -53,7 +53,7 @@ const deleteUser = aynchandler(async(req,res,next)=>{
     const {userId} = req.params
     const user  = await User.findByIdAndDelete(userId)
     if(!user){
-        return next(new ApiError('user not found',404))
+        return next(new ApiError('user not found',1341,404))
     }
     res.status(200).json({user})
 })
@@ -63,7 +63,7 @@ const getUser = aynchandler(async(req,res,next)=>{
     const {userId} = req.params
     const user  = await User.findById(userId).select('-password')
     if(!user){
-        return next(new ApiError('user not found',404))
+        return next(new ApiError('user not found',1341,404))
     }
     res.status(200).json({user})
 })

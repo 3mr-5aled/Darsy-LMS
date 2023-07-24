@@ -15,14 +15,14 @@ const login = asynchandler(async (req, res, next) => {
   const user = useremail !== undefined ? await User.findOne({ email: useremail }) : await User.findOne({ phone: req.body.phone });
   // if user isn't found ,server send response ("no email is found")
   if (!user) {
-    return next(new ApiError("no user is found", 404));
+    return next(new ApiError("no user is found",1341, 404));
   }
   // compare password (comes from body ) and password (come from database)
   const isvalid = await bcrypt.compare(userpassword, user.password);
 
   // if password is invalid ,server send response ("password is invalid")
   if (!isvalid) {
-    return next(new ApiError("password is invalid", 400));
+    return next(new ApiError("password is invalid",8092, 400));
   }
   const { _doc } = user;
   // use jsonwebtoken to get token
@@ -36,7 +36,7 @@ const register = asynchandler(async (req, res, next) => {
   // @api   Post /auth/register
   let {password,phone,parentsPhone} = req.body;
     if (phone === parentsPhone) {
-      return next(new ApiError('phone and parents Phone must be different'))
+      return next(new ApiError('phone and parents Phone must be different',4112,400))
     }     
     // create salt to use it for hashing password
     const salt = await bcrypt.genSalt(10);
@@ -62,15 +62,15 @@ const profile = asynchandler(async (req, res,next) => {
   const { token } = req.cookies;
   // check the token, the user variable contain all details
     if (!token) {
-      return next(new ApiError('un authorized',401))
+      return next(new ApiError('un authorized',3824,401))
     }
     const user = jwt.verify(token, process.env.JWT);
     if (!user) {
-      return next(new ApiError('un authorized',401))
+      return next(new ApiError('un authorized',3824,401))
     }
     const userFromDB =await User.findOne({_id:user._id}).select("-password")
     if (!userFromDB) {
-      return next(new ApiError('no user is found',400))
+      return next(new ApiError('no user is found',1341,400))
     }
     return res.status(200).json(userFromDB)
   });
@@ -81,7 +81,7 @@ const forgetpassword = asynchandler(async (req, res, next) => {
   // send me email of user that (gmail) and i will send mail contain resثt code
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
-    return next(new ApiError("no user is found", 404));
+    return next(new ApiError("no user is found",1341, 404));
   }
   // generate vefication code
   const resetcode = Math.floor(100000 + Math.random() * 900000).toString();
@@ -120,7 +120,7 @@ const verifycode = asynchandler(async (req, res, next) => {
     user.forgetpasswordcode
   );
   if (!user || !isvalid) {
-    return next(new ApiError("reset codde is invalid or expired", 400));
+    return next(new ApiError("reset codde is invalid or expired",8095, 400));
   }
   user.forgetpasswordvalidation = true;
   await user.save();
@@ -133,11 +133,11 @@ const resetpassword = asynchandler(async (req, res,next) => {
   // get user from db
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
-    return next(new ApiError("no user is found", 404));
+    return next(new ApiError("no user is found",1341, 404));
   }
   
   if (!user.forgetpasswordvalidation) {
-    return next(new ApiError("reset code not verficated", 400));
+    return next(new ApiError("reset code not verficated",8097, 400));
   }
   const salt = await bcrypt.genSalt(10);
   // hash password

@@ -11,7 +11,7 @@ const addLesson = asynchandler(async (req, res, next) => {
   const { sectionId } = req.params;
   const section = await Section.findById(sectionId);
   if (!section) {
-    return next(new ApiError("no course or section is found", 404));
+    return next(new ApiError("no course or section is found",9341, 404));
   }
   const lesson = await Lesson.create({ ...req.body, courseId: section.courseId, sectionId });
   console.log(section.courseId);
@@ -26,7 +26,6 @@ const addLesson = asynchandler(async (req, res, next) => {
   users.map(async (user) => {
     user.enrolledCourse.map(userCourse => {
       if (userCourse.courseId.toString() === section.courseId.toString()) {
-        console.log('inn');
         userCourse.lessonTotal = course.total
         return userCourse
       } else {
@@ -61,7 +60,7 @@ const deleteLesson = asynchandler(async (req, res, next) => {
   const lesson = await Lesson.deleteMany({ _id: lessonId });
   const section = await Section.findById(sectionId);
   if (!lesson) {
-    return next(new ApiError("no lesson is found", 404));
+    return next(new ApiError("no lesson is found",6341, 404));
   }
   section.lessons = section.lessons.filter((lesson) => lesson !== lessonId);
   section.total = section.total - 1
@@ -101,7 +100,7 @@ const updateLesson = asynchandler(async (req, res, next) => {
     new: true,
   });
   if (!lesson) {
-    return next(new ApiError("no lesson is found", 404));
+    return next(new ApiError("no lesson is found",6341, 404));
   }
   res.status(200).json(lesson);
 });

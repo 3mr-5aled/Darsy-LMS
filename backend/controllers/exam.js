@@ -8,7 +8,7 @@ const createExam = aynchandler(async(req,res,next)=>{
     // you will send lessonId in params and exam object of array in body
     const lesson = await Lesson.findById(req.params.lessonId)
     if(!lesson){
-        return next(new ApiError('lesson not found', 404 ))
+        return next(new ApiError('lesson not found',6341, 404 ))
     }
     const {body} =req
     lesson.exams=[...body]

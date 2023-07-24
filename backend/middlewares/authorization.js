@@ -9,7 +9,7 @@ const authintication =async(req,res,next)=>{
         req.user = userFromDB
         return next()
     }else{
-        return next(new ApiError('you are not admin',401))
+        return next(new ApiError('you are not admin',7987,401))
     }
 }
 module.exports=authintication

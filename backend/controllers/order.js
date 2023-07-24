@@ -19,7 +19,7 @@ const checkOrder =asynchandler(async(req,res,next)=>{
     const {response_code} = req.body.payment_result
     if (response_code != 200) {
        await Order.findByIdAndDelete(req.body.cart_id)
-       return next(ApiError('Payment failed',400))
+       return next(ApiError('Payment failed',9023,400))
     }
     const courses = user.enrolledCourse.filter(course => course.courseId.toString() === order.courseId.toString())
     const course = await Course.findById(order.courseId)

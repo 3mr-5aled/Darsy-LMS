@@ -9,7 +9,7 @@ const addSection = asynchandler(async (req, res, next) => {
   const { courseId } = req.params
   const course = await Course.findOne({ _id: courseId })
   if (!course) {
-    return next(new ApiError("no course with this id", 400))
+    return next(new ApiError("no course with this id",8341, 400))
   }
   const section = await Section.create({ title, courseId, duration })
   course.sections.push(section._id)
@@ -22,7 +22,7 @@ const getSection = asynchandler(async (req, res, next) => {
   const { sectionId } = req.params
   const section = await Section.findById(sectionId).populate("lessons")
   if (!section) {
-    return next(new ApiError("no section with this id", 404))
+    return next(new ApiError("no section with this id",7341, 404))
   }
   res.status(200).json(section)
 })
@@ -39,7 +39,7 @@ const deleteSection = asynchandler(async (req, res, next) => {
   const { sectionId } = req.params
   const section = await Section.deleteMany({ _id: sectionId })
   if (!section) {
-    return next(new ApiError("no section with this id", 404))
+    return next(new ApiError("no section with this id",7341, 404))
   }
   res.status(200).json({ msg: "section is deleted" })
 })
@@ -51,7 +51,7 @@ const updateSection = asynchandler(async (req, res, next) => {
     new: true,
   })
   if (!section) {
-    return next(new ApiError("no section with this id", 404))
+    return next(new ApiError("no section with this id",7341, 404))
   }
   res.status(200).json(section)
 })

@@ -19,7 +19,7 @@ const updateCourse = aynchandler(async (req, res, next) => {
 
     const course = await Course.findByIdAndUpdate(id, { ...body }, { new: true })
     if (!course) {
-        return next(new ApiError("no course found to updated", 404))
+        return next(new ApiError("no course found to updated",8341, 404))
     }
     res.status(200).json(course)
     // you recieve the new course object
@@ -35,7 +35,7 @@ const getCourse = aynchandler(async (req, res, next) => {
     const { id } = req.params
     const course = await Course.findById(id).populate('sections')
     if (!course) {
-        return next(new ApiError('no course with this id', 400))
+        return next(new ApiError('no course with this id',8341, 400))
     }
     res.status(200).json(course)
     // get specific course
@@ -46,7 +46,7 @@ const deleteCourse = aynchandler(async (req, res, next) => {
     const { id } = req.params
     const course = await Course.findOneAndDelete({ _id: id })
     if (!course) {
-        return next(new ApiError('no course with this id', 400))
+        return next(new ApiError('no course with this id',8341, 400))
     }
     res.status(200).json({ msg: 'course is deleted' })
     // recieve {msg:'course is deleted'} if course is deleted
