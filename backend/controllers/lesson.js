@@ -130,7 +130,7 @@ const completeLesson = asynchandler(async (req, res, next) => {
       const newLessonId = lesson.courseId.sections[0].lessons[0]
       userFromDB.enrolledCourse.map(course => course.courseId.toString() === lesson.courseId._id.toString() ? { ...course, nextLesson: newLessonId } : course)
       await userFromDB.save();
-      return res.status(200).json({ msg: "lest lesson of course" })
+      return next(new ApiError("last lesson of the course",5221, 404));
     }
     const newSectionId = lesson.courseId.sections[sectionIndex + 1]
     const section = await Section.findById(newSectionId)
