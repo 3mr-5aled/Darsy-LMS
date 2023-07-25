@@ -26,7 +26,8 @@ const updateCourse = aynchandler(async (req, res, next) => {
 })
 const getAllCourses = aynchandler(async (req, res, next) => {
     // @api   get api/v1/course/getallcourses
-    const grade = req.params
+    const {grade} = req.params
+    console.log(grade)
     const course = grade === 'all' ? await Course.find({}) : await Course.find({grade})
     if (course.length === 0) {
         return next(new ApiError('no courses are found',8341, 404))
