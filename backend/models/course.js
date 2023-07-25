@@ -7,6 +7,11 @@ const Courses = new mongoose.Schema(
       type: String,
       required: true,
     },
+    grade:{
+      type: String,
+      required: true,
+      enum:['sec-1','sec-2','sec-3','prep-1','prep-2','prep-3']
+    },
     expiredTime:{
       type:Number,
       default:0

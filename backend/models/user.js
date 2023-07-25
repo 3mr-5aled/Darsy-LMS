@@ -47,6 +47,8 @@ const User =new mongoose.Schema({
     },
     grade:{
         type:String,
+        required:true,
+        enum:['sec-1','sec-2','sec-3','prep-1','prep-2','prep-3']
     },
     enrolledCourse: [{
         courseId: {
