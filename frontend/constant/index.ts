@@ -60,7 +60,32 @@ export const CityOption = {
 }
 export const GradeOption = {
   title: "الصف الدراسي" as string,
-  options: ["أولى ثانوي", "تانية ثانوي", "تالتة ثانوي"] as Array<string>,
+  options: [
+    {
+      title: "أولي إعدادي",
+      value: "prep-1",
+    },
+    {
+      title: "تانية إعدادي",
+      value: "prep-2",
+    },
+    {
+      title: "تالتة إعدادي",
+      value: "prep-3",
+    },
+    {
+      title: "أولي ثانوي",
+      value: "sec-1",
+    },
+    {
+      title: "تانية ثانوي",
+      value: "sec-2",
+    },
+    {
+      title: "تالتة ثانوي",
+      value: "sec-3",
+    },
+  ] as Array<{ title: string; value: string }>,
 }
 export const features = [
   {

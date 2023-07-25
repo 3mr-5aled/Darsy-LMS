@@ -12,6 +12,7 @@ export default function VideoPlayer({ video }: Props) {
   const getYouTubeVideoId = (url: string): string | null => {
     const videoIdRegex =
       /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/
+    // /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/
     const match = url.match(videoIdRegex)
     return match ? match[1] : null
   }

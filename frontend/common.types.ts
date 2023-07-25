@@ -43,10 +43,11 @@ export type CourseType = {
   name: string
   description: string
   image: string
+  grade: string
   courseImg?: string | undefined
   duration: number
   price: number
-  discount?: number
+  discount: number
   sections?: Section[]
 }
 export type CoursesType = {

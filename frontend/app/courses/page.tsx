@@ -1,13 +1,15 @@
 "use client"
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 import useCourses from "@/lib/FetchCourses"
 import Loading from "../loading"
 import { CourseType } from "@/common.types"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import NotFoundComponent from "@/components/NotFoundComponent"
+import { useUserContext } from "@/contexts/userContext"
 
 const Courses = () => {
+  // @ts-ignore
   const [courses, isLoading, error] = useCourses()
   const router = useRouter()
 

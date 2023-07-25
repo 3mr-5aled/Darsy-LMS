@@ -68,6 +68,7 @@ const Course = () => {
             <p>Duration: {course.duration} hours</p>
             <p>Price: {course.price}$</p>
             <p>Discount: {course.discount}%</p>
+            <p>Grade: {course.grade}</p>
 
             <button
               className="mt-5 mb-3 btn btn-primary btn-outline"
