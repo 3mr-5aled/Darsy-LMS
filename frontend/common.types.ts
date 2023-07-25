@@ -71,6 +71,7 @@ export interface LessonType {
   _id?: string
   title: string
   video?: {
+    public_id: string
     src: string
     provider: "normal" | "youtube"
   }

@@ -56,6 +56,7 @@ const LessonForm = ({
       setValue("material.name", lesson.material?.name || "")
       setValue("material.link", lesson.material?.link || "")
       if (lesson.video) {
+        setValue("video.public_id", lesson.video?.public_id || "")
         setValue("video.provider", lesson.video?.provider || "")
         setValue("video.src", lesson.video?.src || "") // Use "video.src" instead of "video"
       }
@@ -98,18 +99,6 @@ const LessonForm = ({
       if (isSubmitting) {
         return
       }
-      if (videoType === "normal") {
-        videoUrl = await uploadVideo()
-        if (videoUrl === null) {
-          if (videoType === "normal" && type === "create") {
-            toast.error("Please select a file to upload.")
-            return
-          }
-        }
-      }
-      console.log(data)
-=======
->>>>>>> e9d4c437cbf993a4966be4e29f41bfa51425516d
 
       setValue("title", data.title)
       setValue("description", data.description)
@@ -119,8 +108,6 @@ const LessonForm = ({
       setValue("courseId", courseId || "")
       setValue("sectionId", sectionId || "")
       setValue("video.provider", videoType)
-
-      console.log(data)
 
       if (videoType === "normal") {
         if (videoType === "normal" && file) {
@@ -134,9 +121,7 @@ const LessonForm = ({
             })
             toast.success("Video uploaded")
             setValue("video.src", response.data.secure_url)
-
-            console.log(response.data.secure_url)
-            return response.data.secure_url
+            setValue("video.public_id", response.data.public_id)
           } catch (error) {
             console.error(error)
             toast.error("Error uploading video")
@@ -151,18 +136,17 @@ const LessonForm = ({
           }
         }
         if (type === "create") {
-          // const response = await axiosInstance.post(
-          //   `/lesson/${sectionId}/add-lesson`,
-          //   data
-          // )
-          // reset()
-          console.log(data)
+          const response = await axiosInstance.post(
+            `/lesson/${sectionId}/add-lesson`,
+            data
+          )
+          reset()
 
           toast.success("Lesson added")
           router.push(`/admin/courses/manage-course/${courseId}`)
         } else if (type === "edit" && lesson?._id) {
-          // await axiosInstance.put(`/lesson/update-lesson/${lesson._id}`, data)
-          // reset()
+          await axiosInstance.put(`/lesson/update-lesson/${lesson._id}`, data)
+          reset()
 
           toast.success("Lesson updated successfully")
           router.push(`/admin/courses/manage-course/${courseId}`)
@@ -178,16 +162,16 @@ const LessonForm = ({
       }
 
       if (type === "create") {
-        // const response = await axiosInstance.post(
-        //   `/lesson/${sectionId}/add-lesson`,
-        //   data
-        // )
-        // reset()
+        const response = await axiosInstance.post(
+          `/lesson/${sectionId}/add-lesson`,
+          data
+        )
+        reset()
         toast.success("Lesson added")
         router.push(`/admin/courses/manage-course/${courseId}`)
       } else if (type === "edit" && lesson?._id) {
-        // await axiosInstance.put(`/lesson/update-lesson/${lesson._id}`, data)
-        // reset()
+        await axiosInstance.put(`/lesson/update-lesson/${lesson._id}`, data)
+        reset()
         toast.success("Lesson updated successfully")
         router.push(`/admin/courses/manage-course/${courseId}`)
       }
