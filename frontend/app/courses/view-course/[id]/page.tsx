@@ -43,9 +43,9 @@ const Course = () => {
   const calculateDiscountedPrice = () => {
     // Add a null check for course.discount
     if (course.discount !== undefined && course.discount > 0) {
-      const originalPrice = parseFloat(course.price)
+      // const originalPrice = parseFloat(course.price)
       const discountPercentage = course.discount / 100
-      const discountedPrice = originalPrice - originalPrice * discountPercentage
+      const discountedPrice = course.price - course.price * discountPercentage
       return discountedPrice.toFixed(2)
     }
     return course.price
@@ -140,6 +140,7 @@ const Course = () => {
             </div>
           </div>
           <p>Description: {course.description}</p>
+          <p>Grade: {course.grade}</p>
           <p>Duration: {course.duration} hours</p>
           {user?.enrolledCourse.some(
             (enrolledCourse) => enrolledCourse.courseId === course._id

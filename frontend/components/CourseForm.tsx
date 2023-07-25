@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { CourseType } from "@/common.types"
 import axiosInstance from "@/axios.config"
 import { toast } from "react-toastify"
+import { GradeOption } from "@/constant"
 
 type Props = {
   title: string
@@ -16,9 +17,10 @@ type FormValues = {
   name: string
   description: string
   duration: number
-  price: number
+  price: number | string
+  grade: string
   discount?: number | undefined
-  expiredTime?: Date
+  // expiredTime?: Date
 }
 
 const CourseForm = ({ title, type, course }: Props) => {
@@ -59,6 +61,7 @@ const CourseForm = ({ title, type, course }: Props) => {
     const formData: CourseType = {
       name: data.name,
       description: data.description,
+      grade: data.grade,
       image: imageBase64!,
       duration: data.duration,
       price: data.price,
@@ -220,6 +223,24 @@ const CourseForm = ({ title, type, course }: Props) => {
             />
             {errors.discount && <span>This field is required</span>}
             {/* Display error message if the "discount" field is not filled */}
+          </div>
+          <div className="w-full py-3 form-control">
+            <label htmlFor="grade">Grade</label>
+            <select
+              className="w-full max-w-xs select select-bordered"
+              id="grade"
+              {...register("grade", { required: true })}
+            >
+              <option value="">Choose Grade</option>
+              {GradeOption.options.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.title}
+                </option>
+              ))}
+            </select>
+            {errors.grade && (
+              <p className="text-sm text-error">Grade is required</p>
+            )}
           </div>
           {/* <div className="form-control w-full">
             <label htmlFor="expiredTime">Date of expire</label>
