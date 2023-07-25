@@ -24,18 +24,7 @@ const checkOrder = asynchandler(async (req, res, next) => {
     await Order.findByIdAndDelete(req.body.cart_id)
     return next(ApiError("Payment failed", 9023, 400))
   }
-  const courses = user.enrolledCourse.filter(
-    (course) => course.courseId.toString() === order.courseId.toString()
-  )
   const course = await Course.findById(order.courseId)
-  if (courses.length > 0) {
-    // const expiredDate = Date.now() + course.expiredTime * 24 * 60 * 60 * 1000
-    // user.enrolledCourse.map(course => course.courseId.toString() === order.courseId.toString() ? course.expiredDate = expiredDate : course)
-    await user.save()
-    order.status = "paid"
-    await order.save()
-    return res.status(200).json({ user, order })
-  }
   user.enrolledCourse.push({
     courseId: order.courseId,
     lessonsDone: [],

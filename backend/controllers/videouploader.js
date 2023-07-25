@@ -11,11 +11,12 @@ const uploadVideo = asynchandler(async (req, res, next) => {
     const opts = {
         overwrite: true,
         invalidate: true,
+        use_filename: true,
         chunk_size: 6000000,
         resource_type: "video"
     }
     if(!req.file){
-        return next(new ApiError('file uploaded failed',500))
+        return next(new ApiError('file uploaded failed',8090,500))
     }
     const path =req.file.path
     const uploadedVideo = await new Promise((resolve, reject) => {

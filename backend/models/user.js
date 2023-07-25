@@ -79,5 +79,9 @@ const User =new mongoose.Schema({
         }
         ,{timestamps:true}
     ],
+    isMemberShip:{
+        type:Boolean,
+        default:false
+    },
 }, { timestamps: true });
 module.exports = mongoose.model('users', User);
