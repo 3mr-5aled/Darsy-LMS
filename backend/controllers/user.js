@@ -11,8 +11,8 @@ const getAllUsers = aynchandler(async(req,res,next)=>{
     const {courseId} = req.query
     const users  = await User.find({}).select('-password').sort('createdAt')
     if (courseId) {
-        const enrolledUsers = users.filter(user => user.enrolledCourse.filter(course => course.courseId.toString() === courseId ))        
-        const unEnrolledUsers = users.filter(user => user.enrolledCourse.filter(course => course.courseId.toString() !== courseId ))        
+        const enrolledUsers = await User.find({ ['enrolledCourse.courseId']: courseId })
+        const unEnrolledUsers = users.filter(user => user.enrolledCourse.every(course => course.courseId.toString() !== courseId ))        
         return res.status(200).json({enrolledUsers,unEnrolledUsers})
     }
     res.status(200).json(users)
