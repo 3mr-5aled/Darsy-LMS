@@ -57,12 +57,12 @@ let customer_details = [
 let shipping_address = customer_details;
 
 let url = {
-    callback:"https://d8fa-197-58-241-107.ngrok-free.app/after-pay",
-    response:"https://d8fa-197-58-241-107.ngrok-free.app/api/v1/payment/checkorder"
+    callback:"https://fa0a-197-58-241-107.ngrok-free.app/api/v1/payment/check-order",
+    response:"https://webhook.site/b0328eaf-3c6f-4bcf-858b-747d95d8bf8b"
 }
 let response_URLs = [
-    url.response,
-    url.callback
+    url.callback,
+    url.response
 ];
 let lang = "ar";
 
@@ -81,7 +81,5 @@ paytabs.createPaymentPage(
     paymentPageCreated,
     frameMode
 );
-
-  
 })
 module.exports = payment;
