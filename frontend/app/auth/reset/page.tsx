@@ -51,7 +51,7 @@ const Reset = () => {
     setIsLoading(true) // Start loading state
     try {
       await axiosInstance.put("/auth/reset-password", data)
-      console.log("Password reset successful")
+
       router.push("/auth/login")
     } catch (error) {
       console.error(error)

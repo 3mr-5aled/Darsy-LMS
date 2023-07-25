@@ -2,40 +2,41 @@ import Plyr from "plyr-react"
 import "plyr-react/plyr.css"
 
 type Props = {
-  video: {
-    src: string
-    provider: "youtube" | "normal" // Add other supported video providers here
-  }
+  source: string
+  provider: "youtube" | "normal" // Add other supported video providers here
 }
 
-export default function VideoPlayer({ video }: Props) {
+export default function VideoPlayer({ source, provider }: Props) {
   const getYouTubeVideoId = (url: string): string | null => {
     const videoIdRegex =
       /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/
-    // /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/
     const match = url.match(videoIdRegex)
     return match ? match[1] : null
   }
 
   // Extract the video ID from the YouTube URL
-  const videoId =
-    video.provider === "youtube" ? getYouTubeVideoId(video.src) : null
+  const videoId = provider === "youtube" ? getYouTubeVideoId(source) : null
+
+  if (provider === "youtube" && !videoId) {
+    // Handle the case when the video is from YouTube but the video ID could not be extracted
+    return <div>Error: Invalid YouTube video URL</div>
+  }
 
   return (
     <>
-      {video && (
-        <div key={video.provider} className="w-full h-full">
+      {provider && (
+        <div key={provider} className="w-full h-full">
           <Plyr
-            id={video.provider}
+            id={provider}
             source={
-              video.provider === "youtube"
+              provider === "youtube"
                 ? {
                     type: "video",
                     sources: [{ src: videoId || "", provider: "youtube" }],
                   }
                 : {
                     type: "video",
-                    sources: [{ src: video.src, type: "video/mp4", size: 720 }],
+                    sources: [{ src: source, type: "video/mp4", size: 720 }],
                   }
             }
             options={{

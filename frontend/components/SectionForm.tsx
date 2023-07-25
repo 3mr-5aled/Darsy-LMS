@@ -20,6 +20,7 @@ const SectionForm = ({ title, type, section, courseId, onClose }: Props) => {
     handleSubmit,
     formState: { errors, isSubmitting },
     setValue,
+    reset,
   } = useForm<SectionType>() // Specify the generic type for useForm
 
   const router = useRouter()
@@ -45,14 +46,21 @@ const SectionForm = ({ title, type, section, courseId, onClose }: Props) => {
           )
           if (response?.data) {
             toast.success("Section created")
+            reset()
+
             router.push(`/admin/courses/manage-course/${courseId}`)
             onClose()
           } else {
             toast.error("An error occurred during section creation")
           }
         } else if (type === "edit" && section?._id) {
-          await axiosInstance.put(`/section/update-section/${section._id}`, data)
+          await axiosInstance.put(
+            `/section/update-section/${section._id}`,
+            data
+          )
           toast.success("Section updated successfully")
+          reset()
+
           router.push(`/admin/courses/manage-course/${courseId}`)
           onClose()
         }

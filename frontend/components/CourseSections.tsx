@@ -9,10 +9,12 @@ import SectionForm from "./SectionForm"
 import {
   BsCheckCircle,
   BsCheckCircleFill,
+  BsEye,
   BsPencilFill,
   BsTrashFill,
 } from "react-icons/bs"
 import { useUserContext } from "@/contexts/userContext"
+import LessonView from "./LessonView"
 
 type Section = {
   _id: string
@@ -124,6 +126,9 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
   const closeLessonEditModal = () => {
     setIsLessonModalOpen(false)
   }
+  const closeLessonViewModal = () => {
+    setIsLessonModalOpen(false)
+  }
 
   const closeLessonModal = () => {
     setIsLessonModalOpen(false)
@@ -144,6 +149,14 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
     if (modal) {
       modal.showModal() // Show the modal if it exists
       modal.onclose = closeLessonEditModal // Set the onclose event to call closeLessonEditModal when the modal is closed
+    }
+  }
+  const showLessonViewModal = (index: number) => {
+    const modalId = `view_modal_${index}` // Generate a dynamic ID for the modal
+    const modal = document.getElementById(modalId) as HTMLDialogElement | null
+    if (modal) {
+      modal.showModal() // Show the modal if it exists
+      modal.onclose = closeLessonViewModal // Set the onclose event to call closeLessonEditModal when the modal is closed
     }
   }
 
@@ -276,8 +289,8 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                 <p>{section.duration} min</p>
               </div>
             </div>
-            <div className="flex flex-col collapse-content bg-base-200">
-              <div className="flex flex-row items-center justify-between p-3 my-3 rounded-md bg-base-100">
+            <div className="flex flex-col collapse-content bg-base-100">
+              <div className="flex flex-row items-center justify-between p-3 my-3 rounded-md ">
                 <h2 className="text-xl font-bold">Lessons</h2>
                 {isAdmin && (
                   <>
@@ -323,12 +336,25 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                       className="cursor-pointer flex flex-row gap-x-3 items-center"
                     >
                       {index + 1}. {lesson.title}
-                      {renderDoneIcon(lesson._id)}
+                      {!isAdmin && renderDoneIcon(lesson._id)}
                     </div>
 
                     {isAdmin && (
                       <>
                         <div className="flex flex-row gap-4">
+                          <div
+                            className="tooltip tooltip-left"
+                            data-tip="View Lesson"
+                          >
+                            <button
+                              title="View"
+                              type="button"
+                              className="cursor-pointer text-warning"
+                              onClick={() => showLessonViewModal(index)}
+                            >
+                              <BsEye />
+                            </button>
+                          </div>
                           <div
                             className="tooltip tooltip-left"
                             data-tip="Edit Lesson"
@@ -358,6 +384,18 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                             </button>
                           </div>
                         </div>
+                        <dialog id={`view_modal_${index}`} className="modal">
+                          <form method="dialog" className="modal-box">
+                            <button
+                              title="close"
+                              className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2"
+                              onClick={closeLessonViewModal}
+                            >
+                              ✕
+                            </button>
+                            <LessonView lesson={lesson} />
+                          </form>
+                        </dialog>
                         <dialog id={`edit_modal_${index}`} className="modal">
                           <form method="dialog" className="modal-box">
                             <button

@@ -17,6 +17,11 @@ const VideoPlayer = dynamic(
   { ssr: false }
 )
 
+interface RadialProgressStyle {
+  "--value": number
+  "--size": string
+}
+
 type CourseType = {
   _id: string
   name: string
@@ -42,7 +47,10 @@ type LessonType = {
     name: string
     link: string
   }
-  video: {} // Add specific type if needed
+  video: {
+    src: string
+    provider: "youtube" | "normal"
+  } // Add specific type if needed
   exams: {
     question: string
     answers: string[]
@@ -152,7 +160,7 @@ const LessonPage = () => {
 
       if (courseWithProgress) {
         const lessonsDone = courseWithProgress.lessonsDone.length
-        const progress = (lessonsDone / data.totalLessons) * 100
+        const progress: number = (lessonsDone / data.totalLessons) * 100
 
         return {
           progress: progress,
@@ -258,6 +266,11 @@ const LessonPage = () => {
     )
   }
 
+  const radialProgressStyle: RadialProgressStyle = {
+    "--value": progress,
+    "--size": "4rem",
+  }
+
   return (
     <>
       {isLoading ? (
@@ -294,7 +307,8 @@ const LessonPage = () => {
               <div className="m-3">
                 <div
                   className="radial-progress"
-                  style={{ "--value": progress, "--size": "4rem" }}
+                  // @ts-ignore
+                  style={radialProgressStyle as CSSProperties}
                 >
                   {progress.toFixed(0)}%
                 </div>
@@ -312,7 +326,10 @@ const LessonPage = () => {
             <div className="flex flex-col items-center justify-center drawer-content">
               {lesson && isBrowser && (
                 <>
-                  <VideoPlayer video={lesson.video} />
+                  <VideoPlayer
+                    source={lesson.video.src}
+                    provider={lesson.video.provider}
+                  />
                   {/* <VideoPlayer videoId="LH7LPMXv8Lg" /> */}
                   {/* Only render Plyr in the browser environment */}
                   <div
@@ -358,7 +375,7 @@ const LessonPage = () => {
             <div className="drawer-side">
               <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
 
-              <ul className="h-full p-4 menu w-80 bg-base-200 text-base-content">
+              <div className="h-full p-4 menu w-80 bg-base-200 text-base-content">
                 {/* Display related sections */}
                 <div className="w-full join join-vertical">
                   {sections.map((section, index) => (
@@ -400,7 +417,7 @@ const LessonPage = () => {
                     </div>
                   ))}
                 </div>
-              </ul>
+              </div>
             </div>
           </div>
         </>

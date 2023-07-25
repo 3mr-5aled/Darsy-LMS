@@ -36,8 +36,8 @@ const Students = () => {
 
   return (
     <div className="p-5 m-5">
-      <div className="mb-8 prose text-center">
-        <h1>Students</h1>
+      <div className="mb-8 text-center">
+        <h1 className="text-4xl font-bold">Students</h1>
       </div>
       {users?.map((user: any) => {
         return (

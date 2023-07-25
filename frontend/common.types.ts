@@ -48,6 +48,7 @@ export type CourseType = {
   duration: number
   price: number
   discount: number
+  total?: number
   sections?: Section[]
 }
 export type CoursesType = {
@@ -66,17 +67,16 @@ export type Material = {
   link: string
 }
 
-export type VideoType = "normal" | "youtube"
-
 export interface LessonType {
   _id?: string
   title: string
   video?: {
     src: string
-    provider: VideoType
+    provider: "normal" | "youtube"
   }
   file: any
   videotype: string
+  youtubelink: string
   duration: string
   description: string
   material?: {

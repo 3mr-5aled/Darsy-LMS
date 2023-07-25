@@ -1,7 +1,7 @@
 "use client"
 import { useRouter } from "next/navigation"
-import { SubmitHandler, useForm } from "react-hook-form"
-import { LessonType, VideoType } from "@/common.types"
+import { SubmitHandler, useForm, useWatch } from "react-hook-form"
+import { LessonType } from "@/common.types"
 import axiosInstance from "@/axios.config"
 import { toast } from "react-toastify"
 import { useEffect, useState } from "react"
@@ -29,9 +29,9 @@ const LessonForm = ({
     formState: { errors, isSubmitting },
     setValue,
     reset,
+    control,
   } = useForm<LessonType>() // Specify the generic type for useForm
 
-  const [videoType, setVideoType] = useState<VideoType>("normal")
   const [file, setFile] = useState<File | null>(null)
   const router = useRouter()
 
@@ -40,16 +40,6 @@ const LessonForm = ({
       setFile(e.target.files[0]) // Set the selected file to the state
     }
   }
-
-  const VideoTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === "youtube") {
-      setValue("video.provider", "youtube")
-    } else {
-      setValue("video.provider", "normal")
-    }
-    setVideoType(e.target.value as VideoType)
-  }
-
   //  const [videoSrc , seVideoSrc] = useState("");
   //     const handleChange = ({file}) => {
   //       var reader = new FileReader();
@@ -68,36 +58,43 @@ const LessonForm = ({
       if (lesson.video) {
         setValue("video.provider", lesson.video?.provider || "")
         setValue("video.src", lesson.video?.src || "") // Use "video.src" instead of "video"
-        setVideoType(lesson.video?.provider || "normal")
       }
     }
   }, [])
 
+  const videoType = useWatch({
+    control,
+    name: "video.provider",
+    defaultValue: "normal",
+  })
+
   const uploadVideo = async () => {
     if (videoType === "normal" && file) {
-      const uploadResponse = await axiosInstance.post("/upload", file)
-      return uploadResponse.data.url
+      try {
+        const formData = new FormData()
+        formData.append("file", file)
+        const response = await axiosInstance.post("/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data", // Set the correct content type for file uploads
+          },
+        })
+        toast.success("Video uploaded")
+
+        return response.data.secure_url
+      } catch (error) {
+        console.error(error)
+        toast.error("Error uploading video")
+        return null
+      }
     }
     return null
   }
 
   const onSubmit: SubmitHandler<LessonType> = async (data) => {
     try {
-      var videoUrl
       if (isSubmitting) {
         return
       }
-      if (videoType === "normal") {
-        videoUrl = await uploadVideo()
-
-        if (videoUrl === null) {
-          if (videoType === "normal" && type === "create") {
-            toast.error("Please select a file to upload.")
-            return
-          }
-        }
-      }
-      console.log(data)
 
       setValue("title", data.title)
       setValue("description", data.description)
@@ -107,46 +104,50 @@ const LessonForm = ({
       setValue("courseId", courseId || "")
       setValue("sectionId", sectionId || "")
       setValue("video.provider", videoType)
-      setValue("video.src", videoUrl)
-
-      console.log(data)
 
       if (videoType === "normal") {
-        if (type === "create") {
-          const response = await axiosInstance.post(
-            `/lesson/${sectionId}/add-lesson`,
-            data
-          )
-          reset()
-          toast.success("Lesson added")
-          router.push(`/admin/courses/manage-course/${courseId}`)
-        } else if (type === "edit" && lesson?._id) {
-          await axiosInstance.put(`/lesson/update-lesson/${lesson._id}`, data)
-          reset()
-          toast.success("Lesson updated successfully")
-          router.push(`/admin/courses/manage-course/${courseId}`)
+        const videoUrl = await uploadVideo()
+
+        if (videoUrl === null) {
+          if (type === "create") {
+            toast.error("Please select a file to upload.")
+            return
+          }
         }
+
+        setValue("video.src", videoUrl)
+
+        // Continue with form submission
       } else if (videoType === "youtube") {
-        if (type === "create") {
-          const response = await axiosInstance.post(
-            `/lesson/${sectionId}/add-lesson`,
-            data
-          )
-          reset()
-          toast.success("Lesson added")
-          router.push(`/admin/courses/manage-course/${courseId}`)
-        } else if (type === "edit" && lesson?._id) {
-          await axiosInstance.put(`/lesson/update-lesson/${lesson._id}`, data)
-          reset()
-          toast.success("Lesson updated successfully")
-          router.push(`/admin/courses/manage-course/${courseId}`)
+        // Check if data.video exists and has a valid src property
+        if (!data.video?.src) {
+          toast.error("Please provide a valid YouTube video URL.")
+          return
         }
+        setValue("video.src", data.video.src)
       }
 
-      onClose() // Close the modal
+      if (type === "create") {
+        const response = await axiosInstance.post(
+          `/lesson/${sectionId}/add-lesson`,
+          data
+        )
+        reset()
+
+        toast.success("Lesson added")
+        router.push(`/admin/courses/manage-course/${courseId}`)
+      } else if (type === "edit" && lesson?._id) {
+        await axiosInstance.put(`/lesson/update-lesson/${lesson._id}`, data)
+        reset()
+
+        toast.success("Lesson updated successfully")
+        router.push(`/admin/courses/manage-course/${courseId}`)
+      }
     } catch (error: any) {
       console.error(error)
       toast.error(error.response?.data?.message || "An error occurred")
+    } finally {
+      onClose() // Call onClose in the finally block to ensure it gets executed even in case of errors
     }
   }
 
@@ -183,8 +184,8 @@ const LessonForm = ({
             <select
               id="videoType"
               className="select select-bordered"
-              value={videoType}
-              onChange={VideoTypeChange}
+              disabled={isSubmitting}
+              {...register("video.provider")}
             >
               <option value="normal">Normal Video</option>
               <option value="youtube">YouTube Video</option>

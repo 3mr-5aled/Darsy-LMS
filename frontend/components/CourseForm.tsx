@@ -17,9 +17,9 @@ type FormValues = {
   name: string
   description: string
   duration: number
-  price: number | string
+  price: number
   grade: string
-  discount?: number | undefined
+  discount: number
   // expiredTime?: Date
 }
 
