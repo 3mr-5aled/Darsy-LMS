@@ -29,4 +29,13 @@ const uploadVideo = asynchandler(async (req, res, next) => {
         })
     res.status(200).json(uploadedVideo)
 })
-module.exports = uploadVideo
+const deleteVideo = async(public_id)=>{
+        try {
+          const result = await cloudinary.uploader.destroy(public_id, { resource_type: "video" });
+          console.log(`Successfully removed video with public ID: ${public_id}`);
+        } catch (error) {
+          next(new ApiError('file uploaded failed',8090,500))
+        }
+        return result
+}
+module.exports = {uploadVideo,deleteVideo}

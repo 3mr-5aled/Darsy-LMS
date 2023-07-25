@@ -3,7 +3,10 @@ const Lesson = require("../models/lesson");
 const User = require("../models/user");
 const ApiError = require("../utils/apierror");
 const Course = require("../models/course");
+const fs =require('fs')
+const path =require('path')
 const Section = require("../models/section");
+const { deleteVideo } = require("./videouploader");
 
 const addLesson = asynchandler(async (req, res, next) => {
   // @api  post    /sectionId:/add-lesson
@@ -57,12 +60,23 @@ const deleteLesson = asynchandler(async (req, res, next) => {
   // @api delete /:sectionId/delete-lesson/:lessonId
   // send sectionId and courseId and lessonId in params
   const { sectionId, lessonId } = req.params;
-  const lesson = await Lesson.deleteMany({ _id: lessonId });
-  const section = await Section.findById(sectionId);
+
+  const lesson = await Lesson.findById(lessonId)
   if (!lesson) {
     return next(new ApiError("no lesson is found",6341, 404));
   }
-
+  await Lesson.deleteMany({ _id: lessonId });
+  if (lesson.video.provider !== "youtube") {
+    const deletedVideo = await deleteVideo(lesson.video.provider)
+    console.log(deletedVideo);
+    const videoPath = path.join(__dirname, `/../uploads/${deletedVideo.filename}`)
+    fs.unlink(videoPath, (err) => {
+      if (err) {
+        return next(new ApiError("error in deleting video",6341, 404));
+      }
+    })
+  }
+  const section = await Section.findById(sectionId);
   section.lessons = section.lessons.filter((lesson) => lesson !== lessonId);
   section.total = section.total - 1
   await section.save();
