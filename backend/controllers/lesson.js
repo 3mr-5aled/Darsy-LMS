@@ -62,6 +62,7 @@ const deleteLesson = asynchandler(async (req, res, next) => {
   if (!lesson) {
     return next(new ApiError("no lesson is found",6341, 404));
   }
+
   section.lessons = section.lessons.filter((lesson) => lesson !== lessonId);
   section.total = section.total - 1
   await section.save();

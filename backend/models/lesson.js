@@ -51,11 +51,24 @@ const Lesson = new mongoose.Schema(
   { timestamps: true }
 );
 Lesson.pre('deleteMany', async function (next) {
+    const lesson = await mongoose.model('lessons').findById(this.getQuery()._id)
     console.log('inn');
+    console.log(lesson);
+    if (lesson.video.provider !== 'youtube') {
+      try {
+        
+        next();
+      } catch (error) {
+        next(new ApiError(error,500));
+      }
+    } 
+        
+    
     try {
       // Delete all sections associated with this course
       // Assuming you have a 'sections' model defined in your code
       await mongoose.model('users').updateMany({}, { $pull: { exams: { lessonId: this.getQuery()._id } } });
+      
       next();
     } catch (error) {
       next(new ApiError(error,500));

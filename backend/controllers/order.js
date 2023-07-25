@@ -5,6 +5,12 @@ const Course = require("../models/course")
 const User = require("../models/user")
 const createOrder = asynchandler(async (req, res, next) => {
   let { courseId } = req.body
+  const {user} = req
+  const userFromDB  = await User.findById(req.user._id)
+  const courses = user.enrolledCourse.filter(enrolledCourse => enrolledCourse.courseId === course._id)
+  if (courses.length > 0) {
+    return next(ApiError("You have already enrolled this course", 9022, 400))
+  } 
   const course = await Course.findById(courseId)
   const price = parseInt(course.price)
   const amount =
@@ -25,14 +31,13 @@ const checkOrder = asynchandler(async (req, res, next) => {
     return next(ApiError("Payment failed", 9023, 400))
   }
   const course = await Course.findById(order.courseId)
-  user.enrolledCourse.push({
+    user.enrolledCourse.push({
     courseId: order.courseId,
     lessonsDone: [],
     name: course.name,
     courseImg: course.courseImg,
-    lessonTotal: course.total,
-  })
-  await user.save()
+    lessonTotal: course.total})
+    await user.save()
   order.status = "paid"
   await order.save()
   res.status(200).json({ user, order })

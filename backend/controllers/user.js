@@ -8,7 +8,13 @@ const course = require('../models/course')
 
 const getAllUsers = aynchandler(async(req,res,next)=>{
     // @api   get api/v1/user/get-all-users
+    const {courseId} = req.query
     const users  = await User.find({}).select('-password').sort('createdAt')
+    if (courseId) {
+        const enrolledUsers = users.filter(user => user.enrolledCourse.filter(course => course.courseId.toString() === courseId ))        
+        const unEnrolledUsers = users.filter(user => user.enrolledCourse.filter(course => course.courseId.toString() !== courseId ))        
+        return res.status(200).json({enrolledUsers,unEnrolledUsers})
+    }
     res.status(200).json(users)
 })
 

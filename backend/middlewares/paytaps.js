@@ -3,8 +3,8 @@ const axios = require("axios")
 const paytabs = require("paytabs_pt2")
 require("dotenv").config()
 const payment = asynchandler(async (req, res, next) => {
-  const profileID = "124773",
-    serverKey = "SJJ9LJWDDR-J6NJ9GHDMD-MJ2JNLHZHG",
+  const profileID = process.env.PROFILE_ID,
+    serverKey = process.env.SERVER_KEY,
     region = "EGY"
   paytabs.setConfig(profileID, serverKey, region)
   let paymentMethods = ["all"]
