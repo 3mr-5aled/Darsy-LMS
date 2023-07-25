@@ -89,7 +89,6 @@ const LessonForm = ({
       }
       if (videoType === "normal") {
         videoUrl = await uploadVideo()
-
         if (videoUrl === null) {
           if (videoType === "normal" && type === "create") {
             toast.error("Please select a file to upload.")
