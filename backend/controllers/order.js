@@ -7,7 +7,7 @@ const createOrder = asynchandler(async (req, res, next) => {
   let { courseId } = req.body
   const {user} = req
   const userFromDB  = await User.findById(req.user._id)
-  const courses = user.enrolledCourse.filter(enrolledCourse => enrolledCourse.courseId === course._id)
+  const courses = userFromDB.enrolledCourse.filter(enrolledCourse => enrolledCourse.courseId === course._id)
   if (courses.length > 0) {
     return next(ApiError("You have already enrolled this course", 9022, 400))
   } 
