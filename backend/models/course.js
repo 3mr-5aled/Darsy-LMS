@@ -50,14 +50,13 @@ Courses.pre('findOneAndDelete', async function (next) {
   }
   try { 
     const users =await mongoose.model('users').find({['enrolledCourse.courseId']: course._id})
-    if(users.length === 0 ){
-      return next();
+    if(users.length !== 0 ){
+      users.map(async (user)=>{
+        user.enrolledCourse.filter((userCourse)=>userCourse.courseId.toString() !== course._id.toString() )  
+        await user.save()
+      })
     }
-    users.map(async (user)=>{
-      user.enrolledCourse.filter((userCourse)=>userCourse.courseId.toString() !== course._id.toString() )  
-      await user.save()
-    })
-    await mongoose.model('sections').deleteMany({ _id: { $in: course.sections } });
+      await mongoose.model('sections').deleteMany({ _id: { $in: course.sections } });
     next();
   } catch (error) {
     next(new ApiError(error,500));

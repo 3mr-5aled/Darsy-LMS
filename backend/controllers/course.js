@@ -26,17 +26,10 @@ const updateCourse = aynchandler(async (req, res, next) => {
 })
 const getAllCourses = aynchandler(async (req, res, next) => {
     // @api   get api/v1/course/getallcourses
-    const course = await Course.find({})
+    const grade = req.params
+    const course = grade === 'all' ? await Course.find({}) : await Course.find({grade})
     if (course.length === 0) {
         return next(new ApiError('no courses are found',8341, 404))
-    } 
-    res.status(200).json(course)
-})
-const getAllCoursesByGrade = aynchandler(async (req, res, next) => {
-    // @api   get api/v1/course/getallcourses
-    const course = await Course.find({grade:req.user.grade})
-    if (course.length === 0) {
-        return next(new ApiError(`no courses for ${req.user.grade} grade are found`,8341, 404))
     } 
     res.status(200).json(course)
 })
@@ -62,4 +55,4 @@ const deleteCourse = aynchandler(async (req, res, next) => {
     res.status(200).json({ msg: 'course is deleted' })
     // recieve {msg:'course is deleted'} if course is deleted
 })
-module.exports = { createCourse, updateCourse, getCourse, getAllCourses, deleteCourse,getAllCoursesByGrade }
+module.exports = { createCourse, updateCourse, getCourse, getAllCourses, deleteCourse }
