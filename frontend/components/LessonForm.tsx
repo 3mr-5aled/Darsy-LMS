@@ -68,30 +68,33 @@ const LessonForm = ({
     defaultValue: "normal",
   })
 
-  const uploadVideo = async () => {
-    if (videoType === "normal" && file) {
-      try {
-        const formData = new FormData()
-        formData.append("file", file)
-        const response = await axiosInstance.post("/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data", // Set the correct content type for file uploads
-          },
-        })
-        toast.success("Video uploaded")
+  // const uploadVideo = async () => {
+  //   if (videoType === "normal" && file) {
+  //     try {
+  //       const formData = new FormData()
+  //       formData.append("file", file)
+  //       const response = await axiosInstance.post("/upload", formData, {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data", // Set the correct content type for file uploads
+  //         },
+  //       })
+  //       toast.success("Video uploaded")
+  //       setValue("video.src", response.data.secure_url)
 
-        return response.data.secure_url
-      } catch (error) {
-        console.error(error)
-        toast.error("Error uploading video")
-        return null
-      }
-    }
-    return null
-  }
+  //       console.log(response.data.secure_url)
+  //       return response.data.secure_url
+  //     } catch (error) {
+  //       console.error(error)
+  //       toast.error("Error uploading video")
+  //       return null
+  //     }
+  //   }
+  //   return null
+  // }
 
   const onSubmit: SubmitHandler<LessonType> = async (data) => {
     try {
+      var videoUrl
       if (isSubmitting) {
         return
       }
@@ -105,41 +108,74 @@ const LessonForm = ({
       setValue("sectionId", sectionId || "")
       setValue("video.provider", videoType)
 
+      console.log(data)
+
       if (videoType === "normal") {
-        const videoUrl = await uploadVideo()
+        if (videoType === "normal" && file) {
+          try {
+            const formData = new FormData()
+            formData.append("file", file)
+            const response = await axiosInstance.post("/upload", formData, {
+              headers: {
+                "Content-Type": "multipart/form-data", // Set the correct content type for file uploads
+              },
+            })
+            toast.success("Video uploaded")
+            setValue("video.src", response.data.secure_url)
+
+            console.log(response.data.secure_url)
+            return response.data.secure_url
+          } catch (error) {
+            console.error(error)
+            toast.error("Error uploading video")
+            return null
+          }
+        }
 
         if (videoUrl === null) {
-          if (type === "create") {
+          if (videoType === "normal" && type === "create") {
             toast.error("Please select a file to upload.")
             return
           }
         }
+        if (type === "create") {
+          // const response = await axiosInstance.post(
+          //   `/lesson/${sectionId}/add-lesson`,
+          //   data
+          // )
+          // reset()
+          console.log(data)
 
-        setValue("video.src", videoUrl)
+          toast.success("Lesson added")
+          router.push(`/admin/courses/manage-course/${courseId}`)
+        } else if (type === "edit" && lesson?._id) {
+          // await axiosInstance.put(`/lesson/update-lesson/${lesson._id}`, data)
+          // reset()
 
-        // Continue with form submission
+          toast.success("Lesson updated successfully")
+          router.push(`/admin/courses/manage-course/${courseId}`)
+        }
       } else if (videoType === "youtube") {
         // Check if data.video exists and has a valid src property
-        if (!data.video?.src) {
+        if (data.video?.src) {
+          setValue("video.src", data.video.src)
+        } else {
           toast.error("Please provide a valid YouTube video URL.")
           return
         }
-        setValue("video.src", data.video.src)
       }
 
       if (type === "create") {
-        const response = await axiosInstance.post(
-          `/lesson/${sectionId}/add-lesson`,
-          data
-        )
-        reset()
-
+        // const response = await axiosInstance.post(
+        //   `/lesson/${sectionId}/add-lesson`,
+        //   data
+        // )
+        // reset()
         toast.success("Lesson added")
         router.push(`/admin/courses/manage-course/${courseId}`)
       } else if (type === "edit" && lesson?._id) {
-        await axiosInstance.put(`/lesson/update-lesson/${lesson._id}`, data)
-        reset()
-
+        // await axiosInstance.put(`/lesson/update-lesson/${lesson._id}`, data)
+        // reset()
         toast.success("Lesson updated successfully")
         router.push(`/admin/courses/manage-course/${courseId}`)
       }
