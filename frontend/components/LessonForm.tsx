@@ -98,6 +98,18 @@ const LessonForm = ({
       if (isSubmitting) {
         return
       }
+      if (videoType === "normal") {
+        videoUrl = await uploadVideo()
+        if (videoUrl === null) {
+          if (videoType === "normal" && type === "create") {
+            toast.error("Please select a file to upload.")
+            return
+          }
+        }
+      }
+      console.log(data)
+=======
+>>>>>>> e9d4c437cbf993a4966be4e29f41bfa51425516d
 
       setValue("title", data.title)
       setValue("description", data.description)

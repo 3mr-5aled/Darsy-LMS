@@ -47,6 +47,19 @@ const addCourseToUser = aynchandler(async(req,res,next)=>{
     console.log(new Date(expiredDate));
     res.status(200).json({user,order})
 })
+const removeUserFromCourse = aynchandler(async(req,res,next)=>{
+    // @api   put api/v1/user/delete-user/:userId
+    // send userId as params
+    const {userId} = req.params
+    const {courseId} = req.body
+    const user  = await User.findById(userId)
+    if(!user){
+        return next(new ApiError('user not found',1341,404))
+    }
+    user.enrolledCourse = user.enrolledCourse.filter(course => course.courseId.toString() !== courseId)
+    await user.save()
+    res.status(200).json({user,msg:"the user deleted successfully from course "})
+})
 const deleteUser = aynchandler(async(req,res,next)=>{
     // @api   put api/v1/user/delete-user/:userId
     // send userId as params
@@ -69,6 +82,6 @@ const getUser = aynchandler(async(req,res,next)=>{
 })
 
 
-module.exports = {getAllUsers,updateUser,getUser,deleteUser,addCourseToUser}
+module.exports = {getAllUsers,updateUser,getUser,deleteUser,addCourseToUser,removeUserFromCourse}
 
 
