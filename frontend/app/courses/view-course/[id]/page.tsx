@@ -40,6 +40,18 @@ const Course = () => {
     return <Loading />
   }
 
+  const calculateLessonsCompleted = () => {
+    if (!user) {
+      return 0
+    }
+
+    const enrolledCourse = user.enrolledCourse.find(
+      (enrolled) => enrolled.courseId === course._id
+    )
+
+    return enrolledCourse ? enrolledCourse.lessonsDone.length : 0
+  }
+
   const calculateDiscountedPrice = () => {
     // Add a null check for course.discount
     if (course.discount !== undefined && course.discount > 0) {
@@ -106,7 +118,6 @@ const Course = () => {
         // amount: course.price,
       })
       router.push(paymentResponse.data.url)
-      console.log(paymentResponse.data.url)
     } catch (error) {
       console.error(error)
       // Handle errors if necessary
@@ -134,14 +145,28 @@ const Course = () => {
         )}
         <div className="flex flex-col justify-center w-full">
           <div className="flex flex-row justify-between items-center">
-            <h1 className="my-5 text-2xl font-bold">{course.name}</h1>
+            <div>
+              <h1 className="my-5 text-2xl font-bold">{course.name}</h1>
+              <span>
+                <strong>
+                  {calculateLessonsCompleted()}/{course.total}
+                </strong>{" "}
+                Completed
+              </span>
+            </div>
             <div>
               <p className="whitespace-nowrap">{renderPrice()}</p>
             </div>
           </div>
-          <p>Description: {course.description}</p>
-          <p>Grade: {course.grade}</p>
-          <p>Duration: {course.duration} hours</p>
+          <p>
+            Description: <strong>{course.description}</strong>
+          </p>
+          <p>
+            Grade: <strong>{course.grade}</strong>
+          </p>
+          <p>
+            Duration: <strong>{course.duration}</strong> hours
+          </p>
           {user?.enrolledCourse.some(
             (enrolledCourse) => enrolledCourse.courseId === course._id
           ) ? (

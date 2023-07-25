@@ -15,7 +15,7 @@ const storage =multer.diskStorage({
 const uploadFile = asynchandler(async(req,res,next)=>{
     const upload = multer({storage:storage}).single("file")
     const uploadFile = util.promisify(upload);
-    await uploadFile(req, res);
+    await uploadFile(req, res)  
     // Multer has processed the file and added it to req.file
     // You can perform additional operations if needed
     next();
