@@ -80,8 +80,6 @@ const getUser = aynchandler(async(req,res,next)=>{
     }
     res.status(200).json({user})
 })
-
-
 module.exports = {getAllUsers,updateUser,getUser,deleteUser,addCourseToUser,removeUserFromCourse}
 
 
