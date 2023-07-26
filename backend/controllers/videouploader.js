@@ -15,27 +15,26 @@ const uploadVideo = asynchandler(async (req, res, next) => {
         chunk_size: 6000000,
         resource_type: "video"
     }
-    if(!req.file){
-        return next(new ApiError('file uploaded failed',8090,500))
+    if (!req.file) {
+        return next(new ApiError('file uploaded failed', 8090, 500))
     }
-    const path =req.file.path
+    const path = req.file.path
     const uploadedVideo = await new Promise((resolve, reject) => {
-            cloudinary.uploader.upload_large(path, opts, (err, result) => {
+        cloudinary.uploader.upload_large(path, opts, (err, result) => {
             if (err) {
                 reject(err)
             }
             resolve(result)
-            })
         })
+    })
     res.status(200).json(uploadedVideo)
 })
-const deleteVideo = async(public_id)=>{
-        try {
-          const result = await cloudinary.uploader.destroy(public_id, { resource_type: "video" });
-          console.log(`Successfully removed video with public ID: ${public_id}`);
-        } catch (error) {
-          next(new ApiError('file uploaded failed',8090,500))
-        }
-        return result
+const deleteVideo = async (public_id) => {
+    try {
+        await cloudinary.uploader.destroy(public_id, { resource_type: "video" });
+        console.log(`Successfully removed video with public ID: ${public_id}`);
+    } catch (error) {
+        throw new ApiError(error.message, 8090, 500)
+    }
 }
-module.exports = {uploadVideo,deleteVideo}
+module.exports = { uploadVideo, deleteVideo }

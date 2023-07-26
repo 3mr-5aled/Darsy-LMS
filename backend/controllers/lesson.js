@@ -67,9 +67,9 @@ const deleteLesson = asynchandler(async (req, res, next) => {
   }
   await Lesson.deleteMany({ _id: lessonId });
   if (lesson.video.provider !== "youtube") {
-    const deletedVideo = await deleteVideo(lesson.video.provider)
-    console.log(deletedVideo);
-    const videoPath = path.join(__dirname, `/../uploads/${deletedVideo.filename}`)
+    await deleteVideo(lesson.video.provider)
+    console.log(lesson.video.fileName);
+    const videoPath = path.join(__dirname, `/../uploads/${lesson.video.fileName}`)
     fs.unlink(videoPath, (err) => {
       if (err) {
         return next(new ApiError("error in deleting video",6341, 404));

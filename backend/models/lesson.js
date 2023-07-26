@@ -12,6 +12,9 @@ const Lesson = new mongoose.Schema(
         },
         provider:{
             type: String,
+        },
+        fileName:{
+            type: String,
         }
     },
     duration:{
