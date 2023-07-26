@@ -16,7 +16,6 @@ const updateCourse = aynchandler(async (req, res, next) => {
     // you will send data to update in  body and id as params
     const { body } = req
     const { id } = req.params
-
     const course = await Course.findByIdAndUpdate(id, { ...body }, { new: true })
     if (!course) {
         return next(new ApiError("no course found to updated",8341, 404))

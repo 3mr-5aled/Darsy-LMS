@@ -31,6 +31,9 @@ const getAllSections = asynchandler(async (req, res, next) => {
   // send courseId as params 
   const {courseId} = req.params
   const section = await Section.find({courseId}).populate("lessons")
+  if (!section.length === 0) {
+    return next(new ApiError("no sections in this course",7341, 404))
+  }
   res.status(200).json({ total: section.length, section })
 })
 const deleteSection = asynchandler(async (req, res, next) => {

@@ -9,14 +9,17 @@ const enrolledCourse = async (req, res, next) => {
   if (!lesson) {
     return next(new ApiError("no lesson is found",6341, 404));
   }
+  await lesson.populate('sectionId')
+  await lesson.populate('courseId')
+  req.lesson = lesson
   const userFromDB = await User.findById(user._id)
+  if (userFromDB.role === "tutor") {
+    return next()
+  }
   const enrolledCourses = userFromDB.enrolledCourse.filter(course => course.courseId.toString() === lesson.courseId.toString())
   if (enrolledCourses.length === 0) {
     return next(new ApiError("you are not enrolled in this course",8364, 400));
   }
-  await lesson.populate('sectionId')
-  await lesson.populate('courseId')
-  req.lesson = lesson
   next()
 }
 module.exports = { enrolledCourse }
