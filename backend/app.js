@@ -11,7 +11,7 @@ const paymentRouter = require('./routers/payment')
 const uploadImage = require('./middlewares/imageupload')
 const examRouter = require('./routers/exam')
 const payment = require('./middlewares/paytaps')
-const fileUploader = require('express-fileupload')
+// const fileUploader = require('express-fileupload')
 const uploaderRouter = require('./routers/uploader')
 const userRouter = require('./routers/user')
 require('dotenv').config()
@@ -29,7 +29,7 @@ const corssettings = {
 // axios.defaults.withcredintials=true
 
 app.use(express.json())
-app.use(fileUploader())
+// app.use(fileUploader())
 app.use(
   cors({
     origin: "http://localhost:8080",
