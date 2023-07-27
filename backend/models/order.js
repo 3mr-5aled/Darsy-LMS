@@ -15,7 +15,7 @@ const Order =new mongoose.Schema({
     },
     courseId:{
         type:mongoose.Schema.Types.ObjectId,
-        required:true
+        
     },
     tran_ref:{
         type:String,
@@ -23,6 +23,10 @@ const Order =new mongoose.Schema({
     status:{
         type:String,
         default:"pending"
+    },
+    type:{
+        type:String,
+        enum:['credit','enroll']
     }
 },{timestamps:true})
     

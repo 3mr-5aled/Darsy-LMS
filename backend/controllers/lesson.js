@@ -7,6 +7,7 @@ const fs =require('fs')
 const path =require('path')
 const Section = require("../models/section");
 const { deleteVideo } = require("./videouploader");
+const sendemail = require("../utils/sendemail");
 
 const addLesson = asynchandler(async (req, res, next) => {
   // @api  post    /sectionId:/add-lesson
@@ -25,7 +26,6 @@ const addLesson = asynchandler(async (req, res, next) => {
   course.total = course.total + 1
   await course.save();
   const users = await User.find({ ['enrolledCourse.courseId']: course._id })
-
   users.map(async (user) => {
     user.enrolledCourse.map(userCourse => {
       if (userCourse.courseId.toString() === section.courseId.toString()) {
@@ -36,6 +36,22 @@ const addLesson = asynchandler(async (req, res, next) => {
       }
     })
     await user.save()
+  })
+  const allUsers = await User.find({grade:course.grade})
+  allUsers.map(async (user) => {
+    let text =''
+    const courses = user.enrolledCourse.filter(userCourse => userCourse.courseId.toString() === section.courseId.toString())
+    if (courses.length > 0) {
+      text = `You have a new lesson in ${section.title} section ,\n hurry to complete your study \n Good luck`
+    }else{
+      text = `this is new lesson added , \n enroll to it now \n Good luck  `
+    }
+    const options = {
+      email:user.email,
+      message:`${course.name} has a new lesson in ${section.title} section`,
+      text
+    }
+    await sendemail(options)
   })
   res.status(200).json(lesson)
 });
