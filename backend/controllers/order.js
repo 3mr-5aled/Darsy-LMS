@@ -57,8 +57,10 @@ const addCredit = asynchandler(async (req, res, next) => {
   next()
 })
 const buyCourse = asynchandler(async (req, res, next) => {
-  const {amount , cart_id} = req.body
+  const {amount , cart_id} = req
   const user = await User.findById(req.user._id)
+
+  console.log(user.credit , amount)
   if (user.credit < amount) {
     return next(new ApiError("not enough credit", 9024, 400))
   }
