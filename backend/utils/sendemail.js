@@ -2,6 +2,7 @@ const nodemailer =require('nodemailer')
 require('dotenv').config()
 
 const sendemail=async(options)=>{
+    console.log('innn')
     const transporter = nodemailer.createTransport({
         host:process.env.EMAIL_HOST,
         port:process.env.EMAIL_PORT,
