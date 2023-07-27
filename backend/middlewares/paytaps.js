@@ -7,7 +7,7 @@ const payment = asynchandler(async (req, res, next) => {
     serverKey = process.env.SERVER_KEY,
     region = "EGY"
   paytabs.setConfig(profileID, serverKey, region)
-  let paymentMethods = ["all"]
+  let paymentMethods = ["-valu"]
 
   let transaction = {
     type: "sale",
@@ -23,7 +23,7 @@ const payment = asynchandler(async (req, res, next) => {
 
   let cart_details = [cart.id, cart.currency, cart.amount, cart.description]
   let customer = {
-    name: req.user.name,
+    name:"",
     email: req.user.email,
     phone: req.user.phone,
     street1: "",
@@ -49,7 +49,7 @@ const payment = asynchandler(async (req, res, next) => {
 
   let url = {
     callback:
-      "https://714e-197-58-74-81.ngrok-free.app/api/v1/payment/checkorder",
+      "https://e26b-197-58-101-82.ngrok-free.app/api/v1/payment/check-order",
     return: "http://localhost:8080/",
   }
   let response_URLs = [url.callback, url.return]

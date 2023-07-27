@@ -7,26 +7,33 @@ const Courses = new mongoose.Schema(
       type: String,
       required: true,
     },
-    grade:{
+    grade: {
       type: String,
       required: true,
-      enum:['sec-1','sec-2','sec-3','prep-1','prep-2','prep-3']
+      enum: ['sec-1', 'sec-2', 'sec-3', 'prep-1', 'prep-2', 'prep-3']
     },
-    expiredTime:{
-      type:Number,
-      default:0
-    },
-    discount:{
+    expiredTime: {
       type: Number,
-      default:0
+      default: 0
+    },
+    discount: {
+      type: Number,
+      default: 0
     },
     description: {
       type: String,
       required: true,
     },
     courseImg: {
-      type: String,
-      required: true,
+      src: {
+        type: String,
+      },
+      fileName: {
+        type: String,
+      },
+      publicId: {
+        type: String,
+      }
     },
     duration: {
       type: String,
@@ -39,7 +46,7 @@ const Courses = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    sections: [ {type:mongoose.Types.ObjectId,ref:'sections'}],
+    sections: [{ type: mongoose.Types.ObjectId, ref: 'sections' }],
   },
   { timestamps: true }
 );
@@ -48,18 +55,18 @@ Courses.pre('findOneAndDelete', async function (next) {
   if (course.sections.length === 0) {
     return next();
   }
-  try { 
-    const users =await mongoose.model('users').find({['enrolledCourse.courseId']: course._id})
-    if(users.length !== 0 ){
-      users.map(async (user)=>{
-        user.enrolledCourse.filter((userCourse)=>userCourse.courseId.toString() !== course._id.toString() )  
+  try {
+    const users = await mongoose.model('users').find({ ['enrolledCourse.courseId']: course._id })
+    if (users.length !== 0) {
+      users.map(async (user) => {
+        user.enrolledCourse.filter((userCourse) => userCourse.courseId.toString() !== course._id.toString())
         await user.save()
       })
     }
-      await mongoose.model('sections').deleteMany({ _id: { $in: course.sections } });
+    await mongoose.model('sections').deleteMany({ _id: { $in: course.sections } });
     next();
   } catch (error) {
-    next(new ApiError(error,500));
+    next(new ApiError(error, 500));
   }
 });
 module.exports = mongoose.model("courses", Courses);

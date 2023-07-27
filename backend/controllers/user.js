@@ -86,6 +86,15 @@ const getUser = aynchandler(async(req,res,next)=>{
     }
     res.status(200).json({user})
 })
-module.exports = {getAllUsers,updateUser,getUser,deleteUser,addCourseToUser,removeUserFromCourse}
+const editCredit = aynchandler(async (req, res, next) => {
+    const {userId} = req.params
+    const {amount} = req.body
+    const user = await User.findById(userId)
+    const order = await Order.create({ amount , userId:userId , status:'paid', adminId:req.user._id , type:'credit' })
+    user.credit += amount
+    await user.save()
+    res.status(200).send({user , order})
+})
+module.exports = {getAllUsers,updateUser,getUser,deleteUser,addCourseToUser,removeUserFromCourse,editCredit}
 
 

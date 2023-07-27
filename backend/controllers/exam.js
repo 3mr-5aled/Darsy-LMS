@@ -19,11 +19,6 @@ const createExam = aynchandler(async(req,res,next)=>{
 
 const addExamDegree = aynchandler(async(req,res,next)=>{
     const {exam} = req.body
-    // [{
-            // question: 'question',
-            // selectedAnswer: 'selecteddAnswer',
-            // correctAnswer: 'correctAnswer',
-    // }]
     let degree = 0
     exam.map(item=>{
         if(item.selectedAnswer === item.correctAnswer){
@@ -31,7 +26,7 @@ const addExamDegree = aynchandler(async(req,res,next)=>{
         }
         return degree 
     })
-    degree = (degree/exam.length) * 100
+    degree = (degree/exam.length) * 100 
     const user = await User.findById(req.user._id)
     user.exams.push({degree,lessonId:req.params.lessonId})
     await user.save()
