@@ -6,6 +6,8 @@ import { CourseType } from "@/common.types"
 import axiosInstance from "@/axios.config"
 import { toast } from "react-toastify"
 import { GradeOption } from "@/constant"
+import UploadImageButton from "./UploadImageButton"
+import Image from "next/image"
 
 type Props = {
   title: string
@@ -20,6 +22,11 @@ type FormValues = {
   price: number
   grade: string
   discount: number
+  courseImg: {
+    src: string
+    publicId: string
+    fileName: string
+  }
   // expiredTime?: Date
 }
 
@@ -31,9 +38,20 @@ const CourseForm = ({ title, type, course }: Props) => {
     setValue,
   } = useForm<FormValues>() // Specify the generic type for useForm
 
-  const [imageBase64, setImageBase64] = useState<string | null | undefined>(
-    null
-  )
+  const [imageURL, setImageURL] = useState("")
+  const [publicId, setPublicId] = useState("")
+  const [fileName, setFileName] = useState("")
+
+  const handleImageUpload = (url: string, Id: string, file: string) => {
+    setValue("courseImg.src", url)
+    setValue("courseImg.publicId", Id)
+    setValue("courseImg.fileName", file)
+
+    setImageURL(url)
+    setPublicId(Id)
+    setFileName(file)
+  }
+
   const [minDate, setMinDate] = useState<string | number | undefined>(undefined)
 
   useEffect(() => {
@@ -52,8 +70,11 @@ const CourseForm = ({ title, type, course }: Props) => {
       setValue("duration", course?.duration)
       setValue("price", course?.price)
       setValue("discount", course?.discount)
+      setValue("courseImg.src", course?.courseImg.src)
+      setValue("courseImg.publicId", course?.courseImg.publicId)
+      setValue("courseImg.fileName", course?.courseImg.fileName)
       // setValue("expiredTime", course?.expiredTime)
-      setImageBase64(course?.courseImg || null) // Handle undefined case here
+      setImageURL(course?.courseImg.src || "") // Handle undefined case here
     }
   }, [course, setValue])
 
@@ -62,7 +83,11 @@ const CourseForm = ({ title, type, course }: Props) => {
       name: data.name,
       description: data.description,
       grade: data.grade,
-      image: imageBase64!,
+      courseImg: {
+        src: imageURL!,
+        publicId: publicId,
+        fileName: fileName!,
+      },
       duration: data.duration,
       price: data.price,
       discount: data?.discount,
@@ -74,6 +99,11 @@ const CourseForm = ({ title, type, course }: Props) => {
       }
 
       try {
+        if (!imageURL) {
+          // If the image URL is empty, display an error message or take appropriate action
+          toast.error("Please upload an image")
+          return
+        }
         await handleSubmit(async () => {
           if (type === "create") {
             const response = await axiosInstance.post(
@@ -104,28 +134,6 @@ const CourseForm = ({ title, type, course }: Props) => {
     }
   }
 
-  const handleChangeImage = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault()
-
-    const file = e.target.files?.[0]
-
-    if (!file) return
-
-    if (!file.type.includes("image")) {
-      alert("Please upload an image!")
-      return
-    }
-
-    const reader = new FileReader()
-
-    reader.readAsDataURL(file)
-
-    reader.onload = () => {
-      const result = reader.result as string
-      setImageBase64(result)
-    }
-  }
-
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -133,27 +141,24 @@ const CourseForm = ({ title, type, course }: Props) => {
     >
       <h1>{title}</h1>
       <div className="flex-col gap-5 flexCenter">
-        <div className="flexStart form_image-container">
-          {!imageBase64 && (
+        <div className="flexCenter flex-col form_image-container">
+          {!imageURL && (
             <label htmlFor="image" className="flexCenter form_image-label">
-              {!imageBase64 && "Choose a poster for your project"}
+              {!imageURL && "Choose a poster for your project"}
             </label>
           )}
-          <input
-            id="image"
-            type="file"
-            accept="image/*"
-            required={type === "create" ? true : false}
-            className="form_image-input"
-            onChange={(e) => handleChangeImage(e)}
-          />
-          {imageBase64 && (
-            <img
-              src={imageBase64}
+          {imageURL && (
+            <Image
+              src={imageURL}
+              alt="Uploaded"
+              width={300}
+              height={300}
               className="z-20 object-contain p-3 border-2 border-gray-500 border-dashed sm:p-10"
-              alt="image"
             />
           )}
+          <div className="my-3">
+            <UploadImageButton onImageUpload={handleImageUpload} />
+          </div>
         </div>
         <div className="flex flex-wrap justify-around w-full gap-5">
           <div className="form-control">
@@ -209,12 +214,12 @@ const CourseForm = ({ title, type, course }: Props) => {
             {errors.price && <span>This field is required</span>}
             {/* Display error message if the "price" field is not filled */}
           </div>
-          <div className="form-control w-full">
+          <div className="form-control  w-2/6">
             <label htmlFor="discount">discount:</label>
             <input
               type="number"
               id="discount"
-              className="input input-bordered w-1/2"
+              className="input input-bordered"
               placeholder="Default value zero %"
               min={0}
               max={100}
@@ -224,10 +229,10 @@ const CourseForm = ({ title, type, course }: Props) => {
             {errors.discount && <span>This field is required</span>}
             {/* Display error message if the "discount" field is not filled */}
           </div>
-          <div className="w-full py-3 form-control">
+          <div className="form-control">
             <label htmlFor="grade">Grade</label>
             <select
-              className="w-full max-w-xs select select-bordered"
+              className="select select-bordered"
               id="grade"
               {...register("grade", { required: true })}
             >

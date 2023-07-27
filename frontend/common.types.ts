@@ -42,9 +42,13 @@ export type CourseType = {
   _id?: string
   name: string
   description: string
-  image: string
+  // image: string
   grade: string
-  courseImg?: string | undefined
+  courseImg: {
+    src: string
+    publicId: string
+    fileName: string
+  }
   duration: number
   price: number
   discount: number
@@ -71,7 +75,8 @@ export interface LessonType {
   _id?: string
   title: string
   video?: {
-    public_id: string
+    publicId: string
+    fileName: string
     src: string
     provider: "normal" | "youtube"
   }

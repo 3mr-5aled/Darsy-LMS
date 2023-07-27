@@ -54,10 +54,7 @@ const LessonView = ({ lesson }: { lesson: LessonType }) => {
               <strong>Video:</strong>
 
               <div className="mt-3">
-                <VideoPlayer
-                  source={lesson.video.src}
-                  provider={lesson.video.provider}
-                />
+                <VideoPlayer video={lesson.video} />
               </div>
             </div>
           )

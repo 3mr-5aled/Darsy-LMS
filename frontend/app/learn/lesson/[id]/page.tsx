@@ -48,8 +48,10 @@ type LessonType = {
     link: string
   }
   video: {
+    publicId: string
+    fileName: string
     src: string
-    provider: "youtube" | "normal"
+    provider: "normal" | "youtube"
   } // Add specific type if needed
   exams: {
     question: string
@@ -233,7 +235,7 @@ const LessonPage = () => {
 
   const isBrowser = typeof window !== "undefined"
   if (!user) {
-    return <p>User isn't authenticated please go to the login page</p>
+    return <p>Check if you are logged in</p>
   }
 
   if (!data) {
@@ -246,10 +248,14 @@ const LessonPage = () => {
   }
 
   if (
-    !user.enrolledCourse.some((course) => course.courseId === data.course?._id)
+    !user.enrolledCourse.some(
+      (course) => course.courseId === data.course?._id
+    ) &&
+    user.role !== "tutor"
   ) {
     return <p>Please enroll in the course first to access the lesson</p>
   }
+
   const isLessonDone = (lessonId: string) => {
     return user?.enrolledCourse[0]?.lessonsDone?.includes(lessonId) ?? false
   }
@@ -326,10 +332,7 @@ const LessonPage = () => {
             <div className="flex flex-col items-center justify-center drawer-content">
               {lesson && isBrowser && (
                 <>
-                  <VideoPlayer
-                    source={lesson.video.src}
-                    provider={lesson.video.provider}
-                  />
+                  <VideoPlayer video={lesson.video} />
                   {/* <VideoPlayer videoId="LH7LPMXv8Lg" /> */}
                   {/* Only render Plyr in the browser environment */}
                   <div

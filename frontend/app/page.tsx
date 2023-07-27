@@ -1,14 +1,23 @@
+"use client"
 import { features } from "@/constant"
 import Link from "next/link"
 import Hero from "@/components/Hero"
+import { useUserContext } from "@/contexts/userContext"
+import { useRouter } from "next/navigation"
+import Testimonials from "@/components/Testimonials"
 
 const Home = () => {
+  const { state, setUser, clearUser } = useUserContext()
+  const { user } = state
+  const router = useRouter()
+  if (user?.role === "student") {
+    router.push("/learn")
+  }
   return (
     <>
       <main className="flex flex-col gap-y-5 md:gap-y-8 overflow-hidden">
         <Hero />
       </main>
-
       <div className="bg-base-100 py-24 sm:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
@@ -46,6 +55,8 @@ const Home = () => {
           </div>
         </div>
       </div>
+      {/* testimonials */}
+      <Testimonials />
     </>
   )
 }
