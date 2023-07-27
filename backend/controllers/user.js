@@ -90,6 +90,10 @@ const editCredit = aynchandler(async (req, res, next) => {
     const {userId} = req.params
     const {amount} = req.body
     const user = await User.findById(userId)
+    const price = user.credit + amount
+    if(price < 0){
+        return next(new ApiError('you dont have enough credit',1341,404))
+    }
     const order = await Order.create({ amount , userId:userId , status:'paid', adminId:req.user._id , type:'credit' })
     user.credit += amount
     await user.save()
