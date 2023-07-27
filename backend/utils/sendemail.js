@@ -13,8 +13,9 @@ const sendemail=async(options)=>{
     }
 })
 const msgOpt={
-    from:'Darsy.com',
+    from:'Darsy.lms.com',
     to:options.email,
+    sender:process.env.EMAIL_USER,
     subject:options.message,
     text:options.text
 }
