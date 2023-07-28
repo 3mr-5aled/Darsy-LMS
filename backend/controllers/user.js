@@ -114,10 +114,10 @@ const addMemberShip = aynchandler(async (req, res, next) => {
     }
     const order = await Order.create({ amount:member.price , userId:req.user._id , status:'paid', type:'member' })
     user.credit = totalPrice
-    user.isMemberShip.memberId = memberId
-    user.isMemberShip.expiredTime = Date.now() + (member.expiredTime * 24 * 60 * 60 * 1000)
+    user.memberShip.memberId = memberId
+    user.memberShip.name = member.name
+    user.memberShip.expiredTime = Date.now() + (member.expiredTime * 24 * 60 * 60 * 1000)
     await user.save()
-    console.log(new Date(user.isMemberShip.expiredTime))
     res.status(200).send({user , order})
 })
 module.exports = {getAllUsers,addMemberShip,updateUser,getUser,deleteUser,addCourseToUser,removeUserFromCourse,editCredit}

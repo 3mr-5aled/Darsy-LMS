@@ -79,11 +79,12 @@ const User = new mongoose.Schema({
         }
         , { timestamps: true }
     ],
-    isMemberShip: {
+    memberShip: {
         memberId:{
         type: mongoose.Schema.ObjectId,
         ref: 'users'},
         expiredTime:Date,
+        name:String
     },
     credit: {
         type: Number,

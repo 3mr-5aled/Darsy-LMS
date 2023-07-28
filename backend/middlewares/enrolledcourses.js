@@ -17,7 +17,7 @@ const enrolledCourse = async (req, res, next) => {
   if (userFromDB.role === "tutor") {
     return next()
   }
-  if (userFromDB.isMemberShip.memberId && userFromDB.isMemberShip.expiredTime > Date.now()) {
+  if (userFromDB.memberShip.memberId && userFromDB.memberShip.expiredTime > Date.now()) {
     return next()
   }
   const enrolledCourses = userFromDB.enrolledCourse.filter(course => course.courseId.toString() === lesson.courseId.toString())
