@@ -26,7 +26,7 @@ const Order =new mongoose.Schema({
     },
     type:{
         type:String,
-        enum:['credit','enroll']
+        enum:['credit','enroll','member']
     }
 },{timestamps:true})
     

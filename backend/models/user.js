@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const User =new mongoose.Schema({
+const User = new mongoose.Schema({
     name: {
-        required: [true,"name is required"],
+        required: [true, "name is required"],
         min: [4, 'characters must be between 3 and 30'],
         max: [30, 'characters must be between 3 and 30'],
         type: String
@@ -13,14 +13,14 @@ const User =new mongoose.Schema({
         type: String,
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
     },
-    forgetpasswordcode:String,
-    forgetpasswordexpired:Date,
-    forgetpasswordvalidation:Boolean,
+    forgetpasswordcode: String,
+    forgetpasswordexpired: Date,
+    forgetpasswordvalidation: Boolean,
     city: {
         required: true,
         type: String,
     },
-    parentsPhone:{
+    parentsPhone: {
         required: true,
         type: String
     },
@@ -38,54 +38,56 @@ const User =new mongoose.Schema({
         min: [8, "password must be between 8 and 16 characters"],
         max: [16, "password must be between 8 and 16 characters"]
     },
-    role:{
-        type:String,
-        default:"student"
+    role: {
+        type: String,
+        default: "student"
     },
-    gender:{
-        type:String,
+    gender: {
+        type: String,
     },
-    grade:{
-        type:String,
-        required:true,
-        enum:['sec-1','sec-2','sec-3','prep-1','prep-2','prep-3']
+    grade: {
+        type: String,
+        required: true,
+        enum: ['sec-1', 'sec-2', 'sec-3', 'prep-1', 'prep-2', 'prep-3']
     },
     enrolledCourse: [{
         courseId: {
             type: mongoose.Schema.ObjectId,
             ref: 'courses'
         },
-        lessonsDone:[{
+        lessonsDone: [{
             type: mongoose.Schema.ObjectId,
             ref: 'lessons'
         }],
-        nextLesson:{
+        nextLesson: {
             type: mongoose.Schema.ObjectId,
             ref: 'lessons'
         },
-        name:String,
-        lessonTotal:Number,
-        courseImg:String,
-    },{timestamps:true}],
-    exams:[
+        name: String,
+        lessonTotal: Number,
+        courseImg: String,
+    }, { timestamps: true }],
+    exams: [
         {
-            lessonId:{
+            lessonId: {
                 type: mongoose.Schema.ObjectId,
                 ref: 'lessons'
             },
-            degree:{
-                type:String
+            degree: {
+                type: String
             }
         }
-        ,{timestamps:true}
+        , { timestamps: true }
     ],
-    isMemberShip:{
-        type:Boolean,
-        default:false
+    isMemberShip: {
+        memberId:{
+        type: mongoose.Schema.ObjectId,
+        ref: 'users'},
+        expiredTime:Date,
     },
-    credit:{
-        type:Number,
-        default:0
+    credit: {
+        type: Number,
+        default: 0
     }
 }, { timestamps: true });
 module.exports = mongoose.model('users', User);

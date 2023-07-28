@@ -49,7 +49,7 @@ const payment = asynchandler(async (req, res, next) => {
 
   let url = {
     callback:
-      "https://e26b-197-58-101-82.ngrok-free.app/api/v1/payment/check-order",
+      "https://0432-197-58-174-141.ngrok-free.app/api/v1/payment/check-order",
     return: "http://localhost:8080/",
   }
   let response_URLs = [url.callback, url.return]

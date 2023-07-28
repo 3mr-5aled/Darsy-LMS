@@ -5,6 +5,7 @@ const Order = require('../models/order')
 const Course = require('../models/course')
 const ApiError = require('../utils/apierror')
 const course = require('../models/course')
+const Member = require('../models/member')
 
 const getAllUsers = aynchandler(async(req,res,next)=>{
     // @api   get api/v1/user/get-all-users
@@ -13,7 +14,8 @@ const getAllUsers = aynchandler(async(req,res,next)=>{
     if (courseId) {
         const enrolledUsers = await User.find({ ['enrolledCourse.courseId']: courseId })
         const unEnrolledUsers = users.filter(user => user.enrolledCourse.every(course => course.courseId.toString() !== courseId ))        
-        return res.status(200).json({enrolledUsers,unEnrolledUsers})
+        const course = await Course.findById(courseId).select('price discount')
+        return res.status(200).json({enrolledUsers,unEnrolledUsers,course})
     }
     res.status(200).json(users)
 })
@@ -99,6 +101,25 @@ const editCredit = aynchandler(async (req, res, next) => {
     await user.save()
     res.status(200).send({user , order})
 })
-module.exports = {getAllUsers,updateUser,getUser,deleteUser,addCourseToUser,removeUserFromCourse,editCredit}
+const addMemberShip = aynchandler(async (req, res, next) => {
+    const {memberId} = req.params
+    const user = await User.findById(req.user._id)
+    const member = await Member.findById(memberId)
+    if(!member){
+        return next(new ApiError('member not found',1341,404))
+    }
+    const totalPrice = user.credit - member.price
+    if(totalPrice < 0){
+        return next(new ApiError('you dont have enough credit',1341,404))
+    }
+    const order = await Order.create({ amount:member.price , userId:req.user._id , status:'paid', type:'member' })
+    user.credit = totalPrice
+    user.isMemberShip.memberId = memberId
+    user.isMemberShip.expiredTime = Date.now() + (member.expiredTime * 24 * 60 * 60 * 1000)
+    await user.save()
+    console.log(new Date(user.isMemberShip.expiredTime))
+    res.status(200).send({user , order})
+})
+module.exports = {getAllUsers,addMemberShip,updateUser,getUser,deleteUser,addCourseToUser,removeUserFromCourse,editCredit}
 
 

@@ -23,9 +23,11 @@ const createOrder = asynchandler(async (req, res, next) => {
 })
 const checkOrder = asynchandler(async (req, res, next) => {
   const order = await Order.findById(req.body.cart_id)
+  console.log(order)
   const user = await User.findById(order.userId)
   const { response_code } = req.body.payment_result
   if (response_code != 200) {
+    console.log('in')
     await Order.findByIdAndDelete(req.body.cart_id)
     return next(ApiError("Payment failed", 9023, 400))
   }
@@ -33,6 +35,7 @@ const checkOrder = asynchandler(async (req, res, next) => {
   order.tran_ref = req.body.tran_ref
   await order.save()
   if (order.type === 'credit') {
+    console.log('innnn')
     user.credit += parseInt(order.amount)
     await user.save()
     return res.status(200).json({ user, order })

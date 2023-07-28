@@ -4,6 +4,7 @@ const ApiError = require('../utils/apierror')
 require('dotenv').config()
 const enrolledCourse = async (req, res, next) => {
   const { user } = req
+  console.log(user);
   const { lessonId } = req.params;
   const lesson = await Lesson.findById(lessonId)
   if (!lesson) {
@@ -14,6 +15,9 @@ const enrolledCourse = async (req, res, next) => {
   req.lesson = lesson
   const userFromDB = await User.findById(user._id)
   if (userFromDB.role === "tutor") {
+    return next()
+  }
+  if (userFromDB.isMemberShip.memberId && userFromDB.isMemberShip.expiredTime > Date.now()) {
     return next()
   }
   const enrolledCourses = userFromDB.enrolledCourse.filter(course => course.courseId.toString() === lesson.courseId.toString())

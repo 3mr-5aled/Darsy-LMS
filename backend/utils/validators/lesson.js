@@ -5,7 +5,6 @@ const addLessonValidator=[
     check('title').notEmpty().withMessage('title is required'),
     check('duration').notEmpty().withMessage('duration is required'),
     check('description').notEmpty().withMessage('description is required'),
-    check('sectionId').notEmpty().withMessage('sectionId is required').isMongoId().withMessage('sectionId is invalid id'),
     validator
 ]
 const getLessonValidator=[
