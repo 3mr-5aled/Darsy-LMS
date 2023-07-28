@@ -7,6 +7,7 @@ import { FaRoute } from "react-icons/fa"
 
 export const WebsiteDetails = {
   name: "Darsy" as string,
+  url: "http://localhost:8080" as string,
   description:
     "this is the description for the website where you can find all you need" as string,
   logo: "Logo" as string,
@@ -35,6 +36,7 @@ export const AdminNavLinks = [
     key: "Create Course",
     text: "Create Course",
   },
+
   { href: "/admin/courses", key: "Manage Courses", text: "Manage Courses" },
   { href: "/", key: "Back to Homepage", text: "Back to Homepage" },
 ]

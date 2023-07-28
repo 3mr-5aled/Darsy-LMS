@@ -14,11 +14,11 @@ const Course = () => {
   const [course, setCourse] = useState<CourseType | null>(null)
   const [error, setError] = useState<string | null>(null)
 
-  const { id } = useParams()
+  const { courseId } = useParams()
   const fetchCourse = async () => {
     setIsLoading(true)
     try {
-      const response = await axiosInstance.get(`/course/get-course/${id}`)
+      const response = await axiosInstance.get(`/course/get-course/${courseId}`)
       setCourse(response.data)
       setIsLoading(false)
     } catch (error: any) {
@@ -36,7 +36,7 @@ const Course = () => {
     try {
       if (window.confirm("Are you sure you want to delete this course?")) {
         setIsLoading(true)
-        await axiosInstance.delete(`/course/delete-course/${id}`)
+        await axiosInstance.delete(`/course/delete-course/${courseId}`)
         toast.success("Course deleted successfully")
         router.push("/admin/courses") // Redirect to the courses page after deletion
       }
@@ -59,8 +59,8 @@ const Course = () => {
             className="rounded-lg"
             src={course.courseImg || "https://picsum.photos/350/350"}
             alt={course.name}
-            width={350}
-            height={350}
+            width={400}
+            height={400}
           />
           <div className="flex flex-col justify-center">
             <h1 className="my-5 text-2xl font-bold">{course.name}</h1>
@@ -89,6 +89,16 @@ const Course = () => {
               onClick={deleteCourse}
             >
               Delete course
+            </button>
+            <button
+              className="mt-3 mb-5 btn btn-accent btn-outline"
+              onClick={() =>
+                router.push(
+                  `/admin/courses/manage-course/${course._id}/students`
+                )
+              }
+            >
+              Manage course students
             </button>
           </div>
         </div>

@@ -123,16 +123,16 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
     setIsLessonModalOpen(false)
   }
 
-  const closeLessonEditModal = () => {
-    setIsLessonModalOpen(false)
-  }
+  // const closeLessonEditModal = () => {
+  //   setIsLessonModalOpen(false)
+  // }
   const closeLessonViewModal = () => {
     setIsLessonModalOpen(false)
   }
 
-  const closeLessonModal = () => {
-    setIsLessonModalOpen(false)
-  }
+  // const closeLessonModal = () => {
+  //   setIsLessonModalOpen(false)
+  // }
 
   const showSectionEditModal = (index: number) => {
     const modalId = `edit_section_modal_${index}` // Generate a dynamic ID for the modal
@@ -143,14 +143,14 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
     }
   }
 
-  const showLessonEditModal = (index: number) => {
-    const modalId = `edit_modal_${index}` // Generate a dynamic ID for the modal
-    const modal = document.getElementById(modalId) as HTMLDialogElement | null
-    if (modal) {
-      modal.showModal() // Show the modal if it exists
-      modal.onclose = closeLessonEditModal // Set the onclose event to call closeLessonEditModal when the modal is closed
-    }
-  }
+  // const showLessonEditModal = (index: number) => {
+  //   const modalId = `edit_modal_${index}` // Generate a dynamic ID for the modal
+  //   const modal = document.getElementById(modalId) as HTMLDialogElement | null
+  //   if (modal) {
+  //     modal.showModal() // Show the modal if it exists
+  //     modal.onclose = closeLessonEditModal // Set the onclose event to call closeLessonEditModal when the modal is closed
+  //   }
+  // }
   const showLessonViewModal = (index: number) => {
     const modalId = `view_modal_${index}` // Generate a dynamic ID for the modal
     const modal = document.getElementById(modalId) as HTMLDialogElement | null
@@ -160,14 +160,14 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
     }
   }
 
-  const showLessonModal = (index: number) => {
-    const modalId = `modal_${index}` // Generate a dynamic ID for the modal
-    const modal = document.getElementById(modalId) as HTMLDialogElement | null
-    if (modal) {
-      modal.showModal() // Show the modal if it exists
-      modal.onclose = closeLessonModal // Set the onclose event to call closeLessonModal when the modal is closed
-    }
-  }
+  // const showLessonModal = (index: number) => {
+  //   const modalId = `modal_${index}` // Generate a dynamic ID for the modal
+  //   const modal = document.getElementById(modalId) as HTMLDialogElement | null
+  //   if (modal) {
+  //     modal.showModal() // Show the modal if it exists
+  //     modal.onclose = closeLessonModal // Set the onclose event to call closeLessonModal when the modal is closed
+  //   }
+  // }
 
   const isLessonDone = (lessonId: string) => {
     return user?.enrolledCourse[0]?.lessonsDone?.includes(lessonId) ?? false
@@ -297,11 +297,16 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                     <button
                       title="add lesson"
                       className="btn btn-primary"
-                      onClick={() => showLessonModal(index)}
+                      // onClick={() => showLessonModal(index)}
+                      onClick={() =>
+                        router.push(
+                          `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/create-lesson`
+                        )
+                      }
                     >
                       Add Lesson
                     </button>
-                    <dialog id={`modal_${index}`} className="modal">
+                    {/* <dialog id={`modal_${index}`} className="modal z-0">
                       <form method="dialog" className="modal-box">
                         <button
                           title="close"
@@ -318,7 +323,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                           onClose={closeLessonModal}
                         />
                       </form>
-                    </dialog>
+                    </dialog> */}
                   </>
                 )}
               </div>
@@ -363,7 +368,12 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                               title="edit"
                               type="button"
                               className="cursor-pointer text-warning"
-                              onClick={() => showLessonEditModal(index)}
+                              // onClick={() => showLessonEditModal(index)}
+                              onClick={() =>
+                                router.push(
+                                  `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/${lesson._id}/edit-lesson`
+                                )
+                              }
                             >
                               <BsPencilFill />
                             </button>
@@ -396,7 +406,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                             <LessonView lesson={lesson} />
                           </form>
                         </dialog>
-                        <dialog id={`edit_modal_${index}`} className="modal">
+                        {/* <dialog id={`edit_modal_${index}`} className="modal">
                           <form method="dialog" className="modal-box">
                             <button
                               title="close"
@@ -414,7 +424,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                               onClose={closeLessonEditModal}
                             />
                           </form>
-                        </dialog>
+                        </dialog> */}
                       </>
                     )}
                   </div>
