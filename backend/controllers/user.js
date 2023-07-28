@@ -102,21 +102,16 @@ const editCredit = aynchandler(async (req, res, next) => {
     res.status(200).send({user , order})
 })
 const addMemberShip = aynchandler(async (req, res, next) => {
-    const {memberId} = req.params
+    const {amount , membershipName , expiredTime  } = req.params
     const user = await User.findById(req.user._id)
-    const member = await Member.findById(memberId)
-    if(!member){
-        return next(new ApiError('member not found',1341,404))
-    }
-    const totalPrice = user.credit - member.price
+    const totalPrice = user.credit - amount
     if(totalPrice < 0){
         return next(new ApiError('you dont have enough credit',1341,404))
     }
-    const order = await Order.create({ amount:member.price , userId:req.user._id , status:'paid', type:'member' })
+    const order = await Order.create({ amount, userId:req.user._id , status:'paid', type:'member' })
     user.credit = totalPrice
-    user.memberShip.memberId = memberId
-    user.memberShip.name = member.name
-    user.memberShip.expiredTime = Date.now() + (member.expiredTime * 24 * 60 * 60 * 1000)
+    user.memberShip.name = membershipName
+    user.memberShip.expiredTime = Date.now() + (parseInt(expiredTime) * 24 * 60 * 60 * 1000)
     await user.save()
     res.status(200).send({user , order})
 })

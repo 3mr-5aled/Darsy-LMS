@@ -80,9 +80,6 @@ const User = new mongoose.Schema({
         , { timestamps: true }
     ],
     memberShip: {
-        memberId:{
-        type: mongoose.Schema.ObjectId,
-        ref: 'users'},
         expiredTime:Date,
         name:String
     },
