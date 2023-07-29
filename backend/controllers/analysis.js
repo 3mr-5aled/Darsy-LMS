@@ -29,15 +29,15 @@ const getMoneyPerPeriod = aynchandler(async (req, res, next) => {
     let totalMoney = []
     if (year && month && day) {
         totalMoney = calculateTotalMoneyPerDay(year, month, day, orders)
-        res.status(200).json(totalMoney)
+        return res.status(200).json(totalMoney)
     }
     if (year && month) {
         totalMoney = calculateTotalMoneyPerWeek(year, month, orders)
-        res.status(200).json(totalMoney)
+        return res.status(200).json(totalMoney)
     }
     if (year) {
         totalMoney = calculateTotalMoneyPerMonth(year, orders)
-        res.status(200).json(totalMoney)
+        return res.status(200).json(totalMoney)
     }
     next(new ApiError('you must send year at least', 4161 ,400))
 })
