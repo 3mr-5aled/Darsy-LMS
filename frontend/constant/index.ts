@@ -2,6 +2,13 @@ import {
   BsFillArrowUpCircleFill,
   BsFingerprint,
   BsFillLockFill,
+  BsPeople,
+  BsPlusCircle,
+  BsStack,
+  BsHouseDoorFill,
+  BsPersonBadgeFill,
+  BsPersonFillAdd,
+  BsMenuButtonWideFill,
 } from "react-icons/bs"
 import { FaRoute } from "react-icons/fa"
 
@@ -26,19 +33,54 @@ export const WebsiteDetails = {
 
 export const NavLinks = [
   { href: "/courses", key: "Courses", text: "Courses" },
+  { href: "/membership", key: "Membership", text: "Membership" },
   { href: "/about", key: "About", text: "About" },
   { href: "/contact", key: "Contact", text: "Contact" },
 ]
 export const AdminNavLinks = [
-  { href: "/admin/students", key: "Manage Students", text: "Manage Students" },
+  {
+    href: "/admin/dashboard",
+    icon: BsMenuButtonWideFill,
+    key: "Dashboard",
+    text: "Dashboard",
+  },
+  {
+    href: "/admin/students",
+    icon: BsPeople,
+    key: "Manage Students",
+    text: "Manage Students",
+  },
   {
     href: "/admin/courses/create-course",
+    icon: BsPlusCircle,
     key: "Create Course",
     text: "Create Course",
   },
 
-  { href: "/admin/courses", key: "Manage Courses", text: "Manage Courses" },
-  { href: "/", key: "Back to Homepage", text: "Back to Homepage" },
+  {
+    href: "/admin/courses",
+    icon: BsStack,
+    key: "Manage Courses",
+    text: "Manage Courses",
+  },
+  {
+    href: "/admin/memberships",
+    icon: BsPersonBadgeFill,
+    key: "Manage Memberships",
+    text: "Manage Memberships",
+  },
+  {
+    href: "/admin/memberships/create-membership",
+    icon: BsPersonFillAdd,
+    key: "Create Memberships",
+    text: "Create Memberships",
+  },
+  {
+    href: "/",
+    icon: BsHouseDoorFill,
+    key: "Back to Homepage",
+    text: "Back to Homepage",
+  },
 ]
 export const GenderOption = {
   title: "النوع" as string,
@@ -51,13 +93,33 @@ export const RoleOption = {
 export const CityOption = {
   title: "المدينة" as string,
   options: [
+    "الإسكندرية",
+    "أسوان",
+    "أسيوط",
+    "البحيرة",
+    "بني سويف",
     "القاهرة",
+    "الدقهلية",
+    "دمياط",
+    "الفيوم",
+    "الغربية",
     "الجيزة",
-    "مدينة نصر",
-    "الزيتون",
-    "المهندسين",
-    "المعادي",
-    "الزمالك",
+    "الإسماعيلية",
+    "كفر الشيخ",
+    "الأقصر",
+    "مطروح",
+    "المنيا",
+    "المنوفية",
+    "الوادي الجديد",
+    "شمال سيناء",
+    "بورسعيد",
+    "القليوبية",
+    "قنا",
+    "البحر الأحمر",
+    "الشرقية",
+    "سوهاج",
+    "جنوب سيناء",
+    "السويس",
   ] as Array<string>,
 }
 export const GradeOption = {
@@ -116,89 +178,26 @@ export const features = [
   },
 ]
 
-export const categoryFilters = [
-  "Frontend",
-  "Backend",
-  "Full-Stack",
-  "Mobile",
-  "UI/UX",
-  "Game Dev",
-  "DevOps",
-  "Data Science",
-  "Machine Learning",
-  "Cybersecurity",
-  "Blockchain",
-  "E-commerce",
-  "Chatbots",
-]
-
-export const footerLinks = [
+export const testimonialsData = [
   {
-    title: "For developers",
-    links: [
-      "Go Pro!",
-      "Explore development work",
-      "Development blog",
-      "Code podcast",
-      "Open-source projects",
-      "Refer a Friend",
-      "Code of conduct",
-    ],
+    name: "Mohamed Yasser",
+    subject: "Best Platform ever",
+    quote:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis officia ipsam minus provident repellendus repudiandae voluptate facilis, reprehenderit quam amet ab aperiam dolorem quos accusantium iure aliquam omnis incidunt sint.",
+    rating: 5,
   },
   {
-    title: "Hire developers",
-    links: [
-      "Post a job opening",
-      "Post a freelance project",
-      "Search for developers",
-    ],
+    name: "Omar Elmodather",
+    subject: "Best Platform ever",
+    quote:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis officia ipsam minus provident repellendus repudiandae voluptate facilis, reprehenderit quam amet ab aperiam dolorem quos accusantium iure aliquam omnis incidunt sint.",
+    rating: 4,
   },
   {
-    title: "Brands",
-    links: ["Advertise with us"],
-  },
-  {
-    title: "Company",
-    links: [
-      "About",
-      "Careers",
-      "Support",
-      "Media kit",
-      "Testimonials",
-      "API",
-      "Terms of service",
-      "Privacy policy",
-      "Cookie policy",
-    ],
-  },
-  {
-    title: "Directories",
-    links: [
-      "Development jobs",
-      "Developers for hire",
-      "Freelance developers for hire",
-      "Tags",
-      "Places",
-    ],
-  },
-  {
-    title: "Development assets",
-    links: [
-      "Code Marketplace",
-      "GitHub Marketplace",
-      "NPM Registry",
-      "Packagephobia",
-    ],
-  },
-  {
-    title: "Development Resources",
-    links: [
-      "Freelancing",
-      "Development Hiring",
-      "Development Portfolio",
-      "Development Education",
-      "Creative Process",
-      "Development Industry Trends",
-    ],
+    name: "Saif Eldin Mohammed",
+    subject: "Best Platform ever",
+    quote:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis officia ipsam minus provident repellendus repudiandae voluptate facilis, reprehenderit quam amet ab aperiam dolorem quos accusantium iure aliquam omnis incidunt sint.",
+    rating: 5,
   },
 ]

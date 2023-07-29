@@ -57,7 +57,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="flexBetween relative navbar z-20">
+    <nav className="relative z-20 flexBetween navbar">
       <div className="container gap-10 flexStart">
         {" "}
         {/* Container for the logo */}
@@ -65,7 +65,7 @@ const Navbar = () => {
           <label tabIndex={0} className="btn btn-ghost btn-circle">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="w-5 h-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -142,7 +142,7 @@ const Navbar = () => {
                 <Link href="/account/profile">My Profile</Link>
               </li>
               <li>
-                <Link href="/account/my-courses">My Courses</Link>
+                <Link href="/learn">My Learning Page</Link>
               </li>
               <AdminOnlyLink>
                 <li>

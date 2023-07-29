@@ -17,6 +17,11 @@ const Profile = () => {
         <li>Name: {user?.name}</li>
         <li>Email: {user?.email}</li>
         <li>Phone: {user?.phone}</li>
+        <li>Credit: {user?.credit}</li>
+        {/* // TODO */}
+        {/* <li>Membership: {user?.membership.name}</li> */}
+        {/* calculate teh expireed time left */}
+        {/* <li>Membership expiretime: {user?.membership.expiretime} from now</li> */}
         <li>Parent Phone: {user?.parentsPhone}</li>
         <li>City: {user?.city}</li>
         <li>Grade: {user?.grade}</li>

@@ -1,15 +1,16 @@
 "use client"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import axiosInstance from "@/axios.config"
 import { useParams } from "next/navigation"
 import { UserType } from "@/common.types"
 import { toast } from "react-toastify"
 import Loading from "@/app/loading"
+import CourseStudentCard from "@/components/CourseStudentCard"
 
-const CourseStudentsPage = () => {
+const CourseStudentsPage: React.FC = () => {
   const { courseId } = useParams()
-  const [students, setStudents] = useState<UserType[]>([])
-  // const [sortedStudents, setSortedStudents] = useState([])
+  const [enrolledStudents, setEnrolledStudents] = useState<UserType[]>([])
+  const [unEnrolledStudents, setUnEnrolledStudents] = useState<UserType[]>([])
   const [searchTerm, setSearchTerm] = useState<string>("")
   const [newPaidAmount, setNewPaidAmount] = useState<number>(0)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -20,9 +21,10 @@ const CourseStudentsPage = () => {
       const response = await axiosInstance.get(
         `/user/get-all-users?courseId=${courseId}`
       )
-      setStudents(response.data)
+      setEnrolledStudents(response.data.enrolledUsers)
+      setUnEnrolledStudents(response.data.unEnrolledUsers)
     } catch (error: any) {
-      toast.error(error.message) // Pass the error message to toast.error
+      toast.error(error.message)
       console.error(error)
     } finally {
       setIsLoading(false)
@@ -37,18 +39,18 @@ const CourseStudentsPage = () => {
     setSearchTerm(e.target.value)
   }
 
-  const handleAddStudent = async (userId: string) => {
-    if (!newPaidAmount) return
+  const handleAddStudent = async (userId: string, amount: number) => {
+    if (!amount) return
 
     try {
-      // Add student to the course using the API
-      await axiosInstance.post(`/user/add-course-to-user/${userId}`, {
+      await axiosInstance.put(`/user/add-course-to-user/${userId}`, {
         courseId: courseId,
-        amount: newPaidAmount,
+        amount: amount,
       })
 
-      // Refresh the students list after adding
       setNewPaidAmount(0)
+      toast.success("user added")
+
       fetchStudents()
     } catch (error) {
       console.error(error)
@@ -57,20 +59,31 @@ const CourseStudentsPage = () => {
 
   const handleRemoveStudent = async (userId: string) => {
     try {
-      // Remove student from the course using the API
-      await axiosInstance.post(`/users/remove-user-from-course/${userId}`, {
-        courseId,
+      await axiosInstance.put(`/user/remove-user-from-course/${userId}`, {
+        courseId: courseId,
       })
 
-      // Refresh the students list after removal
+      toast.success("user removed")
       fetchStudents()
     } catch (error) {
       console.error(error)
     }
   }
 
-  const filteredStudents = students.filter((student) =>
-    student.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredEnrolledStudents = React.useMemo(
+    () =>
+      enrolledStudents.filter((student) =>
+        student.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [enrolledStudents, searchTerm]
+  )
+
+  const filteredUnEnrolledStudents = React.useMemo(
+    () =>
+      unEnrolledStudents.filter((student) =>
+        student.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [unEnrolledStudents, searchTerm]
   )
 
   return (
@@ -86,35 +99,34 @@ const CourseStudentsPage = () => {
               placeholder="Search students..."
               value={searchTerm}
               onChange={handleSearch}
+              className="w-full p-2 border border-gray-300 rounded-md"
             />
           </div>
           <div>
-            <ul>
-              {filteredStudents.map((student) => (
-                <li
+            <h2 className="text-lg font-semibold mb-2">Enrolled Students</h2>
+            <ul className="space-y-4">
+              {filteredEnrolledStudents.map((student) => (
+                <CourseStudentCard
                   key={student._id}
-                  className="flex items-center justify-between mb-2"
-                >
-                  <span>{student.name}</span>
-                  {studentEnrolled ? (
-                    <button onClick={() => handleRemoveStudent(student._id)}>
-                      Remove
-                    </button>
-                  ) : (
-                    <div>
-                      <input
-                        type="number"
-                        placeholder="Enter Amount paid ..."
-                        className="input input-bordered"
-                        value={newPaidAmount}
-                        onChange={(e) => setNewPaidAmount(+e.target.value)}
-                      />
-                      <button onClick={() => handleAddStudent(student._id)}>
-                        Add Student
-                      </button>
-                    </div>
-                  )}
-                </li>
+                  student={student}
+                  handleAddStudent={handleAddStudent}
+                  handleRemoveStudent={handleRemoveStudent}
+                  isEnrolled={true}
+                />
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold mb-2">Unenrolled Students</h2>
+            <ul className="space-y-4">
+              {filteredUnEnrolledStudents.map((student) => (
+                <CourseStudentCard
+                  key={student._id}
+                  student={student}
+                  handleAddStudent={handleAddStudent}
+                  handleRemoveStudent={handleRemoveStudent}
+                  isEnrolled={false}
+                />
               ))}
             </ul>
           </div>

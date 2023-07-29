@@ -33,7 +33,7 @@ const CoursesAdminView = () => {
             <div>
               <img
                 className="rounded-lg"
-                src={item.courseImg || "https://picsum.photos/350/350"}
+                src={item.courseImg.src || "https://picsum.photos/350/350"}
                 alt={item.name}
                 width={350}
                 height={350}
