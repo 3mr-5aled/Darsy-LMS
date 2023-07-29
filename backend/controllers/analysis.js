@@ -75,9 +75,11 @@ function calculateTotalMoneyPerDay(year, month, orders) {
     return totalMoneyPerDay;
 }
 function calculateTotalMoneyPerWeek(year, month, day, orders) {
-    const firstDayOfWeek = new Date(parseInt(year), parseInt(month) - 1, parseInt(day) + 1);
-    const lastDayOfWeek = new Date(parseInt(year), parseInt(month) - 1, parseInt(day) + 7);
+    const lastDayOfWeek = new Date(parseInt(year), parseInt(month) - 1, parseInt(day) + 1);
+    const firstDayOfWeek = new Date(parseInt(year), parseInt(month) - 1, parseInt(day) - 5);
     const totalMoneyPerDay = [];
+    console.log(firstDayOfWeek)
+    console.log(lastDayOfWeek);
     let currentDate = new Date(firstDayOfWeek);
     while (currentDate <= lastDayOfWeek) {
         const totalMoneyForDay = orders.reduce((total, order) => {
