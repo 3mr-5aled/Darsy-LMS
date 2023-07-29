@@ -61,7 +61,6 @@ function calculateTotalMoneyPerWeek(year, month, orders) {
     let startDate = new Date(firstDayOfMonth);
     while (startDate <= lastDayOfMonth) {
         const endDate = new Date(startDate);
-
         endDate.setDate(endDate.getDate() + 7); // End date will be 6 days after start date (end of the week)
         const totalMoneyForWeek = orders.reduce((total, order) => {
             const orderDate = new Date(order.createdAt);
