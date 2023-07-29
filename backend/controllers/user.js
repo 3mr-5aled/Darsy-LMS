@@ -105,10 +105,17 @@ const addMemberShip = aynchandler(async (req, res, next) => {
     const {memberId} = req.params
     const user = await User.findById(req.user._id)
     const member = await Member.findById(memberId)
+    if (member.grade !== user.grade) {
+        return next(new ApiError("you can't buy this membership",8532,400))
+    }
+    if (user.memberShip.memberId && user.memberShip.expiredTime > Date.now()) {
+        return next(new ApiError("you already boght membership ",8532,400))
+    }
     const totalPrice = user.credit - member.price
     if(totalPrice < 0){
         return next(new ApiError('you dont have enough credit',1341,404))
     }
+    
     const order = await Order.create({ amount:member.price , userId:req.user._id , status:'paid', type:'member' })
     member.userId.push(user._id)
     await member.save()
