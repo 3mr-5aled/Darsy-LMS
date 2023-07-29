@@ -17,8 +17,8 @@ const login = asynchandler(async (req, res, next) => {
   if (!user) {
     return next(new ApiError("no user is found",1341, 404));
   }
-  user.lastSignedIn = new Date();
-  user.save();
+  user.lastSignedIn = new Date()
+  await user.save()
   // compare password (comes from body ) and password (come from database)
   const isvalid = await bcrypt.compare(userpassword, user.password);
 
@@ -74,7 +74,8 @@ const profile = asynchandler(async (req, res,next) => {
     if (!userFromDB) {
       return next(new ApiError('no user is found',1341,400))
     }
-    userFromDB.lastSignedIn = new Date();
+    userFromDB.lastSignedIn = new Date()
+    await userFromDB.save()
     return res.status(200).json(userFromDB)
   });
 const forgetpassword = asynchandler(async (req, res, next) => {

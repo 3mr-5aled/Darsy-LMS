@@ -68,6 +68,4 @@ const start = async () => {
     console.log(error.message)
   }
 }
-console.log(new Date())
-
 start()

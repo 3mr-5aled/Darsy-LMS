@@ -6,13 +6,13 @@ const Order = require('../models/order')
 const Lesson = require('../models/lesson')
 
 const getAnalysis = aynchandler(async (req, res, next) => {
-    const students = await User.find({ role: 'student' }).select('-password -city -gender -credit -exams -dateOfBirth -phone -parentsPhone')
+    const students = await User.find({ role: 'tutor' }).select('-password -city -gender -credit -exams -dateOfBirth -phone -parentsPhone')
     const courses = await Course.find({}).length
     const lessons = await Lesson.find({}).lenght
-    const todaySignedInStudents = students.filter(student => student.lastSignedIn.toDateString() === new Date().toDateString()).length
-    const enrolledStudents = students.filter(student => student.enrolledCourse.length > 1).length
+    const todaySignedInStudents = students.filter(student => student.lastSignedIn?.toDateString() === new Date().toDateString()).length
+    const enrolledStudents = students.filter(student => student.enrolledCourse.length >= 1).length
     const studentsInMembership = students.filter(student => student.memberShip.expiredTime > Date.now()).length
-    const studentsWithNoMembership = students.filter(student => student.memberShip?.expiredTime < Date.now()).length
+    const studentsWithNoMembership = students.filter(student =>  student.memberShip.memberId === undefined || student.memberShip.expiredTime < Date.now()).length
     const studentsWithNoEnrolledCourse = students.filter(student => student.enrolledCourse.length === 0).length
     const orders = await Order.find({})
     let allMoney = 0
