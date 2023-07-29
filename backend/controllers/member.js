@@ -2,6 +2,10 @@ const asynchandler = require("express-async-handler");
 const ApiError = require("../utils/apierror");
 const Member = require("../models/member");
 const addMemberShip = asynchandler(async (req, res , next) => {
+     const members = await Member.find({grade:req.body.grade})
+     if (members.length >= 3) {
+         return next(new ApiError("Grade full", 1216,404))
+     }   
      const member = await Member.create(req.body);
      res.status(201).json(member)
 })

@@ -67,7 +67,7 @@ const buyCourse = asynchandler(async (req, res, next) => {
   }
   const order = await Order.findById(cart_id)
   const course = await Course.findById(order.courseId)
-    user.enrolledCourse.push({
+  user.enrolledCourse.push({
     courseId: order.courseId,
     lessonsDone: [],
     name: course.name,

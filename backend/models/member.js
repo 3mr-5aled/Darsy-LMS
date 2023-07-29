@@ -30,8 +30,12 @@ const Member = new mongoose.Schema(
         userId:[{
             type:mongoose.Types.ObjectId,
             res:'users'
-        }]
-    },
+        }],
+        disabled:{
+            type:Boolean,
+            default:false
+        }
+        },
     { timestamps: true }
 );
 module.exports = mongoose.model("members", Member);

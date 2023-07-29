@@ -14,8 +14,7 @@ const Order =new mongoose.Schema({
         required:true
     },
     courseId:{
-        type:mongoose.Schema.Types.ObjectId,
-        
+        type:mongoose.Schema.Types.ObjectId,        
     },
     tran_ref:{
         type:String,
