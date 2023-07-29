@@ -81,11 +81,16 @@ const User = new mongoose.Schema({
     ],
     memberShip: {
         expiredTime:Date,
-        name:String
+        name:String,
+        memberId:{
+            type: mongoose.Schema.ObjectId,
+            ref: 'members'
+        }
     },
     credit: {
         type: Number,
         default: 0
-    }
+    },
+    lastSignedIn:Date,
 }, { timestamps: true });
 module.exports = mongoose.model('users', User);

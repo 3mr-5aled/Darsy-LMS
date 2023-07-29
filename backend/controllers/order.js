@@ -53,7 +53,7 @@ const checkOrder = asynchandler(async (req, res, next) => {
 const addCredit = asynchandler(async (req, res, next) => {
   const {amount} = req.body
   const user = await User.findById(req.user._id)
-  const order = await Order.create({ amount, userId:req.user._id  , type:'credit' })
+  const order = await Order.create({ amount , userId:req.user._id  , type:'credit' })
   req.cart_id = order._id
   req.amount = amount
   req.user =  user

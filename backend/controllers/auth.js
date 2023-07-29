@@ -17,6 +17,8 @@ const login = asynchandler(async (req, res, next) => {
   if (!user) {
     return next(new ApiError("no user is found",1341, 404));
   }
+  user.lastSignedIn = new Date();
+  user.save();
   // compare password (comes from body ) and password (come from database)
   const isvalid = await bcrypt.compare(userpassword, user.password);
 
@@ -43,7 +45,7 @@ const register = asynchandler(async (req, res, next) => {
     // hash password
     const hashedpassword = await bcrypt.hash(password, salt);
     req.body.password = hashedpassword
-    const user = await User.create(req.body);
+    const user = await User.create({...req.body,lastSignedIn:new Date()});
     const { _doc } = user;
   // use jsonwebtoken to get token
     const token = jwt.sign({..._doc,},process.env.JWT );
@@ -72,6 +74,7 @@ const profile = asynchandler(async (req, res,next) => {
     if (!userFromDB) {
       return next(new ApiError('no user is found',1341,400))
     }
+    userFromDB.lastSignedIn = new Date();
     return res.status(200).json(userFromDB)
   });
 const forgetpassword = asynchandler(async (req, res, next) => {
