@@ -8,7 +8,7 @@ import Loading from "@/app/loading"
 import { CourseType } from "@/common.types"
 
 export default function EditCourse() {
-  const { id } = useParams()
+  const { courseId } = useParams()
   const [course, setCourse] = useState<CourseType | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
@@ -16,7 +16,7 @@ export default function EditCourse() {
     const fetchCourse = async () => {
       try {
         const response = await axiosInstance.get<CourseType>(
-          `/course/get-course/${id}`
+          `/course/get-course/${courseId}`
         )
         setCourse(response.data)
         setIsLoading(false)
@@ -27,7 +27,7 @@ export default function EditCourse() {
     }
 
     fetchCourse()
-  }, [id])
+  }, [courseId])
 
   if (isLoading) {
     return <Loading />

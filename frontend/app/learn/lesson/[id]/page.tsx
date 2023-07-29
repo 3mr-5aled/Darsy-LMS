@@ -277,6 +277,8 @@ const LessonPage = () => {
     "--size": "4rem",
   }
 
+  const doc = new DOMParser().parseFromString(lesson.description, "text/html")
+
   return (
     <>
       {isLoading ? (
@@ -321,7 +323,7 @@ const LessonPage = () => {
               </div>
             </div>
           )}
-          <div className="drawer lg:drawer-open z-50">
+          <div className="z-50 drawer lg:drawer-open">
             <input
               title="drawer-toggle"
               id="my-drawer-2"
@@ -329,7 +331,7 @@ const LessonPage = () => {
               className="drawer-toggle"
             />
 
-            <div className="flex flex-col items-center justify-center drawer-content">
+            <div className="flex flex-col items-center drawer-content">
               {lesson && isBrowser && (
                 <>
                   <VideoPlayer video={lesson.video} />
@@ -338,13 +340,20 @@ const LessonPage = () => {
                   <div
                     className={`flex flex-row justify-between w-full paddings `}
                   >
-                    <h1 className="text-2xl font-bold flex flex-row gap-x-3 items-center">
+                    <h1 className="flex flex-row items-center text-2xl font-bold gap-x-3">
                       <span>{lesson.title}</span>
                       {renderDoneIcon(lesson._id)}
                     </h1>
                     <p className="text-start">Duration: {lesson.duration}min</p>
                   </div>
-                  <p className="">Description: {lesson.description}</p>
+                  <div className="flex flex-col justify-start w-full p-5 bg-base-300">
+                    <h3 className="text-2xl">Description: </h3>
+                    <div className="p-3 prose bg-base-200 card">
+                      <div
+                        dangerouslySetInnerHTML={{ __html: doc.body.innerHTML }}
+                      />
+                    </div>
+                  </div>
                   <Link
                     href={lesson.material.link}
                     type="button"

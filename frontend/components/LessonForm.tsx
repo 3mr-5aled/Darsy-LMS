@@ -4,8 +4,15 @@ import { SubmitHandler, useForm, useWatch } from "react-hook-form"
 import { LessonType } from "@/common.types"
 import axiosInstance from "@/axios.config"
 import { toast } from "react-toastify"
-import { useEffect, useState } from "react"
+import React, { Suspense, useEffect, useState } from "react"
 import UploadVideoButton from "./UploadVideoButton"
+import dynamic from "next/dynamic"
+
+// const QuillEditor = dynamic(() => import("react-quill"), { ssr: false })
+import "react-quill/dist/quill.snow.css"
+import QuillEditorLoading from "./QuillEditorLoading"
+
+const QuillEditor = React.lazy(() => import("react-quill"))
 
 type Props = {
   PageTitle: string
@@ -39,6 +46,7 @@ Props) => {
   const [videoURL, setVideoURL] = useState("")
   const [publicId, setPublicId] = useState("")
   const [fileName, setFileName] = useState("")
+  const description = useWatch({ control, name: "description" })
 
   const handleVideoUpload = (url: string, Id: string, file: string) => {
     setValue("video.src", url)
@@ -202,12 +210,12 @@ Props) => {
   }
 
   return (
-    <div className="flexCenter flex-col w-full p-5 ">
-      <h1 className="text-4xl font-bold my-5">{PageTitle}</h1>
-      <div className="flexCenter flex-col gap-5">
+    <div className="flex-col w-full p-5 flexCenter ">
+      <h1 className="my-5 text-4xl font-bold">{PageTitle}</h1>
+      <div className="flex-col gap-5 flexCenter">
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-          <div className="lg:col-span-2 grid grid-cols-1 gap-5 lg:grid-cols-2">
-            <div className="lg:col-span-1 space-y-2">
+          <div className="grid grid-cols-1 gap-5 lg:col-span-2 lg:grid-cols-2">
+            <div className=" lg:col-span-1">
               <div className="form-control">
                 <label htmlFor="title">Title:</label>
                 <input
@@ -220,6 +228,8 @@ Props) => {
                 />
                 {errors.title && <span>This field is required</span>}
               </div>
+            </div>
+            <div className="lg:col-span-1">
               <div className="form-control">
                 <label htmlFor="duration">Duration in minutes:</label>
                 <input
@@ -234,23 +244,25 @@ Props) => {
                 {errors.duration && <span>This field is required</span>}
               </div>
             </div>
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-2">
               <div className="form-control">
                 <label htmlFor="description">Description:</label>
-                <textarea
-                  id="description"
-                  className="textarea textarea-bordered w-full min-w-[16rem] max-w-xs"
-                  rows={4}
-                  {...register("description", { required: true })}
-                  placeholder="Description"
-                  disabled={isSubmitting}
-                />
+                {/* <QuillEditor
+                  value={description} // Use "description" instead of "watch("description")"
+                  onChange={(value) => setValue("description", value)}
+                /> */}
+                <Suspense fallback={<QuillEditorLoading />}>
+                  <QuillEditor
+                    value={description} // Use "description" instead of "watch("description")"
+                    onChange={(value) => setValue("description", value)}
+                  />
+                </Suspense>
                 {errors.description && <span>This field is required</span>}
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-2 space-y-4">
+          <div className="space-y-4 lg:col-span-2">
             <div className="form-control">
               <label htmlFor="videoType">Video Type:</label>
               <select
@@ -264,7 +276,7 @@ Props) => {
               </select>
             </div>
             {videoType === "normal" ? (
-              <div className="form-control space-y-4">
+              <div className="space-y-4 form-control">
                 <input
                   type="text"
                   id="youtubeVideoUrl"
@@ -294,13 +306,13 @@ Props) => {
           </div>
 
           <div className="lg:col-span-2">
-            <label htmlFor="material" className="text-xl font-bold mb-2">
+            <label htmlFor="material" className="mb-2 text-xl font-bold">
               Material:
             </label>
             <div className="flex flex-row flex-wrap">
               <div className="mx-3">
                 <div className="form-control">
-                  <label htmlFor="material">Name:</label>
+                  <label htmlFor="material">Title:</label>
                   <input
                     type="text"
                     id="materialName"
@@ -329,7 +341,7 @@ Props) => {
         </div>
       </div>
 
-      <div className="w-full flexCenter my-5">
+      <div className="w-full my-5 flexCenter">
         <button
           type="button"
           className="btn btn-primary"

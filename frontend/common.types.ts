@@ -1,27 +1,42 @@
-interface EnrolledCourse {
+export type EnrolledCourse = {
   courseId: string
-  name: string
-  courseImg: string
-  duration: number
   lessonsDone: string[]
-  nextLesson: string
-  expiredDate: Date
-  lessonTotal: string
+  name: string
+  lessonTotal: number
+  courseImg: string
+  _id: string
 }
 
 export type UserType = {
   _id: string
   name: string
   email: string
-  phone: string
-  parentsPhone: string
-  gender: string
-  grade: string
   city: string
+  parentsPhone: string
+  phone: string
   dateOfBirth: string
   role: string
+  gender: string
+  grade: string
   enrolledCourse: EnrolledCourse[]
+  createdAt: string
+  updatedAt: string
+  __v: number
+  exams: any[] // You can replace 'any[]' with a more specific type if you know the structure of the 'exams' property.
+  lastLesson: string
+  nextLesson: string
+  credit: number
+  isMemberShip:
+    | {
+        _id: string
+        name: string
+      }
+    | false
+  forgetpasswordcode: string
+  forgetpasswordexpired: string
+  forgetpasswordvalidation: boolean
 }
+
 export interface UserState {
   user: UserType | null
 }
@@ -96,4 +111,26 @@ export interface LessonType {
     answers: string[]
     correctAnswer: string
   }[]
+}
+
+export type MembershipType = {
+  _id?: string
+  name: string
+  grade: string
+  expiredTime: number
+  discount: number
+  description: string
+  price: number
+  userId?: string[]
+  disabled: boolean
+}
+
+export type AnalyticsData = {
+  allMoney: number
+  todayMoney: number
+  todaySignedInStudents: number
+  enrolledStudents: number
+  studentsInMembership: number
+  studentsWithNoMembership: number
+  studentsWithNoEnrolledCourse: number
 }

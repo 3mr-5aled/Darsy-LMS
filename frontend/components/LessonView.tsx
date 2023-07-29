@@ -19,18 +19,25 @@ const LessonView = ({ lesson }: { lesson: LessonType }) => {
     }
   }, [lesson])
 
+  const doc = new DOMParser().parseFromString(lesson.description, "text/html")
+
   return (
     <div className="m-5">
-      <h1 className="text-center text-2xl font-bold">View Lesson</h1>
+      <h1 className="text-2xl font-bold text-center">View Lesson</h1>
       <div className="space-y-4">
         <div>
           <strong>Title:</strong> {lesson.title}
         </div>
         <div>
-          <strong>Description:</strong> {lesson.description}
+          {}
+          <strong>Description:</strong>{" "}
+          <div className="prose bg-base-200">
+            <div dangerouslySetInnerHTML={{ __html: doc.body.innerHTML }} />
+          </div>
         </div>
         <div>
-          <strong>Duration:</strong> {lesson.duration}
+          <strong>Duration:</strong>
+          {lesson.duration}
         </div>
         <div>
           <strong>Material title:</strong> {lesson.material?.name}

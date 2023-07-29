@@ -15,7 +15,7 @@ const Course = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [course, setCourse] = useState<CourseType | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const { state, setUser, clearUser } = useUserContext()
+  const { state } = useUserContext()
   const { user } = state
 
   const { id } = useParams()
@@ -71,7 +71,7 @@ const Course = () => {
         <div>
           <p>
             Price: <del className="text-gray-500">{course.price}$</del>
-            <span className="text-success px-2">{discountedPrice}$</span>
+            <span className="px-2 text-success">{discountedPrice}$</span>
           </p>
           <p className="text-warning">Discount : {course.discount}%</p>
         </div>
@@ -123,36 +123,63 @@ const Course = () => {
       // Handle errors if necessary
     }
   }
+  const handleCreditPayment = async () => {
+    try {
+      if (!user) {
+        // User is not logged in, navigate to the login page
+        router.push("/login")
+        return
+      }
+
+      // You should replace the payment API endpoint below with your actual endpoint
+      const paymentResponse = await axiosInstance.post("payment/buy-course", {
+        courseId: course._id,
+      })
+      router.push(paymentResponse.data.url)
+    } catch (error: any) {
+      if (error.response.data.errCode) {
+        toast.error("Charge your credit to buy the course")
+      }
+      console.error(error)
+      // Handle errors if necessary
+    }
+  }
 
   return (
     <div className="flex flex-col p-5 m-5 bg-base-300 card">
-      <div className="flex flex-row flex-wrap md:flex-nowrap gap-5 w-full my-5">
+      <div className="flex flex-row flex-wrap w-full gap-5 my-5 md:flex-nowrap">
         {course.courseImg ? (
           <Image
             className="rounded-lg"
-            src={course.courseImg}
+            src={course.courseImg.src}
             alt={course.name}
             width={350}
             height={350}
           />
         ) : (
           <div
-            className="rounded-lg bg-gray-300"
+            className="bg-gray-300 rounded-lg"
             style={{ width: "350px", height: "350px" }}
           >
             Course Image
           </div>
         )}
         <div className="flex flex-col justify-center w-full">
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-row items-center justify-between">
             <div>
               <h1 className="my-5 text-2xl font-bold">{course.name}</h1>
-              <span>
-                <strong>
-                  {calculateLessonsCompleted()}/{course.total}
-                </strong>{" "}
-                Completed
-              </span>
+              {user?.enrolledCourse.some(
+                (enrolledCourse) => enrolledCourse.courseId === course._id
+              ) ? (
+                <span>
+                  <strong>
+                    {calculateLessonsCompleted()}/{course.total}
+                  </strong>{" "}
+                  Completed
+                </span>
+              ) : (
+                ""
+              )}
             </div>
             <div>
               <p className="whitespace-nowrap">{renderPrice()}</p>
@@ -188,12 +215,20 @@ const Course = () => {
                   Enroll Now
                 </button>
               ) : (
-                <button
-                  className="my-5 btn btn-primary w-fit"
-                  onClick={handlePayment}
-                >
-                  Pay and Enroll Now
-                </button>
+                <div className="flex flex-row gap-3">
+                  <button
+                    className="my-5 btn btn-primary w-fit"
+                    onClick={handlePayment}
+                  >
+                    Pay and Enroll Now
+                  </button>
+                  <button
+                    className="my-5 btn btn-secondary w-fit"
+                    onClick={handleCreditPayment}
+                  >
+                    Pay with credit
+                  </button>
+                </div>
               )}
             </>
           )}

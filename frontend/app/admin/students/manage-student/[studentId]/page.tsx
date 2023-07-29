@@ -1,18 +1,20 @@
 "use client"
-import Loading from "@/app/loading"
+import React, { useEffect, useState } from "react"
+import { toast } from "react-toastify"
 import axiosInstance from "@/axios.config"
 import { UserType } from "@/common.types"
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-import { toast } from "react-toastify"
+import Loading from "@/app/loading"
+import CreditModal from "@/components/AddCredit" // Import the CreditModal component
 
 const StudentPage = () => {
   const router = useRouter()
-  const { id } = useParams()
+  const { studentId } = useParams()
   const [user, setUser] = useState<UserType | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
+  const [isCreditModalOpen, setIsCreditModalOpen] = useState<boolean>(false)
 
   const goBack = () => {
     router.back()
@@ -23,9 +25,8 @@ const StudentPage = () => {
     const fetchUser = async () => {
       try {
         const response = await axiosInstance.get<UserType>(
-          `/user/get-user/${id}`
+          `/user/get-user/${studentId}`
         )
-        // @ts-ignore
         setUser(response.data.user)
         setIsLoading(false)
       } catch (error: any) {
@@ -35,19 +36,34 @@ const StudentPage = () => {
     }
 
     fetchUser()
-  }, [id])
+  }, [studentId])
 
   const handleDelete = async () => {
     try {
       setIsLoading(true)
       // Make an API call to delete the user based on the ID
-      await axiosInstance.delete(`/user/delete-user/${id}`)
-      toast.success("user deleted successfully")
+      await axiosInstance.delete(`/user/delete-user/${studentId}`)
+      toast.success("User deleted successfully")
       router.push("/admin/students")
-      // Redirect to a different page or show a success message
-      setIsLoading(false)
     } catch (error) {
       setError("An error occurred while deleting the user.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleAddCredit = async (amount: number) => {
+    try {
+      setIsLoading(true)
+      // Make an API call to add credit to the user based on the ID
+      await axiosInstance.post(`/user/add-credit/${studentId}`, { amount })
+      const response = await axiosInstance.get<UserType>(
+        `/user/get-user/${studentId}`
+      )
+      setUser(response.data.user)
+    } catch (error) {
+      setError("An error occurred while adding credit.")
+    } finally {
       setIsLoading(false)
     }
   }
@@ -62,10 +78,10 @@ const StudentPage = () => {
 
   return (
     <div className="p-5 m-5">
-      <div className="mb-8 prose text-center">
-        <h1>Student Details</h1>
+      <div className="mb-8 text-center">
+        <h1 className="text-4xl font-bold">Student Details</h1>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid items-center justify-center w-full grid-cols-2 gap-4">
         <div className="font-bold">Name:</div>
         <div>{user?.name}</div>
 
@@ -74,6 +90,14 @@ const StudentPage = () => {
 
         <div className="font-bold">Phone:</div>
         <div>{user?.phone}</div>
+
+        <div className="font-bold">Credit:</div>
+        <div>{user?.credit}</div>
+
+        {/* // TODO */}
+        {/* <li>Membership: {user?.membership.name}</li> */}
+        {/* calculate teh expiredtime left */}
+        {/* <li>Membership expiretdime: {user?.membership.expiredtime} from now</li> */}
 
         <div className="font-bold">Parents' Phone:</div>
         <div>{user?.parentsPhone}</div>
@@ -96,13 +120,30 @@ const StudentPage = () => {
         <button type="button" className="btn btn-secondary" onClick={goBack}>
           Back
         </button>
-        <Link href={`/admin/students/edit-student/${id}`} passHref>
+        <Link
+          href={`/admin/students/manage-student/${studentId}/edit`}
+          passHref
+        >
           <button className="btn btn-primary">Edit</button>
         </Link>
         <button className="btn btn-error" onClick={handleDelete}>
           Delete
         </button>
+        <button
+          className="btn btn-primary"
+          onClick={() => setIsCreditModalOpen(true)}
+        >
+          Add Credit
+        </button>
       </div>
+
+      {/* Render the credit modal */}
+      <CreditModal
+        isOpen={isCreditModalOpen}
+        onClose={() => setIsCreditModalOpen(false)}
+        onAddCredit={handleAddCredit}
+        studentId={studentId}
+      />
     </div>
   )
 }

@@ -55,14 +55,22 @@ const Students = () => {
       />
 
       {filteredUsers.length > 0 ? (
-        filteredUsers.map((user: any) => (
+        filteredUsers.map((user: UserType, index: number) => (
           <Link
             key={user._id}
             href={`/admin/students/manage-student/${user._id}`}
             className="flex flex-row items-center justify-between w-full p-3 rounded-md hover:bg-base-100 min-w-lg"
           >
-            <h3 className="pr-5 text-lg font-bold">{user.name}</h3>
-            <p className="text-success">{user.email}</p>
+            <h3 className="pr-5 text-lg font-bold">
+              {index + 1}
+              {". "} {user.name}
+            </h3>
+            <div className="flex flex-row items-center gap-3">
+              <p className="p-3 rounded-full bg-base-100">
+                {user.member ? user.member.name : "No subscription"}
+              </p>
+              <p className="text-success">{user.email}</p>
+            </div>
           </Link>
         ))
       ) : (

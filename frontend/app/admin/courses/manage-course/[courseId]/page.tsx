@@ -7,6 +7,7 @@ import CourseSections from "@/components/CourseSections"
 import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
+import CourseStudentsPage from "./students/page"
 
 const Course = () => {
   const router = useRouter()
@@ -57,7 +58,7 @@ const Course = () => {
         <div className="flex flex-row flex-wrap gap-5">
           <img
             className="rounded-lg"
-            src={course.courseImg || "https://picsum.photos/350/350"}
+            src={course.courseImg.src || "https://picsum.photos/350/350"}
             alt={course.name}
             width={400}
             height={400}
