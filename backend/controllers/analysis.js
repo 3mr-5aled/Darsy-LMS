@@ -6,7 +6,7 @@ const Order = require('../models/order')
 const Lesson = require('../models/lesson')
 
 const getAnalysis = aynchandler(async (req, res, next) => {
-    const students = await User.find({ role: 'tutor' }).select('-password -city -gender -credit -exams -dateOfBirth -phone -parentsPhone')
+    const students = await User.find({ role: 'student' }).select('-password -city -gender -credit -exams -dateOfBirth -phone -parentsPhone')
     const courses = await Course.find({}).length
     const lessons = await Lesson.find({}).lenght
     const todaySignedInStudents = students.filter(student => student.lastSignedIn?.toDateString() === new Date().toDateString()).length
