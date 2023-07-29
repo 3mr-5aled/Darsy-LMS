@@ -4,7 +4,7 @@ const Member = require("../models/member");
 const addMemberShip = asynchandler(async (req, res , next) => {
      const members = await Member.find({grade:req.body.grade})
      if (members.length >= 3) {
-         return next(new ApiError("Grade full", 1216,404))
+         return next(new ApiError("you can't create more than 3 memberships for one grade", 1216,404))
      }   
      const member = await Member.create(req.body);
      res.status(201).json(member)

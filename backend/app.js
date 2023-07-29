@@ -52,7 +52,6 @@ app.use('/api/v1/user',userRouter)
 app.use('/api/v1/member',memberRouter)
 app.use((req,res,next)=>{res.status(404).json({message:"This api is not found"})})
 app.use(errorhandler)
-
 const start = async () => {
   try {
     port = process.env.PORT || 3000
