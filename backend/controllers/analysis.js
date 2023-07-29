@@ -28,11 +28,11 @@ const getMoneyPerPeriod = aynchandler(async (req, res, next) => {
     const orders = await Order.find({})
     let totalMoney = []
     if (year && month && day) {
-        totalMoney = calculateTotalMoneyPerDay(year, month, day, orders)
+        totalMoney = calculateTotalMoneyPerWeek(year, month, day ,orders)
         return res.status(200).json(totalMoney)
     }
     if (year && month) {
-        totalMoney = calculateTotalMoneyPerWeek(year, month, orders)
+        totalMoney = calculateTotalMoneyPerDay(year, month, orders)
         return res.status(200).json(totalMoney)
     }
     if (year) {
@@ -53,33 +53,31 @@ function calculateTotalMoneyPerMonth(year, orders) {
     return totalMoneyPerMonth;
 }
 
-function calculateTotalMoneyPerWeek(year, month, orders) {
-
-    const firstDayOfMonth = new Date(parseInt(year), parseInt(month), 1);
-    const lastDayOfMonth = new Date(parseInt(year), parseInt(month) + 1, 0);
-    const totalMoneyPerWeek = [];
-    let startDate = new Date(firstDayOfMonth);
-    while (startDate <= lastDayOfMonth) {
-        const endDate = new Date(startDate);
-        endDate.setDate(endDate.getDate() + 7); // End date will be 6 days after start date (end of the week)
-        const totalMoneyForWeek = orders.reduce((total, order) => {
+function calculateTotalMoneyPerDay(year, month, orders) {
+    const firstDayOfMonth = new Date(parseInt(year), parseInt(month) - 1, 2);
+    const lastDayOfMonth = new Date(parseInt(year), parseInt(month) , 1);
+    const totalMoneyPerDay = [];
+    console.log(firstDayOfMonth)
+    console.log(lastDayOfMonth)
+    let currentDate = new Date(firstDayOfMonth);
+    while (currentDate <= lastDayOfMonth) {
+        const totalMoneyForDay = orders.reduce((total, order) => {
             const orderDate = new Date(order.createdAt);
-            if (orderDate >= startDate && orderDate <= endDate) {
+            if (orderDate.toDateString() === currentDate.toDateString()) {
                 return total + parseInt(order.amount);
             }
             return total;
         }, 0);
-        totalMoneyPerWeek.push(totalMoneyForWeek);
-        startDate.setDate(startDate.getDate() + 7); // Move to the next week
+        totalMoneyPerDay.push(totalMoneyForDay);
+        currentDate.setDate(currentDate.getDate() + 1); // Move to the next day
     }
-    return totalMoneyPerWeek;
+
+    return totalMoneyPerDay;
 }
-function calculateTotalMoneyPerDay(year, month, day, orders) {
-    const firstDayOfWeek = new Date(parseInt(year), parseInt(month), parseInt(day));
-    const lastDayOfWeek = new Date(parseInt(year), parseInt(month), parseInt(day) + 6);
+function calculateTotalMoneyPerWeek(year, month, day, orders) {
+    const firstDayOfWeek = new Date(parseInt(year), parseInt(month) - 1, parseInt(day) + 1);
+    const lastDayOfWeek = new Date(parseInt(year), parseInt(month) - 1, parseInt(day) + 7);
     const totalMoneyPerDay = [];
-    console.log(firstDayOfWeek)
-    console.log(lastDayOfWeek)
     let currentDate = new Date(firstDayOfWeek);
     while (currentDate <= lastDayOfWeek) {
         const totalMoneyForDay = orders.reduce((total, order) => {
