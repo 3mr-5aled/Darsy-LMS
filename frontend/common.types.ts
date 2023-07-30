@@ -134,3 +134,16 @@ export type AnalyticsData = {
   studentsWithNoMembership: number
   studentsWithNoEnrolledCourse: number
 }
+
+interface Answer {
+  text: string
+  image: File | null
+}
+
+export interface Question {
+  question: string
+  questionImage: File | null
+  answers: Answer[]
+  correctAnswer: string[] // Array of answer texts
+  isCheckboxQuiz: boolean
+}
