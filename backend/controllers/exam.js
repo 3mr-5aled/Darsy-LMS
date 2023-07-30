@@ -22,8 +22,15 @@ const addExamDegree = aynchandler(async(req,res,next)=>{
     const {exam} = req.body
     let degree = 0
     exam.map(item=>{
-        if(item.selectedAnswer === item.correctAnswer){
-            degree++
+        if(item.isCheckBoxQuiz){
+            const correct = item.selectedAnswer.map(answer => { item.correctAnswer.includes(answer) ? true : false});
+            const trueAnswers = correct.filter(item => item === true)
+            degree += trueAnswers.length/item.correctAnswer.length
+        }
+        else{
+            if(item.selectedAnswer === item.correctAnswer[0]){
+                degree++
+            }
         }
         return degree 
     })
