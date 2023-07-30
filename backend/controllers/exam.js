@@ -19,26 +19,31 @@ const createExam = aynchandler(async(req,res,next)=>{
 
 const addExamDegree = aynchandler(async(req,res,next)=>{
     const {exam} = req.body
+    const {lessonId} = req.params
+    const user = await User.findById(req.user._id)
+    const userExam = user.exams.some(exam => exam.lessonId.toString() === lessonId)
+    console.log(userExam)
+    if(userExam){
+        return next(new ApiError('you already have submitted the exam before',6342, 400 ))
+    }
     let degree = 0
     exam.map(item=>{
         if(item.isCheckBoxQuiz){
-            const correct = item.selectedAnswer.map(answer => { item.correctAnswer.includes(answer) ? true : false});
-            const trueAnswers = correct.filter(item => item === true)
-            degree += trueAnswers.length/item.correctAnswer.length
+            const correct = item.selectedAnswer.map(answer =>  item.correctAnswer.includes(answer) ? true : false)
+            const trueAnswers = correct.filter(item => item === true) 
+            degree = degree + (trueAnswers.length/item.correctAnswer.length)
         }
         else{
-            if(item.selectedAnswer === item.correctAnswer[0]){
+            if(item.selectedAnswer[0] === item.correctAnswer[0]){
                 degree++
             }
         }
         return degree 
     })
-    degree = (degree/exam.length) * 100 
-    const user = await User.findById(req.user._id)
-    user.exams.push({degree,lessonId:req.params.lessonId})
+    degree = Math.round((degree/exam.length) * 100)
+    user.exams.push({degree:degree+"%",lessonId})
     await user.save()
-    await user.populate('exams.lessonId')
-    res.status(200).json(user)
+    res.status(200).json({msg:"the exam was sent successfully"})
 })
 module.exports = {createExam,addExamDegree}
 
