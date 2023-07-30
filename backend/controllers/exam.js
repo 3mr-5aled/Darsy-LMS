@@ -16,16 +16,20 @@ const createExam = aynchandler(async(req,res,next)=>{
     res.status(200).json(lesson.exams)
     //  you will recieve new lesson object
 })
-
+const getExam = aynchandler(async(req,res,next)=>{
+    // @api   get api/v1/exam/:lessonId/get-exam
+    const exam = req.lesson.exams
+    const title = req.lesson.title
+    if(!exam){
+        return next(new ApiError('exam not found',6141, 404 ))
+    }
+    res.status(200).json({exam,title})
+    //  you will recieve new lesson object
+})
 const addExamDegree = aynchandler(async(req,res,next)=>{
     const {exam} = req.body
     const {lessonId} = req.params
     const user = await User.findById(req.user._id)
-    const userExam = user.exams.some(exam => exam.lessonId.toString() === lessonId)
-    console.log(userExam)
-    if(userExam){
-        return next(new ApiError('you already have submitted the exam before',6342, 400 ))
-    }
     let degree = 0
     exam.map(item=>{
         if(item.isCheckBoxQuiz){
@@ -45,6 +49,6 @@ const addExamDegree = aynchandler(async(req,res,next)=>{
     await user.save()
     res.status(200).json({msg:"the exam was sent successfully"})
 })
-module.exports = {createExam,addExamDegree}
+module.exports = {createExam,addExamDegree,getExam}
 
 
