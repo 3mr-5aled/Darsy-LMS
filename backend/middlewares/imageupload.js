@@ -12,20 +12,7 @@ const uploadImage = asynchandler(async (req, res, next) => {
         invalidate: true,
         resource_type: "auto"
     }
-    const {exams} = req.body
-    
-    const exam =  exams.forEach(async (exam) => {
-    exam.answers.forEach(async (answer) => {
-        if (!answer.image) return 
-        const uploadedImage = await cloudinary.uploader.upload(answer.image, opts)
-        answer.imageUrl = uploadedImage.secure_url
-    })
-    if (exam.questionImage) {
-        const uploadedImage = await cloudinary.uploader.upload(questionImage, opts)
-        exam.questionImage = uploadedImage.secure_url
-    } 
-})
-        req.exams = exam
-     next()   
+        const uploadedImage = await cloudinary.uploader.upload(req.body.image, opts)
+        res.status(200).json(uploadedImage)   
     })
 module.exports = uploadImage
