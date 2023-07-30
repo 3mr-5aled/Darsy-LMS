@@ -49,7 +49,7 @@ const Lesson = new mongoose.Schema(
           text:String,
           image:String
         }],
-        correctAnswer: [Number],
+        correctAnswer: [String],
         questionImage:String,
         isCheckBoxQuiz:Boolean
       },
