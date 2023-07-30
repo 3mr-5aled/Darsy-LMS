@@ -70,19 +70,21 @@ const User = new mongoose.Schema({
     exams: [
         {
             lessonId: {
-                type: mongoose.Schema.ObjectId,
+                type: mongoose.Types.ObjectId,
                 ref: 'lessons'
             },
             degree: {
                 type: String
+            },
+            createdAt: {
+            type: Date,
+            default: Date.now()
             }
-        }
-        , { timestamps: true }
-    ],
+        }],
     memberShip: {
-        expiredTime:Date,
-        name:String,
-        memberId:{
+        expiredTime: Date,
+        name: String,
+        memberId: {
             type: mongoose.Schema.ObjectId,
             ref: 'members'
         }
@@ -91,6 +93,6 @@ const User = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    lastSignedIn:Date,
+    lastSignedIn: Date,
 }, { timestamps: true });
 module.exports = mongoose.model('users', User);
