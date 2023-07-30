@@ -186,7 +186,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
   }
 
   return (
-    <div className="bg-base-200 rounded-md">
+    <div className="rounded-md bg-base-200">
       <div className="flex flex-row items-center justify-between p-3 my-3 bg-base-200">
         <h2 className="text-xl font-bold">Sections</h2>
         {isAdmin && (
@@ -306,7 +306,8 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                     >
                       Add Lesson
                     </button>
-                    {/* <dialog id={`modal_${index}`} className="modal z-0">
+
+                    {/* <dialog id={`modal_${index}`} className="z-0 modal">
                       <form method="dialog" className="modal-box">
                         <button
                           title="close"
@@ -338,7 +339,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                   >
                     <div
                       onClick={() => router.push(`/learn/lesson/${lesson._id}`)}
-                      className="cursor-pointer flex flex-row gap-x-3 items-center"
+                      className="flex flex-row items-center cursor-pointer gap-x-3"
                     >
                       {index + 1}. {lesson.title}
                       {!isAdmin && renderDoneIcon(lesson._id)}
@@ -346,7 +347,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
 
                     {isAdmin && (
                       <>
-                        <div className="flex flex-row gap-4">
+                        <div className="flex flex-row items-center gap-4 text-xl">
                           <div
                             className="tooltip tooltip-left"
                             data-tip="View Lesson"
@@ -393,6 +394,17 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                               <BsTrashFill />
                             </button>
                           </div>
+                          <button
+                            title="add quiz"
+                            className="btn btn-primary btn-outline"
+                            onClick={() =>
+                              router.push(
+                                `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/${lesson._id}/create-quiz`
+                              )
+                            }
+                          >
+                            Add Quiz
+                          </button>
                         </div>
                         <dialog id={`view_modal_${index}`} className="modal">
                           <form method="dialog" className="modal-box">
