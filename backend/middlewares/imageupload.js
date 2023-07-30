@@ -13,6 +13,7 @@ const uploadImage = asynchandler(async (req, res, next) => {
         resource_type: "auto"
     }
         const uploadedImage = await cloudinary.uploader.upload(req.body.image, opts)
+        
         res.status(200).json(uploadedImage)   
-    })
+})
 module.exports = uploadImage

@@ -7,14 +7,13 @@ const createExam = aynchandler(async(req,res,next)=>{
     // @api   post api/v1/exam/:lessonId/add-exam
     // you will send lessonId in params and exam object of array in body
     const lesson = await Lesson.findById(req.params.lessonId)
-    console.log(req.exams);
     if(!lesson){
         return next(new ApiError('lesson not found',6341, 404 ))
     }
     const {body} =req
     lesson.exams=[...body]
     await lesson.save()
-    res.status(200).json(req.exams)
+    res.status(200).json(lesson.exams)
     //  you will recieve new lesson object
 })
 
