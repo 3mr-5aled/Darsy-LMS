@@ -44,17 +44,14 @@ const Lesson = new mongoose.Schema(
     },
     exams: [
       {
-        question: {
-          type: String,
-        },
-        answers: [
-          {
-            type: String,
-          },
-        ],
-        correctAnswer: {
-          type: String,
-        },
+        question: String,
+        answers: [{
+          text:String,
+          image:String
+        }],
+        correctAnswer: [Number],
+        questionImage:String,
+        isCheckBoxQuiz:Boolean
       },
       { timestamps: true },
     ],
