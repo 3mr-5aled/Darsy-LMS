@@ -240,7 +240,7 @@ const CreateQuizPage = ({
         console.log(response.data)
         // Exam successfully created
         toast.success("Quiz successfully created!")
-        router.push(`admin/courses/manage-course/${courseId}`)
+        router.push(`/admin/courses/manage-course/${courseId}`)
 
         // You can also redirect the user to a different page after successful submission if needed.
       } else {
