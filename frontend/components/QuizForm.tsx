@@ -1,23 +1,33 @@
+import { Question } from "@/common.types"
+import { useEffect, useState } from "react"
 import axiosInstance from "@/axios.config"
-import { useParams } from "next/navigation"
-import { useState } from "react"
+import {
+  BsArrowLeftCircleFill,
+  BsCheckSquareFill,
+  BsCircleFill,
+  BsImage,
+  BsXCircleFill,
+} from "react-icons/bs"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { useRouter } from "next/navigation"
 
-interface Answer {
-  text: string
-  image: File | null
-}
+const CreateQuizPage = ({
+  courseId,
+  sectionId,
+  lessonId,
+  exam,
+  type,
+}: {
+  courseId: string
+  sectionId: string
+  lessonId: string
+  exam?: Question[]
+  type: "create" | "edit"
+}) => {
+  const router = useRouter()
+  const [imageData, setImageData] = useState<string | null>(null)
 
-interface Question {
-  question: string
-  questionImage: File | null
-  answers: Answer[]
-  correctAnswer: string[] // Array of answer texts
-  isCheckboxQuiz: boolean
-}
-
-const CreateQuizPage = ({ lessonId }: { lessonId: string }) => {
   const [questions, setQuestions] = useState<Question[]>([
     {
       question: "",
@@ -30,6 +40,32 @@ const CreateQuizPage = ({ lessonId }: { lessonId: string }) => {
       isCheckboxQuiz: false,
     },
   ])
+
+  const getImageURL = (image: File | string | null) => {
+    if (!image) return null
+    return typeof image === "string" ? image : URL.createObjectURL(image)
+  }
+
+  useEffect(() => {
+    if (exam) {
+      // Deep clone the exam data to avoid modifying the original data
+      setQuestions(exam)
+    } else {
+      // If no exam data is provided, initialize the state with a default question
+      setQuestions([
+        {
+          question: "",
+          questionImage: null,
+          answers: [
+            { text: "", image: null },
+            { text: "", image: null },
+          ],
+          correctAnswer: [],
+          isCheckboxQuiz: false,
+        },
+      ])
+    }
+  }, [exam])
 
   const addQuestion = () => {
     if (questions.length < 30) {
@@ -166,18 +202,18 @@ const CreateQuizPage = ({ lessonId }: { lessonId: string }) => {
     }
 
     try {
-      // Convert images to base64
+      // Convert images to base64 and upload
       const exams = await Promise.all(
         questions.map(async (q) => ({
           ...q,
           questionImage: q.questionImage
-            ? await getBase64FromImageFile(q.questionImage)
+            ? await uploadImageAndGetURL(q.questionImage)
             : null,
           answers: await Promise.all(
             q.answers.map(async (answer) => ({
               ...answer,
               image: answer.image
-                ? await getBase64FromImageFile(answer.image)
+                ? await uploadImageAndGetURL(answer.image)
                 : null,
             }))
           ),
@@ -193,10 +229,6 @@ const CreateQuizPage = ({ lessonId }: { lessonId: string }) => {
         return
       }
 
-      // Save exams to exam array
-
-      console.log(exams)
-
       // Make the PUT request to the API endpoint using axiosInstance.put()
       const response = await axiosInstance.put(
         `/exam/${lessonId}/add-exam`,
@@ -205,28 +237,37 @@ const CreateQuizPage = ({ lessonId }: { lessonId: string }) => {
 
       // Handle the response from the API
       if (response.status === 200) {
+        console.log(response.data)
         // Exam successfully created
         toast.success("Quiz successfully created!")
-        // Clear the questions and reset the form after successful submission
-        setQuestions([
-          {
-            question: "",
-            questionImage: null,
-            answers: [
-              { text: "", image: null },
-              { text: "", image: null },
-            ],
-            correctAnswer: [],
-            isCheckboxQuiz: false,
-          },
-        ])
+        router.push(`admin/courses/manage-course/${courseId}`)
+
         // You can also redirect the user to a different page after successful submission if needed.
       } else {
-        // Handle other response status codes or error scenarios from the API
         toast.error("Error submitting the quiz. Please try again.")
       }
     } catch (error: any) {
       toast.error("Error submitting the quiz. Please try again.")
+      console.error(error)
+    }
+  }
+
+  const uploadImageAndGetURL = async (
+    image: File
+  ): Promise<string | null | undefined> => {
+    try {
+      const base64Image = await getBase64FromImageFile(image)
+      const response = await axiosInstance.post("/upload/image", {
+        image: base64Image,
+      })
+
+      if (response.status === 200 && response.data.url) {
+        return response.data.url
+      } else {
+        toast.error("Error uploading image. Please try again.")
+      }
+    } catch (error) {
+      toast.error("Error uploading image. Please try again.")
       console.error(error)
     }
   }
@@ -247,38 +288,64 @@ const CreateQuizPage = ({ lessonId }: { lessonId: string }) => {
 
   return (
     <div className="container p-4 mx-auto">
-      <h1 className="mb-4 text-2xl font-semibold">Create Quiz</h1>
+      <button
+        className="bg-base-100 rounded-full p-3 my-3 hover:text-primary"
+        onClick={() => router.back()}
+      >
+        <BsArrowLeftCircleFill />
+      </button>
+      <h1 className="mb-4 text-2xl font-semibold">
+        {type === "create" ? "Create Quiz" : "Edit Quiz"}
+      </h1>
       {questions.map((q, questionIndex) => (
         <div key={questionIndex} className="mb-6">
           <label className="block mb-2 font-semibold">
             Question {questionIndex + 1}:
           </label>
-          <input
-            type="text"
-            className="w-full p-2 border rounded input input-bordered"
-            value={q.question}
-            onChange={(e) =>
-              handleQuestionChange(questionIndex, e.target.value)
-            }
-          />
+          <div className="flex flex-row gap-3 items-center">
+            <input
+              title="question title"
+              type="text"
+              className="w-full p-2 border rounded input input-bordered"
+              value={q.question}
+              onChange={(e) =>
+                handleQuestionChange(questionIndex, e.target.value)
+              }
+            />
+
+            <div className="w-fit h-fit z-30 hover:bg-base-100 bg-base-200 shadow rounded-full relative cursor-pointer">
+              <input
+                title="image"
+                type="file"
+                accept="image/*"
+                className="z-30 w-full h-full cursor-pointer absolute opacity-0"
+                onChange={(e) =>
+                  handleQuestionImageChange(questionIndex, e.target.files[0])
+                }
+              />
+              <div className="w-fit h-fit z-10 rounded-full cursor-pointer p-3 ">
+                <BsImage />
+              </div>
+            </div>
+          </div>
           {q.questionImage && (
             <img
-              src={URL.createObjectURL(q.questionImage)}
               alt={`Question ${questionIndex + 1} Image`}
+              src={getImageURL(q.questionImage)}
               className="max-w-md mt-2"
             />
           )}
-          <input
-            type="file"
-            accept="image/*"
-            className="file-input file-input-bordered"
-            onChange={(e) =>
-              handleQuestionImageChange(questionIndex, e.target.files[0])
-            }
-          />
-          <div className="mb-4">
+
+          <div className="divider"></div>
+          <div className="mt-3 mb-4">
             <label className="font-semibold">Select Quiz Type:</label>
+            {q.isCheckboxQuiz ? (
+              <BsCheckSquareFill className="mx-3 mr-2 inline-block align-text-bottom" />
+            ) : (
+              <BsCircleFill className="mx-3 mr-2 inline-block align-text-bottom" />
+            )}
             <select
+              title="question type"
               className="px-8 py-2 ml-2 border rounded w-max select select-bordered"
               value={q.isCheckboxQuiz ? "checkbox" : "multiple-choice"}
               onChange={(e) =>
@@ -292,68 +359,86 @@ const CreateQuizPage = ({ lessonId }: { lessonId: string }) => {
               <option value="checkbox">Checkbox</option>
             </select>
           </div>
-          {q.answers.map((answer, answerIndex) => (
-            <div key={answerIndex}>
-              {q.isCheckboxQuiz ? (
+          <div className="flex flex-col gap-3">
+            {q.answers.map((answer, answerIndex) => (
+              <div
+                key={answerIndex}
+                className="flex flex-row gap-3 items-center"
+              >
+                {q.isCheckboxQuiz ? (
+                  <input
+                    title="Correct answer"
+                    type="checkbox"
+                    className="checkbox"
+                    checked={q.correctAnswer.includes(answer.text)}
+                    onChange={() =>
+                      handleCorrectAnswerChange(questionIndex, answerIndex)
+                    }
+                  />
+                ) : (
+                  <input
+                    title="Correct answer"
+                    type="radio"
+                    className="radio"
+                    name={`correctAnswer-${questionIndex}`}
+                    value={answerIndex}
+                    checked={q.correctAnswer[0] === answer.text}
+                    onChange={() =>
+                      handleCorrectAnswerChange(questionIndex, answerIndex)
+                    }
+                  />
+                )}
                 <input
-                  type="checkbox"
-                  className="checkbox"
-                  checked={q.correctAnswer.includes(answer.text)}
-                  onChange={() =>
-                    handleCorrectAnswerChange(questionIndex, answerIndex)
+                  title="answer"
+                  type="text"
+                  className="p-2 border rounded input input-bordered"
+                  value={answer.text}
+                  onChange={(e) =>
+                    handleAnswerChange(
+                      questionIndex,
+                      answerIndex,
+                      e.target.value
+                    )
                   }
                 />
-              ) : (
-                <input
-                  type="radio"
-                  className="radio"
-                  name={`correctAnswer-${questionIndex}`}
-                  value={answerIndex}
-                  checked={q.correctAnswer[0] === answer.text}
-                  onChange={() =>
-                    handleCorrectAnswerChange(questionIndex, answerIndex)
-                  }
-                />
-              )}
-              <input
-                type="text"
-                className="p-2 border rounded input input-bordered"
-                value={answer.text}
-                onChange={(e) =>
-                  handleAnswerChange(questionIndex, answerIndex, e.target.value)
-                }
-              />
-              {answer.image && (
-                <img
-                  src={URL.createObjectURL(answer.image)}
-                  alt={`Question ${questionIndex + 1} Answer ${
-                    answerIndex + 1
-                  } Image`}
-                  className="max-w-md mt-2"
-                />
-              )}
-              <input
-                type="file"
-                accept="image/*"
-                className="file-input file-input-bordered"
-                onChange={(e) =>
-                  handleAnswerImageChange(
-                    questionIndex,
-                    answerIndex,
-                    e.target.files[0]
-                  )
-                }
-              />
-              {q.answers.length > 2 && (
-                <button
-                  className="mt-2 btn btn-danger"
-                  onClick={() => removeAnswer(questionIndex, answerIndex)}
-                >
-                  Remove Answer
-                </button>
-              )}
-            </div>
-          ))}
+                {q.answers.length > 2 && (
+                  <button
+                    className="hover:text-error"
+                    onClick={() => removeAnswer(questionIndex, answerIndex)}
+                  >
+                    <BsXCircleFill size={20} />
+                  </button>
+                )}
+                <div className="w-fit h-fit z-30 hover:bg-base-100 bg-base-200 shadow rounded-full relative cursor-pointer">
+                  <input
+                    title="image"
+                    type="file"
+                    accept="image/*"
+                    className="z-30 w-full h-full cursor-pointer absolute opacity-0"
+                    onChange={(e) =>
+                      handleAnswerImageChange(
+                        questionIndex,
+                        answerIndex,
+                        e.target.files[0]
+                      )
+                    }
+                  />
+                  <div className="w-fit h-fit z-10 rounded-full cursor-pointer p-3 ">
+                    <BsImage />
+                  </div>
+                </div>
+                {answer.image && (
+                  <img
+                    src={getImageURL(answer.image)}
+                    alt={`Question ${questionIndex + 1} Answer ${
+                      answerIndex + 1
+                    } Image`}
+                    className="max-w-xs mt-2"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
           <button
             className="mt-2 mr-2 btn btn-secondary"
             onClick={() => addAnswer(questionIndex)}
@@ -363,7 +448,7 @@ const CreateQuizPage = ({ lessonId }: { lessonId: string }) => {
           </button>
           {questions.length > 1 && (
             <button
-              className="mt-2 btn btn-danger"
+              className="mt-2 btn hover:text-error"
               onClick={() => removeQuestion(questionIndex)}
             >
               Remove Question
@@ -371,16 +456,18 @@ const CreateQuizPage = ({ lessonId }: { lessonId: string }) => {
           )}
         </div>
       ))}
-      <button
-        className="btn"
-        onClick={addQuestion}
-        disabled={questions.length >= 30}
-      >
-        Add Question
-      </button>
-      <button className="mt-4 btn btn-primary" onClick={handleSubmit}>
-        Save Quiz
-      </button>
+      <div className="flex flex-row items-center gap-3">
+        <button
+          className="btn"
+          onClick={addQuestion}
+          disabled={questions.length >= 30}
+        >
+          Add Question
+        </button>
+        <button className="btn btn-primary" onClick={handleSubmit}>
+          Save Quiz
+        </button>
+      </div>
     </div>
   )
 }

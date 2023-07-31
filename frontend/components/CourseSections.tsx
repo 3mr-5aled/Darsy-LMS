@@ -15,6 +15,7 @@ import {
 } from "react-icons/bs"
 import { useUserContext } from "@/contexts/userContext"
 import LessonView from "./LessonView"
+import Link from "next/link"
 
 type Section = {
   _id: string
@@ -333,113 +334,113 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                 <p>No Lessons available</p>
               ) : (
                 lessons.map((lesson, index) => (
-                  <div
-                    className="flex flex-row items-center justify-between p-3 my-3 rounded-md bg-base-200 text-start"
-                    key={lesson._id}
-                  >
+                  <>
                     <div
-                      onClick={() => router.push(`/learn/lesson/${lesson._id}`)}
-                      className="flex flex-row items-center cursor-pointer gap-x-3"
+                      className="flex flex-row items-center justify-between p-3 my-3 rounded-md bg-base-200 text-start"
+                      key={lesson._id}
                     >
-                      {index + 1}. {lesson.title}
-                      {!isAdmin && renderDoneIcon(lesson._id)}
-                    </div>
+                      <div
+                        onClick={() =>
+                          router.push(`/learn/lesson/${lesson._id}`)
+                        }
+                        className="flex flex-row items-center cursor-pointer gap-x-3"
+                      >
+                        {index + 1}. {lesson.title}
+                        {!isAdmin && renderDoneIcon(lesson._id)}
+                      </div>
 
-                    {isAdmin && (
-                      <>
-                        <div className="flex flex-row items-center gap-4 text-xl">
-                          <div
-                            className="tooltip tooltip-left"
-                            data-tip="View Lesson"
-                          >
-                            <button
-                              title="View"
-                              type="button"
-                              className="cursor-pointer text-warning"
-                              onClick={() => showLessonViewModal(index)}
+                      {isAdmin && (
+                        <>
+                          <div className="flex flex-row items-center gap-4 text-xl">
+                            <div
+                              className="tooltip tooltip-left"
+                              data-tip="View Lesson"
                             >
-                              <BsEye />
-                            </button>
+                              <button
+                                title="View"
+                                type="button"
+                                className="cursor-pointer text-warning"
+                                onClick={() => showLessonViewModal(index)}
+                              >
+                                <BsEye />
+                              </button>
+                            </div>
+                            <div
+                              className="tooltip tooltip-left"
+                              data-tip="Edit Lesson"
+                            >
+                              <button
+                                title="edit"
+                                type="button"
+                                className="cursor-pointer text-warning"
+                                onClick={() =>
+                                  router.push(
+                                    `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/${lesson._id}/edit-lesson`
+                                  )
+                                }
+                              >
+                                <BsPencilFill />
+                              </button>
+                            </div>
+                            <div
+                              className="tooltip tooltip-left"
+                              data-tip="Delete Lesson"
+                            >
+                              <button
+                                title="delete"
+                                type="button"
+                                className="cursor-pointer text-error "
+                                onClick={() =>
+                                  deleteLesson(lesson._id, section._id)
+                                }
+                              >
+                                <BsTrashFill />
+                              </button>
+                            </div>
                           </div>
-                          <div
-                            className="tooltip tooltip-left"
-                            data-tip="Edit Lesson"
-                          >
-                            <button
-                              title="edit"
-                              type="button"
-                              className="cursor-pointer text-warning"
-                              // onClick={() => showLessonEditModal(index)}
-                              onClick={() =>
-                                router.push(
-                                  `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/${lesson._id}/edit-lesson`
-                                )
-                              }
-                            >
-                              <BsPencilFill />
-                            </button>
-                          </div>
-                          <div
-                            className="tooltip tooltip-left"
-                            data-tip="Delete Lesson"
-                          >
-                            <button
-                              title="delete"
-                              type="button"
-                              className="cursor-pointer text-error "
-                              onClick={() =>
-                                deleteLesson(lesson._id, section._id)
-                              }
-                            >
-                              <BsTrashFill />
-                            </button>
-                          </div>
-                          <button
-                            title="add quiz"
-                            className="btn btn-primary btn-outline"
-                            onClick={() =>
-                              router.push(
-                                `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/${lesson._id}/create-quiz`
-                              )
-                            }
-                          >
-                            Add Quiz
-                          </button>
-                        </div>
-                        <dialog id={`view_modal_${index}`} className="modal">
-                          <form method="dialog" className="modal-box">
-                            <button
-                              title="close"
-                              className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2"
-                              onClick={closeLessonViewModal}
-                            >
-                              ✕
-                            </button>
-                            <LessonView lesson={lesson} />
-                          </form>
-                        </dialog>
-                        {/* <dialog id={`edit_modal_${index}`} className="modal">
-                          <form method="dialog" className="modal-box">
-                            <button
-                              title="close"
-                              className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2"
-                              onClick={closeLessonEditModal}
-                            >
-                              ✕
-                            </button>
-                            <LessonForm
-                              PageTitle="Edit Lesson"
-                              sectionId={section._id}
-                              courseId={courseId}
-                              lesson={lesson}
-                              type="edit"
-                              onClose={closeLessonEditModal}
-                            />
-                          </form>
-                        </dialog> */}
-                      </>
-                    )}
-                  </div>
+                          <dialog id={`view_modal_${index}`} className="modal">
+                            <form method="dialog" className="modal-box">
+                              <button
+                                title="close"
+                                className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2"
+                                onClick={closeLessonViewModal}
+                              >
+                                ✕
+                              </button>
+                              <LessonView lesson={lesson} />
+                            </form>
+                          </dialog>
+                        </>
+                      )}
+                    </div>
+                    <div>
+                      {lesson.exams?.length > 0 ? (
+                        <button
+                          title="edit quiz"
+                          className="btn btn-primary btn-outline"
+                          onClick={() =>
+                            router.push(
+                              `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/${lesson._id}/edit-quiz`
+                            )
+                          }
+                        >
+                          Edit Quiz
+                        </button>
+                      ) : (
+                        <button
+                          title="add quiz"
+                          className="btn btn-secondary"
+                          onClick={() =>
+                            router.push(
+                              `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/${lesson._id}/create-quiz`
+                            )
+                          }
+                        >
+                          Add Quiz
+                        </button>
+                      )}
+                    </div>
+                  </>
                 ))
               )}
             </div>
