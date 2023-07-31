@@ -131,13 +131,10 @@ const addMemberShip = aynchandler(async (req, res, next) => {
     member.userId.push(user._id)
     await member.save()
     const courses = await Course.find({ grade: member.grade })
+    console.log(courses.length)
     const userCourses = courses.map(course => {
-        const enrolledCourse = user.enrolledCourse.filter(userCourse => {
-            console.log( userCourse.courseId , course._id.toString())
-            return userCourse.courseId.toString() === course._id.toString()
-        });
+        const enrolledCourse = user.enrolledCourse.filter(userCourse =>  userCourse.courseId.toString() === course._id.toString());
         if (enrolledCourse.length > 0) {
-            console.log('inn')
             return {
                 courseId: course._id,
                 lessonsDone: [],
@@ -146,7 +143,6 @@ const addMemberShip = aynchandler(async (req, res, next) => {
                 lessonTotal: course.total,
             };
         } else {
-            console.log('innnnnn')
             return {
                 courseId: course._id,
                 lessonsDone: [],
@@ -157,14 +153,14 @@ const addMemberShip = aynchandler(async (req, res, next) => {
                 memberExpiredTime: Date.now() + member.expiredTime * 24 * 60 * 60 * 1000
             };
         }
+
     });
-    user.enrolledCourse.push(...userCourses)
+    user.enrolledCourse = userCourses
     user.credit = totalPrice
     user.memberShip.name = member.name
     user.memberShip.memberId = member._id
     user.memberShip.expiredTime = Date.now() + (member.expiredTime * 24 * 60 * 60 * 1000)
     await user.save()
-    console.log(user.enrolledCourse.length)
     res.status(200).send({ user, order })
 })
 module.exports = { getAllUsers, addMemberShip, updateUser, getUser, deleteUser, addCourseToUser, removeUserFromCourse, editCredit }
