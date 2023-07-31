@@ -113,9 +113,12 @@ body {
 
 .pencil {
   width: 150px;
-  background: #ffc334;
+  background: hsl(var(--sf));
+  border-top: 10px solid hsl(var(--s));
+  border-bottom: 10px solid hsl(var(--s));
+  /* background: #ffc334;
   border-top: 10px solid #ffd268;
-  border-bottom: 10px solid #e3af38;
+  border-bottom: 10px solid #e3af38; */
   overflow: hidden;
   -webkit-transform-origin: top;
   -ms-transform-origin: top;
@@ -130,7 +133,8 @@ body {
   line-height: 15px;
   text-transform: uppercase;
   font-weight: bold;
-  color: #d09200;
+  /* color: #d09200; */
+  color: black;
 }
 
 .pencil:before {
