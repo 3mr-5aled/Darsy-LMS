@@ -3,18 +3,20 @@ const mongoose = require('mongoose');
 const Order =new mongoose.Schema({
     userId:{
         type:mongoose.Schema.Types.ObjectId,
+        ref:"users",
         required:true
     },
     adminId:{
         type:mongoose.Schema.Types.ObjectId,
-
+        ref:"users"
     },
     amount:{
         type:String,
         required:true
     },
     courseId:{
-        type:mongoose.Schema.Types.ObjectId,        
+        type:mongoose.Schema.Types.ObjectId,   
+        ref:"courses"
     },
     tran_ref:{
         type:String,
