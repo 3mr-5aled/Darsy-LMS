@@ -67,7 +67,7 @@ const getLesson = asynchandler(async (req, res, next) => {
   const totalLessons = lesson.courseId.total
   const sections = await Section.find({ courseId: lesson.courseId._id, total: { $gt: 0 } }).populate({
     path: "lessons",
-    select: "title", // Include only the 'title' property from the lessons object
+    select: "title exams", // Include only the 'title' property from the lessons object
   }).select("title duration total")
   res.status(200).json({ lesson: { title, duration, material, video, _id, exams, description }, sections, sectionTitle, sectionDuration, courseTitle, course: courseId, totalLessons });
 });
