@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import "swiper/swiper-bundle.css" // Import Swiper CSS
+import "swiper/css" // Import Swiper CSS
 import Swiper from "swiper" // Import Swiper library
 import { testimonialsData } from "@/constant"
 
