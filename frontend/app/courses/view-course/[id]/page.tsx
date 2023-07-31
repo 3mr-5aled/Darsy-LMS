@@ -145,6 +145,16 @@ const Course = () => {
     }
   }
 
+  const isMembershipValid = () => {
+    if (!user?.membership?.expireTime) {
+      return true // If there is no expireTime, consider the membership as valid
+    }
+
+    const currentTime = new Date()
+    const expireTime = new Date(user.membership.expireTime)
+    return currentTime.getTime() < expireTime.getTime()
+  }
+
   return (
     <div className="flex flex-col p-5 m-5 bg-base-300 card">
       <div className="flex flex-row flex-wrap w-full gap-5 my-5 md:flex-nowrap">
@@ -207,7 +217,7 @@ const Course = () => {
             </button>
           ) : (
             <>
-              {course.price === 0 ? (
+              {course.price === 0 || isMembershipValid() ? (
                 <button
                   className="my-5 btn btn-primary w-fit"
                   onClick={handleEnrollCourse}

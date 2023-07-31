@@ -121,8 +121,10 @@ const CreateQuizPage = ({
 
   const handleQuestionImageChange = (questionIndex: number, file: File) => {
     const exams = [...questions]
-    exams[questionIndex].questionImage = file
-    setQuestions(exams)
+    if (file) {
+      exams[questionIndex].questionImage = file
+      setQuestions(exams)
+    }
   }
 
   const handleAnswerChange = (
@@ -141,10 +143,11 @@ const CreateQuizPage = ({
     file: File
   ) => {
     const exams = [...questions]
-    exams[questionIndex].answers[answerIndex].image = file
-    setQuestions(exams)
+    if (file) {
+      exams[questionIndex].answers[answerIndex].image = file
+      setQuestions(exams)
+    }
   }
-
   const handleQuestionTypeChange = (
     questionIndex: number,
     isCheckbox: boolean
@@ -289,6 +292,7 @@ const CreateQuizPage = ({
   return (
     <div className="container p-4 mx-auto">
       <button
+        title="back button"
         className="bg-base-100 rounded-full p-3 my-3 hover:text-primary"
         onClick={() => router.back()}
       >
@@ -403,6 +407,7 @@ const CreateQuizPage = ({
                 />
                 {q.answers.length > 2 && (
                   <button
+                    title="remove answer"
                     className="hover:text-error"
                     onClick={() => removeAnswer(questionIndex, answerIndex)}
                   >
