@@ -79,7 +79,7 @@ const deleteUser = aynchandler(async(req,res,next)=>{
     res.status(200).json({user})
 })
 const getUser = aynchandler(async(req,res,next)=>{
-    // @api   put api/v1/user/get-user/:userId
+    // @api   get api/v1/user/get-user/:userId
     // send userId as params
     const {userId} = req.params
     const user  = await User.findById(userId).select('-password -forgetpasswordcode -forgetpasswordexpired -forgetpasswordvalidation -email').populate({
@@ -91,8 +91,8 @@ const getUser = aynchandler(async(req,res,next)=>{
     }
     const {gender, role , name , grade , phone , parentsPhone , dateOfBirth , city} = user
     const userDetails = {gender, role , name , grade , phone , parentsPhone , dateOfBirth , city}
-    const userDegrees = user.exams.map(exam => ({degree:exam.degree,lessonTitle:exam.lessonId.title,examDate:exam.createdAt}) )
-    const userCourses = user.enrolledCourse.map(course => ({name:course.name,progress:Math.ceil(course.lessonsDone.length/course.lessonTotal)+"%"}))
+    const userDegrees = user.exams.map(exam => ({degree:exam.degree,lessonTitle:exam.lessonId.title,examDate:exam.createdAt,lessonId:exam.lessonId._id}) )
+    const userCourses = user.enrolledCourse.map(course => ({name:course.name,courseId:course.courseId,courseImg:course.courseImg,progress:Math.ceil(course.lessonsDone.length/course.lessonTotal)+"%"}))
     const userMembership = user.memberShip.memberId && user.memberShip.expiredTime > Date.now() ? {...user.memberShip} : "user has no membership"
     res.status(200).json({userDetails:{...userDetails},userDegrees,userCourses,lastSignedIn:user.lastSignedIn,userMembership,credit:user.credit})
 })
