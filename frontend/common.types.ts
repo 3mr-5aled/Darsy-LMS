@@ -7,7 +7,7 @@ export type EnrolledCourse = {
   _id: string
 }
 
-export type UserType = {
+export interface UserType {
   _id: string
   name: string
   email: string
@@ -18,23 +18,35 @@ export type UserType = {
   role: string
   gender: string
   grade: string
-  enrolledCourse: EnrolledCourse[]
+  enrolledCourse: {
+    courseId: string
+    lessonsDone: string[]
+    name: string
+    lessonTotal: number
+    courseImg: string
+    _id: string
+  }[]
   createdAt: string
   updatedAt: string
   __v: number
-  exams: any[] // You can replace 'any[]' with a more specific type if you know the structure of the 'exams' property.
+  exams: {
+    lessonId: string
+    degree: string
+    createdAt: string
+    _id: string
+  }[]
   lastLesson: string
   nextLesson: string
   credit: number
-  isMemberShip:
-    | {
-        _id: string
-        name: string
-      }
-    | false
+  membership: {
+    expireTime: Date
+    name: string
+    memberId: string
+  }
   forgetpasswordcode: string
   forgetpasswordexpired: string
   forgetpasswordvalidation: boolean
+  lastSignedIn?: string
 }
 
 export interface UserState {
@@ -70,15 +82,14 @@ export type CourseType = {
   total?: number
   sections?: Section[]
 }
-export type CoursesType = {
-  courses: CourseType[]
-}
 
 export type SectionType = {
   _id?: string
   title: string
   duration: string
   courseId?: string
+  lessons: LessonType[]
+  total: number
 }
 
 export type Material = {
@@ -87,7 +98,7 @@ export type Material = {
 }
 
 export interface LessonType {
-  _id?: string
+  _id: string
   title: string
   video?: {
     publicId: string
@@ -100,10 +111,12 @@ export interface LessonType {
   youtubelink: string
   duration: string
   description: string
-  material?: {
-    name: string
-    link: string
-  }
+  material?:
+    | {
+        name: string
+        link: string
+      }
+    | undefined
   courseId?: string
   sectionId?: string
   exams?: {
@@ -146,4 +159,14 @@ export interface Question {
   answers: Answer[]
   correctAnswer: string[] // Array of answer texts
   isCheckboxQuiz: boolean
+}
+
+export type ApiResponseType = {
+  lesson: LessonType
+  sections: SectionType[]
+  sectionTitle: string
+  sectionDuration: string
+  courseTitle: string
+  course: CourseType
+  totalLessons: number
 }

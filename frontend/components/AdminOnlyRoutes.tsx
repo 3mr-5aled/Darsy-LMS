@@ -5,13 +5,12 @@ import useUser from "@/lib/FetchUser"
 
 const AdminOnlyRoute = ({ children }: { children: React.ReactNode }) => {
   const [user, isLoading] = useUser()
-  // TODO - add admin check
-  // if (user?.role === "tutor") {
-  //   return children
-  // }
-  // if (user?.role === "tutor") {
-  return children
-  // }
+  if (user?.role === "tutor") {
+    return children
+  }
+  if (user?.role === "tutor") {
+    return children
+  }
   return (
     <section style={{ height: "80vh" }} className="flexCenter">
       <div className="p-5 bg-base-300 card prose">
