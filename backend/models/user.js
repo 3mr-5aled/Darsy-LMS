@@ -66,6 +66,11 @@ const User = new mongoose.Schema({
         name: String,
         lessonTotal: Number,
         courseImg: String,
+        memberId:{
+            type: mongoose.Schema.ObjectId,
+            ref: 'members'
+        },
+        memberExpiredTime: Date,
     }, { timestamps: true }],
     exams: [
         {

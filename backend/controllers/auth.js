@@ -4,8 +4,8 @@ const bcrypt = require("bcryptjs");
 const asynchandler = require("express-async-handler");
 const sendemail = require("../utils/sendemail");
 const ApiError = require("../utils/apierror");
+const deleteCourseFromUser = require("./delete course from user");
 require("dotenv").config();
-
 const login = asynchandler(async (req, res, next) => {
   // @api   Post /auth/login
   // get email and password from request body
@@ -17,11 +17,12 @@ const login = asynchandler(async (req, res, next) => {
   if (!user) {
     return next(new ApiError("no user is found",1341, 404));
   }
+  const userCourses = await deleteCourseFromUser(user.enrolledCourse)
+  user.enrolledCourse = userCourses
   user.lastSignedIn = new Date()
   await user.save()
   // compare password (comes from body ) and password (come from database)
   const isvalid = await bcrypt.compare(userpassword, user.password);
-
   // if password is invalid ,server send response ("password is invalid")
   if (!isvalid) {
     return next(new ApiError("password is invalid",8092, 400));
@@ -75,6 +76,8 @@ const profile = asynchandler(async (req, res,next) => {
       return next(new ApiError('no user is found',1341,400))
     }
     userFromDB.lastSignedIn = new Date()
+    const userCourses = await deleteCourseFromUser(userFromDB.enrolledCourse)
+    userFromDB.enrolledCourse = userCourses
     await userFromDB.save()
     return res.status(200).json(userFromDB)
   });

@@ -46,13 +46,14 @@ const addCourseToUser = aynchandler(async(req,res,next)=>{
         user.enrolledCourse.map(courses => courses.courseId.toString() === courseId.toString() ? {...courses,lessonTotal:course.total} : courses )
         await user.save()
         const order = await Order.create({userId,courseId,status:'paid',amount,adminId:admin._id})
-        console.log(new Date(expiredDate));
-        return res.status(200).json({user,order})
+        return res.status(200).json({order,msg:"user already bougth this coursse"})
     }
+    if (!course) {
+        return next(new ApiError('course not found',1341,404))
+    } 
     user.enrolledCourse.push({courseId,lessonsDone:[],name:course.name,courseImg:course.courseImg,lessonTotal:course.total})
     await user.save()
-    const order = await Order.create({userId,courseId,status:'paid',amount,adminId:admin._id})
-    console.log(new Date(expiredDate));
+    const order = await Order.create({userId,courseId,status:'paid',amount,adminId:admin._id,type:'enroll'})
     res.status(200).json({user,order})
 })
 const removeUserFromCourse = aynchandler(async(req,res,next)=>{
@@ -113,6 +114,9 @@ const addMemberShip = aynchandler(async (req, res, next) => {
     const {memberId} = req.params
     const user = await User.findById(req.user._id)
     const member = await Member.findById(memberId)
+    if (!member) {
+        return next(new ApiError("member not found",8532,400))
+    }
     if (member.grade !== user.grade) {
         return next(new ApiError("you can't buy this membership",8532,400))
     }
@@ -127,11 +131,15 @@ const addMemberShip = aynchandler(async (req, res, next) => {
     const order = await Order.create({ amount:member.price , userId:req.user._id , status:'paid', type:'member' })
     member.userId.push(user._id)
     await member.save()
+    const courses = await Course.find({grade:member.grade})
+    const userCourses = courses.map(course => ({courseId:course._id,lessonsDone:[],name:course.name,courseImg:course.courseImg,lessonTotal:course.total,memberId:member._id,memberExpiredTime:(Date.now() + (member.expiredTime * 24 * 60 * 60 * 1000))}))
+    user.enrolledCourse.push(...userCourses)
     user.credit = totalPrice
     user.memberShip.name = member.name
     user.memberShip.memberId = member._id
     user.memberShip.expiredTime = Date.now() + (member.expiredTime * 24 * 60 * 60 * 1000)
     await user.save()
+    console.log(user.enrolledCourse.length)
     res.status(200).send({user , order})
 })
 module.exports = {getAllUsers,addMemberShip,updateUser,getUser,deleteUser,addCourseToUser,removeUserFromCourse,editCredit}
