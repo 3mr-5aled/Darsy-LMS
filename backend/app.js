@@ -11,6 +11,7 @@ const paymentRouter = require('./routers/payment')
 const uploadImage = require('./middlewares/imageupload')
 const examRouter = require('./routers/exam')
 const payment = require('./middlewares/paytaps')
+const bodyParser = require('body-parser');
 // const fileUploader = require('express-fileupload')
 const uploaderRouter = require('./routers/uploader')
 const userRouter = require('./routers/user')
@@ -21,6 +22,10 @@ const authintication = require('./middlewares/authintication')
 require('dotenv').config()
 const app = express()
 
+
+// Increase payload limit to 10 MB
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 const corssettings = {
 
   origin: "http://localhost:8080/",
