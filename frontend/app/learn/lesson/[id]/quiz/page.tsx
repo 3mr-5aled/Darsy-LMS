@@ -45,7 +45,8 @@ const StudentQuizPage = () => {
     questionIndex: number,
     answerText: string,
     isCheckBoxQuiz: Boolean,
-    correctAnswers: []
+    correctAnswers: [],
+    id:string
   ) => {
     const updatedSelectedAnswers = [...selectedAnswers];
     let selectedAnswer: string[] = updatedSelectedAnswers[questionIndex]?.selectedAnswer || [];
@@ -69,6 +70,7 @@ const StudentQuizPage = () => {
       correctAnswers,
       isCheckBoxQuiz,
       selectedAnswer,
+      id
     };
     setSelectedAnswers(updatedSelectedAnswers);
     console.log(selectedAnswers[questionIndex]?.selectedAnswer?.includes(answerText))  
@@ -154,7 +156,8 @@ const StudentQuizPage = () => {
                           questionIndex,
                           answer.text,
                           q.isCheckBoxQuiz,
-                          q.correctAnswer
+                          q.correctAnswer,
+                          q._id
                         )
                       }
                    />
@@ -171,7 +174,8 @@ const StudentQuizPage = () => {
                           questionIndex,
                           answer.text,
                           q.isCheckBoxQuiz,
-                          q.correctAnswer
+                          q.correctAnswer,
+                          q._id
                         )
                       }
                     />
