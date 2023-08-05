@@ -217,7 +217,7 @@ const StudentPage = () => {
           Edit Credit
         </button>
       </div>
-      <div className="mb-8 text-center">
+      <div className="my-8 text-center">
         <h1 className="text-4xl font-bold">Enrolled Courses</h1>
       </div>
       <div className="grid grid-cols-3 max-md:grid-cols-1 gap-4 my-5 xl:grid-cols-4">
