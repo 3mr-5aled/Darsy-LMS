@@ -228,7 +228,7 @@ const CreateQuizPage = ({
         toast.error("The answers in each question must be different");
       }
     });
-  
+  console.log(hasDuplicates)
     if (hasDuplicates) {
       return; // If duplicates are found, exit the function and don't submit the form
     }
