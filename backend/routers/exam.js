@@ -2,7 +2,7 @@ const express = require("express")
 const authintication = require("../middlewares/authorization")
 const authintications = require("../middlewares/authintication")
 const { enrolledCourse } = require("../middlewares/enrolledcourses")
-const { createExam, addExamDegree, getExam } = require("../controllers/exam")
+const { createExam, addExamDegree, getExam, getExamResult } = require("../controllers/exam")
 const { checkExam } = require("../middlewares/checkExam")
 
 const router = express.Router()
@@ -17,5 +17,6 @@ router.get(
   getExam
 )
 router.put("/:lessonId/submit-exam", authintications, addExamDegree)
+router.get("/:lessonId/get-exam/:userId", authintications,getExamResult)
 
 module.exports = router

@@ -37,6 +37,16 @@ const getExam = aynchandler(async (req, res, next) => {
     res.status(200).json({ exam, title })
     //  you will recieve new lesson object
 })
+const getExamResult = aynchandler(async (req, res, next) => {
+    // @api   get api/v1/exam/:lessonId/get-exam
+    const {lessonId,userId} = req.params
+    const exam = await User.findOne({_id:userId,['exams.lessonId']:lessonId})
+    if (!exam) {
+        return next(new ApiError('exam not found', 6141, 404))
+    }
+    res.status(200).json({ exam })
+    //  you will recieve new lesson object
+})
 const addExamDegree = aynchandler(async (req, res, next) => {
     const { exam } = req.body
     const { lessonId } = req.params
@@ -72,6 +82,6 @@ const addExamDegree = aynchandler(async (req, res, next) => {
     await user.save()
     res.status(200).json({ msg: "the exam was sent successfully" })
 })
-module.exports = { createExam, addExamDegree, getExam }
+module.exports = { createExam, addExamDegree, getExam,getExamResult }
 
 
