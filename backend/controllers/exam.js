@@ -60,8 +60,15 @@ const addExamDegree = aynchandler(async (req, res, next) => {
         }
         return degree
     })
+   const lessonExam = lesson.exams.map(singleExam =>{
+        const filteredExam = exam.filter( e => e.id === singleExam._id)
+        if (filteredExam.length > 0 ) {
+            const filteredExamObj = filteredExam[0]
+            return {...singleExam,...filteredExamObj}
+        }else return
+    })
     degree = Math.round((degree / exam.length) * 100)
-    user.exams.push({ degree: degree , lessonId })
+    user.exams.push({ degree: degree , lessonId , lessonExam})
     await user.save()
     res.status(200).json({ msg: "the exam was sent successfully" })
 })
