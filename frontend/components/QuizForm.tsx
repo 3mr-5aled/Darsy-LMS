@@ -238,15 +238,15 @@ const CreateQuizPage = ({
       const exams = await Promise.all(
         questions.map(async (q) => ({
           ...q,
-          questionImage: q.questionImage
+          questionImage: q.questionImage?.size
             ? await uploadImageAndGetURL(q.questionImage)
-            : null,
+            : q.questionImage ? q.questionImage : null,
           answers: await Promise.all(
             q.answers.map(async (answer) => ({
               ...answer,
-              image: answer.image
-                ? await uploadImageAndGetURL(answer.image)
-                : null,
+              image: answer.image?.size
+              ? await uploadImageAndGetURL(answer.image)
+              : answer.image ? answer.image : null,
             }))
           ),
         }))
