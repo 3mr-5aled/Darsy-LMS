@@ -45,7 +45,7 @@ const StudentQuizPage = () => {
     questionIndex: number,
     answerText: string,
     isCheckBoxQuiz: Boolean,
-    correctAnswers: [],
+    correctAnswer: [],
     id:string
   ) => {
     const updatedSelectedAnswers = [...selectedAnswers];
@@ -58,7 +58,7 @@ const StudentQuizPage = () => {
         console.log('innn')
         selectedAnswer = selectedAnswer.length > 0 ? [...selectedAnswer] : [answerText] // If it is, create a shallow copy of selectedAnswer (unnecessary step)
       } else {
-        if (selectedAnswer.length === correctAnswers.length) {
+        if (selectedAnswer.length === correctAnswer.length) {
           selectedAnswer.splice(0, 1);
           selectedAnswer = [...selectedAnswer, answerText]; // If it is not, create a new array with answerText appended
         } else {
@@ -67,7 +67,7 @@ const StudentQuizPage = () => {
       }
     }
     updatedSelectedAnswers[questionIndex] = {
-      correctAnswers,
+      correctAnswer,
       isCheckBoxQuiz,
       selectedAnswer,
       id
