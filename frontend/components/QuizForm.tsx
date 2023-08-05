@@ -216,16 +216,17 @@ const CreateQuizPage = ({
       );
       return;
     }
-    questions.forEach((q) => {
-      const answerTexts = q.answers.map((answer) => answer.text);
-      const duplicates = answerTexts.some(
-        (text, index) => answerTexts.indexOf(text) !== index
-      );
-      if (duplicates) {
-        toast.error("the answers in each question must be different");
-        return;
-      }
-    });
+    const answerTexts = questions.map((q) => {
+      return q.answers.map((answer) => answer.text);
+});
+console.log(answerTexts)
+    const duplicates = answerTexts.some(
+      (text, index) => answerTexts.indexOf(text) !== index
+    );
+    if (duplicates) {
+      toast.error("the answers in each question must be different");
+      return;
+    }
     try {
       // Convert images to base64 and upload
       const exams = await Promise.all(
