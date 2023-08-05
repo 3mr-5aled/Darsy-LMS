@@ -204,7 +204,21 @@ const CreateQuizPage = ({
       return
     }
 
-    try {
+    const hasNoCorrectAnswer = questions.some((q) => q.correctAnswer.length === 0)
+    if (hasNoCorrectAnswer) {
+      toast.error(
+        "Please select at least one correct answer for each question."
+        )
+        return
+      }
+      questions.forEach(q =>{ 
+        const answerTexts = q.answers.map((answer) => answer.text);
+        const duplicates = answerTexts.some((text, index) => answerTexts.indexOf(text) !== index);
+        if (duplicates) {
+          return toast.error('the answers in each question must be different')
+        }
+      })
+          try {
       // Convert images to base64 and upload
       const exams = await Promise.all(
         questions.map(async (q) => ({
@@ -224,13 +238,6 @@ const CreateQuizPage = ({
       )
 
       // Validate that all questions have at least one correct answer
-      const hasNoCorrectAnswer = exams.some((q) => q.correctAnswer.length === 0)
-      if (hasNoCorrectAnswer) {
-        toast.error(
-          "Please select at least one correct answer for each question."
-        )
-        return
-      }
 
       // Make the PUT request to the API endpoint using axiosInstance.put()
       const response = await axiosInstance.put(
