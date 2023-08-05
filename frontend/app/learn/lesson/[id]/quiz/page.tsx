@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useParams, useRouter } from "next/navigation";
 import { any, string } from "prop-types";
 import Loading from "@/app/loading";
+import NotFoundComponent from "@/components/NotFoundComponent";
 
 const StudentQuizPage = () => {
   const { id } = useParams();
@@ -107,7 +108,7 @@ const StudentQuizPage = () => {
     }
   };
   if (error) {
-    return <h1>{error}</h1>;
+    return <NotFoundComponent message={error} />
   }
 
   return (
