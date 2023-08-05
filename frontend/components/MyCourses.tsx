@@ -42,8 +42,8 @@ const MyCourses = () => {
 
   return (
     <div className="h-full w-full flexCenter flex-col bg-base-300 card">
-      <h1 className="text-2xl font-bold py-2">My Courses</h1>
-      <div className="p-5 card bg-base-300 min-w-1/2">
+      <h1 className="text-2xl font-bold py-5">My Courses</h1>
+      <div className="p-5 pt-0 card bg-base-300 min-w-1/2">
         {/* <h2 className="text-lg font-bold py-2">Your Enrolled Courses:</h2> */}
         {user.enrolledCourse.length > 0 ? (
           <ul className="list-none">

@@ -109,7 +109,7 @@ const StudentMainPage = () => {
     <div className="p-5 m-5 flexCenter">
       <div className="w-screen p-4 ">
         <div className="grid w-full gap-3 md:grid-cols-3">
-          <div className="w-full flexCenter bg-base-200 card">
+          <div className="w-full flexCenter max-md:pt-3 bg-base-200 card">
             <Link
               href={"/membership"}
               className="flex flex-row items-center gap-3 cursor-pointer"
@@ -199,7 +199,7 @@ const StudentMainPage = () => {
               </span>
             </button>
           </div>
-          <div className="w-full lg:col-span-3">
+          <div className="w-full md:col-span-3">
             <MyCourses />
           </div>
         </div>

@@ -29,7 +29,7 @@ const StudentQuizPage = () => {
         console.log(error);
         setIsLoading(false);
         if (error.response.data.errCode === 6342) {
-          setError("you havee submited this exam before");
+          setError("you have already submitted this exam before");
           return;
         }
         toast.error("Error fetching quiz questions.");
