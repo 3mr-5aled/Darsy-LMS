@@ -50,7 +50,7 @@ const getCourse = aynchandler(async (req, res, next) => {
     //  send id as params
     const { id } = req.params
     const course = await Course.findById(id).populate('sections')
-    if (!course || course.appearenceDate < Date.now()) {
+    if (!course || course.appearenceDate > Date.now()) {
         return next(new ApiError('no course with this id',8341, 400))
     }
     res.status(200).json(course)
