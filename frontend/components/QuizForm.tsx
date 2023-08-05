@@ -226,6 +226,7 @@ const CreateQuizPage = ({
       if (duplicates) {
         hasDuplicates = true; // Set the flag to true if duplicates are found
         toast.error("The answers in each question must be different");
+        return
       }
     });
   console.log(hasDuplicates)
