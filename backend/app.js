@@ -36,7 +36,7 @@ app.use(express.json())
 // app.use(fileUploader())
 app.use(
   cors({
-    origin: "http://localhost:8080",
+    origin: "https://darsy-lms-beta.vercel.app",
     credentials: true,
   })
 )
