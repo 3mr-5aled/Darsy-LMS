@@ -79,4 +79,12 @@ const buyCourse = asynchandler(async (req, res, next) => {
   await order.save()
   res.status(200).json({ user, order })
 })
-module.exports = { createOrder, checkOrder , addCredit , buyCourse}
+const getSingleOrder = asynchandler(async(req,res,next)=>{
+  const order = req.user.role ==="tutor" ? await Order.findById(req.params.orderId).populate([{path:'userId',select:'name'},{path:'adminId',select:'name'}]).sort("-createdAt").select('') :await Order.findById(req.params.orderId).populate({path:"userId",select:'name'}).select(' -adminId -courseId -tran_ref ').sort("-createdAt")
+  if(!order){
+    return next(new ApiError('no order is found',8124,404))
+  }
+  console.log(order)
+  res.status(200).json(order)
+})
+module.exports = { createOrder, checkOrder , addCredit , buyCourse , getSingleOrder}

@@ -82,7 +82,8 @@ const User = new mongoose.Schema({
                 type: String
             },
 
-            question: String,
+           examAnswer:[
+            { question: String,
             answers: [{
                 text: String,
                 image: String
@@ -91,6 +92,8 @@ const User = new mongoose.Schema({
             questionImage: String,
             selectedAnswer:[String],
             isCheckBoxQuiz: Boolean,
+        }
+        ],
             createdAt: {
                 type: Date,
                 default: Date.now()

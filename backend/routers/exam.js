@@ -17,6 +17,6 @@ router.get(
   getExam
 )
 router.put("/:lessonId/submit-exam", authintications, addExamDegree)
-router.get("/:lessonId/get-exam/:userId", authintications,getExamResult)
+router.get("/:lessonId/get-exam-results", authintications,getExamResult)
 
 module.exports = router

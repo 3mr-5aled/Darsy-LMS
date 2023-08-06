@@ -20,7 +20,7 @@ const createExam = aynchandler(async (req, res, next) => {
             email: user.email,
             message: `new exam was added seconds ago `,
             text: `new exam was added in ${lesson.title} lesson \n hurry to solve the exam`,
-            name:user.name
+            name: user.name
         }
         await sendemail(options)
     })
@@ -39,12 +39,14 @@ const getExam = aynchandler(async (req, res, next) => {
 })
 const getExamResult = aynchandler(async (req, res, next) => {
     // @api   get api/v1/exam/:lessonId/get-exam
-    const {lessonId,userId} = req.params
-    const exam = await User.findOne({_id:userId,['exams.lessonId']:lessonId})
-    if (!exam) {
+    const { lessonId } = req.params
+    const {_id} = req.user
+    const user = await User.findOne({ _id })
+    if (!user) {
         return next(new ApiError('exam not found', 6141, 404))
     }
-    res.status(200).json({ exam })
+    const exam = user.exams.filter(exam => exam.lessonId.toString() === lessonId.toString())[0]
+    res.status(200).json( exam )
     //  you will recieve new lesson object
 })
 const addExamDegree = aynchandler(async (req, res, next) => {
@@ -56,7 +58,6 @@ const addExamDegree = aynchandler(async (req, res, next) => {
     }
     const user = await User.findById(req.user._id)
     let degree = 0
-    console.log(exam)
     exam.map(item => {
         if (item.isCheckBoxQuiz) {
             const correct = item.selectedAnswer.map(answer => item.correctAnswer.includes(answer) ? true : false)
@@ -70,18 +71,19 @@ const addExamDegree = aynchandler(async (req, res, next) => {
         }
         return degree
     })
-   const lessonExam = lesson.exams.map(singleExam =>{
-        const filteredExam = exam.filter( e => e.id === singleExam._id)
-        if (filteredExam.length > 0 ) {
-            const filteredExamObj = filteredExam[0]
-            return {...singleExam,...filteredExamObj}
-        }else return
-    })
+    const examAnswer = exam.map(singleExam => {
+        const filteredExam = lesson.exams.filter(e => e._id.toString() === singleExam.id);
+        if (filteredExam.length > 0) {
+            return {question:filteredExam[0].question,questionImage:filteredExam[0].questionImage,answers:filteredExam[0].answers,correctAnswer:filteredExam[0].correctAnswer,isCheckBoxQuiz:filteredExam[0].isCheckBoxQuiz,selectedAnswer:singleExam.selectedAnswer}
+        }
+        return singleExam
+    });
+    console.log(examAnswer)
     degree = Math.round((degree / exam.length) * 100)
-    user.exams.push({ degree: degree , lessonId , lessonExam})
+    user.exams.push({ degree: degree, lessonId, examAnswer })
     await user.save()
-    res.status(200).json({ msg: "the exam was sent successfully" })
+    res.status(200).json( user.exams )
 })
-module.exports = { createExam, addExamDegree, getExam,getExamResult }
+module.exports = { createExam, addExamDegree, getExam, getExamResult }
 
 

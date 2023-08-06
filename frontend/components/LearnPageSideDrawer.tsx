@@ -84,6 +84,17 @@ const LearnPageSideDrawer = () => {
       </span>
     )
   }
+  const examStatus = (id : string)=>{
+    let status;
+    console.log('innnn')
+    user?.exams?.forEach(exam => {
+      console.log(exam)
+      if(exam.lessonId.toString() === id){
+        status = parseInt(exam.degree) > 50  ? ' bg-success bg-opacity-50':'bg-error bg-opacity-50'
+      }
+    })
+    return status
+  }
 
   return (
     <>
@@ -127,9 +138,10 @@ const LearnPageSideDrawer = () => {
                       </Link>
                     {lessonItem?.exams && lessonItem.exams.length > 0 && (
                       <Link
-                        className=" flex flex-row py-3 px-3 hover:bg-neutral"
+                        className={`${examStatus(lessonItem._id as string)} flex flex-row py-3 px-3  hover:bg-neutral`}
                         href={`/learn/lesson/${lessonItem._id}/quiz`}
                       >
+                        
                         Quiz
                       </Link>
                     )}

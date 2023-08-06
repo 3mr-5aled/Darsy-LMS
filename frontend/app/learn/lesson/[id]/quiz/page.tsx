@@ -7,8 +7,11 @@ import { useParams, useRouter } from "next/navigation";
 import { any, string } from "prop-types";
 import Loading from "@/app/loading";
 import NotFoundComponent from "@/components/NotFoundComponent";
+import ExamResults from "@/components/ExamResults";
+import { useUserContext } from "@/contexts/userContext";
 
 const StudentQuizPage = () => {
+  const { state, setUser, clearUser } = useUserContext()
   const { id } = useParams();
   const router = useRouter();
   const [questions, setQuestions] = useState<any[]>([]);
@@ -79,6 +82,17 @@ const StudentQuizPage = () => {
 
   const handleSubmit = async () => {
     // Check if all questions have been answered
+    let emptyAnswers = false
+    selectedAnswers.forEach((selectedAnswer)=>{
+      if(!(selectedAnswer?.selectedAnswer)){
+        emptyAnswers = true
+        toast.error('you must select answers for each quetion')
+        return
+      }
+    })
+    if (emptyAnswers) {
+      return
+    }
     if (
       selectedAnswers.some((selectedAnswer) =>
         selectedAnswer.isCheckBoxQuiz
@@ -99,6 +113,9 @@ const StudentQuizPage = () => {
       // Handle the response from the API
       if (response.status === 200) {
         console.log(response.data);
+
+        const {data} = await axiosInstance.get(`/auth/profile`);
+        setUser(data)
         // Redirect the user to the exam page with the results
         router.push(`/exam-results/${id}`);
       } else {
@@ -110,7 +127,7 @@ const StudentQuizPage = () => {
     }
   };
   if (error) {
-    return <NotFoundComponent message={error} />
+    return <ExamResults />
   }
 
   return (

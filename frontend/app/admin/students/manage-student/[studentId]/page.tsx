@@ -260,7 +260,7 @@ const StudentPage = () => {
         <div className="  font-extrabold ">Date</div>
       </div>
         {orders.map((order,index) => (
-          <div key={order._id} className={` rounded-lg gap-x-2 my-5 py-3 grid grid-cols-8 ${index % 2 === 0 ? 'bg-slate-800' : ' bg-base-100' }`}>
+          <div key={order._id} onClick={() => router.push('/admin/orders/single-order/'+order._id)} className={` rounded-lg gap-x-2 my-5 py-3 cursor-pointer grid grid-cols-8 ${index % 2 === 0 ? 'bg-slate-800' : ' bg-base-100' }`}>
           <div className=" justify-self-center">{order.type ? order.type : " "}</div>
           <div className=" justify-self-center">{order.amount}</div>
           <div data-tip={order.adminId?.name} className=" cursor-default z-0 tooltip justify-self-center">{order.adminId?.name.split(' ')[0]}</div> 
