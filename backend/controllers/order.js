@@ -9,7 +9,11 @@ const createOrder = asynchandler(async (req, res, next) => {
   const course = await Course.findById(courseId)
   const courses = userFromDB.enrolledCourse.filter(enrolledCourse => enrolledCourse.courseId === course._id)
   if (courses.length > 0) {
-    return next(new ApiError("You have already enrolled in this course", 9022, 400))
+    if (courses[0].memberId && course[0].memberExpiredTime > Date.now()) {
+      return next(new ApiError("You have already enrolled in this course", 9022, 400))
+    }else{
+      return next(new ApiError("You have already enrolled in this course", 9022, 400))
+    }
   } 
   const price = parseInt(course.price)
   const amount =

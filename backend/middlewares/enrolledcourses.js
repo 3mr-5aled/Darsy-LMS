@@ -8,21 +8,28 @@ const enrolledCourse = async (req, res, next) => {
   const { lessonId } = req.params;
   const lesson = await Lesson.findById(lessonId)
   if (!lesson) {
-    return next(new ApiError("no lesson is found",6341, 404));
+    return next(new ApiError("no lesson is found", 6341, 404));
   }
   await lesson.populate('sectionId')
   await lesson.populate('courseId')
   req.lesson = lesson
   const userFromDB = await User.findById(user._id)
-  if (userFromDB.role === "tutor") {
-    return next()
-  }
-  if (userFromDB.memberShip.memberId && userFromDB.memberShip.expiredTime > Date.now() && lesson.courseId.grade === userFromDB.grade ) {
-    return next()
-  }
-  const enrolledCourses = userFromDB.enrolledCourse.filter(course => course.courseId.toString() === lesson.courseId.toString())
+  // if (userFromDB.role === "tutor") {
+  //   return next()
+  // }
+  // if (userFromDB.memberShip.memberId && userFromDB.memberShip.expiredTime > Date.now() && lesson.courseId.grade === userFromDB.grade ) {
+  //   return next()
+  // }
+  const enrolledCourses = userFromDB.enrolledCourse.filter(course => course.courseId.toString() === lesson.courseId._id.toString())
   if (enrolledCourses.length === 0) {
-    return next(new ApiError("you are not enrolled in this course",8364, 400));
+    return next(new ApiError("you are not enrolled in this course", 8364, 400));
+  }
+  const userCourse = enrolledCourses[0]
+  if (userCourse.memberId) {
+    console.log('in')
+    if (userCourse.memberExpiredTime < Date.now()) {
+      return next(new ApiError("your membership has expired", 8364, 400));
+    }
   }
   next()
 }
