@@ -26,7 +26,8 @@ const StudentQuizPage = () => {
         const response = await axiosInstance.get(`/exam/${id}/get-exam`)
         setQuestions(response.data.exam)
         // Initialize selectedAnswers array with null values for each question
-        setSelectedAnswers(new Array(response.data.exam.length).fill(null))
+        const exam = response.data.exam.map( (e : any)  => ({id:e._id,correctAnswer:e.correctAnswer,isCheckBoxQuiz:e.isCheckBoxQuiz,selectedAnswer:[]}))
+        setSelectedAnswers(new Array(response.data.exam.length).fill(exam))
         setIsLoading(false)
       } catch (error: any) {
         console.log(error)
