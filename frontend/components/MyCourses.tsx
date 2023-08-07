@@ -6,7 +6,6 @@ import { UserType } from "@/common.types"
 import Link from "next/link"
 import Image from "next/image"
 import NotFoundComponent from "@/components/NotFoundComponent"
-import NoSSRWrapper from "@/components/NoSSRWrapper"
 import { useRouter } from "next/navigation"
 
 const MyCourses = () => {
@@ -16,7 +15,7 @@ const MyCourses = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axiosInstance.get(`/auth/profile`) // Replace with the actual API endpoint to get the user data
+        const response = await axiosInstance.get(`/auth/profile`)
         setUser(response.data)
       } catch (error) {
         console.error(error)
@@ -36,7 +35,6 @@ const MyCourses = () => {
         `/lesson/${courseId}/continue-lesson`
       )
       router.push(`/learn/lesson/${response.data.nextLesson}`)
-      // Replace with the actual API endpoint to get the user data
     } catch (error) {}
   }
 
@@ -44,9 +42,8 @@ const MyCourses = () => {
     <div className="h-full w-full flexCenter flex-col bg-base-300 card">
       <h1 className="text-2xl font-bold py-5">My Courses</h1>
       <div className="p-5 pt-0 card bg-base-300 min-w-1/2">
-        {/* <h2 className="text-lg font-bold py-2">Your Enrolled Courses:</h2> */}
         {user.enrolledCourse.length > 0 ? (
-          <ul className="list-none">
+          <ul className="list-none grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {user.enrolledCourse.map((course) => (
               <li key={course.courseId}>
                 <button
@@ -55,7 +52,7 @@ const MyCourses = () => {
                 >
                   <Image
                     className="rounded-md"
-                    src={course.courseImg || "https://picsum.photos/350/350"}
+                    src={course.courseImg || "/no-course-image.png"}
                     alt={course.name}
                     width={250}
                     height={250}

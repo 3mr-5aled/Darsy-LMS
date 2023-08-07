@@ -161,7 +161,7 @@ const Course = () => {
         {course.courseImg ? (
           <Image
             className="rounded-lg"
-            src={course.courseImg.src || "https://picsum.photos/350/350"}
+            src={course.courseImg.src || "/no-course-image.png"}
             alt={course.name}
             width={450}
             height={150}
@@ -191,8 +191,6 @@ const Course = () => {
                 ""
               )}
             </div>
-            
-            
           </div>
           <p>
             Description: <strong>{course.description}</strong>
@@ -218,14 +216,14 @@ const Course = () => {
             <>
               {course.price === 0 || isMembershipValid() ? (
                 <>
-              <p className="whitespace-nowrap my-4">{renderPrice()}</p>
-                <button
-                  className="my-1 btn btn-primary w-fit"
-                  onClick={handleEnrollCourse}
+                  <p className="whitespace-nowrap my-4">{renderPrice()}</p>
+                  <button
+                    className="my-1 btn btn-primary w-fit"
+                    onClick={handleEnrollCourse}
                   >
-                  Enroll Now
-                </button>
-                  </>
+                    Enroll Now
+                  </button>
+                </>
               ) : (
                 <div className="flex flex-row gap-3">
                   <button

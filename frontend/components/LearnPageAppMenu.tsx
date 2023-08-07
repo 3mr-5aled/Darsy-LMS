@@ -1,70 +1,69 @@
-"use client";
-import axiosInstance from "@/axios.config";
-import { ApiResponseType, LessonType, SectionType } from "@/common.types";
-import { useUserContext } from "@/contexts/userContext";
-import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+"use client"
+import axiosInstance from "@/axios.config"
+import { ApiResponseType, LessonType, SectionType } from "@/common.types"
+import { useUserContext } from "@/contexts/userContext"
+import Link from "next/link"
+import { useParams, useRouter } from "next/navigation"
+import React, { useEffect, useState } from "react"
+import { toast } from "react-toastify"
 
 interface RadialProgressStyle {
-  "--value": number;
-  "--size": string;
+  "--value": number
+  "--size": string
 }
 
 const LearnPageAppMenu = () => {
-  const { id } = useParams();
+  const { id } = useParams()
 
-  const [data, setData] = useState<any | null>(null);
-  const [lesson, setLesson] = useState<LessonType | null>(null);
-  const [sections, setSections] = useState<SectionType[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { state, setUser, clearUser } = useUserContext();
-  const { user } = state;
-  const [progress, setProgress] = useState(0);
-  const [lessonsDone, setLessonsDone] = useState(0);
+  const [data, setData] = useState<any | null>(null)
+  const [lesson, setLesson] = useState<LessonType | null>(null)
+  const [sections, setSections] = useState<SectionType[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const { state, setUser, clearUser } = useUserContext()
+  const { user } = state
+  const [progress, setProgress] = useState(0)
+  const [lessonsDone, setLessonsDone] = useState(0)
   useEffect(() => {
     const fetchLesson = async () => {
       try {
         const response = await axiosInstance.get<ApiResponseType>(
           `/lesson/get-lesson/${id}`
-        );
-        setData(response.data);
-        setLesson(response.data.lesson);
-        setSections(response.data.sections);
-        setIsLoading(false);
+        )
+        setData(response.data)
+        setLesson(response.data.lesson)
+        setSections(response.data.sections)
+        setIsLoading(false)
       } catch (error: any) {
-        console.error(error);
-        toast.error(error.response.message);
-        setIsLoading(false);
-        return <p>{error.response.message}</p>;
+        console.error(error)
+        toast.error(error.response.message)
+        setIsLoading(false)
+        return <p>{error.response.message}</p>
         // Handle error, e.g., show an error message or redirect to an error page
       }
-    };
+    }
 
-    fetchLesson();
-  }, [id]);
+    fetchLesson()
+  }, [id])
 
   useEffect(() => {
     if (data && user && user.enrolledCourse.length > 0) {
       const courseWithProgress = user.enrolledCourse.find(
         (enrolledCourse) => enrolledCourse.courseId === data.course._id
-      );
+      )
       if (courseWithProgress) {
-        const lessonsDone = courseWithProgress.lessonsDone.length;
-        const progress: number = (lessonsDone / data.totalLessons) * 100;
-        console.log('done')
-        setProgress(progress);
-        setLessonsDone(lessonsDone);
-        return;
+        const lessonsDone = courseWithProgress.lessonsDone.length
+        const progress: number = (lessonsDone / data.totalLessons) * 100
+        setProgress(progress)
+        setLessonsDone(lessonsDone)
+        return
       }
     }
-  },[data, user])
+  }, [data, user])
 
   const radialProgressStyle: RadialProgressStyle = {
     "--value": progress,
     "--size": "4rem",
-  };
+  }
 
   return (
     <>
@@ -106,7 +105,7 @@ const LearnPageAppMenu = () => {
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default LearnPageAppMenu;
+export default LearnPageAppMenu

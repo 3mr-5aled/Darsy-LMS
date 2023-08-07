@@ -32,28 +32,28 @@ const LessonPage = () => {
   const { state, setUser, clearUser } = useUserContext()
   const { user } = state
 
-  useEffect(() => {
-    // Find the active section index based on the current lesson
-    if (lesson) {
-      const activeIndex = sections.findIndex((section) =>
-        section.lessons.some((item) => item._id === lesson._id)
-      )
-      setActiveSectionIndex(activeIndex)
-    }
-  }, [lesson, sections])
+  // useEffect(() => {
+  //   // Find the active section index based on the current lesson
+  //   if (lesson) {
+  //     const activeIndex = sections.findIndex((section) =>
+  //       section.lessons.some((item) => item._id === lesson._id)
+  //     )
+  //     setActiveSectionIndex(activeIndex)
+  //   }
+  // }, [lesson, sections])
 
-  useEffect(() => {
-    // Initialize openSections state with closed states for all sections
-    setOpenSections(new Array(sections.length).fill(false))
-    // Open the active section by default
-    if (activeSectionIndex !== -1) {
-      setOpenSections((prevOpenSections) => {
-        const newOpenSections = [...prevOpenSections]
-        newOpenSections[activeSectionIndex] = true
-        return newOpenSections
-      })
-    }
-  }, [sections, activeSectionIndex])
+  // useEffect(() => {
+  //   // Initialize openSections state with closed states for all sections
+  //   setOpenSections(new Array(sections.length).fill(false))
+  //   // Open the active section by default
+  //   if (activeSectionIndex !== -1) {
+  //     setOpenSections((prevOpenSections) => {
+  //       const newOpenSections = [...prevOpenSections]
+  //       newOpenSections[activeSectionIndex] = true
+  //       return newOpenSections
+  //     })
+  //   }
+  // }, [sections, activeSectionIndex])
 
   useEffect(() => {
     const fetchLesson = async () => {
@@ -69,7 +69,6 @@ const LessonPage = () => {
         console.error(error)
         toast.error(error.response.data.message)
         setIsLoading(false)
-        return <p>{error.response.date.message}</p>
         // Handle error, e.g., show an error message or redirect to an error page
       }
     }
@@ -156,9 +155,32 @@ const LessonPage = () => {
     }
   }
 
+  const [userCheckTimeout, setUserCheckTimeout] = useState<boolean>(false)
+
+  useEffect(() => {
+    // Set a timeout to simulate loading user data
+    const timeout = setTimeout(() => {
+      setUserCheckTimeout(true)
+    }, 2000) // Adjust the timeout duration as needed
+
+    return () => clearTimeout(timeout)
+  }, [])
+
   const isBrowser = typeof window !== "undefined"
+
+  if (!userCheckTimeout) {
+    return <Loading />
+  }
+
   if (!user) {
-    return <Loading/>
+    return (
+      <div className="flexCenter flex-col gap-5 h-[calc(100vh-250px)] font-bold w-full">
+        <p>Please sign in to access this lesson.</p>
+        <Link className="btn btn-primary" href="/auth/login">
+          Sign in
+        </Link>
+      </div>
+    )
   }
 
   if (!data) {
@@ -167,7 +189,7 @@ const LessonPage = () => {
   }
   if (!data.course) {
     // Handle the case where data.courseId is null or undefined
-    return <p>No course data found</p>
+    return <p>No Course data found</p>
   }
 
   if (
@@ -176,7 +198,17 @@ const LessonPage = () => {
     ) &&
     user.role !== "tutor"
   ) {
-    return <p>Please enroll in the course first to access the lesson</p>
+    return (
+      <div className="flexCenter h-[calc(100vh-250px)] font-bold w-full">
+        <p>Please enroll in the course first to access the lesson.</p>
+        <Link
+          className="btn btn-primary"
+          href={`/courses/view-course/${data.course._id}`}
+        >
+          Enroll the course
+        </Link>
+      </div>
+    )
   }
 
   const isLessonDone = (lessonId: string) => {
@@ -194,8 +226,11 @@ const LessonPage = () => {
       </span>
     )
   }
-  
-    const doc = new DOMParser().parseFromString(lesson ? lesson.description : '<p>describtion of lesson</p>', "text/html")
+
+  const doc = new DOMParser().parseFromString(
+    lesson ? lesson.description : "<p>description of lesson</p>",
+    "text/html"
+  )
 
   return (
     <>

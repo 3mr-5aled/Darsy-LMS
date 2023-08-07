@@ -1,0 +1,23 @@
+{
+  "name": "darsy",
+  "version": "1.0.0",
+  "description": "Courses LMS website\r learning easier than before",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "concurrently \"cd backend && npm start\" \"cd frontend && npm run dev\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/3mr-5aled/Darsy.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/3mr-5aled/Darsy/issues"
+  },
+  "homepage": "https://github.com/3mr-5aled/Darsy#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

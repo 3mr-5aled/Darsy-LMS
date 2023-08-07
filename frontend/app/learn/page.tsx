@@ -138,7 +138,9 @@ const StudentMainPage = () => {
             )}
           </div>
           <div className="md:col-span-1">
-            <h1 className="mb-5 text-2xl lg:text-4xl font-bold text-center">My Homepage</h1>
+            <h1 className="mb-5 text-2xl lg:text-4xl font-bold text-center">
+              My Homepage
+            </h1>
             <div className="w-full transition-all flexCenter">
               <div className="flex flex-row items-center justify-around w-2/3 gap-5 p-3 text-2xl rounded-full flex-nowrap bg-base-200">
                 <div className="tooltip" data-tip="HomePage">

@@ -58,7 +58,7 @@ const Course = () => {
         <div className="flex flex-row flex-wrap gap-5">
           <img
             className="rounded-lg"
-            src={course.courseImg.src || "https://picsum.photos/350/350"}
+            src={course.courseImg.src || "/no-course-image.png"}
             alt={course.name}
             width={400}
             height={400}
@@ -80,7 +80,9 @@ const Course = () => {
             <button
               className="mt-5 mb-3 btn btn-secondary btn-outline"
               onClick={() =>
-                router.push(`/admin/courses/manage-course/${course._id}/edit-course`)
+                router.push(
+                  `/admin/courses/manage-course/${course._id}/edit-course`
+                )
               }
             >
               Edit Course

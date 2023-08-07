@@ -9,3 +9,4 @@ npm-debug.log
 .flaskenv*
 !.env.project
 !.env.vault
+.env*

@@ -69,6 +69,29 @@ const LearnPageSideDrawer = () => {
     }
   }, [lesson, sections])
 
+  useEffect(() => {
+    // Find the active section index based on the current lesson
+    if (lesson) {
+      const activeIndex = sections.findIndex((section) =>
+        section.lessons.some((item) => item._id === lesson._id)
+      )
+      setActiveSectionIndex(activeIndex)
+    }
+  }, [lesson, sections])
+
+  useEffect(() => {
+    // Initialize openSections state with closed states for all sections
+    setOpenSections(new Array(sections.length).fill(false))
+    // Open the active section by default
+    if (activeSectionIndex !== -1) {
+      setOpenSections((prevOpenSections) => {
+        const newOpenSections = [...prevOpenSections]
+        newOpenSections[activeSectionIndex] = true
+        return newOpenSections
+      })
+    }
+  }, [sections, activeSectionIndex])
+
   const isLessonDone = (lessonId: string) => {
     return user?.enrolledCourse[0]?.lessonsDone?.includes(lessonId) ?? false
   }
@@ -84,13 +107,14 @@ const LearnPageSideDrawer = () => {
       </span>
     )
   }
-  const examStatus = (id : string)=>{
-    let status;
-    console.log('innnn')
-    user?.exams?.forEach(exam => {
-      console.log(exam)
-      if(exam.lessonId.toString() === id){
-        status = parseInt(exam.degree) > 50  ? ' bg-success bg-opacity-50':'bg-error bg-opacity-50'
+  const examStatus = (id: string) => {
+    let status
+    user?.exams?.forEach((exam) => {
+      if (exam.lessonId.toString() === id) {
+        status =
+          parseInt(exam.degree) > 50
+            ? "border-2 border-success border-opacity-50"
+            : "border-2 border-error border-opacity-50"
       }
     })
     return status
@@ -124,24 +148,25 @@ const LearnPageSideDrawer = () => {
               <div className="flex flex-col gap-3 collapse-content">
                 {/* Display lessons in each section */}
                 {section.lessons.map((lessonItem, lessonIndex) => (
-                  <div>
-                      <Link href={`/learn/lesson/${lessonItem._id}`}>
-                    <div
-                      key={lessonItem._id}
-                      className={`flex flex-row hover:bg-primary justify-between items-center rounded-lg p-2 ${
-                        lessonItem._id === lesson?._id ? "bg-base-100" : ""
-                      }`}
-                    >
+                  <div key={lessonItem._id}>
+                    <Link href={`/learn/lesson/${lessonItem._id}`}>
+                      <div
+                        key={lessonItem._id}
+                        className={`flex flex-row hover:bg-primary justify-between items-center rounded-lg p-2 ${
+                          lessonItem._id === lesson?._id ? "bg-base-100" : ""
+                        }`}
+                      >
                         {lessonIndex + 1}. {lessonItem.title}
-                      {renderDoneIcon(lessonItem._id)}
-                    </div>
-                      </Link>
+                        {renderDoneIcon(lessonItem._id)}
+                      </div>
+                    </Link>
                     {lessonItem?.exams && lessonItem.exams.length > 0 && (
                       <Link
-                        className={`${examStatus(lessonItem._id as string)} flex flex-row py-3 px-3  hover:bg-neutral`}
+                        className={`${examStatus(
+                          lessonItem._id as string
+                        )} flex flex-row py-3 px-3 rounded-lg border-2 border-gray-500 hover:bg-neutral`}
                         href={`/learn/lesson/${lessonItem._id}/quiz`}
                       >
-                        
                         Quiz
                       </Link>
                     )}
