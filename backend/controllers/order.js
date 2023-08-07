@@ -84,35 +84,25 @@ const buyCourse = asynchandler(async (req, res, next) => {
   res.status(200).json({ user, order })
 })
 const getSingleOrder = asynchandler(async(req,res,next)=>{
-  const order = req.user.role ==="tutor" ? await Order.findById(req.params.orderId).populate([{path:'userId',select:'name'},{path:'adminId',select:'name'}]).sort("-createdAt").select('') :await Order.findById(req.params.orderId).populate({path:"userId",select:'name'}).select(' -adminId -courseId -tran_ref ').sort("-createdAt")
+  const order = req.user.role ==="tutor" ? await Order.findById(req.params.orderId).populate([{path:'userId',select:'name'},{path:'adminId',select:'name'}]).sort("-createdAt") :await Order.findById(req.params.orderId).populate({path:"userId",select:'name'}).select(' -adminId -courseId -tran_ref ').sort("-createdAt")
   if(!order){
     return next(new ApiError('no order is found',8124,404))
   }
   console.log(order)
   res.status(200).json(order)
 })
-const getAllOrders = asynchandler(async(req,res,next)=>{
+const getAllOrdersByDay = asynchandler(async(req,res,next)=>{
+  
   const date = req.query.date || new Date();
-
   const startDate = new Date(date);
   startDate.setDate(req.query.date ? startDate.getDate() + 1 :startDate.getDate() );
   startDate.setUTCHours(0, 0, 0, 0);
-  
   const endDate = new Date(startDate);
-  endDate.setDate(endDate.getDate() + 1);
-  
-  console.log(startDate.getHours(), startDate.getMinutes(),startDate); // Log start date's hours and minutes
-  console.log(endDate.getHours(), endDate.getMinutes(), endDate); // Log end date's hours, minutes, and full date
-  
-  const orders = await Order.find({
-    createdAt: { $gte: startDate, $lt: endDate },
-  });
-  
-  if (orders.length === 0) {
-    return next(new ApiError('No orders in this day', 2198, 404));
-  }
-  
-  res.status(200).json(orders);
-  
+  endDate.setDate(endDate.getDate() + 1);  
+  const todayOrders = req.user.role ==="tutor" ? await Order.find({ createdAt: { $gte: startDate, $lt: endDate }}).populate([{path:'userId',select:'name'},{path:'adminId',select:'name'}]).sort("-createdAt") :
+  await Order.find({ createdAt: { $gte: startDate, $lt: endDate }}).populate({path:"userId",select:'name'}).select(' -adminId -courseId -tran_ref ').sort("-createdAt")
+  const orders = req.user.role ==="tutor" ? await Order.find({ $or: [{ createdAt: { $lt: startDate } }, { createdAt: { $gt: endDate } }] }).populate([{path:'userId',select:'name'},{path:'adminId',select:'name'}]).sort("-createdAt") :
+  await Order.find({ $or: [{ createdAt: { $lt: startDate } }, { createdAt: { $gt: endDate } }] }).populate({path:"userId",select:'name'}).select(' -adminId -courseId -tran_ref ').sort("-createdAt");
+  res.status(200).json({orders,todayOrders});
 })
-module.exports = { createOrder, checkOrder , addCredit , buyCourse , getSingleOrder , getAllOrders}
+module.exports = { createOrder, checkOrder , addCredit , buyCourse , getSingleOrder , getAllOrdersByDay}
