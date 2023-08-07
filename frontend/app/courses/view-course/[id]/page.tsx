@@ -98,7 +98,7 @@ const Course = () => {
       // const { order } = response.data
       toast.success("Course enrolled successfully")
       // Navigate to the Learn page passing the courseId as a query parameter
-      router.push(`/account/my-courses`)
+      router.push(`/learn`)
     } catch (error) {
       console.error(error)
       // Handle errors if necessary

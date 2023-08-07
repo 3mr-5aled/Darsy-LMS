@@ -26,7 +26,12 @@ const StudentQuizPage = () => {
         const response = await axiosInstance.get(`/exam/${id}/get-exam`)
         setQuestions(response.data.exam)
         // Initialize selectedAnswers array with null values for each question
-        const exam = response.data.exam.map( (e : any)  => ({id:e._id,correctAnswer:e.correctAnswer,isCheckBoxQuiz:e.isCheckBoxQuiz,selectedAnswer:[]}))
+        const exam = response.data.exam.map((e: any) => ({
+          id: e._id,
+          correctAnswer: e.correctAnswer,
+          isCheckBoxQuiz: e.isCheckBoxQuiz,
+          selectedAnswer: [],
+        }))
         setSelectedAnswers(new Array(response.data.exam.length).fill(exam))
         setIsLoading(false)
       } catch (error: any) {
@@ -86,7 +91,7 @@ const StudentQuizPage = () => {
     selectedAnswers.forEach((selectedAnswer) => {
       if (!selectedAnswer?.selectedAnswer) {
         emptyAnswers = true
-        toast.error("you must select answers for each quetion")
+        toast.error("you must select answers for each question")
         return
       }
     })

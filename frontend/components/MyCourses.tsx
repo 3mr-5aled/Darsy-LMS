@@ -76,7 +76,7 @@ const MyCourses = () => {
             ))}
           </ul>
         ) : (
-          <div>
+          <div className="text-center">
             <NotFoundComponent message="You have not enrolled in any courses yet." />
             <Link href="/courses">
               <button className="btn btn-primary">Browse Courses</button>

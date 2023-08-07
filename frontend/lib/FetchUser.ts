@@ -4,7 +4,7 @@ import { toast } from "react-toastify"
 import { UserType } from "@/common.types"
 
 const useUser = (): [UserType | null, boolean] => {
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [user, setUser] = useState<UserType | null>(null)
 
   const fetchUser = async () => {

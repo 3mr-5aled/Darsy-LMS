@@ -1,51 +1,55 @@
-import { Question } from "@/common.types";
-import { useEffect, useState } from "react";
-import axiosInstance from "@/axios.config";
+import { Question } from "@/common.types"
+import { useEffect, useState } from "react"
+import axiosInstance from "@/axios.config"
 import {
   BsArrowLeftCircleFill,
   BsCheckSquareFill,
   BsCircleFill,
   BsImage,
   BsXCircleFill,
-} from "react-icons/bs";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useParams, useRouter } from "next/navigation";
-import Loading from "@/app/loading";
+} from "react-icons/bs"
+import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import { useParams, useRouter } from "next/navigation"
+import Loading from "@/app/loading"
+import PreviousPageButton from "./PreviousPageButton"
 
 const SingleOrder = () => {
-  const router = useRouter();
-  const [order, setOrder] = useState<any | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const { id } = useParams();
+  const router = useRouter()
+  const [order, setOrder] = useState<any | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
+  const { id } = useParams()
   useEffect(() => {
-    setLoading(true);
+    setLoading(true)
     const fetchOrder = async () => {
       try {
-        const response = await axiosInstance.get("/user/get-single-order/" + id);
-        setOrder(response.data);
-        setLoading(false);
+        const response = await axiosInstance.get("/user/get-single-order/" + id)
+        setOrder(response.data)
+        setLoading(false)
       } catch (error) {
-        setLoading(false);
-        toast.error("no order found");
-        return;
+        setLoading(false)
+        toast.error("no order found")
+        return
       }
-    };
+    }
     fetchOrder()
-  }, [id]);
+  }, [id])
   if (loading) {
-    return <Loading />;
+    return <Loading />
   }
-  const getDate = (date :string)=>{
+  const getDate = (date: string) => {
     return new Date(date).toDateString()
   }
 
   return (
-    <div className=" container mx-auto">
+    <div className="container mx-auto m-5">
+      <div className="m-5">
+        <PreviousPageButton />
+      </div>
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold">Order Details</h1>
       </div>
-      <div className="grid items-center mt-15 py-10 justify-center w-full grid-cols-2 gap-4">
+      <div className="grid items-center mt-15 mx-5 py-10 justify-center w-full grid-cols-2 gap-4">
         {order?.tran_ref && (
           <>
             <div className="font-bold">tran ref:</div>
@@ -76,13 +80,13 @@ const SingleOrder = () => {
             <div>{getDate(order?.createdAt)}</div>
           </>
         )}
-         {order?.amount && (
+        {order?.amount && (
           <>
             <div className="font-bold">amount</div>
             <div>{order?.amount}</div>
           </>
         )}
-         {order?.status && (
+        {order?.status && (
           <>
             <div className="font-bold">status</div>
             <div>{order?.status}</div>
@@ -94,7 +98,7 @@ const SingleOrder = () => {
         {/* <li>Membership expiretdime: {order.expiredtime} from now</li> */}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SingleOrder;
+export default SingleOrder

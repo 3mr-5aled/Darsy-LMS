@@ -1,19 +1,101 @@
 "use client"
-import NotFoundComponent from "@/components/NotFoundComponent"
 import useUser from "@/lib/FetchUser"
 import { BsCircleFill, BsDiamondFill, BsStars } from "react-icons/bs"
-import Loading from "../loading"
 import { useState, useEffect } from "react"
 import DataLoading from "@/components/DataLoading"
+import { Line } from "react-chartjs-2"
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js"
+import axiosInstance from "@/axios.config"
+import { UserType } from "@/common.types"
+import { toast } from "react-toastify"
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+)
+
+interface userDegress {
+  degree: number
+  lessonTitle: string
+  examDate: Date
+  lessonId: string
+}
+interface userCourses {
+  name: string
+  courseId: string
+  courseImg: string
+  progress: number
+}
+interface userOrders {
+  userId: {
+    _id: string
+    name: string
+  }
+  createdAt: string
+  _id: string
+  adminId?: {
+    _id: string
+    name: string
+  }
+  amount: string
+  courseId?: {
+    _id: string
+    name: string
+  }
+  tran_ref?: string
+  status: string
+  type: string
+}
 
 const Profile = () => {
-  const [user, isLoading] = useUser()
+  const [student] = useUser()
+  const [user, setUser] = useState<UserType | null>(null)
+  const [degress, setDegrees] = useState<userDegress[] | null>(null)
+  const [orders, setOrders] = useState<userOrders[] | null>(null)
+  const [userEnrolledCourses, setUserEnrolledCourses] = useState<
+    userCourses[] | null
+  >(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [daysLeft, setDaysLeft] = useState<number | null>(null)
   const [formattedExpireTime, setFormattedExpireTime] = useState<string | null>(
     null
   )
   useEffect(() => {
-    // Calculate the days left and format the expiration time when the user data is available
+    if (!student?._id) {
+      return
+    }
+    // Fetch user from the API
+    const fetchUser = async () => {
+      try {
+        const response = await axiosInstance.get(
+          `/user/get-user/${student._id}`
+        )
+        console.log(response.data)
+        setUser(response.data.userDetails)
+        setDegrees(response.data.userDegrees)
+        setUserEnrolledCourses(response.data.userCourses)
+        setOrders(response.data.userOrders)
+        setIsLoading(false)
+      } catch (error: any) {
+        console.error(error)
+        toast.error("An error occurred while fetching user")
+        setIsLoading(false)
+      }
+    }
+
     if (user && user.membership?.expireTime) {
       const currentDate = new Date()
       const expireTime = new Date(user.membership.expireTime)
@@ -32,8 +114,10 @@ const Profile = () => {
 
       setDaysLeft(daysLeft)
       setFormattedExpireTime(formattedExpireTime)
-    } 
-  }, [user])
+    }
+
+    fetchUser()
+  }, [student?._id])
 
   const renderMembershipIcon = () => {
     const membershipName = user?.membership?.name?.toLowerCase()
@@ -65,9 +149,39 @@ const Profile = () => {
     return <p className="font-bold text-gray-500">No current subscription</p> // Render nothing if the membership is not gold, platinum, or diamond
   }
 
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top" as const,
+      },
+      title: {
+        display: true,
+        text: `Student Degrees`,
+        font: {
+          size: 36, // Increase the font size for the chart title
+        },
+      },
+    },
+  }
+  const revenueChartDataUserDegree = {
+    labels: degress?.map((degree) => degree.lessonTitle),
+    datasets: [
+      {
+        label: `exam degree`,
+        data: degress?.map((degree) => degree.degree),
+        borderColor: "rgba(192, 192, 75, 1)",
+      },
+    ],
+  }
+
   return (
-    <DataLoading data={user} loadingTime={10000} message="User Not Found, please login or register">
-      <div className="flex flex-col items-start justify-start h-screen my-12 mx-24">
+    <DataLoading
+      data={user}
+      loadingTime={10000}
+      message="User Not Found, please login or register"
+    >
+      <div className="flex flex-col items-start justify-start my-12 mx-24">
         <h1 className="text-4xl font-bold my-5">My Profile</h1>
         <ul className="list-disc">
           <li className="mb-3">
@@ -92,14 +206,16 @@ const Profile = () => {
               {renderMembershipIcon()}
             </div>
           </li>
-          {user?.membership?.expireTime ? (
-            <li className="mb-3">
-              <span className="font-bold">Membership expireTime:</span>{" "}
-              {formattedExpireTime} (in {daysLeft} days) from now
-            </li>
-          ) : (
-            <li className="mb-3 font-bold">No current subscription</li>
-          )}
+          <li className="mb-3 whitespace-nowrap flex flex-row items-center gap-3">
+            <span className="font-bold">Membership expireTime:</span>{" "}
+            {user?.membership?.expireTime ? (
+              `${formattedExpireTime} (in ${daysLeft} days) from now`
+            ) : (
+              <div className="font-bold text-gray-500">
+                No current subscription
+              </div>
+            )}
+          </li>
           <li className="mb-3">
             <span className="font-bold">Parent Phone:</span>{" "}
             {user?.parentsPhone}
@@ -121,7 +237,11 @@ const Profile = () => {
           </li>
         </ul>
         <div className="divider"></div>
-        <div className="text-center text-3xl font-bold">Students analytics</div>
+        <div className="flexCenter w-full h-full">
+          <div className="w-10/12">
+            <Line options={options} data={revenueChartDataUserDegree} />
+          </div>
+        </div>
       </div>
     </DataLoading>
   )
