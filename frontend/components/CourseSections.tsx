@@ -35,6 +35,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [lessons, setLessons] = useState<any[]>([])
+  const [currentSectionId, setCurrentSectionId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [filteredSections, setFilteredSections] = useState<Section[]>([])
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
@@ -76,8 +77,12 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
   }, [filteredSections])
 
   const handleSectionClick = (sectionId: string) => {
+    if (currentSectionId === sectionId) {
+      return
+    }
     setIsLoading(true)
     setLessons([])
+    setCurrentSectionId(sectionId)
     setTimeout(() => {
       fetchLessons(sectionId)
     }, 1000);
@@ -456,9 +461,9 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                    (
                     <div>
                     {lesson.exams?.length ? (
-                      <button className="btn btn-secondary btn-md"> exam is available </button>
+                      <span className=" px-5 text-md"> exam is available </span>
                     ):(
-                      <button className="btn btn-secondary btn-md"> no exam is available </button>
+                      <span className=" px-5 text-md"> no exam is available </span>
                     )}
                     </div>
                     )

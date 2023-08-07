@@ -66,7 +66,7 @@ const User = new mongoose.Schema({
         name: String,
         lessonTotal: Number,
         courseImg: String,
-        memberId: {
+        memberId:{
             type: mongoose.Schema.ObjectId,
             ref: 'members'
         },
@@ -81,22 +81,9 @@ const User = new mongoose.Schema({
             degree: {
                 type: String
             },
-
-           examAnswer:[
-            { question: String,
-            answers: [{
-                text: String,
-                image: String
-            }],
-            correctAnswer: [String],
-            questionImage: String,
-            selectedAnswer:[String],
-            isCheckBoxQuiz: Boolean,
-        }
-        ],
             createdAt: {
-                type: Date,
-                default: Date.now()
+            type: Date,
+            default: Date.now()
             }
         }],
     memberShip: {
@@ -112,7 +99,7 @@ const User = new mongoose.Schema({
         default: 0
     },
     lastSignedIn: Date,
-    nextLesson: {
+    nextLesson:{
         type: mongoose.Schema.ObjectId,
         ref: 'lessons'
     }
