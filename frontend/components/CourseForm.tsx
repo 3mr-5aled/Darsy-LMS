@@ -17,7 +17,7 @@ type Props = {
 
 type FormValues = {
   name: string
-  appearenceDate:number
+  appearenceDate: number
   description: string
   duration: number
   price: number
@@ -76,17 +76,17 @@ const CourseForm = ({ title, type, course }: Props) => {
       setValue("courseImg.publicId", course?.courseImg.publicId)
       setValue("courseImg.fileName", course?.courseImg.fileName)
       // setValue("expiredTime", course?.expiredTime)
-      setImageURL(course?.courseImg.src || "https://picsum.photos/350/350") // Handle undefined case here
+      setImageURL(course?.courseImg.src || "/no-course-image.png") // Handle undefined case here
     }
   }, [course, setValue])
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formData: CourseType = {
       name: data.name,
-      appearenceDate:data.appearenceDate,
+      appearenceDate: data.appearenceDate,
       description: data.description,
       grade: data.grade,
-      isShown:false,
+      isShown: false,
       courseImg: {
         src: imageURL!,
         publicId: publicId,
@@ -146,7 +146,7 @@ const CourseForm = ({ title, type, course }: Props) => {
     >
       <h1>{title}</h1>
       <div className="flex-col gap-5 flexCenter">
-        <div className="flexCenter flex-col form_image-container">
+        <div className="flex-col flexCenter form_image-container">
           {!imageURL && (
             <label htmlFor="image" className="flexCenter form_image-label">
               {!imageURL && "Choose a poster for your project"}
@@ -219,7 +219,7 @@ const CourseForm = ({ title, type, course }: Props) => {
             {errors.price && <span>This field is required</span>}
             {/* Display error message if the "price" field is not filled */}
           </div>
-          <div className="form-control  w-2/6">
+          <div className="w-2/6 form-control">
             <label htmlFor="discount">discount:</label>
             <input
               type="number"
@@ -234,8 +234,8 @@ const CourseForm = ({ title, type, course }: Props) => {
             {errors.discount && <span>This field is required</span>}
             {/* Display error message if the "discount" field is not filled */}
           </div>
-          <div className="form-control  w-2/6">
-            <label htmlFor="appearenceDate">appearenceDate:</label>
+          <div className="w-2/6 form-control">
+            <label htmlFor="appearenceDate">Launch Date:</label>
             <input
               type="datetime-local"
               id="appearenceDate"
@@ -265,7 +265,7 @@ const CourseForm = ({ title, type, course }: Props) => {
               <p className="text-sm text-error">Grade is required</p>
             )}
           </div>
-          {/* <div className="form-control w-full">
+          {/* <div className="w-full form-control">
             <label htmlFor="expiredTime">Date of expire</label>
             <input
               className="w-full input input-bordered"

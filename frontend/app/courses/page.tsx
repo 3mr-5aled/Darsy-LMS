@@ -21,9 +21,9 @@ const Courses = () => {
   if (error) {
     return <NotFoundComponent message="Error loading courses." />
   }
-  const getLaunchDate=(date : number)=>{
-     const time = new Date(date)
-    return time.toLocaleString().replace(',',' ')
+  const getLaunchDate = (date: number) => {
+    const time = new Date(date)
+    return time.toLocaleString().replace(",", " ")
   }
   return (
     <DataLoading data={courses} loadingTime={10000} message="Courses Not Found">
@@ -31,11 +31,17 @@ const Courses = () => {
         {courses && courses.length > 0 ? (
           courses.map((item: CourseType, index: number) => (
             <div key={index} className="card w-fit mx-auto bg-base-300 p-5">
-              <div onClick={() => item.isShown &&router.push(`/courses/view-course/${item._id}`)} id={item._id}>
+              <div
+                onClick={() =>
+                  item.isShown &&
+                  router.push(`/courses/view-course/${item._id}`)
+                }
+                id={item._id}
+              >
                 <div>
                   <Image
                     className="rounded-lg"
-                    src={item.courseImg.src || "https://picsum.photos/350/350"}
+                    src={item.courseImg.src || "/no-course-image.png"}
                     alt={item.name}
                     width={350}
                     height={350}
@@ -47,17 +53,24 @@ const Courses = () => {
                     <span className="block">{item.price}$</span>
                     <span className="block">{item.duration}h</span>
                   </div>
-                  {item.isShown ?(<button
-                    className="btn btn-primary"
-                    onClick={() =>
-                     item.isShown ? router.push(`/courses/view-course/${item._id}`) : null
-                    }
-                  >
-                    Enroll Now
-                  </button>):(
+                  {item.isShown ? (
+                    <button
+                      className="btn btn-primary"
+                      onClick={() =>
+                        item.isShown
+                          ? router.push(`/courses/view-course/${item._id}`)
+                          : null
+                      }
+                    >
+                      Enroll Now
+                    </button>
+                  ) : (
                     <p>
-                    release in : <span className=" font-medium text-white">{getLaunchDate(item.appearenceDate)}</span>
-                  </p>
+                      release in :{" "}
+                      <span className=" font-medium text-white">
+                        {getLaunchDate(item.appearenceDate)}
+                      </span>
+                    </p>
                   )}
                 </div>
               </div>

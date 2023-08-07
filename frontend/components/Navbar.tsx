@@ -120,7 +120,7 @@ const Navbar = () => {
         {/* Container for the user avatar/sign-in button */}
         <DarkModeButton />
         {isLoadingUser ? (
-          <div className="w-16 h-6 m-1 animate-pulse" /> // Placeholder skeleton for username
+          <div>Loading ...</div> // Placeholder skeleton for username
         ) : user ? (
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="">

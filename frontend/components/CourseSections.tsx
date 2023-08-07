@@ -85,7 +85,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
     setCurrentSectionId(sectionId)
     setTimeout(() => {
       fetchLessons(sectionId)
-    }, 1000);
+    }, 1000)
   }
 
   const deleteSection = async (sectionId: string) => {
@@ -304,26 +304,25 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
               <div className="flex flex-row items-center justify-between p-3 my-3 rounded-md ">
                 {isLoading ? (
                   <div className=" my-2 mx-auto loading loading-lg loading-spinner"></div>
-                ):
-                (
+                ) : (
                   <>
-                <h2 className="text-xl font-bold">Lessons</h2>
-                {isAdmin && (
-                  <>
-                    <button
-                      title="add lesson"
-                      className="btn btn-primary"
-                      // onClick={() => showLessonModal(index)}
-                      onClick={() =>
-                        router.push(
-                          `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/create-lesson`
-                        )
-                      }
-                    >
-                      Add Lesson
-                    </button>
+                    <h2 className="text-xl font-bold">Lessons</h2>
+                    {isAdmin && (
+                      <>
+                        <button
+                          title="add lesson"
+                          className="btn btn-primary"
+                          // onClick={() => showLessonModal(index)}
+                          onClick={() =>
+                            router.push(
+                              `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/create-lesson`
+                            )
+                          }
+                        >
+                          Add Lesson
+                        </button>
 
-                    {/* <dialog id={`modal_${index}`} className="z-0 modal">
+                        {/* <dialog id={`modal_${index}`} className="z-0 modal">
                       <form method="dialog" className="modal-box">
                         <button
                         title="close"
@@ -341,13 +340,13 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                           />
                           </form>
                         </dialog> */}
+                      </>
+                    )}
                   </>
-                )}
-                </>
                 )}
               </div>
               {/* Check if lessons array is empty */}
-               {!isLoading && lessons.length === 0 ? (
+              {!isLoading && lessons.length === 0 ? (
                 <p>No Lessons available</p>
               ) : (
                 lessons.map((lesson, index) => (
@@ -431,44 +430,43 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                       )}
                     </div>
 
-                   {isAdmin ? (<div>
-                      {lesson.exams?.length > 0 ? (
-                        <button
-                          title="edit quiz"
-                          className="btn btn-primary btn-outline"
-                          onClick={() =>
-                            router.push(
-                              `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/${lesson._id}/edit-quiz`
-                            )
-                          }
-                        >
-                          Edit Quiz
-                        </button>
-                      ) : (
-                        <button
-                          title="add quiz"
-                          className="btn btn-secondary"
-                          onClick={() =>
-                            router.push(
-                              `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/${lesson._id}/create-quiz`
-                            )
-                          }
-                        >
-                          Add Quiz
-                        </button>
-                      )}
-                    </div>) : 
-                   (
-                    <div>
-                    {lesson.exams?.length ? (
-                      <span className=" px-5 text-md"> exam is available </span>
-                    ):(
-                      <span className=" px-5 text-md"> no exam is available </span>
+                    {isAdmin ? (
+                      <div>
+                        {lesson.exams?.length > 0 ? (
+                          <button
+                            title="edit quiz"
+                            className="btn btn-primary btn-outline"
+                            onClick={() =>
+                              router.push(
+                                `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/${lesson._id}/edit-quiz`
+                              )
+                            }
+                          >
+                            Edit Quiz
+                          </button>
+                        ) : (
+                          <button
+                            title="add quiz"
+                            className="btn btn-secondary"
+                            onClick={() =>
+                              router.push(
+                                `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/${lesson._id}/create-quiz`
+                              )
+                            }
+                          >
+                            Add Quiz
+                          </button>
+                        )}
+                      </div>
+                    ) : (
+                      <div>
+                        {lesson.exams?.length ? (
+                          <span className=" px-5 text-md"> Quiz </span>
+                        ) : (
+                          ""
+                        )}
+                      </div>
                     )}
-                    </div>
-                    )
-                    } 
-                   
                   </>
                 ))
               )}
