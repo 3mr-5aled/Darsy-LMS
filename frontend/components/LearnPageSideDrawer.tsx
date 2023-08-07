@@ -110,12 +110,11 @@ const LearnPageSideDrawer = () => {
   const examStatus = (id: string) => {
     let status
     user?.exams?.forEach((exam) => {
-      console.log(exam)
       if (exam.lessonId.toString() === id) {
         status =
           parseInt(exam.degree) > 50
-            ? " bg-success bg-opacity-50"
-            : "bg-error bg-opacity-50"
+            ? "border-2 border-success border-opacity-50"
+            : "border-2 border-error border-opacity-50"
       }
     })
     return status
@@ -149,7 +148,7 @@ const LearnPageSideDrawer = () => {
               <div className="flex flex-col gap-3 collapse-content">
                 {/* Display lessons in each section */}
                 {section.lessons.map((lessonItem, lessonIndex) => (
-                  <div>
+                  <div key={lessonItem._id}>
                     <Link href={`/learn/lesson/${lessonItem._id}`}>
                       <div
                         key={lessonItem._id}
@@ -165,7 +164,7 @@ const LearnPageSideDrawer = () => {
                       <Link
                         className={`${examStatus(
                           lessonItem._id as string
-                        )} flex flex-row py-3 px-3 rounded-lg hover:bg-neutral`}
+                        )} flex flex-row py-3 px-3 rounded-lg border-2 border-gray-500 hover:bg-neutral`}
                         href={`/learn/lesson/${lessonItem._id}/quiz`}
                       >
                         Quiz
