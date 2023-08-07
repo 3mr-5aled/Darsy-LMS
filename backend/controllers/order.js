@@ -91,4 +91,28 @@ const getSingleOrder = asynchandler(async(req,res,next)=>{
   console.log(order)
   res.status(200).json(order)
 })
-module.exports = { createOrder, checkOrder , addCredit , buyCourse , getSingleOrder}
+const getAllOrders = asynchandler(async(req,res,next)=>{
+  const date = req.query.date || new Date();
+
+  const startDate = new Date(date);
+  startDate.setDate(req.query.date ? startDate.getDate() + 1 :startDate.getDate() );
+  startDate.setUTCHours(0, 0, 0, 0);
+  
+  const endDate = new Date(startDate);
+  endDate.setDate(endDate.getDate() + 1);
+  
+  console.log(startDate.getHours(), startDate.getMinutes(),startDate); // Log start date's hours and minutes
+  console.log(endDate.getHours(), endDate.getMinutes(), endDate); // Log end date's hours, minutes, and full date
+  
+  const orders = await Order.find({
+    createdAt: { $gte: startDate, $lt: endDate },
+  });
+  
+  if (orders.length === 0) {
+    return next(new ApiError('No orders in this day', 2198, 404));
+  }
+  
+  res.status(200).json(orders);
+  
+})
+module.exports = { createOrder, checkOrder , addCredit , buyCourse , getSingleOrder , getAllOrders}
