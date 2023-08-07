@@ -81,6 +81,19 @@ const User = new mongoose.Schema({
             degree: {
                 type: String
             },
+            examAnswer:[
+               { 
+                question: String,
+                questionImage:String,
+                answers: [ {
+                    text: String,
+                    image: String
+                }],
+                correctAnswer: [ String ],
+                isCheckBoxQuiz: Boolean,
+                selectedAnswer: [ String ]
+            }
+            ],
             createdAt: {
             type: Date,
             default: Date.now()

@@ -74,11 +74,10 @@ const addExamDegree = aynchandler(async (req, res, next) => {
     const examAnswer = exam.map(singleExam => {
         const filteredExam = lesson.exams.filter(e => e._id.toString() === singleExam.id);
         if (filteredExam.length > 0) {
-            return {question:filteredExam[0].question,questionImage:filteredExam[0].questionImage,answers:filteredExam[0].answers,correctAnswer:filteredExam[0].correctAnswer,isCheckBoxQuiz:filteredExam[0].isCheckBoxQuiz,selectedAnswer:singleExam.selectedAnswer}
+            return {question:filteredExam[0].question,questionImage:filteredExam[0].questionImage,answers:filteredExam[0].answers,correctAnswer:filteredExam[0].correctAnswer,isCheckBoxQuiz:filteredExam[0].isCheckBoxQuiz || singleExam.isCheckBoxQuiz,selectedAnswer:singleExam.selectedAnswer}
         }
         return singleExam
     });
-    console.log(examAnswer)
     degree = Math.round((degree / exam.length) * 100)
     user.exams.push({ degree: degree, lessonId, examAnswer })
     await user.save()
