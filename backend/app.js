@@ -32,11 +32,14 @@ app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }))
 
 app.use(express.json())
 // app.use(fileUploader())
+const isProduction = process.env.NODE_ENV === "production"
+const baseUrl = isProduction
+  ? "https://darsy-lms-7ni9.onrender.com"
+  : `http://localhost:8080`
+
 app.use(
   cors({
-    origin:
-      `http://localhost:${process.env.FRONTEND_PORT}` ||
-      process.env.FRONTEND_BASE_URL,
+    origin: baseUrl,
     credentials: true,
   })
 )
