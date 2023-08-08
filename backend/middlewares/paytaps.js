@@ -2,6 +2,15 @@ const asynchandler = require("express-async-handler")
 const axios = require("axios")
 const paytabs = require("paytabs_pt2")
 require("dotenv").config()
+
+const isProduction = process.env.NODE_ENV === "production"
+const FrontEndBaseUrl = isProduction
+  ? process.env.FRONTEND_BASE_URL
+  : `http://localhost:${process.env.FRONTEND_PORT}`
+const BackEndBaseUrl = isProduction
+  ? process.env.BACKEND_BASE_URL
+  : "https://0432-197-58-174-141.ngrok-free.app/api/v1/payment/check-order"
+
 const payment = asynchandler(async (req, res, next) => {
   const profileID = process.env.PROFILE_ID,
     serverKey = process.env.SERVER_KEY,
@@ -23,7 +32,7 @@ const payment = asynchandler(async (req, res, next) => {
 
   let cart_details = [cart.id, cart.currency, cart.amount, cart.description]
   let customer = {
-    name:"",
+    name: "",
     email: req.user.email,
     phone: req.user.phone,
     street1: "",
@@ -48,9 +57,8 @@ const payment = asynchandler(async (req, res, next) => {
   let shipping_address = customer_details
 
   let url = {
-    callback:
-      "https://0432-197-58-174-141.ngrok-free.app/api/v1/payment/check-order",
-    return: "http://localhost:8080/",
+    callback: BackEndBaseUrl,
+    return: FrontEndBaseUrl,
   }
   let response_URLs = [url.callback, url.return]
   let lang = "ar"
