@@ -51,6 +51,7 @@ const Lesson = new mongoose.Schema(
         }],
         correctAnswer: [String],
         questionImage:String,
+        duration:Number,
         isCheckBoxQuiz:Boolean
       },
       { timestamps: true },

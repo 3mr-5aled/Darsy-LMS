@@ -36,7 +36,7 @@ const isProduction = process.env.NODE_ENV === "production"
 const baseUrl = isProduction
   ? "https://darsy-lms-beta.vercel.app"
   : `http://localhost:8080`
-
+console.log(baseUrl)
 app.use(
   cors({
     origin: baseUrl,
