@@ -34,7 +34,7 @@ app.use(express.json())
 // app.use(fileUploader())
 const isProduction = process.env.NODE_ENV === "production"
 const baseUrl = isProduction
-  ? "https://darsy-lms-7ni9.onrender.com"
+  ? "https://darsy-lms-beta.vercel.app"
   : `http://localhost:8080`
 
 app.use(
