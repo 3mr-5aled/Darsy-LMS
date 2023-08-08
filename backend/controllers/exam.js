@@ -11,8 +11,9 @@ const createExam = aynchandler(async (req, res, next) => {
     if (!lesson) {
         return next(new ApiError('lesson not found', 6341, 404))
     }
-    const { body } = req
-    lesson.exams = [...body]
+    const { exams , timer} = req.body
+    lesson.exams = [...exams]
+    lesson.timer = timer
     await lesson.save()
     const enrolledUsers = await User.find({ ['enrolledCourse.courseId']: lesson.courseId })
     enrolledUsers.map(async (user) => {

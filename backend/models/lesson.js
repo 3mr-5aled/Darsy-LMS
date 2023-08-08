@@ -36,6 +36,7 @@ const Lesson = new mongoose.Schema(
         type: String,
       },
     },
+    timer:Number,
     courseId: { type: mongoose.Types.ObjectId, ref: "courses", required: true },
     sectionId: {
       type: mongoose.Types.ObjectId,
@@ -51,7 +52,6 @@ const Lesson = new mongoose.Schema(
         }],
         correctAnswer: [String],
         questionImage:String,
-        duration:Number,
         isCheckBoxQuiz:Boolean
       },
       { timestamps: true },
