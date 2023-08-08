@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import axiosInstance from "@/axios.config"
 import MyCourses from "@/components/MyCourses"
 import useUser from "@/lib/FetchUser"
@@ -16,15 +16,37 @@ import {
 } from "react-icons/bs"
 import { toast } from "react-toastify"
 import DarkModeButton from "@/components/DarkModeButton"
+import Loading from "../loading"
 
 const StudentMainPage = () => {
-  const [user] = useUser()
+  const [user, isLoading] = useUser()
   const router = useRouter()
 
   // Step 1: Define state variables
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [amount, setAmount] = useState("")
   const [amountError, setAmountError] = useState("")
+
+  if (isLoading) {
+    return <Loading /> // Assuming you have a Loading component
+  }
+
+  // If user is not logged in, show a message and button to navigate to login page
+  if (!user) {
+    return (
+      <div className="p-5 m-5 w-full h-96 flexCenter flex-col">
+        <p className="text-xl font-semibold">You are not logged in.</p>
+        <div>
+          <Link href="/auth/login">
+            <span className="mt-4 mr-3 btn btn-primary">Login</span>
+          </Link>
+          <Link href="/">
+            <span className="mt-4 btn btn-primary">Back to Homepage</span>
+          </Link>
+        </div>
+      </div>
+    )
+  }
 
   const handleContinueLearning = async () => {
     if (user) {

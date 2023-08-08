@@ -1,14 +1,13 @@
 "use client"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import axiosInstance from "@/axios.config"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useParams, useRouter } from "next/navigation"
-import { any, string } from "prop-types"
 import Loading from "@/app/loading"
-import NotFoundComponent from "@/components/NotFoundComponent"
 import ExamResults from "@/components/ExamResults"
 import { useUserContext } from "@/contexts/userContext"
+import Timer from "@/components/quizs/Timer"
 
 const StudentQuizPage = () => {
   const { state, setUser, clearUser } = useUserContext()
@@ -18,6 +17,7 @@ const StudentQuizPage = () => {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState<Boolean>(true)
   const [selectedAnswers, setSelectedAnswers] = useState<any[]>([])
+  const [timerFinished, setTimerFinished] = useState<boolean>(false)
 
   useEffect(() => {
     // Fetch quiz questions from the API based on the id
@@ -47,9 +47,11 @@ const StudentQuizPage = () => {
 
     fetchQuizQuestions()
   }, [id])
+
   if (isLoading) {
     return <Loading />
   }
+
   const handleAnswerChange = (
     questionIndex: number,
     answerText: string,
@@ -66,13 +68,13 @@ const StudentQuizPage = () => {
     } else {
       if (selectedAnswer.includes(answerText)) {
         selectedAnswer =
-          selectedAnswer.length > 0 ? [...selectedAnswer] : [answerText] // If it is, create a shallow copy of selectedAnswer (unnecessary step)
+          selectedAnswer.length > 0 ? [...selectedAnswer] : [answerText]
       } else {
         if (selectedAnswer.length === correctAnswer.length) {
           selectedAnswer.splice(0, 1)
-          selectedAnswer = [...selectedAnswer, answerText] // If it is not, create a new array with answerText appended
+          selectedAnswer = [...selectedAnswer, answerText]
         } else {
-          selectedAnswer = [...selectedAnswer, answerText] // If it is not, create a new array with answerText appended
+          selectedAnswer = [...selectedAnswer, answerText]
         }
       }
     }
@@ -87,34 +89,35 @@ const StudentQuizPage = () => {
 
   const handleSubmit = async () => {
     // Check if all questions have been answered
-    let emptyAnswers = false
-    selectedAnswers.forEach((selectedAnswer) => {
-      if (!selectedAnswer?.selectedAnswer) {
-        emptyAnswers = true
-        toast.error("you must select answers for each question")
-        return
-      }
-    })
-    if (emptyAnswers) {
-      return
-    }
-    if (
-      selectedAnswers.some((selectedAnswer) =>
-        selectedAnswer.isCheckBoxQuiz
-          ? selectedAnswer.selectedAnswer < 2
-          : selectedAnswer.selectedAnswer === 0
-      )
-    ) {
-      toast.error("Please answer all questions before submitting.")
-      return
+    console.log(selectedAnswers)
+    if (!timerFinished) {
+      selectedAnswers.forEach((selectedAnswer) => {
+        if (!selectedAnswer?.selectedAnswer) {
+          toast.error("you must select answers for each question")
+          return
+        }
+        if (
+          selectedAnswers.some((selectedAnswer) =>
+            selectedAnswer.isCheckBoxQuiz
+              ? selectedAnswer.selectedAnswer.length < 2
+              : selectedAnswer.selectedAnswer.length === 0
+          )
+        ) {
+          toast.error("Please answer all questions before submitting.")
+          return
+        }
+      })
     }
 
+    console.log(selectedAnswers)
     try {
+      console.log(selectedAnswers)
       // Make the POST request to the API endpoint using axiosInstance.post()
       const response = await axiosInstance.put(`/exam/${id}/submit-exam`, {
         exam: selectedAnswers,
       })
 
+      console.log(selectedAnswers)
       // Handle the response from the API
       if (response.status === 200) {
         console.log(response.data)
@@ -131,8 +134,15 @@ const StudentQuizPage = () => {
       console.error(error)
     }
   }
+
   if (error) {
     return <ExamResults />
+  }
+
+  const handleTimeout = () => {
+    setTimerFinished(true)
+    toast.error("Time is up! The quiz will be submitted.")
+    handleSubmit()
   }
 
   return (
@@ -140,6 +150,7 @@ const StudentQuizPage = () => {
       <h1 className="mb-4 mt-4 underline text-4xl font-semibold text-center">
         Quiz
       </h1>
+      <Timer initialTime={20} onTimeout={handleTimeout} />
       {questions.map((q, questionIndex) => (
         <div key={questionIndex} className="mb-6">
           <p className="block mb-2 font-semibold">
