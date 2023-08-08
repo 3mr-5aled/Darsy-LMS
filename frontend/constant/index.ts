@@ -14,7 +14,7 @@ import { FaRoute } from "react-icons/fa"
 
 export const WebsiteDetails = {
   name: "Darsy" as string,
-  url: "http://localhost:8080" as string,
+  url: "https://darsy-lms-beta.vercel.app/" as string,
   description:
     "this is the description for the website where you can find all you need" as string,
   logo: "Logo" as string,
