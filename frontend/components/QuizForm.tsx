@@ -14,7 +14,6 @@ import { useRouter } from "next/navigation"
 
 const CreateQuizPage = ({
   courseId,
-  sectionId,
   lessonId,
   exam,
   type,
@@ -26,6 +25,7 @@ const CreateQuizPage = ({
   type: "create" | "edit"
 }) => {
   const router = useRouter()
+  const [timerMinutes, setTimerMinutes] = useState(30)
   const [imageData, setImageData] = useState<string | null>(null)
   const [questions, setQuestions] = useState<Question[]>([
     {
@@ -234,6 +234,8 @@ const CreateQuizPage = ({
     if (hasDuplicates) {
       return // If duplicates are found, exit the function and don't submit the form
     }
+    const totalTimerDuration = timerMinutes * 60
+
     try {
       // Convert images to base64 and upload
       const exams = await Promise.all(
@@ -330,6 +332,18 @@ const CreateQuizPage = ({
       <h1 className="mb-4 text-2xl font-semibold">
         {type === "create" ? "Create Quiz" : "Edit Quiz"}
       </h1>
+      <div className="mb-4">
+        <label className="block mb-2 font-semibold">
+          Quiz Timer Duration (minutes):
+        </label>
+        <input
+          title="duration"
+          type="number"
+          className="w-24 p-2 border rounded input input-bordered"
+          value={timerMinutes}
+          onChange={(e) => setTimerMinutes(Number(e.target.value))}
+        />
+      </div>
       {questions.map((q, questionIndex) => (
         <div key={questionIndex} className="mb-6">
           <label className="block mb-2 font-semibold">

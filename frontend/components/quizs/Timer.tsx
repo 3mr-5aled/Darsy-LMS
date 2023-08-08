@@ -27,13 +27,45 @@ const Timer: React.FC<TimerProps> = ({ initialTime, onTimeout }) => {
     }
   }, [time, onTimeout])
 
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60)
+  const formatTime = (seconds: number) => {
+    const days = Math.floor(seconds / 86400) // 1 day = 86400 seconds
+    const hours = Math.floor((seconds % 86400) / 3600) // 1 hour = 3600 seconds
+    const minutes = Math.floor((seconds % 3600) / 60)
     const secs = seconds % 60
-    return `${mins}:${secs < 10 ? "0" : ""}${secs}`
+
+    return { days, hours, minutes, secs }
   }
 
-  return <div>Time Remaining: {formatTime(time)}</div>
+  const { days, hours, minutes, secs } = formatTime(time)
+
+  return (
+    <div className="grid grid-flow-col gap-5 text-center auto-cols-max">
+      {/* <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+        <span className="countdown font-mono text-5xl">
+          <span style={{ "--value": days } as React.CSSProperties}></span>
+        </span>
+        days
+      </div>
+      <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+        <span className="countdown font-mono text-5xl">
+          <span style={{ "--value": hours } as React.CSSProperties}></span>
+        </span>
+        hours
+      </div> */}
+      <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+        <span className="countdown font-mono text-5xl">
+          <span style={{ "--value": minutes } as React.CSSProperties}></span>
+        </span>
+        min
+      </div>
+      <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
+        <span className="countdown font-mono text-5xl">
+          <span style={{ "--value": secs } as React.CSSProperties}></span>
+        </span>
+        sec
+      </div>
+    </div>
+  )
 }
 
 export default Timer
