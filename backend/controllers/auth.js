@@ -27,9 +27,8 @@ const login = asynchandler(async (req, res, next) => {
   if (!isvalid) {
     return next(new ApiError("password is invalid",8092, 400));
   }
-  const { _doc } = user;
   // use jsonwebtoken to get token
-  const token = jwt.sign({..._doc},process.env.JWT );
+  const token = jwt.sign({_id:user._id,name:user.name},process.env.JWT);
   // send response with all user details and token as cookie
   const {name,email,phone,parentsPhone,grade,city,gender,role,enrolledCourse} = user
   res.status(201).cookie("token", token,{ secure: true, sameSite: 'none'  }).json({email,name,phone,parentsPhone,grade,city,gender,role,enrolledCourse})
@@ -47,9 +46,8 @@ const register = asynchandler(async (req, res, next) => {
     const hashedpassword = await bcrypt.hash(password, salt);
     req.body.password = hashedpassword
     const user = await User.create({...req.body,lastSignedIn:new Date()});
-    const { _doc } = user;
   // use jsonwebtoken to get token
-    const token = jwt.sign({..._doc,},process.env.JWT );
+    const token = jwt.sign({_id:user._id,name:user.name},process.env.JWT );
     // send response with all user details and token as cookie
     const {name,email,grade,city,gender,role} = user
     res.status(201).cookie("token", token,{ secure: true, sameSite: 'none'  }).json({email,name,phone,parentsPhone,grade,city,gender,role})
