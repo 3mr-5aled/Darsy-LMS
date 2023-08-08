@@ -10,24 +10,33 @@ import { useRouter } from "next/navigation"
 
 const MyCourses = () => {
   const [user, setUser] = useState<UserType | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
   const router = useRouter()
 
   useEffect(() => {
     const fetchUserData = async () => {
+      setLoading(true)
       try {
+        
         const response = await axiosInstance.get(`/auth/profile`)
         setUser(response.data)
+        setLoading(false)
       } catch (error) {
         console.error(error)
+        setLoading(false)
       }
     }
 
     fetchUserData()
   }, [])
-
-  if (!user) {
+  if (loading) {
     return <Loading />
+
   }
+  if (!user) {
+    return <NotFoundComponent message="you are not enrolled in courses" />
+  }
+
 
   const handleContinueCourse = async (courseId: string) => {
     try {
