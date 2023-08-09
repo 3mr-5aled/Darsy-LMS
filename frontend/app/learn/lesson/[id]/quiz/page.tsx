@@ -21,6 +21,10 @@ const StudentQuizPage = () => {
 
   useEffect(() => {
     // Fetch quiz questions from the API based on the id
+    if (timerFinished) {
+      handleSubmit();
+      return
+    }
     const fetchQuizQuestions = async () => {
       try {
         const response = await axiosInstance.get(`/exam/${id}/get-exam`)
@@ -32,7 +36,7 @@ const StudentQuizPage = () => {
           isCheckBoxQuiz: e.isCheckBoxQuiz,
           selectedAnswer: [],
         }))
-        setSelectedAnswers(new Array(response.data.exam.length).fill(exam))
+        setSelectedAnswers(exam)
         setIsLoading(false)
       } catch (error: any) {
         console.log(error)
@@ -46,7 +50,7 @@ const StudentQuizPage = () => {
     }
 
     fetchQuizQuestions()
-  }, [id])
+  }, [id,timerFinished])
 
   if (isLoading) {
     return <Loading />
@@ -86,16 +90,18 @@ const StudentQuizPage = () => {
     }
     setSelectedAnswers(updatedSelectedAnswers)
   }
-
+  
   const handleSubmit = async () => {
     // Check if all questions have been answered
-    console.log(selectedAnswers)
+    console.log(timerFinished)
+    let empty = false
     if (!timerFinished) {
       selectedAnswers.forEach((selectedAnswer) => {
         if (!selectedAnswer?.selectedAnswer) {
           toast.error("you must select answers for each question")
+          empty = true
           return
-        }
+    }
         if (
           selectedAnswers.some((selectedAnswer) =>
             selectedAnswer.isCheckBoxQuiz
@@ -104,9 +110,13 @@ const StudentQuizPage = () => {
           )
         ) {
           toast.error("Please answer all questions before submitting.")
+          empty = true
           return
         }
       })
+    }
+    if (empty) {
+      return
     }
 
     console.log(selectedAnswers)
@@ -135,14 +145,14 @@ const StudentQuizPage = () => {
     }
   }
 
+
   if (error) {
     return <ExamResults />
   }
 
   const handleTimeout = () => {
-    setTimerFinished(true)
     toast.error("Time is up! The quiz will be submitted.")
-    handleSubmit()
+    setTimerFinished(true)
   }
 
   return (
@@ -166,7 +176,7 @@ const StudentQuizPage = () => {
 
           <div className="divider"></div>
           <div className="mt-3 mb-4">
-            <label className="font-semibold">Select Answer:</label>
+            <label className="font-semibold">Select {q.correctAnswer.length} Answer{q.correctAnswer.length > 1 && 's'}:</label>
             <div className="flex flex-col gap-3">
               {q.answers.map((answer: any, answerIndex: number) => (
                 <div

@@ -57,6 +57,7 @@ const addExamDegree = aynchandler(async (req, res, next) => {
     if (!lesson) {
         return next(new ApiError('lesson not found', 6141, 404))
     }
+    console.log(exam)
     const user = await User.findById(req.user._id)
     let degree = 0
     exam.map(item => {
