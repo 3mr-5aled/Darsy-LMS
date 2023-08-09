@@ -114,7 +114,7 @@ const Dashboard = () => {
     ],
   }
   const revenueChartDataCurrentMonth = {
-    labels: revenueDataCurrentMonth.map((data,index) => `Day ${index + 1}`) ,
+    labels: revenueDataCurrentMonth.map((data, index) => `Day ${index + 1}`),
     datasets: [
       {
         label: `Revenue Current Month`,
@@ -181,7 +181,7 @@ const Dashboard = () => {
                   className={`mr-2 ${
                     timeRange === "year"
                       ? "bg-primary rounded-xl p-3 text-sm font-bold"
-                      : "text-sm font-bold"
+                      : "text-sm font-bold bg-base-100 hover:bg-primary-focus transition-all rounded-xl p-3"
                   }`}
                   onClick={() => handleTimeRangeChange("year")}
                 >
@@ -191,7 +191,7 @@ const Dashboard = () => {
                   className={`mr-2 ${
                     timeRange === "currentMonth"
                       ? "bg-primary rounded-xl p-3 text-sm font-bold"
-                      : "text-sm font-bold"
+                      : "text-sm font-bold bg-base-100 hover:bg-primary-focus transition-all rounded-xl p-3"
                   }`}
                   onClick={() => handleTimeRangeChange("currentMonth")}
                 >
@@ -201,7 +201,7 @@ const Dashboard = () => {
                   className={`${
                     timeRange === "lastSevenDays"
                       ? "bg-primary rounded-xl p-3 text-sm font-bold"
-                      : " text-sm font-bold"
+                      : " text-sm font-bold bg-base-100 hover:bg-primary-focus transition-all rounded-xl p-3"
                   }`}
                   onClick={() => handleTimeRangeChange("lastSevenDays")}
                 >

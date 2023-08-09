@@ -1,16 +1,9 @@
 import "@/app/globals.css"
-import { AdminNavLinks, WebsiteDetails } from "@/constant"
+import { WebsiteDetails } from "@/constant"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import Link from "next/link"
 import AdminOnlyRoute from "@/components/AdminOnlyRoutes"
-import DarkModeButton from "@/components/DarkModeButton"
-import {
-  BsPeople,
-  BsPlusCircle,
-  BsStack,
-  BsHouseDoorFill,
-} from "react-icons/bs"
+import AdminSideBar from "@/components/admin/AdminSideBar"
 
 export const metadata = {
   title: WebsiteDetails.name,
@@ -58,30 +51,7 @@ export default function RootLayout({
         </div>
         <div className="drawer-side">
           <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-          <ul className="h-full p-4 menu w-80 bg-base-200 text-base-content">
-            <div className="flex flex-row items-center justify-between mb-5">
-              <div className="text-2xl font-bold">
-                <Link href="/">{WebsiteDetails.name}</Link>
-              </div>
-              <DarkModeButton />
-            </div>
-            {/* Sidebar content here */}
-            {AdminNavLinks.map((link) => (
-              <li>
-                <Link
-                  href={link.href}
-                  key={link.key}
-                  className="flex flex-row gap-3"
-                >
-                  <link.icon />
-                  <span>{link.text}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-          {/* <div className="p-4">
-            <UserComponent />
-          </div> */}
+          <AdminSideBar />
         </div>
       </div>
     </AdminOnlyRoute>

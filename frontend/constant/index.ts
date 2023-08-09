@@ -39,47 +39,61 @@ export const NavLinks = [
 ]
 export const AdminNavLinks = [
   {
-    href: "/admin/dashboard",
-    icon: BsMenuButtonWideFill,
-    key: "Dashboard",
-    text: "Dashboard",
+    name: "Dashboard",
+    links: [
+      {
+        href: "/admin/dashboard",
+        icon: BsMenuButtonWideFill,
+        key: "Dashboard",
+        text: "Dashboard",
+      },
+    ],
   },
   {
-    href: "/admin/students",
-    icon: BsPeople,
-    key: "Manage Students",
-    text: "Manage Students",
+    name: "Students",
+    links: [
+      {
+        href: "/admin/students",
+        icon: BsPeople,
+        key: "Manage Students",
+        text: "Manage Students",
+      },
+    ],
   },
   {
-    href: "/admin/courses/create-course",
-    icon: BsPlusCircle,
-    key: "Create Course",
-    text: "Create Course",
-  },
+    name: "Courses",
+    links: [
+      {
+        href: "/admin/courses/create-course",
+        icon: BsPlusCircle,
+        key: "Create Course",
+        text: "Create Course",
+      },
 
-  {
-    href: "/admin/courses",
-    icon: BsStack,
-    key: "Manage Courses",
-    text: "Manage Courses",
+      {
+        href: "/admin/courses",
+        icon: BsStack,
+        key: "Manage Courses",
+        text: "Manage Courses",
+      },
+    ],
   },
   {
-    href: "/admin/memberships",
-    icon: BsPersonBadgeFill,
-    key: "Manage Memberships",
-    text: "Manage Memberships",
-  },
-  {
-    href: "/admin/memberships/create-membership",
-    icon: BsPersonFillAdd,
-    key: "Create Memberships",
-    text: "Create Memberships",
-  },
-  {
-    href: "/",
-    icon: BsHouseDoorFill,
-    key: "Back to Homepage",
-    text: "Back to Homepage",
+    name: "Memberships",
+    links: [
+      {
+        href: "/admin/memberships",
+        icon: BsPersonBadgeFill,
+        key: "Manage Memberships",
+        text: "Manage Memberships",
+      },
+      {
+        href: "/admin/memberships/create-membership",
+        icon: BsPersonFillAdd,
+        key: "Create Memberships",
+        text: "Create Memberships",
+      },
+    ],
   },
 ]
 export const GenderOption = {

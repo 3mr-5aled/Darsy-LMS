@@ -3,10 +3,8 @@ import { useState, useEffect } from "react"
 import useCourses from "@/lib/FetchCourses"
 import Loading from "../loading"
 import { CourseType } from "@/common.types"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import NotFoundComponent from "@/components/NotFoundComponent"
-import { useUserContext } from "@/contexts/userContext"
 import DataLoading from "@/components/DataLoading"
 import Image from "next/image"
 
@@ -30,7 +28,10 @@ const Courses = () => {
       <div className="m-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 overflow-x-hidden">
         {courses && courses.length > 0 ? (
           courses.map((item: CourseType, index: number) => (
-            <div key={index} className="card w-fit mx-auto bg-base-300 p-5">
+            <div
+              key={index}
+              className="card w-fit mx-auto bg-base-300 p-5 shadow-xl"
+            >
               <div
                 onClick={() =>
                   item.isShown &&

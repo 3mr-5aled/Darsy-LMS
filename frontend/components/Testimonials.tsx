@@ -62,7 +62,7 @@ const Testimonials = () => {
                 sunt id!
               </p>
 
-              <div className="hidden lg:mt-8 lg:flex lg:justify-center lg:gap-4">
+              <div className="hidden lg:mt-8 lg:flex lg:justify-start lg:gap-4">
                 <button
                   id="prev"
                   className="p-3 text-pink-600 border border-pink-600 rounded-full prev-button hover:bg-pink-600 hover:text-white"
@@ -112,7 +112,7 @@ const Testimonials = () => {
                 <div className="swiper-wrapper">
                   {testimonialsData.map((testimonial, index) => (
                     <div key={index} className="swiper-slide">
-                      <blockquote className="flex flex-col justify-between h-full p-12 bg-base-200">
+                      <blockquote className="flex flex-col justify-between h-full p-12 bg-base-200 shadow-xl">
                         <div>
                           <div className="flex gap-0.5 text-green-500">
                             {[...Array(testimonial.rating)].map(
