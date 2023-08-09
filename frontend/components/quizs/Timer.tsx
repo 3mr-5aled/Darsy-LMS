@@ -42,7 +42,7 @@ const Timer: React.FC<TimerProps> = ({ initialTime, onTimeout }) => {
   const { days, hours, minutes, secs } = formatTime(time)
 
   return (
-    <div className="grid grid-flow-col gap-5 text-center auto-cols-max">
+    <div className="grid sticky top-10 -mr-5 z-10 justify-end  -right-4 grid-flow-col gap-5 text-center auto-cols-max">
       {/* <div className="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">
         <span className="countdown font-mono text-5xl">
           <span style={{ "--value": days } as React.CSSProperties}></span>

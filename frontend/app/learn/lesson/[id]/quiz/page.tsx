@@ -63,6 +63,9 @@ const StudentQuizPage = () => {
     correctAnswer: [],
     id: string
   ) => {
+    if (timerFinished) {
+      return
+    }
     const updatedSelectedAnswers = [...selectedAnswers]
     let selectedAnswer: string[] =
       updatedSelectedAnswers[questionIndex]?.selectedAnswer || []
@@ -157,10 +160,11 @@ const StudentQuizPage = () => {
 
   return (
     <div className="container p-4 mx-auto">
+      
       <h1 className="mb-4 mt-4 underline text-4xl font-semibold text-center">
         Quiz
       </h1>
-      <Timer initialTime={20} onTimeout={handleTimeout} />
+      <Timer initialTime={100} onTimeout={handleTimeout} />
       {questions.map((q, questionIndex) => (
         <div key={questionIndex} className="mb-6">
           <p className="block mb-2 font-semibold">

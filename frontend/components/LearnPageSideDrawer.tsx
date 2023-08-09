@@ -108,7 +108,7 @@ const LearnPageSideDrawer = () => {
     )
   }
   const examStatus = (id: string) => {
-    let status
+    let status ="border-gray-500"
     user?.exams?.forEach((exam) => {
       if (exam.lessonId.toString() === id) {
         status =
@@ -164,7 +164,7 @@ const LearnPageSideDrawer = () => {
                       <Link
                         className={`${examStatus(
                           lessonItem._id as string
-                        )} flex flex-row py-3 px-3 rounded-lg border-2 border-gray-500 hover:bg-neutral`}
+                        )} flex flex-row py-3 px-3 rounded-lg border-2  hover:bg-neutral`}
                         href={`/learn/lesson/${lessonItem._id}/quiz`}
                       >
                         Quiz
