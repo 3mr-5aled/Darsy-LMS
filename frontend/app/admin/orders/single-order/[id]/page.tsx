@@ -1,10 +1,6 @@
 "use client"
-import Link from "next/link"
-import { useEffect, useState } from "react"
-import axiosInstance from "@/axios.config"
-import { UserType } from "@/common.types"
-import Loading from "@/app/loading"
-import SingleOrder from "@/components/SingleOrder"
+import { useState } from "react"
+import SingleOrder from "@/components/orders/SingleOrder"
 
 const Students = () => {
   const [users, setUsers] = useState<any>([])
@@ -16,7 +12,7 @@ const Students = () => {
 
   return (
     <>
-    <SingleOrder/>
+      <SingleOrder />
     </>
   )
 }

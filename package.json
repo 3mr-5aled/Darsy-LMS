@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "concurrently \"cd backend && npm start\" \"cd frontend && npm run dev\""
+    "start:dev": "concurrently \"cd backend && npm start\" \"cd frontend && npm run dev\"",
+    "newPKG": "concurrently \"cd backend && npm i\" \"cd frontend && npm i\"",
+    "newENV": "concurrently \"cd backend && npx --yes dotenv-vault@1.24.0 pull --yes\" \"cd frontend && npx --yes dotenv-vault@1.24.0 pull --yes\""
   },
   "repository": {
     "type": "git",
@@ -19,5 +21,8 @@
   "homepage": "https://github.com/3mr-5aled/Darsy#readme",
   "devDependencies": {
     "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "react-quill": "^2.0.0"
   }
 }

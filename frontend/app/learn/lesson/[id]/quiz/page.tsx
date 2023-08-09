@@ -7,7 +7,7 @@ import { useParams, useRouter } from "next/navigation"
 import Loading from "@/app/loading"
 import ExamResults from "@/components/ExamResults"
 import { useUserContext } from "@/contexts/userContext"
-import Timer from "@/components/quizs/Timer"
+import Timer from "@/components/quizes/Timer"
 
 const StudentQuizPage = () => {
   const { state, setUser, clearUser } = useUserContext()

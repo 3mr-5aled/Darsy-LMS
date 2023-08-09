@@ -9,6 +9,7 @@ import {
   BsPersonBadgeFill,
   BsPersonFillAdd,
   BsMenuButtonWideFill,
+  BsBox,
 } from "react-icons/bs"
 import { FaRoute } from "react-icons/fa"
 
@@ -92,6 +93,17 @@ export const AdminNavLinks = [
         icon: BsPersonFillAdd,
         key: "Create Memberships",
         text: "Create Memberships",
+      },
+    ],
+  },
+  {
+    name: "Orders",
+    links: [
+      {
+        href: "/admin/orders",
+        icon: BsBox,
+        key: "View Orders",
+        text: "View Orders",
       },
     ],
   },
