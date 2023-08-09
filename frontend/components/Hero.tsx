@@ -1,4 +1,6 @@
-import Image from "next/image"
+import { WebsiteDetails } from "@/constant"
+import Link from "next/link"
+import { BsFacebook, BsInstagram, BsTwitter, BsWhatsapp } from "react-icons/bs"
 
 const Hero = () => {
   return (
@@ -9,8 +11,8 @@ const Hero = () => {
         <span className="absolute right-4 bottom-12 w-24 h-24 rounded-3xl bg-secondary blur-xl opacity-80"></span>
       </div>
       <span className="w-4/12 lg:w-2/12 aspect-square bg-gradient-to-tr from-primary to-secondary absolute -top-5 lg:left-0 rounded-full skew-y-12 blur-2xl opacity-40 skew-x-12 rotate-90"></span>
-      <div className="relative flex flex-row items-center flex-wrap">
-        <div className="relative order-2 md:order-1 px-5 -top-24 md:top-0 flex flex-col items-center text-center lg:text-left lg:py-7 xl:py-8 lg:items-start lg:max-w-none max-w-3xl mx-auto lg:mx-0 lg:flex-1 lg:w-1/2">
+      <div className="container relative flex flex-row items-center flex-wrap">
+        <div className="relative order-2 md:order-1 px-5 py-5 -top-24 md:top-0 flex flex-col items-center text-center lg:text-left lg:py-7 xl:py-8 lg:items-start lg:max-w-none max-w-3xl mx-auto lg:mx-0 lg:flex-1 lg:w-1/2">
           <h1 className="text-3xl/tight sm:text-4xl/tight md:text-5xl/tight xl:text-6xl/tight font-bold text-heading-1">
             Darsy LMS{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-br from-secondary from-20% via-primary via-30% to-secondary">
@@ -23,11 +25,35 @@ const Hero = () => {
             repellat perspiciatis aspernatur quis voluptatum porro incidunt,
             libero sequi quos eos velit
           </p>
-          <div className="mt-10  w-full flex max-w-md mx-auto lg:mx-0">
-            <div className="flex sm:flex-row flex-col gap-5 w-full">
+          <div className="mt-10 w-full flex max-w-md mx-auto lg:mx-0">
+            <div className="flexCenter lg:justify-start gap-5 w-full">
               <button className="min-w-max text-white btn btn-primary">
-                <span className="flex relative z-[5] pr-3">Get Started</span>
+                <span className="flex relative z-[5]">Get Started</span>
               </button>
+              <Link
+                href={WebsiteDetails.whatsappLink}
+                className="text-xl transition-all hover:text-secondary rounded-full"
+              >
+                <BsWhatsapp />
+              </Link>
+              <Link
+                href={WebsiteDetails.facebookLink}
+                className="text-xl transition-all hover:text-secondary rounded-full"
+              >
+                <BsFacebook />
+              </Link>
+              <Link
+                href={WebsiteDetails.instagramLink}
+                className="text-xl transition-all hover:text-secondary rounded-full"
+              >
+                <BsInstagram />
+              </Link>
+              <Link
+                href={WebsiteDetails.twitterLink}
+                className="text-xl transition-all hover:text-secondary rounded-full"
+              >
+                <BsTwitter />
+              </Link>
             </div>
           </div>
         </div>

@@ -67,8 +67,8 @@ type Section = {
 
 export type CourseType = {
   _id?: string
-  appearenceDate:number
-  isShown:boolean
+  appearenceDate: number
+  isShown: boolean
   name: string
   description: string
   // image: string
