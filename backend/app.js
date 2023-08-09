@@ -1,10 +1,13 @@
 const express = require("express")
 const cors = require("cors")
+const hpp =require("hpp")
 const cookie = require("cookie-parser")
 const authRrouter = require("./routers/auth")
 const errorhandler = require("./middlewares/errorhandler")
 const { connect } = require("mongoose")
 const courseRouter = require("./routers/course")
+const { xss } = require('express-xss-sanitizer');
+const mongoSanitize = require('express-mongo-sanitize');
 const sectionRouter = require("./routers/section")
 const lessonRouter = require("./routers/lesson")
 const paymentRouter = require("./routers/payment")
@@ -13,30 +16,37 @@ const examRouter = require("./routers/exam")
 const payment = require("./middlewares/paytaps")
 const bodyParser = require("body-parser")
 // const fileUploader = require('express-fileupload')
+const helmet  = require("helmet")
 const uploaderRouter = require("./routers/uploader")
 const userRouter = require("./routers/user")
 const memberRouter = require("./routers/member")
 const { getAnalysis, getMoneyPerPeriod } = require("./controllers/analysis")
 const authorization = require("./middlewares/authorization")
+const rateLimit = require("express-rate-limit")
 const authintication = require("./middlewares/authintication")
+const ApiError = require("./utils/apierror")
 require("dotenv").config()
 const app = express()
 
-// Increase payload limit to 10 MB
-app.use(bodyParser.json({ limit: "10mb" }))
-app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }))
+// Increase payload limit to 10 kb
+app.use(bodyParser.json({ limit: "5mb" }))
+app.use(bodyParser.urlencoded({ limit: "5mb", extended: true }))
+
+app.use(hpp());
+app.use(mongoSanitize());
+app.use(xss());
+app.use(helmet.xPoweredBy());
+
 
 // middlewares
 // axios.defaults.baseurl=
 // axios.defaults.withcredintials=true
 
-app.use(express.json())
 // app.use(fileUploader())
 const isProduction = process.env.NODE_ENV === "production"
 const baseUrl = isProduction
   ? "https://darsy-lms-beta.vercel.app"
   : `http://localhost:8080`
-console.log(baseUrl)
 app.use(
   cors({
     origin: baseUrl,
@@ -46,8 +56,12 @@ app.use(
 app.use(cookie())
 
 // routes
-
-app.use("/api/v1/auth", authRrouter)
+const limiter = rateLimit({
+  windowMs: 5 * 60 * 1000, 
+  max:50,
+  message: "Too many requests from this IP, please try again after 5 minutes"
+})
+app.use("/api/v1/auth",limiter,authRrouter)
 app.use("/api/v1/course", courseRouter)
 app.use("/api/v1/section", sectionRouter)
 app.use("/api/v1/lesson", lessonRouter)

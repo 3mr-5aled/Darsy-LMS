@@ -6,6 +6,7 @@ const Lesson = new mongoose.Schema(
       type: String,
       required: true,
     },
+    index:Number,
     video: {
       src: {
         type: String,
