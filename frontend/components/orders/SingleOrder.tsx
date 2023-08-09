@@ -12,7 +12,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useParams, useRouter } from "next/navigation"
 import Loading from "@/app/loading"
-import PreviousPageButton from "./PreviousPageButton"
+import PreviousPageButton from "../PreviousPageButton"
 
 const SingleOrder = () => {
   const router = useRouter()
@@ -50,45 +50,39 @@ const SingleOrder = () => {
         <h1 className="text-4xl font-bold">Order Details</h1>
       </div>
       <div className="grid items-center mt-15 mx-5 py-10 justify-center w-full grid-cols-2 gap-4">
-        {order?.tran_ref && (
-          <>
-            <div className="font-bold">tran ref:</div>
-            <div>{order?.tran_ref}</div>
-          </>
-        )}
         {order?.adminId && (
           <>
-            <div className="font-bold">admin name:</div>
+            <div className="font-bold">Admin name:</div>
             <div>{order?.adminId.name}</div>
           </>
         )}
         {order?.userId && (
           <>
-            <div className="font-bold">user name</div>
+            <div className="font-bold">User name:</div>
             <div>{order?.userId.name}</div>
           </>
         )}
         {order?.type && (
           <>
-            <div className="font-bold">type</div>
+            <div className="font-bold">Type:</div>
             <div>{order?.type}</div>
           </>
         )}
         {order?.createdAt && (
           <>
-            <div className="font-bold">createdAt</div>
+            <div className="font-bold">Created at:</div>
             <div>{getDate(order?.createdAt)}</div>
           </>
         )}
         {order?.amount && (
           <>
-            <div className="font-bold">amount</div>
+            <div className="font-bold">Amount:</div>
             <div>{order?.amount}</div>
           </>
         )}
         {order?.status && (
           <>
-            <div className="font-bold">status</div>
+            <div className="font-bold">Status:</div>
             <div>{order?.status}</div>
           </>
         )}

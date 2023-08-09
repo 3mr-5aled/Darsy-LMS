@@ -21,6 +21,7 @@ import {
 import Image from "next/image"
 import { BsCircleFill, BsDiamondFill, BsStars } from "react-icons/bs"
 import PreviousPageButton from "@/components/PreviousPageButton"
+import OrdersList from "@/components/orders/OrdersList"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -320,67 +321,10 @@ const StudentPage = () => {
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold">Student Orders</h1>
       </div>
-      {orders && orders.length > 0 && (
-        <div className="mt-10">
-          <div>
-            <div className=" py-5 my-3 rounded-xl justify-items-center grid grid-cols-8 sticky top-5 z-10 bg-slate-900 ">
-              <div className="  font-extrabold ">type</div>
-              <div className="  font-extrabold ">amount</div>
-              <div className="  font-extrabold ">admin</div>
-              <div className="  font-extrabold ">course</div>
-              <div className="  font-extrabold ">trans ref</div>
-              <div className="  font-extrabold ">provider</div>
-              <div className="  font-extrabold ">status</div>
-              <div className="  font-extrabold ">Date</div>
-            </div>
-            {orders.map((order, index) => (
-              <div
-                key={order._id}
-                onClick={() =>
-                  router.push("/admin/orders/single-order/" + order._id)
-                }
-                className={` rounded-lg gap-x-2 my-5 py-3 cursor-pointer grid grid-cols-8 ${
-                  index % 2 === 0 ? "bg-slate-800" : " bg-base-100"
-                }`}
-              >
-                <div className=" justify-self-center">
-                  {order.type ? order.type : "---"}
-                </div>
-                <div className=" justify-self-center">{order.amount}</div>
-                <div
-                  data-tip={order.adminId?.name}
-                  className=" cursor-default z-0 tooltip justify-self-center"
-                >
-                  {order.adminId?.name.split(" ")[0] || "---"}
-                </div>
-                <div
-                  onClick={() => viewCoursePage(order.courseId?._id as string)}
-                  className={` justify-self-center ${
-                    order.courseId
-                      ? " cursor-pointer hover:text-primary-focus duration-200 "
-                      : "---"
-                  }`}
-                >
-                  {order.courseId?.name}
-                </div>
-                <div className=" truncate">
-                  {order.tran_ref ? order.tran_ref : "---"}
-                </div>
-                <div className=" justify-self-center">
-                  {order.tran_ref
-                    ? "paytabs"
-                    : order.adminId
-                    ? "admin"
-                    : "user"}
-                </div>
-                <div className=" justify-self-center">{order.status}</div>
-                <div className=" justify-self-center">
-                  {getOrderTime(order.createdAt as string)}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      {orders ? (
+        <OrdersList orders={orders} admin={true} />
+      ) : (
+        <p>No Orders for current user</p>
       )}
       {/* Render the credit modal */}
       <CreditModal

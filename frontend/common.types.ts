@@ -7,6 +7,39 @@ export type EnrolledCourse = {
   _id: string
 }
 
+export interface userDegrees {
+  degree: number
+  lessonTitle: string
+  examDate: Date
+  lessonId: string
+}
+export interface userCourses {
+  name: string
+  courseId: string
+  courseImg: string
+  progress: number
+}
+export interface userOrders {
+  userId: {
+    _id: string
+    name: string
+  }
+  createdAt: string
+  _id: string
+  adminId?: {
+    _id: string
+    name: string
+  }
+  amount: string
+  courseId?: {
+    _id: string
+    name: string
+  }
+  tran_ref?: string
+  status: string
+  type: string
+}
+
 export interface UserType {
   _id: string
   name: string

@@ -29,8 +29,7 @@ const LessonForm = ({
   lesson,
   sectionId,
   courseId,
-}: // onClose,
-Props) => {
+}: Props) => {
   const {
     register,
     handleSubmit,
@@ -254,7 +253,7 @@ Props) => {
                 <Suspense fallback={<QuillEditorLoading />}>
                   <QuillEditor
                     value={description} // Use "description" instead of "watch("description")"
-                    onChange={(value) => setValue("description", value)}
+                    onChange={(value: any) => setValue("description", value)}
                   />
                 </Suspense>
                 {errors.description && <span>This field is required</span>}
@@ -295,12 +294,25 @@ Props) => {
                 <input
                   type="text"
                   id="youtubeVideoUrl"
-                  className="input input-bordered"
+                  className={`input input-bordered ${
+                    errors?.video?.src ? "input-error" : ""
+                  }`}
                   placeholder="YouTube Video URL"
                   disabled={isSubmitting}
-                  {...register("video.src")}
+                  {...register("video.src", {
+                    required: "This field is required",
+                    pattern: {
+                      value:
+                        /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/,
+                      message: "Invalid YouTube Video URL",
+                    },
+                  })}
                 />
-                {errors.video && <span>This field is required</span>}
+                {errors.video?.src && (
+                  <span className="error-message">
+                    {errors.video.src.message}
+                  </span>
+                )}
               </div>
             )}
           </div>

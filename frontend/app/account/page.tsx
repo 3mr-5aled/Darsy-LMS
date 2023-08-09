@@ -15,8 +15,10 @@ import {
   Legend,
 } from "chart.js"
 import axiosInstance from "@/axios.config"
-import { UserType } from "@/common.types"
+import { UserType, userCourses, userDegrees, userOrders } from "@/common.types"
 import { toast } from "react-toastify"
+import { useRouter } from "next/navigation"
+import OrdersList from "@/components/orders/OrdersList"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -27,43 +29,12 @@ ChartJS.register(
   Legend
 )
 
-interface userDegress {
-  degree: number
-  lessonTitle: string
-  examDate: Date
-  lessonId: string
-}
-interface userCourses {
-  name: string
-  courseId: string
-  courseImg: string
-  progress: number
-}
-interface userOrders {
-  userId: {
-    _id: string
-    name: string
-  }
-  createdAt: string
-  _id: string
-  adminId?: {
-    _id: string
-    name: string
-  }
-  amount: string
-  courseId?: {
-    _id: string
-    name: string
-  }
-  tran_ref?: string
-  status: string
-  type: string
-}
-
 const Profile = () => {
+  const router = useRouter()
+
   const [student] = useUser()
   const [user, setUser] = useState<UserType | null>(null)
-  const [degress, setDegrees] = useState<userDegress[] | null>(null)
+  const [degress, setDegrees] = useState<userDegrees[] | null>(null)
   const [orders, setOrders] = useState<userOrders[] | null>(null)
   const [userEnrolledCourses, setUserEnrolledCourses] = useState<
     userCourses[] | null
@@ -241,6 +212,17 @@ const Profile = () => {
           <div className="w-10/12">
             <Line options={options} data={revenueChartDataUserDegree} />
           </div>
+        </div>
+        <div className="divider"></div>
+        <div className="w-full">
+          <div className="mb-8 text-center">
+            <h1 className="text-4xl font-bold">Student Orders</h1>
+          </div>
+          {orders ? (
+            <OrdersList orders={orders} admin={false} />
+          ) : (
+            <p>No Orders for current user</p>
+          )}
         </div>
       </div>
     </DataLoading>
