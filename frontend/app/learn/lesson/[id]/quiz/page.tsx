@@ -8,12 +8,14 @@ import Loading from "@/app/loading"
 import ExamResults from "@/components/ExamResults"
 import { useUserContext } from "@/contexts/userContext"
 import Timer from "@/components/quizs/Timer"
+import NotFoundComponent from "@/components/NotFoundComponent"
 
 const StudentQuizPage = () => {
   const { state, setUser, clearUser } = useUserContext()
   const { id } = useParams()
   const router = useRouter()
   const [questions, setQuestions] = useState<any[]>([])
+  const [title, setTitle] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState<Boolean>(true)
   const [selectedAnswers, setSelectedAnswers] = useState<any[]>([])
@@ -29,6 +31,7 @@ const StudentQuizPage = () => {
       try {
         const response = await axiosInstance.get(`/exam/${id}/get-exam`)
         setQuestions(response.data.exam)
+        setTitle(response.data.title)
         // Initialize selectedAnswers array with null values for each question
         const exam = response.data.exam.map((e: any) => ({
           id: e._id,
@@ -42,8 +45,8 @@ const StudentQuizPage = () => {
         console.log(error)
         setIsLoading(false)
         if (error.response.data.errCode === 6342) {
-          setError("you have already submitted this exam before")
-          return
+          setError("you have already submitted this exam")
+          return 
         }
         toast.error("Error fetching quiz questions.")
       }
@@ -160,8 +163,11 @@ const StudentQuizPage = () => {
 
   return (
     <div className="container p-4 mx-auto">
-      
-      <h1 className="mb-4 mt-4 underline text-4xl font-semibold text-center">
+        {title &&(
+        <h1 className="mb-4 mt-4 underline text-4xl font-semibold text-center">
+        {title}
+      </h1>)}
+      <h1 className="mb-4 mt-4 underline text-3xl font-semibold text-center">
         Quiz
       </h1>
       <Timer initialTime={100} onTimeout={handleTimeout} />
