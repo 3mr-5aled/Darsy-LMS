@@ -61,9 +61,6 @@ const Courses = new mongoose.Schema(
 );
 Courses.pre('findOneAndDelete', async function (next) {
   const course = await this.model.findOne({ _id: this.getQuery()._id })// Get the section ids associated with the course
-  if (course.sections.length === 0) {
-    return next();
-  }
   try {
     const users = await mongoose.model('users').find({ ['enrolledCourse.courseId']: course._id })
     if (users.length !== 0) {
@@ -71,6 +68,9 @@ Courses.pre('findOneAndDelete', async function (next) {
         user.enrolledCourse.filter((userCourse) => userCourse.courseId.toString() !== course._id.toString())
         await user.save()
       })
+    }
+    if (course.sections.length === 0) {
+      return next();
     }
     await mongoose.model('sections').deleteMany({ _id: { $in: course.sections } });
     next();

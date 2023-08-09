@@ -17,8 +17,11 @@ const addLesson = asynchandler(async (req, res, next) => {
   if (!section) {
     return next(new ApiError("no course or section is found", 9341, 404));
   }
-  const lesson = await Lesson.create({ ...req.body, courseId: section.courseId, sectionId })
   const course = await Course.findOne({ _id: section.courseId });
+  if (!course) {
+    return next(new ApiError("no course or section is found", 9341, 404));
+  }
+  const lesson = await Lesson.create({ ...req.body, courseId: section.courseId, sectionId })
   section.lessons.push(lesson._id)
   let index = 0;
 
@@ -36,6 +39,7 @@ const addLesson = asynchandler(async (req, res, next) => {
         index++;
         lesson.index = index;
         await lesson.save();
+        console.log(`Lesson ${lesson}`)
       } catch (error) {
         console.error(`Error updating lesson with ID ${lessonId}: ${error.message}`);
         // Handle the error as needed
@@ -90,7 +94,7 @@ const getLesson = asynchandler(async (req, res, next) => {
   // send lessonId in params
   // you must be enrolled in this lesson to get lesson
   const { lesson } = req
-  const { title, duration, material, video, _id, exams, description, courseId } = lesson
+  const { title, duration, material, video, _id, exams, description, courseId , index} = lesson
   const sectionTitle = lesson.sectionId.title
   const sectionDuration = lesson.sectionId.duration
   const courseTitle = lesson.courseId.name
@@ -98,10 +102,10 @@ const getLesson = asynchandler(async (req, res, next) => {
   console.log(sectionTitle, sectionDuration, courseTitle, totalLessons)
   const sections = await Section.find({ courseId: lesson.courseId._id, total: { $gt: 0 } }).populate({
     path: "lessons",
-    select: "title exams", // Include only the 'title' property from the lessons object
+    select: "title exams index", // Include only the 'title' property from the lessons object
   }).select("title duration total")
 
-  res.status(200).json({ lesson: { title, duration, material, video, _id, exams, description }, sections, sectionTitle, sectionDuration, courseTitle, course: courseId, totalLessons });
+  res.status(200).json({ lesson: { title, duration, material, video, _id, exams, description , index }, sections, sectionTitle, sectionDuration, courseTitle, course: courseId, totalLessons });
 });
 
 const deleteLesson = asynchandler(async (req, res, next) => {

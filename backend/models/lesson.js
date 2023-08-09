@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const ApiError = require("../utils/apierror")
 
 const Lesson = new mongoose.Schema(
   {
@@ -61,13 +62,20 @@ const Lesson = new mongoose.Schema(
   { timestamps: true }
 )
 Lesson.pre("deleteMany", async function (next) {
+  const lesson = await this.model.findOne({ _id: this.getQuery()._id })
+  if(!lesson){
+    return next()
+  }
+  // Get the section ids associated with the course
+
   try {
     // Delete all sections associated with this course
     // Assuming you have a 'sections' model defined in your code
-    await mongoose
-      .model("users")
-      .updateMany({}, { $pull: { exams: { lessonId: this.getQuery()._id } } })
-
+    await mongoose.model("users").updateMany({}, { $pull: { exams: { lessonId: lesson._id } } })
+      
+    const section = await mongoose.model("sections").findById(lesson.sectionId)
+    section.lessons.filter((lesson) => lesson !== lesson._id.toString())
+    await section.save()
     next()
   } catch (error) {
     next(new ApiError(error, 500))
