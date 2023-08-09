@@ -8,7 +8,6 @@ import Loading from "@/app/loading"
 import ExamResults from "@/components/ExamResults"
 import { useUserContext } from "@/contexts/userContext"
 import Timer from "@/components/quizs/Timer"
-import NotFoundComponent from "@/components/NotFoundComponent"
 
 const StudentQuizPage = () => {
   const { state, setUser, clearUser } = useUserContext()
@@ -20,11 +19,12 @@ const StudentQuizPage = () => {
   const [isLoading, setIsLoading] = useState<Boolean>(true)
   const [selectedAnswers, setSelectedAnswers] = useState<any[]>([])
   const [timerFinished, setTimerFinished] = useState<boolean>(false)
+  const [quizStarted, setQuizStarted] = useState<boolean>(false)
 
   useEffect(() => {
     // Fetch quiz questions from the API based on the id
     if (timerFinished) {
-      handleSubmit();
+      handleSubmit()
       return
     }
     const fetchQuizQuestions = async () => {
@@ -46,14 +46,14 @@ const StudentQuizPage = () => {
         setIsLoading(false)
         if (error.response.data.errCode === 6342) {
           setError("you have already submitted this exam")
-          return 
+          return
         }
         toast.error("Error fetching quiz questions.")
       }
     }
 
     fetchQuizQuestions()
-  }, [id,timerFinished])
+  }, [id, timerFinished])
 
   if (isLoading) {
     return <Loading />
@@ -96,7 +96,7 @@ const StudentQuizPage = () => {
     }
     setSelectedAnswers(updatedSelectedAnswers)
   }
-  
+
   const handleSubmit = async () => {
     // Check if all questions have been answered
     console.log(timerFinished)
@@ -107,7 +107,7 @@ const StudentQuizPage = () => {
           toast.error("you must select answers for each question")
           empty = true
           return
-    }
+        }
         if (
           selectedAnswers.some((selectedAnswer) =>
             selectedAnswer.isCheckBoxQuiz
@@ -151,7 +151,6 @@ const StudentQuizPage = () => {
     }
   }
 
-
   if (error) {
     return <ExamResults />
   }
@@ -161,102 +160,125 @@ const StudentQuizPage = () => {
     setTimerFinished(true)
   }
 
+  const handleStartQuiz = () => {
+    setQuizStarted(true)
+  }
+
   return (
     <div className="container p-4 mx-auto">
-        {title &&(
+      {title && (
         <h1 className="mb-4 mt-4 underline text-4xl font-semibold text-center">
-        {title}
-      </h1>)}
-      <h1 className="mb-4 mt-4 underline text-3xl font-semibold text-center">
-        Quiz
-      </h1>
-      <Timer initialTime={100} onTimeout={handleTimeout} />
-      {questions.map((q, questionIndex) => (
-        <div key={questionIndex} className="mb-6">
-          <p className="block mb-2 font-semibold">
-            Question {questionIndex + 1}: {q.question}
+          {title}
+        </h1>
+      )}
+      {!quizStarted ? (
+        <div className="flex flex-col items-center">
+          <h1 className="mb-4 mt-4 text-3xl font-semibold text-center">
+            Quiz Name: {title}
+          </h1>
+          <p className="mb-4 text-lg text-center">
+            Duration: {/* display your duration here */}
           </p>
-          {q.questionImage && (
-            <img
-              alt={`Question ${questionIndex + 1} Image`}
-              src={q.questionImage}
-              className="max-w-md mt-2"
-            />
-          )}
-
-          <div className="divider"></div>
-          <div className="mt-3 mb-4">
-            <label className="font-semibold">Select {q.correctAnswer.length} Answer{q.correctAnswer.length > 1 && 's'}:</label>
-            <div className="flex flex-col gap-3">
-              {q.answers.map((answer: any, answerIndex: number) => (
-                <div
-                  key={answerIndex}
-                  className={`flex flex-row gap-3 items-center bg-base-200 ${
-                    selectedAnswers[questionIndex]?.selectedAnswer?.includes(
-                      answer.text
-                    )
-                      ? "bg-primary text-white"
-                      : "bg-base-200"
-                  } card p-5`}
-                >
-                  {q.isCheckBoxQuiz ? (
-                    <input
-                      title="Correct answer"
-                      type="checkbox"
-                      className="checkbox"
-                      checked={selectedAnswers[
-                        questionIndex
-                      ]?.selectedAnswer?.includes(answer.text)}
-                      onChange={() =>
-                        handleAnswerChange(
-                          questionIndex,
-                          answer.text,
-                          q.isCheckBoxQuiz,
-                          q.correctAnswer,
-                          q._id
-                        )
-                      }
-                    />
-                  ) : (
-                    <input
-                      title="Correct answer"
-                      type="radio"
-                      className="radio"
-                      name={`correctAnswer-${questionIndex}`}
-                      value={answerIndex}
-                      checked={selectedAnswers[
-                        questionIndex
-                      ]?.selectedAnswer?.includes(answer.text)}
-                      onChange={() =>
-                        handleAnswerChange(
-                          questionIndex,
-                          answer.text,
-                          q.isCheckBoxQuiz,
-                          q.correctAnswer,
-                          q._id
-                        )
-                      }
-                    />
-                  )}
-                  <span>{answer.text}</span>
-                  {answer.image && (
-                    <img
-                      src={answer.image}
-                      alt={`Question ${questionIndex + 1} Answer ${
-                        answerIndex + 1
-                      } Image`}
-                      className="max-w-xs rounded-md mt-2"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+          <button className="btn btn-primary" onClick={handleStartQuiz}>
+            Start Quiz
+          </button>
         </div>
-      ))}
-      <button className="btn btn-primary" onClick={handleSubmit}>
-        Submit Quiz
-      </button>
+      ) : (
+        <>
+          <h1 className="mb-4 mt-4 underline text-3xl font-semibold text-center">
+            Quiz
+          </h1>
+          <Timer initialTime={100} onTimeout={handleTimeout} />
+          {questions.map((q, questionIndex) => (
+            <div key={questionIndex} className="mb-6">
+              <p className="block mb-2 font-semibold">
+                Question {questionIndex + 1}: {q.question}
+              </p>
+              {q.questionImage && (
+                <img
+                  alt={`Question ${questionIndex + 1} Image`}
+                  src={q.questionImage}
+                  className="max-w-md mt-2"
+                />
+              )}
+              <div className="divider"></div>
+              <div className="mt-3 mb-4">
+                <label className="font-semibold">
+                  Select {q.correctAnswer.length} Answer
+                  {q.correctAnswer.length > 1 && "s"}:
+                </label>
+                <div className="flex flex-col gap-3">
+                  {q.answers.map((answer: any, answerIndex: number) => (
+                    <div
+                      key={answerIndex}
+                      className={`flex flex-row gap-3 items-center bg-base-200 ${
+                        selectedAnswers[
+                          questionIndex
+                        ]?.selectedAnswer?.includes(answer.text)
+                          ? "bg-primary text-white"
+                          : "bg-base-200"
+                      } card p-5`}
+                    >
+                      {q.isCheckBoxQuiz ? (
+                        <input
+                          title="Correct answer"
+                          type="checkbox"
+                          className="checkbox"
+                          checked={selectedAnswers[
+                            questionIndex
+                          ]?.selectedAnswer?.includes(answer.text)}
+                          onChange={() =>
+                            handleAnswerChange(
+                              questionIndex,
+                              answer.text,
+                              q.isCheckBoxQuiz,
+                              q.correctAnswer,
+                              q._id
+                            )
+                          }
+                        />
+                      ) : (
+                        <input
+                          title="Correct answer"
+                          type="radio"
+                          className="radio"
+                          name={`correctAnswer-${questionIndex}`}
+                          value={answerIndex}
+                          checked={selectedAnswers[
+                            questionIndex
+                          ]?.selectedAnswer?.includes(answer.text)}
+                          onChange={() =>
+                            handleAnswerChange(
+                              questionIndex,
+                              answer.text,
+                              q.isCheckBoxQuiz,
+                              q.correctAnswer,
+                              q._id
+                            )
+                          }
+                        />
+                      )}
+                      <span>{answer.text}</span>
+                      {answer.image && (
+                        <img
+                          src={answer.image}
+                          alt={`Question ${questionIndex + 1} Answer ${
+                            answerIndex + 1
+                          } Image`}
+                          className="max-w-xs rounded-md mt-2"
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+          <button className="btn btn-primary" onClick={handleSubmit}>
+            Submit Quiz
+          </button>
+        </>
+      )}
     </div>
   )
 }

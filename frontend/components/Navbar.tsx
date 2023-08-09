@@ -1,7 +1,7 @@
 "use client"
 import Image from "next/image"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import axiosInstance from "@/axios.config"
 import { NavLinks, WebsiteDetails } from "@/constant"
 import DarkModeButton from "./DarkModeButton"
@@ -12,6 +12,7 @@ import { AdminOnlyLink } from "./AdminOnlyRoutes"
 
 const Navbar = () => {
   const router = useRouter()
+  const pathname = usePathname()
   const [isSigningOut, setIsSigningOut] = useState<boolean>(false)
   const { state, setUser, clearUser } = useUserContext()
   const { user } = state
@@ -57,7 +58,10 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="relative z-20 flexBetween navbar">
+    <nav
+      className="relative z-20 flexBetween navbar shadow-xl
+    "
+    >
       <div className="container gap-10 flexStart">
         {" "}
         {/* Container for the logo */}
@@ -85,9 +89,11 @@ const Navbar = () => {
             {NavLinks.map((link) => (
               <li
                 key={link.text}
-                className="transition-colors hover:text-secondary"
+                className={`transition-colors hover:text-secondary-focus ${
+                  pathname === link.href ? "text-secondary" : ""
+                }`}
               >
-                {/* Apply transition to the hover state */}
+                {/* Apply transition to the hover and active state */}
                 <Link href={link.href}>{link.text}</Link>
               </li>
             ))}
@@ -108,7 +114,9 @@ const Navbar = () => {
         {NavLinks.map((link) => (
           <li
             key={link.text}
-            className="transition-colors hover:text-secondary"
+            className={`transition-colors hover:text-secondary-focus ${
+              pathname === link.href ? "text-secondary" : ""
+            }`}
           >
             {/* Apply transition to the hover state */}
             <Link href={link.href}>{link.text}</Link>

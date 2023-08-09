@@ -4,6 +4,7 @@ import axiosInstance from "@/axios.config"
 import { toast } from "react-toastify"
 import { useParams } from "next/navigation"
 import Loading from "@/app/loading"
+import { BsCircle } from "react-icons/bs"
 const ExamResults = () => {
   const { id } = useParams()
   const [exam, setExam] = useState<any[] | null>(null)
@@ -44,6 +45,20 @@ const ExamResults = () => {
         {" "}
         your degree : {data?.degree}%
       </h3>
+      <div className="flex flex-row items-center w-full justify-center gap-3 mb-4">
+        <div className="flex flex-row items-center gap-3">
+          <BsCircle color="green" />
+          <span>Correct answer</span>
+        </div>
+        <div className="flex flex-row items-center gap-3">
+          <BsCircle color="red" />
+          <span>Wrong answer</span>
+        </div>
+        <div className="flex flex-row items-center gap-3">
+          <BsCircle color="yellow" />
+          <span>Correct answer and didn't selected an answer</span>
+        </div>
+      </div>
       {exam?.map((q, questionIndex) => (
         <div key={questionIndex} className="mb-6">
           <p className="block mb-2 font-semibold">
@@ -73,7 +88,7 @@ const ExamResults = () => {
                       ? "border-2 border-error"
                       : !q.selectedAnswer.includes(answer.text) &&
                         q.correctAnswer.includes(answer.text)
-                      ? "border-2 border-success"
+                      ? "border-2 border-warning"
                       : "border-2" // Default border
                   }`}
                 >
