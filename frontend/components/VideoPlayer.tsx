@@ -1,6 +1,4 @@
 "use client"
-import { WebsiteDetails } from "@/constant"
-import { CldVideoPlayer } from "next-cloudinary"
 import Plyr from "plyr-react"
 import "plyr-react/plyr.css"
 
