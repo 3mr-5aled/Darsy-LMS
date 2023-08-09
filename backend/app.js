@@ -27,15 +27,17 @@ const authintication = require("./middlewares/authintication")
 const ApiError = require("./utils/apierror")
 require("dotenv").config()
 const app = express()
+const csrf = require('csurf')
 
 // Increase payload limit to 10 kb
-app.use(bodyParser.json({ limit: "5mb" }))
-app.use(bodyParser.urlencoded({ limit: "5mb", extended: true }))
-
+const imageSize= bodyParser.json({ limit: "5mb" })
+const imageSizeUrl= bodyParser.urlencoded({ limit: "5mb", extended: true })
+const textSize = bodyParser.json({ limit: "10kb" })
 app.use(hpp());
 app.use(mongoSanitize());
 app.use(xss());
 app.use(helmet.xPoweredBy());
+const csrfProtection = csrf({ cookie: true })
 
 
 // middlewares
@@ -61,18 +63,20 @@ const limiter = rateLimit({
   max:50,
   message: "Too many requests from this IP, please try again after 5 minutes"
 })
-app.use("/api/v1/auth",limiter,authRrouter)
-app.use("/api/v1/course", courseRouter)
-app.use("/api/v1/section", sectionRouter)
-app.use("/api/v1/lesson", lessonRouter)
-app.use("/api/v1/payment", paymentRouter)
-app.use("/api/v1/exam", examRouter)
-app.use("/api/v1/upload", uploaderRouter)
-app.use("/api/v1/user", userRouter)
-app.use("/api/v1/member", memberRouter)
-app.get("/api/v1/analysis", authintication, authorization, getAnalysis)
+app.use("/api/v1/auth",textSize,limiter,authRrouter)
+app.use("/api/v1/course",textSize, courseRouter)
+app.use("/api/v1/section",textSize, sectionRouter)
+app.use("/api/v1/lesson",textSize, lessonRouter)
+app.use("/api/v1/payment",textSize, paymentRouter)
+app.use("/api/v1/exam",textSize, examRouter)
+app.use("/api/v1/upload",imageSizeUrl,imageSize, uploaderRouter)
+app.use("/api/v1/user",textSize, userRouter)
+app.use("/api/v1/member",textSize, memberRouter)
+app.get("/api/v1/analysis", textSize,authintication, authorization, getAnalysis)
 app.get(
   "/api/v1/total-money-per-period",
+  textSize,
+  csrfProtection,
   authintication,
   authorization,
   getMoneyPerPeriod

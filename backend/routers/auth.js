@@ -3,7 +3,6 @@ const { login, register, profile, signout, resetpassword, verifycode, forgetpass
 const { loginvalidator, registervalidator, resetpasswordvalidator } = require('../utils/validators/authvalidators')
 
 const router = express.Router()
-
 router.post('/login',loginvalidator,login)
 router.post('/register',registervalidator,register)
 router.get('/profile',profile)

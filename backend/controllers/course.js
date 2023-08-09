@@ -1,7 +1,7 @@
 const aynchandler = require('express-async-handler')
 const Course = require('../models/course')
 const ApiError = require('../utils/apierror')
-
+const slugify = require('slugify')
 const createCourse = aynchandler(async (req, res, next) => {
     // @api   post api/v1/course/create-course
     //  you will send name ,description,duration,price,(discount => (optional)) in body
@@ -10,6 +10,7 @@ const createCourse = aynchandler(async (req, res, next) => {
     appearenceDate = new Date(appearenceDate)
     appearenceDate = appearenceDate.getTime()
     body.appearenceDate = appearenceDate
+    body.slug=slugify(body.name)
     // image must be base 64 to upload on cloudinary
     const course = await Course.create({ ...body })
     res.status(200).json(course)

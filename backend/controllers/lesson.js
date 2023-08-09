@@ -3,8 +3,8 @@ const Lesson = require("../models/lesson");
 const User = require("../models/user");
 const ApiError = require("../utils/apierror");
 const Course = require("../models/course");
-const fs =require('fs')
-const path =require('path')
+const fs = require('fs')
+const path = require('path')
 const Section = require("../models/section");
 const { deleteVideo } = require("./videouploader");
 const sendemail = require("../utils/sendemail");
@@ -15,16 +15,45 @@ const addLesson = asynchandler(async (req, res, next) => {
   const { sectionId } = req.params;
   const section = await Section.findById(sectionId);
   if (!section) {
-    return next(new ApiError("no course or section is found",9341, 404));
+    return next(new ApiError("no course or section is found", 9341, 404));
   }
-  const lesson = await Lesson.create({ ...req.body, courseId: section.courseId, sectionId });
-  console.log(section.courseId);
+  const lesson = await Lesson.create({ ...req.body, courseId: section.courseId, sectionId })
   const course = await Course.findOne({ _id: section.courseId });
   section.lessons.push(lesson._id)
-  section.total = section.total + 1
-  await section.save();
-  course.total = course.total + 1
+  let index = 0;
+
+  for (const sectionId of course.sections) {
+    const section = await Section.findById(sectionId);
+    let sectionTotal = 0;
+    for (const lessonId of section.lessons) {
+      try {
+        const lesson = await Lesson.findById(lessonId);
+        if (!lesson) {
+          console.log(`Lesson not found for ID: ${lessonId}`);
+          continue; // Skip to the next iteration if lesson is not found
+        }
+        sectionTotal++;
+        index++;
+        lesson.index = index;
+        await lesson.save();
+      } catch (error) {
+        console.error(`Error updating lesson with ID ${lessonId}: ${error.message}`);
+        // Handle the error as needed
+      }
+    }
+
+    console.log(`Section Total for Section ${sectionId}: ${sectionTotal}`);
+
+    // Update section total and save
+    section.total = sectionTotal + 1; // Adding 1 to account for the next lesson
+    await section.save();
+  }
+
+  // Update course total and save
+  course.total = index;
   await course.save();
+
+  console.log(`Final Index: ${index}`);
   const users = await User.find({ ['enrolledCourse.courseId']: course._id })
   users.map(async (user) => {
     user.enrolledCourse.map(userCourse => {
@@ -37,20 +66,20 @@ const addLesson = asynchandler(async (req, res, next) => {
     })
     await user.save()
   })
-  const allUsers = await User.find({grade:course.grade})
+  const allUsers = await User.find({ grade: course.grade })
   allUsers.map(async (user) => {
-    let text =''
+    let text = ''
     const courses = user.enrolledCourse.filter(userCourse => userCourse.courseId.toString() === section.courseId.toString())
     if (courses.length > 0) {
       text = `You have a new lesson in ${section.title} section ,\n hurry to complete your study \n Good luck`
-    }else{
+    } else {
       text = `this is new lesson added , \n enroll to it now \n Good luck  `
     }
     const options = {
-      email:user.email,
-      message:`${course.name} has a new lesson in ${section.title} section`,
+      email: user.email,
+      message: `${course.name} has a new lesson in ${section.title} section`,
       text,
-      name:user.name
+      name: user.name
     }
     await sendemail(options)
   })
@@ -60,8 +89,7 @@ const getLesson = asynchandler(async (req, res, next) => {
   // @api get    /get-lesson/:lessonId
   // send lessonId in params
   // you must be enrolled in this lesson to get lesson
-  const {lesson} = req
-  console.log(lesson)
+  const { lesson } = req
   const { title, duration, material, video, _id, exams, description, courseId } = lesson
   const sectionTitle = lesson.sectionId.title
   const sectionDuration = lesson.sectionId.duration
@@ -72,7 +100,7 @@ const getLesson = asynchandler(async (req, res, next) => {
     path: "lessons",
     select: "title exams", // Include only the 'title' property from the lessons object
   }).select("title duration total")
-  
+
   res.status(200).json({ lesson: { title, duration, material, video, _id, exams, description }, sections, sectionTitle, sectionDuration, courseTitle, course: courseId, totalLessons });
 });
 
@@ -83,7 +111,7 @@ const deleteLesson = asynchandler(async (req, res, next) => {
 
   const lesson = await Lesson.findById(lessonId)
   if (!lesson) {
-    return next(new ApiError("no lesson is found",6341, 404));
+    return next(new ApiError("no lesson is found", 6341, 404));
   }
   await Lesson.deleteMany({ _id: lessonId });
   if (lesson.video.provider !== "youtube") {
@@ -92,17 +120,50 @@ const deleteLesson = asynchandler(async (req, res, next) => {
     const videoPath = path.join(__dirname, `/../uploads/${lesson.video.fileName}`)
     fs.unlink(videoPath, (err) => {
       if (err) {
-        return next(new ApiError("error in deleting video",6341, 404));
+        return next(new ApiError("error in deleting video", 6341, 404));
       }
     })
   }
   const section = await Section.findById(sectionId);
-  section.lessons = section.lessons.filter((lesson) => lesson !== lessonId);
-  section.total = section.total - 1
-  await section.save();
   const course = await Course.findOne({ _id: section.courseId });
-  course.total = course.total - 1
+  let index = 0;
+
+  for (const sectionId of course.sections) {
+    const section = await Section.findById(sectionId);
+    let sectionTotal = 0;
+    for (const lessonId of section.lessons) {
+      try {
+        const lesson = await Lesson.findById(lessonId);
+        if (!lesson) {
+          console.log(`Lesson not found for ID: ${lessonId}`);
+          continue; // Skip to the next iteration if lesson is not found
+        }
+        sectionTotal++;
+        index++;
+        lesson.index = index;
+        await lesson.save();
+      } catch (error) {
+        console.error(`Error updating lesson with ID ${lessonId}: ${error.message}`);
+        // Handle the error as needed
+      }
+    }
+
+    console.log(`Section Total for Section ${sectionId}: ${sectionTotal}`);
+
+    // Update section total and save
+    section.total = sectionTotal + 1; // Adding 1 to account for the next lesson
+    await section.save();
+  }
+
+  // Update course total and save
+  course.total = index;
   await course.save();
+  section.lessons = section.lessons.filter((lesson) => lesson !== lessonId);
+  await section.save();
+
+
+  console.log(`Final Index: ${index}`);
+
   const users = await User.find({ ['enrolledCourse.courseId']: course._id })
   users.map(async (user) => {
     user.enrolledCourse.map(userCourse => {
@@ -123,7 +184,7 @@ const getAllLesson = asynchandler(async (req, res, next) => {
   const { sectionId } = req.params;
   const lesson = await Lesson.find({ sectionId });
   if (lesson.length === 0) {
-    return next(new ApiError("no lessons are found in this section",6341, 404));
+    return next(new ApiError("no lessons are found in this section", 6341, 404));
   }
   res.status(200).json(lesson);
 });
@@ -135,7 +196,7 @@ const updateLesson = asynchandler(async (req, res, next) => {
     new: true,
   });
   if (!lesson) {
-    return next(new ApiError("no lesson is found",6341, 404));
+    return next(new ApiError("no lesson is found", 6341, 404));
   }
   res.status(200).json(lesson);
 });
@@ -166,7 +227,7 @@ const completeLesson = asynchandler(async (req, res, next) => {
       userFromDB.enrolledCourse.map(course => course.courseId.toString() === lesson.courseId._id.toString() ? { ...course, nextLesson: newLessonId } : course)
       userFromDB.nextLesson = newLessonId
       await userFromDB.save();
-      return next(new ApiError("last lesson of the course",5221, 404));
+      return next(new ApiError("last lesson of the course", 5221, 404));
     }
     const newSectionId = lesson.courseId.sections[sectionIndex + 1]
     const section = await Section.findById(newSectionId)
@@ -194,7 +255,7 @@ const previousLesson = asynchandler(async (req, res, next) => {
     await lesson.populate('courseId')
     const sectionIndex = lesson.courseId.sections.indexOf(lesson.sectionId._id)
     if (sectionIndex === 0) {
-      return next(new ApiError("no previous lesson",5241, 404));
+      return next(new ApiError("no previous lesson", 5241, 404));
     }
     const newSectionId = lesson.courseId.sections[sectionIndex - 1]
     const section = await Section.findById(newSectionId)
@@ -209,18 +270,18 @@ const continueLessons = asynchandler(async (req, res, next) => {
   const { user } = req
   const { courseId } = req.params
   const userFromDB = await User.findById(user._id)
-  const courseFromDB = await Course.findById(courseId) 
+  const courseFromDB = await Course.findById(courseId)
   if (!courseFromDB) {
     return next(new ApiError('no coursse is found', 404))
   }
   const course = userFromDB.enrolledCourse.filter(course => course.courseId === courseId)
   await courseFromDB.populate('sections')
   if (!course.nextLesson) {
-    return res.status(200).json({ nextLesson:courseFromDB.sections[0].lessons[0],courseTitle: courseFromDB.name, coureseImg: courseFromDB.courseImg })
+    return res.status(200).json({ nextLesson: courseFromDB.sections[0].lessons[0], courseTitle: courseFromDB.name, coureseImg: courseFromDB.courseImg })
   }
   if (course.lessonsDone.lengtht === course.lessonTotal) {
-    return res.status(200).json({nextLesson:course.nextLesson,courseTitle: courseFromDB.name, coureseImg: courseFromDB.courseImg })
-  } 
+    return res.status(200).json({ nextLesson: course.nextLesson, courseTitle: courseFromDB.name, coureseImg: courseFromDB.courseImg })
+  }
   res.status(200).json({ nextLesson: course.nextLesson, courseTitle: courseFromDB.name, coureseImg: courseFromDB.courseImg })
 })
 module.exports = {
