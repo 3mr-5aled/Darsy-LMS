@@ -30,6 +30,8 @@ const login = asynchandler(async (req, res, next) => {
   // use jsonwebtoken to get token
   const token = jwt.sign({_id:user._id,name:user.name},process.env.JWT);
   // send response with all user details and token as cookie
+  
+  
   const {name,email,phone,parentsPhone,grade,city,gender,role,enrolledCourse} = user
   res.status(201).cookie("token", token,{secure:true,sameSite:'none'}).json({email,name,phone,parentsPhone,grade,city,gender,role,enrolledCourse})
 });

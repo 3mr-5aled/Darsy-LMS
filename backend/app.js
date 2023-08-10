@@ -28,6 +28,7 @@ const ApiError = require("./utils/apierror")
 require("dotenv").config()
 const app = express()
 const csrf = require('csurf')
+app.use(cookie())
 
 // Increase payload limit to 10 kb
 const imageSize= bodyParser.json({ limit: "5mb" })
@@ -55,7 +56,6 @@ app.use(
     credentials: true,
   })
 )
-app.use(cookie())
 
 // routes
 const limiter = rateLimit({
@@ -63,16 +63,16 @@ const limiter = rateLimit({
   max:50,
   message: "Too many requests from this IP, please try again after 5 minutes"
 })
-app.use("/api/v1/auth",textSize,limiter,authRrouter)
+app.use("/api/v1/auth",textSize,csrfProtection,limiter,authRrouter)
 app.use("/api/v1/course",textSize, courseRouter)
 app.use("/api/v1/section",textSize, sectionRouter)
 app.use("/api/v1/lesson",textSize, lessonRouter)
-app.use("/api/v1/payment",textSize, paymentRouter)
-app.use("/api/v1/exam",textSize, examRouter)
+app.use("/api/v1/payment",textSize,csrfProtection ,paymentRouter)
+app.use("/api/v1/exam",textSize,csrfProtection,examRouter)
 app.use("/api/v1/upload",imageSizeUrl,imageSize, uploaderRouter)
 app.use("/api/v1/user",textSize, userRouter)
 app.use("/api/v1/member",textSize, memberRouter)
-app.get("/api/v1/analysis", textSize,authintication, authorization, getAnalysis)
+app.get("/api/v1/analysis", textSize,authintication, authorization, csrfProtection,getAnalysis)
 app.get(
   "/api/v1/total-money-per-period",
   textSize,
