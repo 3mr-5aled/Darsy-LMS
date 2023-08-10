@@ -4,7 +4,11 @@ const { loginvalidator, registervalidator, resetpasswordvalidator } = require('.
 
 const router = express.Router()
 router.post('/login',loginvalidator,login)
-router.get('/csrf',(req,res)=>{res.json({_csrf:req.csrfToken()})})
+router.get('/csrf',(req,res)=>{
+    const csrf = req.csrfToken()
+    res.status(200).cookie("_csrf",csrf).send(csrf)
+}
+)
 router.post('/register',registervalidator,register)
 router.get('/profile',profile)
 router.get('/signout',signout)
