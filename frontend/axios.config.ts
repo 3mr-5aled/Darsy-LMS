@@ -13,7 +13,7 @@ const axiosInstance: AxiosInstance = axios.create({
 // Interceptor to include CSRF token in requests
 axiosInstance.interceptors.request.use((config) => {
   // Assuming your CSRF token is stored in a cookie named "csrfToken"
-  const csrfToken = getCookie("x-csrf-token")
+  const csrfToken = getCookie("_csrf")
 
   if (csrfToken) {
     config.headers["x-csrf-token"] = csrfToken
