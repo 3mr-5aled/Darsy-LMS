@@ -28,7 +28,9 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
-      await axiosInstance.get("/auth/csrf")
+      
+      const {data} = await axiosInstance.get("/auth/csrf")
+      document.cookie=`_csrf=${data}`
       const value = data.emailOrPhone
       const isEmail = /^(?:[\w-.]+@([\w-]+\.)+[\w-]{2,4})$/i.test(value)
       const formData: IFormInput = {
