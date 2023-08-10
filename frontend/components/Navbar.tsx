@@ -128,7 +128,13 @@ const Navbar = () => {
         {/* Container for the user avatar/sign-in button */}
         <DarkModeButton />
         {isLoadingUser ? (
-          <div>Loading ...</div> // Placeholder skeleton for username
+          <div className="avatar placeholder animate-pulse ">
+          <div className="w-12 transition-all border-2 border-gray-800 rounded-full cursor-pointer bg-neutral-focus text-neutral-content hover:border-2 hover:border-secondary">
+            {" "}
+            {/* Apply transition to the border color */}
+
+          </div>
+        </div> // Placeholder skeleton for username
         ) : user ? (
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="">
