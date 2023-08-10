@@ -9,6 +9,9 @@
   padding: 0;
   box-sizing: border-box;
 }
+:root {
+  --plyr-color-main: hsl(var(--p));
+}
 
 body {
   font-family: Inter;
