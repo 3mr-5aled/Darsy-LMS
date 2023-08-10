@@ -6,7 +6,7 @@ const router = express.Router()
 router.post('/login',loginvalidator,login)
 router.get('/csrf',(req,res)=>{
     const csrf = req.csrfToken()
-    res.status(200).cookie('x-csrf-token',csrf,{secure:true,sameSite:'none',httpOnly:true}).send('created')
+    res.status(200).cookie('x-csrf-token',csrf,{secure:true,sameSite:'none'}).send('created')
 }
 )
 router.post('/register',registervalidator,register)
