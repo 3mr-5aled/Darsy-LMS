@@ -69,7 +69,7 @@ const Reset = () => {
       onSubmit={handleSubmit(() => {})} // Prevent automatic form submission
     >
       {currentStep === 1 && (
-        <div className="card flexCenter w-96 bg-base-300 shadow-xl prose py-5">
+        <div className="card flexCenter w-full md:w-96 bg-base-300 shadow-xl prose py-5">
           <h1>إعادة تعيين كلمة المرور</h1>
           <div className="w-2/3">
             <label htmlFor="email" className="label">
@@ -86,7 +86,7 @@ const Reset = () => {
                   message: "البريد الإلكتروني غير صالح",
                 },
               })}
-              className="input input-bordered"
+              className="input input-bordered w-full"
             />
             {errors.email && (
               <p className="text-error">{errors.email.message}</p>
@@ -104,7 +104,7 @@ const Reset = () => {
       )}
 
       {currentStep === 2 && (
-        <div className="card flexCenter w-96 bg-base-300 shadow-xl prose py-5">
+        <div className="card flexCenter  w-full md:w-96 bg-base-300 shadow-xl prose py-5">
           <h1>التحقق من رمز التحقق</h1>
           <div className="w-2/3">
             <label htmlFor="VerificationCode" className="label">
@@ -132,7 +132,7 @@ const Reset = () => {
       )}
 
       {currentStep === 3 && (
-        <div className="card flexCenter w-96 bg-base-300 shadow-xl prose py-5">
+        <div className="card flexCenter  w-full md:w-96 bg-base-300 shadow-xl prose py-5">
           <h1>إعادة تعيين كلمة المرور</h1>
           <div className="w-2/3">
             <label htmlFor="NewPassword" className="label">

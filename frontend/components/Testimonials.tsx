@@ -29,16 +29,28 @@ const Testimonials = () => {
 
     // Optional: Add event listeners for the buttons
     const nextButton = document.querySelector("#next")
+    const nextButton2 = document.querySelector("#next2")
     const prevButton = document.querySelector("#prev")
+    const prevButton2 = document.querySelector("#prev2")
 
     if (nextButton) {
       nextButton.addEventListener("click", () => {
         swiper.slideNext()
       })
     }
+    if (nextButton2) {
+      nextButton2.addEventListener("click", () => {
+        swiper.slideNext()
+      })
+    }
 
     if (prevButton) {
       prevButton.addEventListener("click", () => {
+        swiper.slidePrev()
+      })
+    }
+    if (prevButton2) {
+      prevButton2.addEventListener("click", () => {
         swiper.slidePrev()
       })
     }
@@ -149,6 +161,49 @@ const Testimonials = () => {
                   ))}
                 </div>
               </div>
+            </div>
+            <div className="flex lg:hidden justify-center gap-4">
+              <button
+                id="prev2"
+                className="p-3 text-pink-600 border border-pink-600 rounded-full prev-button hover:bg-pink-600 hover:text-white"
+              >
+                <span className="sr-only">Previous Slide</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="w-5 h-5 rtl:rotate-180"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 19.5L8.25 12l7.5-7.5"
+                  />
+                </svg>
+              </button>
+
+              <button
+                id="next2"
+                className="p-3 text-pink-600 border border-pink-600 rounded-full next-button hover:bg-pink-600 hover:text-white"
+              >
+                <span className="sr-only">Next Slide</span>
+                <svg
+                  className="w-5 h-5 rtl:rotate-180"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9 5l7 7-7 7"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
         </div>

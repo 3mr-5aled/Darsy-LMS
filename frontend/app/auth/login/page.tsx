@@ -64,7 +64,7 @@ const Login = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flexCenter flex-col p-8">
-      <div className="card flexCenter w-96 bg-base-300 shadow-xl prose py-5">
+      <div className="card flexCenter w-full md:w-96 bg-base-300 shadow-xl prose py-5">
         <h1>تسجيل دخول</h1>
         <div className="w-2/3">
           <div className="form-control">
@@ -115,6 +115,12 @@ const Login = () => {
             )}
           </div>
         </div>
+        <p>
+          هل نسيت كلمة المرور؟{" "}
+          <Link href="/auth/reset" className="text-secondary">
+            استعدها الأن
+          </Link>
+        </p>
 
         <button
           type="submit"

@@ -43,7 +43,7 @@ export default async function Register() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex-col p-8 flexCenter">
-      <div className="py-5 prose shadow-xl card flexCenter w-96 bg-base-300">
+      <div className="py-5 prose shadow-xl card flexCenter  w-full md:w-96 bg-base-300">
         <h1>تسجيل دخول</h1>
         <div className="w-2/3">
           <div className="py-3 form-control">

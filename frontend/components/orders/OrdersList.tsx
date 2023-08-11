@@ -24,8 +24,8 @@ const OrdersList = ({
   return (
     <div className="mt-10">
       {orders && orders.length > 0 && (
-        <div>
-          <div className="py-5 my-3 rounded-xl grid grid-cols-8 justify-items-center sticky top-5 z-10 bg-base-300">
+        <div className="w-max mx-5 md:mx-0">
+          <div className="py-5 my-3 rounded-xl grid grid-cols-8 w-full overflow-x-visible justify-items-center sticky top-5 z-10 bg-base-300">
             <div className="font-extrabold">type</div>
             <div className="font-extrabold">amount</div>
             <div className="font-extrabold">admin</div>
@@ -43,7 +43,7 @@ const OrdersList = ({
                   ? router.push("/admin/orders/single-order/" + order._id)
                   : router.push("/account/single-order/" + order._id)
               }}
-              className={`rounded-lg gap-x-2 my-5 py-3 cursor-pointer grid grid-cols-8 ${
+              className={`rounded-lg gap-x-2 my-5 py-3 cursor-pointer w-full overflow-x-visible grid grid-cols-8 ${
                 index % 2 === 0 ? "bg-secondary bg-opacity-20" : "bg-base-100"
               }`}
             >

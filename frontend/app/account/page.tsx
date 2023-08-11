@@ -152,9 +152,9 @@ const Profile = () => {
       loadingTime={10000}
       message="User Not Found, please login or register"
     >
-      <div className="flex flex-col items-start justify-start my-12 mx-24">
+      <div className="flex flex-col items-start justify-start my-12 mx-5 md:mx-24">
         <h1 className="text-4xl font-bold my-5">My Profile</h1>
-        <ul className="list-disc">
+        <ul className="list-disc mx-5">
           <li className="mb-3">
             <span className="font-bold">Name:</span> {user?.name}
           </li>
@@ -177,7 +177,7 @@ const Profile = () => {
               {renderMembershipIcon()}
             </div>
           </li>
-          <li className="mb-3 whitespace-nowrap flex flex-row items-center gap-3">
+          <li className="mb-3 flex flex-row items-center gap-3">
             <span className="font-bold">Membership expireTime:</span>{" "}
             {user?.membership?.expireTime ? (
               `${formattedExpireTime} (in ${daysLeft} days) from now`
@@ -208,7 +208,7 @@ const Profile = () => {
           </li>
         </ul>
         <div className="divider"></div>
-        <div className="flexCenter w-full h-full">
+        <div className="flexCenter w-full min-h-max h-full">
           <div className="w-10/12">
             <Line options={options} data={revenueChartDataUserDegree} />
           </div>
