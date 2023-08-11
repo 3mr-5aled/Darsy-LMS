@@ -31,6 +31,7 @@ export default async function Register() {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
+      await axiosInstance.get("/auth/csrf")
       const response = await axiosInstance.post("/auth/register", data)
       router.push("/auth/login")
     } catch (error) {

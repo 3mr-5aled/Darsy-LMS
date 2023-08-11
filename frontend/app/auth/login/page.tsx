@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import React from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useUserContext } from "@/contexts/userContext"
+import { headers } from "next/dist/client/components/headers"
 
 interface IFormInput {
   email?: string
@@ -27,6 +28,9 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
+      
+      const {data} = await axiosInstance.get("/auth/csrf")
+      document.cookie=`_csrf=${data}`
       const value = data.emailOrPhone
       const isEmail = /^(?:[\w-.]+@([\w-]+\.)+[\w-]{2,4})$/i.test(value)
       const formData: IFormInput = {
