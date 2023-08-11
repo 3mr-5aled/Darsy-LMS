@@ -10,7 +10,7 @@ const AdminSideBar = () => {
   const pathname = usePathname()
 
   return (
-    <div className="h-full flex flex-col p-4 menu w-80 bg-base-200 text-base-content">
+    <div className="h-full flex flex-col p-4 menu z-50 w-80 bg-base-200 text-base-content">
       <div className="flex flex-row items-center justify-between mb-5">
         <div className="text-2xl font-bold">
           <Link href="/">{WebsiteDetails.name}</Link>

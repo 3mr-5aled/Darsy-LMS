@@ -7,6 +7,7 @@ import { useParams } from "next/navigation"
 import Loading from "@/app/loading"
 import { MembershipType } from "@/common.types"
 import MembershipForm from "@/components/MembershipForm"
+import PreviousPageButton from "@/components/PreviousPageButton"
 
 export default function EditCourse() {
   const { membershipId } = useParams()
@@ -35,10 +36,12 @@ export default function EditCourse() {
   }
 
   return (
-    <MembershipForm
-      title="Edit Membership"
-      type="edit"
-      membership={membership}
-    />
+    <div className="flexCenter">
+      <MembershipForm
+        title="Edit Membership"
+        type="edit"
+        membership={membership}
+      />
+    </div>
   )
 }

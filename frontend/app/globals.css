@@ -85,11 +85,11 @@ body {
 }
 
 .form_image-label {
-  @apply z-10 w-full h-full p-20 text-center text-gray-500 border-2 border-gray-500 border-dashed;
+  @apply w-full h-full p-20 text-center text-gray-500 border-2 border-gray-500 border-dashed;
 }
 
 .form_image-input {
-  @apply absolute z-30 w-full h-full opacity-0 cursor-pointer;
+  @apply absolute z-20 w-full h-full opacity-0 cursor-pointer;
 }
 /* 
 :root { 

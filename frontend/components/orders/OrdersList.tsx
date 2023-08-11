@@ -1,6 +1,6 @@
-import { userOrders } from "@/common.types"
-import { useRouter } from "next/navigation"
 import React from "react"
+import { useRouter } from "next/navigation"
+import { userOrders } from "@/common.types" // Make sure to import the correct type
 
 const OrdersList = ({
   orders,
@@ -22,65 +22,63 @@ const OrdersList = ({
   }
 
   return (
-    <div className="mt-10">
-      {orders && orders.length > 0 && (
-        <div className="w-max mx-5 md:mx-0">
-          <div className="py-5 my-3 rounded-xl grid grid-cols-8 w-full overflow-x-visible justify-items-center sticky top-5 z-10 bg-base-300">
-            <div className="font-extrabold">type</div>
-            <div className="font-extrabold">amount</div>
-            <div className="font-extrabold">admin</div>
-            <div className="font-extrabold">course</div>
-            <div className="font-extrabold">trans ref</div>
-            <div className="font-extrabold">provider</div>
-            <div className="font-extrabold">status</div>
-            <div className="font-extrabold">Date</div>
-          </div>
+    <div className="overflow-x-auto">
+      <table className="table table-pin-rows table-pin-cols">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Admin</th>
+            <th>Course</th>
+            <th>Trans Ref</th>
+            <th>Provider</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
           {orders.map((order, index) => (
-            <div
+            <tr
               key={order._id}
               onClick={() => {
                 admin
                   ? router.push("/admin/orders/single-order/" + order._id)
                   : router.push("/account/single-order/" + order._id)
               }}
-              className={`rounded-lg gap-x-2 my-5 py-3 cursor-pointer w-full overflow-x-visible grid grid-cols-8 ${
+              className={`${
                 index % 2 === 0 ? "bg-secondary bg-opacity-20" : "bg-base-100"
               }`}
             >
-              <div className="justify-self-center">
-                {order.type ? order.type : "---"}
-              </div>
-              <div className="justify-self-center">{order.amount}</div>
-              <div
+              <th>{index + 1}</th>
+              <td>{order.type || "---"}</td>
+              <td>{order.amount}</td>
+              <td
                 data-tip={order.adminId?.name}
-                className="cursor-default z-0 tooltip justify-self-center"
+                className="cursor-default z-0 tooltip"
               >
                 {order.adminId?.name.split(" ")[0] || "---"}
-              </div>
-              <div
+              </td>
+              <td
                 onClick={() => viewCoursePage(order.courseId?._id as string)}
-                className={`justify-self-center ${
+                className={`${
                   order.courseId
                     ? "cursor-pointer hover:text-accent duration-200"
                     : ""
                 }`}
               >
                 {order.courseId?.name || "---"}
-              </div>
-              <div className="justify-self-center truncate">
-                {order.tran_ref ? order.tran_ref : "---"}
-              </div>
-              <div className="justify-self-center">
+              </td>
+              <td className="truncate">{order.tran_ref || "---"}</td>
+              <td>
                 {order.tran_ref ? "paytabs" : order.adminId ? "admin" : "user"}
-              </div>
-              <div className="justify-self-center">{order.status}</div>
-              <div className="justify-self-center">
-                {getOrderTime(order.createdAt as string)}
-              </div>
-            </div>
+              </td>
+              <td>{order.status}</td>
+              <td>{getOrderTime(order.createdAt as string)}</td>
+            </tr>
           ))}
-        </div>
-      )}
+        </tbody>
+      </table>
     </div>
   )
 }

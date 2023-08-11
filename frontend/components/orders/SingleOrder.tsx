@@ -42,14 +42,14 @@ const SingleOrder = () => {
   }
 
   return (
-    <div className="container mx-auto m-5">
+    <div className="container mx-auto p-5">
       <div className="m-5">
         <PreviousPageButton />
       </div>
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold">Order Details</h1>
       </div>
-      <div className="grid items-center mt-15 mx-5 py-10 justify-center w-full grid-cols-2 gap-4">
+      <div className="grid items-center mt-15 md:mx-5 py-10 justify-center w-full grid-cols-2 gap-2 md:gap-4">
         {order?.adminId && (
           <>
             <div className="font-bold">Admin name:</div>

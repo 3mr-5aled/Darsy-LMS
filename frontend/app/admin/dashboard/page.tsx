@@ -79,6 +79,7 @@ const Dashboard = () => {
 
   const options = {
     responsive: true,
+    // maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top" as const,
@@ -145,7 +146,7 @@ const Dashboard = () => {
       ) : (
         analyticsData && (
           <div>
-            <div className="grid grid-cols-2 gap-4 p-5 mt-8">
+            <div className="grid md:grid-cols-2 gap-4 p-5 mt-8">
               <div className="p-4 rounded-lg bg-base-100">
                 <h2 className="text-xl font-semibold">Total Revenue</h2>
                 <p className="text-3xl font-bold text-success">
@@ -173,9 +174,9 @@ const Dashboard = () => {
                 </p>
               </div>
             </div>
-            <div className="mt-8 mb-12">
+            <div className="mt-8 mb-12 mx-3">
               <h2 className="mb-4 text-xl font-semibold">Revenue Chart</h2>
-              <div className="flex mb-4">
+              <div className="flex flex-wrap gap-3 mb-4">
                 {/* Switch between the year, current month, and last seven days chart */}
                 <button
                   className={`mr-2 ${

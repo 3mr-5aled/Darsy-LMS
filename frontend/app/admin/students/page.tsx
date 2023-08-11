@@ -40,7 +40,7 @@ const Students = () => {
   )
 
   return (
-    <div className="p-5 m-5">
+    <div className="p-5 w-full">
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold">Students</h1>
       </div>
@@ -59,13 +59,13 @@ const Students = () => {
           <Link
             key={user._id}
             href={`/admin/students/manage-student/${user._id}`}
-            className="flex flex-row items-center justify-between w-full p-3 rounded-md hover:bg-base-100 min-w-lg"
+            className="flex flex-row flex-wrap items-center justify-between w-full p-3 rounded-md hover:bg-base-100 min-w-lg"
           >
             <h3 className="pr-5 text-lg font-bold">
               {index + 1}
               {". "} {user.name}
             </h3>
-            <div className="flex flex-row items-center gap-3">
+            <div className="flex flex-row flex-wrap items-center gap-3">
               <p className="p-3 rounded-full bg-base-100">
                 {user.membership ? user.membership.name : "No subscription"}
               </p>

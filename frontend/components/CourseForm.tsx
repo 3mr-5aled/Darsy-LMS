@@ -166,7 +166,7 @@ const CourseForm = ({ title, type, course }: Props) => {
           </div>
         </div>
         <div className="flex flex-wrap justify-around w-full gap-5">
-          <div className="form-control">
+          <div className="form-control w-full">
             <label htmlFor="name">Name:</label>
             <input
               type="text"
@@ -179,7 +179,7 @@ const CourseForm = ({ title, type, course }: Props) => {
             {errors.name && <span>This field is required</span>}
             {/* Display error message if the "name" field is not filled */}
           </div>
-          <div className="form-control">
+          <div className="form-control w-full">
             <label htmlFor="description">Description:</label>
             <textarea
               id="description"
@@ -191,7 +191,7 @@ const CourseForm = ({ title, type, course }: Props) => {
             {errors.description && <span>This field is required</span>}
             {/* Display error message if the "description" field is not filled */}
           </div>
-          <div className="form-control">
+          <div className="form-control w-full">
             <label htmlFor="duration">Duration in hours:</label>
             <input
               type="number"
@@ -205,7 +205,7 @@ const CourseForm = ({ title, type, course }: Props) => {
             {errors.duration && <span>This field is required</span>}
             {/* Display error message if the "duration" field is not filled */}
           </div>
-          <div className="form-control">
+          <div className="form-control w-full">
             <label htmlFor="price">Price:</label>
             <input
               type="number"
@@ -219,7 +219,7 @@ const CourseForm = ({ title, type, course }: Props) => {
             {errors.price && <span>This field is required</span>}
             {/* Display error message if the "price" field is not filled */}
           </div>
-          <div className="w-2/6 form-control">
+          <div className="w-full md:w-2/6 form-control">
             <label htmlFor="discount">discount:</label>
             <input
               type="number"
@@ -234,7 +234,7 @@ const CourseForm = ({ title, type, course }: Props) => {
             {errors.discount && <span>This field is required</span>}
             {/* Display error message if the "discount" field is not filled */}
           </div>
-          <div className="w-2/6 form-control">
+          <div className="w-full md:w-2/6 form-control">
             <label htmlFor="appearenceDate">Launch Date:</label>
             <input
               type="datetime-local"
@@ -247,7 +247,7 @@ const CourseForm = ({ title, type, course }: Props) => {
             {errors.appearenceDate && <span>This field is required</span>}
             {/* Display error message if the "discount" field is not filled */}
           </div>
-          <div className="form-control">
+          <div className="w-full form-control">
             <label htmlFor="grade">Grade</label>
             <select
               className="select select-bordered"

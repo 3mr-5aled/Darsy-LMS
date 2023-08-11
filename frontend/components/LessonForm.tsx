@@ -11,6 +11,7 @@ import dynamic from "next/dynamic"
 // const QuillEditor = dynamic(() => import("react-quill"), { ssr: false })
 import "react-quill/dist/quill.snow.css"
 import QuillEditorLoading from "./QuillEditorLoading"
+import PreviousPageButton from "./PreviousPageButton"
 
 const QuillEditor = React.lazy(() => import("react-quill"))
 
@@ -209,8 +210,13 @@ const LessonForm = ({
   }
 
   return (
-    <div className="flex-col w-full p-5 flexCenter ">
-      <h1 className="my-5 text-4xl font-bold">{PageTitle}</h1>
+    <div className="flex-col w-full p-5 flexCenter">
+      <div className="flex flex-row gap-5">
+        <div className="my-3 self-start">
+          <PreviousPageButton />
+        </div>
+        <h1 className="my-5 text-4xl font-bold">{PageTitle}</h1>
+      </div>
       <div className="flex-col gap-5 flexCenter">
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
           <div className="grid grid-cols-1 gap-5 lg:col-span-2 lg:grid-cols-2">
@@ -318,11 +324,11 @@ const LessonForm = ({
           </div>
 
           <div className="lg:col-span-2">
-            <label htmlFor="material" className="mb-2 text-xl font-bold">
+            <label htmlFor="material" className="mb-3 text-xl font-bold">
               Material:
             </label>
-            <div className="flex flex-row flex-wrap">
-              <div className="mx-3">
+            <div className="flex flex-row gap-3 ml-3 flex-wrap">
+              <div className="lg:col-span-1">
                 <div className="form-control">
                   <label htmlFor="material">Title:</label>
                   <input

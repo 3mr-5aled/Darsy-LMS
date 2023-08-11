@@ -217,12 +217,14 @@ const StudentPage = () => {
     // return <p className="font-bold text-gray-500">No current subscription</p> // Render nothing if the membership is not gold, platinum, or diamond
   }
   return (
-    <div className="p-5 m-5">
-      <PreviousPageButton />
+    <div className="px-5">
+      <div className="my-3">
+        <PreviousPageButton />
+      </div>
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold">Student Details</h1>
       </div>
-      <div className="grid items-center justify-center w-full grid-cols-2 gap-4">
+      <div className="grid items-center truncate justify-center w-full grid-cols-2 gap-3 md:gap-4">
         <div className="font-bold">Name:</div>
         <div>{user?.name}</div>
 
@@ -283,7 +285,7 @@ const StudentPage = () => {
       <div className="my-8 text-center">
         <h1 className="text-4xl font-bold">Enrolled Courses</h1>
       </div>
-      <div className="grid grid-cols-3 max-md:grid-cols-1 gap-4 my-5 xl:grid-cols-4">
+      <div className="w-full grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {userEnrolledCourses &&
           userEnrolledCourses.map((course) => (
             <div
@@ -321,11 +323,13 @@ const StudentPage = () => {
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold">Student Orders</h1>
       </div>
-      {orders ? (
-        <OrdersList orders={orders} admin={true} />
-      ) : (
-        <p>No Orders for current user</p>
-      )}
+      <div className="w-80 md:w-full">
+        {orders ? (
+          <OrdersList orders={orders} admin={true} />
+        ) : (
+          <p>No Orders for current user</p>
+        )}
+      </div>
       {/* Render the credit modal */}
       <CreditModal
         isOpen={isCreditModalOpen}

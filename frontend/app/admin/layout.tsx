@@ -26,7 +26,7 @@ export default function RootLayout({
           className="drawer-toggle"
         />
         <div className="flex flex-col items-center justify-center drawer-content">
-          <div className="w-11/12 m-5 card bg-base-300">
+          <div className="my-5 w-11/12 card bg-base-300">
             <label
               htmlFor="my-drawer-2"
               className="lg:hidden btn btn-ghost btn-circle"
@@ -49,7 +49,7 @@ export default function RootLayout({
             {children}
           </div>
         </div>
-        <div className="drawer-side">
+        <div className="drawer-side z-50">
           <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
           <AdminSideBar />
         </div>
