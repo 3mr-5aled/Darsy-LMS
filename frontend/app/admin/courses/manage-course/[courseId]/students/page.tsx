@@ -6,6 +6,7 @@ import { UserType } from "@/common.types"
 import { toast } from "react-toastify"
 import Loading from "@/app/loading"
 import CourseStudentCard from "@/components/CourseStudentCard"
+import PreviousPageButton from "@/components/PreviousPageButton"
 
 const CourseStudentsPage: React.FC = () => {
   const { courseId } = useParams()
@@ -88,7 +89,12 @@ const CourseStudentsPage: React.FC = () => {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Course Students Page</h1>
+      <div className="mb-3">
+        <PreviousPageButton />
+      </div>
+      <h1 className="text-2xl text-center w-full font-bold mb-4">
+        Course Students Page
+      </h1>
       {isLoading ? (
         <Loading />
       ) : (

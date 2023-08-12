@@ -22,7 +22,7 @@ type ColumnProps = {
 
 const Footer = async () => {
   return (
-    <footer className="p-10 transition-all footer bg-neutral text-neutral-content">
+    <footer className="footer">
       <div>
         <Link href="/" className="p-3 prose bg-white rounded-md">
           <Image

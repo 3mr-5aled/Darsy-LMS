@@ -31,7 +31,7 @@ const LessonView = ({ lesson }: { lesson: LessonType }) => {
         <div>
           {}
           <strong>Description:</strong>{" "}
-          <div className="prose bg-base-200">
+          <div className="prose bg-base-200 p-3">
             <div dangerouslySetInnerHTML={{ __html: doc.body.innerHTML }} />
           </div>
         </div>

@@ -9,6 +9,13 @@ import { toast } from "react-toastify"
 import { useUserContext } from "@/contexts/userContext"
 import { useEffect, useState } from "react"
 import { AdminOnlyLink } from "./AdminOnlyRoutes"
+import {
+  BsMenuApp,
+  BsMenuButton,
+  BsMenuDown,
+  BsX,
+  BsXCircle,
+} from "react-icons/bs"
 
 const Navbar = () => {
   const router = useRouter()
@@ -65,8 +72,17 @@ const Navbar = () => {
       <div className="container gap-10 flexStart">
         {" "}
         {/* Container for the logo */}
-        <div className="dropdown lg:hidden">
-          <label tabIndex={0} className="btn btn-ghost btn-circle">
+        <div className="drawer lg:hidden">
+          <input
+            title="toggler"
+            id="my-drawer-2"
+            type="checkbox"
+            className="drawer-toggle"
+          />
+          <label
+            htmlFor="my-drawer-2"
+            className="lg:hidden btn btn-ghost btn-circle"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="w-5 h-5"
@@ -82,22 +98,36 @@ const Navbar = () => {
               />
             </svg>
           </label>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-          >
-            {NavLinks.map((link) => (
-              <li
-                key={link.text}
-                className={`transition-colors hover:text-secondary-focus ${
-                  pathname === link.href ? "text-secondary" : ""
-                }`}
+          <div className="lg:hidden drawer-side z-50">
+            <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
+            <div className="z-50 m-2">
+              <input
+                title="toggler2"
+                id="my-drawer-2"
+                type="checkbox"
+                className="drawer-toggle"
+              />
+              <label
+                htmlFor="my-drawer-2"
+                className="lg:hidden btn btn-ghost btn-circle"
               >
-                {/* Apply transition to the hover and active state */}
-                <Link href={link.href}>{link.text}</Link>
-              </li>
-            ))}
-          </ul>
+                <BsXCircle size={25} />
+              </label>
+            </div>
+            <ul className="h-full w-full flex flex-col justify-center gap-5 p-4 menu bg-base-200 bg-opacity-90 text-base-content">
+              {NavLinks.map((link) => (
+                <li
+                  key={link.text}
+                  className={`transition-colors flexCenter text-xl w-full hover:text-secondary-focus ${
+                    pathname === link.href ? "text-secondary" : ""
+                  }`}
+                >
+                  {/* Apply transition to the hover and active state */}
+                  <Link href={link.href}>{link.text}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
         <Link href="/" className="p-3 prose bg-white rounded-md">
           <Image
@@ -129,12 +159,11 @@ const Navbar = () => {
         <DarkModeButton />
         {isLoadingUser ? (
           <div className="avatar placeholder animate-pulse ">
-          <div className="w-12 transition-all border-2 border-gray-800 rounded-full cursor-pointer bg-neutral-focus text-neutral-content hover:border-2 hover:border-secondary">
-            {" "}
-            {/* Apply transition to the border color */}
-
-          </div>
-        </div> // Placeholder skeleton for username
+            <div className="w-12 transition-all border-2 border-gray-800 rounded-full cursor-pointer bg-neutral-focus text-neutral-content hover:border-2 hover:border-secondary">
+              {" "}
+              {/* Apply transition to the border color */}
+            </div>
+          </div> // Placeholder skeleton for username
         ) : user ? (
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="">

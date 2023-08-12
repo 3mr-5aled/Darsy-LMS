@@ -2,6 +2,7 @@
 import React from "react"
 import Link from "next/link"
 import useUser from "@/lib/FetchUser"
+import { BsArrowLeft } from "react-icons/bs"
 
 const AdminOnlyRoute = ({ children }: { children: React.ReactNode }) => {
   const [user, isLoading] = useUser()
@@ -20,13 +21,16 @@ const AdminOnlyRoute = ({ children }: { children: React.ReactNode }) => {
         </section>
       )}
       {!isLoading && user?.role !== "tutor" && (
-        <section style={{ height: "80vh" }} className="flexCenter">
-          <div className="p-5 bg-base-300 card prose">
+        <section style={{ height: "80vh" }} className="flexCenter w-full">
+          <div className="p-5 bg-base-300 card prose w-11/12 md:w-auto">
             <h2>Permission Denied.</h2>
             <p>This page can only be view by an Admin user.</p>
             <br />
             <Link href="/">
-              <button className="btn btn-primary">&larr; Back To Home</button>
+              <button className="btn btn-primary flex flex-row">
+                <BsArrowLeft size={20} />
+                Back To Home
+              </button>
             </Link>
           </div>
         </section>

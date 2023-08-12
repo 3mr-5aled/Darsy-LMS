@@ -44,7 +44,7 @@ body {
 }
 
 .footer {
-  @apply flex-col w-full gap-20 paddings bg-base-200;
+  @apply flex-col w-full gap-5 md:gap-20 paddings bg-base-200 p-10 transition-all text-neutral-content;
 }
 
 .footer_copyright {
@@ -226,5 +226,37 @@ body {
   100% {
     -webkit-transform: translate(-50%, -50%) rotate(0deg);
     transform: translate(-50%, -50%) rotate(0deg);
+  }
+}
+.ytp-chrome-top .ytp-show-cards-title {
+  display: none !important;
+}
+.ytp-pause-overlay {
+  display: none !important;
+}
+.ytp-chrome-top-buttons {
+  display: none !important;
+}
+#movie_player
+  > div.ytp-chrome-top.ytp-show-cards-title
+  > div.ytp-chrome-top-buttons {
+  display: none !important;
+}
+#movie_player > div.ytp-chrome-top.ytp-show-cards-title {
+  display: none;
+}
+
+.html5-endscreen
+  .ytp-player-content
+  .videowall-endscreen
+  .ytp-endscreen-paginate
+  .ytp-show-tiles {
+  display: none !important;
+}
+
+/* Hide the "Copy link" button on embedded YouTube videos */
+iframe[src*="youtube.com/embed"] {
+  .ytp-copylink-button {
+    display: none !important;
   }
 }
