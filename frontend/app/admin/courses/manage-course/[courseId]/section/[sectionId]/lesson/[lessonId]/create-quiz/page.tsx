@@ -1,5 +1,5 @@
 "use client"
-import QuizForm from "@/components/QuizForm"
+import QuizForm from "@/components/Forms/QuizForm"
 import { useParams } from "next/navigation"
 
 const CreateQuiz = () => {

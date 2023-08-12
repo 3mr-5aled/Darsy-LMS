@@ -5,7 +5,7 @@ import Loading from "@/app/loading"
 import { CourseType } from "@/common.types"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import NotFoundComponent from "@/components/NotFoundComponent"
+import NotFoundComponent from "@/components/Features/NotFoundComponent"
 
 const CoursesAdminView = () => {
   const [courses, isLoading, error] = useCourses()

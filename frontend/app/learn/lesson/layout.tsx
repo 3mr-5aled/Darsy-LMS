@@ -1,15 +1,15 @@
 import "@/app/globals.css"
-import Navbar from "@/components/Navbar"
-import Footer from "@/components/Footer"
+import Navbar from "@/components/Nav/Navbar"
+import Footer from "@/components/Nav/Footer"
 import { WebsiteDetails } from "@/constant"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { UserProvider } from "@/contexts/userContext"
-import ClientOnlyRoute from "@/components/ClientOnlyRoute"
+import ClientOnlyRoute from "@/components/Routes/ClientOnlyRoute"
 import { Suspense } from "react"
 import Loading from "@/app/loading"
-import LearnPageSideDrawer from "@/components/LearnPageSideDrawer"
-import LearnPageAppMenu from "@/components/LearnPageAppMenu"
+import LearnPageSideDrawer from "@/components/learn/LearnPageSideDrawer"
+import LearnPageAppMenu from "@/components/learn/LearnPageAppMenu"
 
 export const metadata = {
   title: WebsiteDetails.name,

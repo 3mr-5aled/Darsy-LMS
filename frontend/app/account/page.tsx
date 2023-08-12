@@ -2,7 +2,7 @@
 import useUser from "@/lib/FetchUser"
 import { BsCircleFill, BsDiamondFill, BsStars } from "react-icons/bs"
 import { useState, useEffect } from "react"
-import DataLoading from "@/components/DataLoading"
+import DataLoading from "@/components/Features/DataLoading"
 import { Line } from "react-chartjs-2"
 import {
   Chart as ChartJS,

@@ -1,6 +1,6 @@
 "use client"
 
-import CourseForm from "@/components/CourseForm"
+import CourseForm from "@/components/Forms/CourseForm"
 import axiosInstance from "@/axios.config"
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"

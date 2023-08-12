@@ -12,7 +12,7 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useParams, useRouter } from "next/navigation"
 import Loading from "@/app/loading"
-import PreviousPageButton from "../PreviousPageButton"
+import PreviousPageButton from "../Features/PreviousPageButton"
 
 const SingleOrder = () => {
   const router = useRouter()

@@ -6,7 +6,7 @@ import { UserType } from "@/common.types"
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 import Loading from "@/app/loading"
-import CreditModal from "@/components/AddCredit" // Import the CreditModal component
+import CreditModal from "@/components/Features/AddCredit" // Import the CreditModal component
 import { Line } from "react-chartjs-2"
 import {
   Chart as ChartJS,
@@ -20,9 +20,9 @@ import {
 } from "chart.js"
 import Image from "next/image"
 import { BsCircleFill, BsDiamondFill, BsStars } from "react-icons/bs"
-import PreviousPageButton from "@/components/PreviousPageButton"
+import PreviousPageButton from "@/components/Features/PreviousPageButton"
 import OrdersList from "@/components/orders/OrdersList"
-import ConfirmModal from "@/components/ConfirmModal"
+import ConfirmModal from "@/components/Features/ConfirmModal"
 ChartJS.register(
   CategoryScale,
   LinearScale,

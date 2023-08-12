@@ -1,13 +1,13 @@
 "use client"
 
-import CourseForm from "@/components/CourseForm"
+import CourseForm from "@/components/Forms/CourseForm"
 import axiosInstance from "@/axios.config"
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import Loading from "@/app/loading"
 import { MembershipType } from "@/common.types"
-import MembershipForm from "@/components/MembershipForm"
-import PreviousPageButton from "@/components/PreviousPageButton"
+import MembershipForm from "@/components/Forms/MembershipForm"
+import PreviousPageButton from "@/components/Features/PreviousPageButton"
 
 export default function EditCourse() {
   const { membershipId } = useParams()

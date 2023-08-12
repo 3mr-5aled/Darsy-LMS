@@ -11,7 +11,7 @@ import dynamic from "next/dynamic"
 // const QuillEditor = dynamic(() => import("react-quill"), { ssr: false })
 import "react-quill/dist/quill.snow.css"
 import QuillEditorLoading from "./QuillEditorLoading"
-import PreviousPageButton from "./PreviousPageButton"
+import PreviousPageButton from "../Features/PreviousPageButton"
 
 const QuillEditor = React.lazy(() => import("react-quill"))
 

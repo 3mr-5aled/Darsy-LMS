@@ -5,8 +5,8 @@ import { useParams } from "next/navigation"
 import { UserType } from "@/common.types"
 import { toast } from "react-toastify"
 import Loading from "@/app/loading"
-import CourseStudentCard from "@/components/CourseStudentCard"
-import PreviousPageButton from "@/components/PreviousPageButton"
+import CourseStudentCard from "@/components/admin/CourseStudentCard"
+import PreviousPageButton from "@/components/Features/PreviousPageButton"
 
 const CourseStudentsPage: React.FC = () => {
   const { courseId } = useParams()

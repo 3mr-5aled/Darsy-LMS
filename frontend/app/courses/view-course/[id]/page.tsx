@@ -3,7 +3,7 @@
 import Loading from "@/app/loading"
 import axiosInstance from "@/axios.config"
 import { CourseType } from "@/common.types"
-import CourseSections from "@/components/CourseSections"
+import CourseSections from "@/components/course/CourseSections"
 import { useUserContext } from "@/contexts/userContext"
 import Image from "next/image"
 import { useParams, useRouter } from "next/navigation"

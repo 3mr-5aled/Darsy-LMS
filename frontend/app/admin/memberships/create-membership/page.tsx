@@ -1,6 +1,6 @@
 "use client"
 
-import MembershipForm from "@/components/MembershipForm"
+import MembershipForm from "@/components/Forms/MembershipForm"
 
 export default function CreateMembership() {
   return (

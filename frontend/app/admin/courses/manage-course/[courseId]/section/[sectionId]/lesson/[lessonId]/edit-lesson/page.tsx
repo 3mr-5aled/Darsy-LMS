@@ -2,7 +2,7 @@
 import Loading from "@/app/loading"
 import axiosInstance from "@/axios.config"
 import { LessonType } from "@/common.types"
-import LessonForm from "@/components/LessonForm"
+import LessonForm from "@/components/Forms/LessonForm"
 import { useParams } from "next/navigation"
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify"

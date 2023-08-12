@@ -4,8 +4,8 @@ import axiosInstance from "@/axios.config"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
-import LessonForm from "./LessonForm"
-import SectionForm from "./SectionForm"
+import LessonForm from "../Forms/LessonForm"
+import SectionForm from "../Forms/SectionForm"
 import {
   BsCheckCircle,
   BsCheckCircleFill,
@@ -18,7 +18,7 @@ import LessonView from "./LessonView"
 import Link from "next/link"
 import Loading from "@/app/loading"
 import { SectionType } from "@/common.types"
-import ConfirmModal from "./ConfirmModal"
+import ConfirmModal from "../Features/ConfirmModal"
 
 type Section = {
   _id: string

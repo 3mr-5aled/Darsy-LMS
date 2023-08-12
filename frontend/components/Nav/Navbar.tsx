@@ -8,7 +8,7 @@ import DarkModeButton from "./DarkModeButton"
 import { toast } from "react-toastify"
 import { useUserContext } from "@/contexts/userContext"
 import { useEffect, useState } from "react"
-import { AdminOnlyLink } from "./AdminOnlyRoutes"
+import { AdminOnlyLink } from "../Routes/AdminOnlyRoutes"
 import {
   BsMenuApp,
   BsMenuButton,

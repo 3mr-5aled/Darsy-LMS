@@ -3,7 +3,9 @@ import React, { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
 
 // Use dynamic import for VideoPlayer to load it only on the client-side
-const VideoPlayer = dynamic(() => import("./VideoPlayer"), { ssr: false })
+const VideoPlayer = dynamic(() => import("../Features/VideoPlayer"), {
+  ssr: false,
+})
 
 const LessonView = ({ lesson }: { lesson: LessonType }) => {
   const [isBrowser, setIsBrowser] = useState(false)

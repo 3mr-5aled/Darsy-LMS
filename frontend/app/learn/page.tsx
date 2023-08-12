@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState } from "react"
 import axiosInstance from "@/axios.config"
-import MyCourses from "@/components/MyCourses"
+import MyCourses from "@/components/learn/account/MyCourses"
 import useUser from "@/lib/FetchUser"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -15,7 +15,7 @@ import {
   BsStars,
 } from "react-icons/bs"
 import { toast } from "react-toastify"
-import DarkModeButton from "@/components/DarkModeButton"
+import DarkModeButton from "@/components/Nav/DarkModeButton"
 import Loading from "../loading"
 
 const StudentMainPage = () => {

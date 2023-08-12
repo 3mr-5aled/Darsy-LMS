@@ -1,8 +1,8 @@
 "use client"
 import axiosInstance from "@/axios.config"
 import { MembershipType } from "@/common.types"
-import ConfirmModal from "@/components/ConfirmModal"
-import DataLoading from "@/components/DataLoading"
+import ConfirmModal from "@/components/Features/ConfirmModal"
+import DataLoading from "@/components/Features/DataLoading"
 import useUser from "@/lib/FetchUser"
 import Loading from "@/app/loading"
 import { useRouter } from "next/navigation"
@@ -53,8 +53,8 @@ const Membership = () => {
       setSelectedGrade(user.grade)
     }
   }, [user])
-  if(membershipData.length === 0 ){
-    return <Loading/>
+  if (membershipData.length === 0) {
+    return <Loading />
   }
   // If the user exists, filter by their grade directly
   const filteredMembershipData = user
@@ -163,19 +163,21 @@ const Membership = () => {
               </p>
             </DataLoading>
           </>
-      ):(<select
-        title="filter"
-        className="w-full p-3 mb-5 border rounded-md"
-        value={selectedGrade} // Set the value to selectedGrade, not membershipData
-        onChange={(e) => setSelectedGrade(e.target.value)}
-      >
-        <option value="all">All Grades</option>
-        {uniqueGrades.map((grade) => (
-          <option key={grade} value={grade}>
-            {grade}
-          </option>
-        ))}
-      </select>)}
+        ) : (
+          <select
+            title="filter"
+            className="w-full p-3 mb-5 border rounded-md"
+            value={selectedGrade} // Set the value to selectedGrade, not membershipData
+            onChange={(e) => setSelectedGrade(e.target.value)}
+          >
+            <option value="all">All Grades</option>
+            {uniqueGrades.map((grade) => (
+              <option key={grade} value={grade}>
+                {grade}
+              </option>
+            ))}
+          </select>
+        )}
         <DataLoading
           data={membershipData}
           loadingTime={1000}

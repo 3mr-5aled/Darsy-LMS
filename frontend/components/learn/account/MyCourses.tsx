@@ -5,7 +5,7 @@ import axiosInstance from "@/axios.config"
 import { UserType } from "@/common.types"
 import Link from "next/link"
 import Image from "next/image"
-import NotFoundComponent from "@/components/NotFoundComponent"
+import NotFoundComponent from "@/components/Features/NotFoundComponent"
 import { useRouter } from "next/navigation"
 
 const MyCourses = () => {
@@ -17,7 +17,6 @@ const MyCourses = () => {
     const fetchUserData = async () => {
       setLoading(true)
       try {
-        
         const response = await axiosInstance.get(`/auth/profile`)
         setUser(response.data)
         setLoading(false)
@@ -31,12 +30,10 @@ const MyCourses = () => {
   }, [])
   if (loading) {
     return <Loading />
-
   }
   if (!user) {
     return <NotFoundComponent message="you are not enrolled in courses" />
   }
-
 
   const handleContinueCourse = async (courseId: string) => {
     try {

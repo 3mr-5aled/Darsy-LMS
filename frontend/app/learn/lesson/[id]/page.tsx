@@ -14,7 +14,7 @@ import {
 import { useUserContext } from "@/contexts/userContext"
 import { ApiResponseType, LessonType, SectionType } from "@/common.types"
 const VideoPlayer = dynamic(
-  () => import("../../../../components/VideoPlayer"),
+  () => import("../../../../components/Features/VideoPlayer"),
   { ssr: false }
 )
 

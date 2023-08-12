@@ -1,9 +1,9 @@
 "use client"
 import { WebsiteDetails, AdminNavLinks } from "@/constant"
 import Link from "next/link"
-import DarkModeButton from "../DarkModeButton"
+import DarkModeButton from "../Nav/DarkModeButton"
 import { usePathname } from "next/navigation"
-import UserComponent from "../UserComponent"
+import UserComponent from "../static/UserComponent"
 import { BsHouseDoorFill } from "react-icons/bs"
 
 const AdminSideBar = () => {

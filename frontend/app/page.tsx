@@ -1,10 +1,10 @@
 "use client"
 import { features } from "@/constant"
 import Link from "next/link"
-import Hero from "@/components/Hero"
+import Hero from "@/components/static/Hero"
 import { useUserContext } from "@/contexts/userContext"
 import { useRouter } from "next/navigation"
-import Testimonials from "@/components/Testimonials"
+import Testimonials from "@/components/static/Testimonials"
 
 const Home = () => {
   const { state, setUser, clearUser } = useUserContext()
