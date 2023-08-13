@@ -98,7 +98,7 @@ const Course = () => {
       // const { order } = response.data
       toast.success("Course enrolled successfully")
       // Navigate to the Learn page passing the courseId as a query parameter
-      router.push(`/learn`)
+      router.push(`/app`)
     } catch (error) {
       console.error(error)
       // Handle errors if necessary
@@ -207,7 +207,7 @@ const Course = () => {
             <button
               className="my-5 btn btn-primary w-fit"
               onClick={() =>
-                router.push(`/learn/lesson/${course.sections?.[0]?.lessons[0]}`)
+                router.push(`/app/lesson/${course.sections?.[0]?.lessons[0]}`)
               }
             >
               Continue Learning

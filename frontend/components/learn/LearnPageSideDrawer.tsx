@@ -108,7 +108,7 @@ const LearnPageSideDrawer = () => {
     )
   }
   const examStatus = (id: string) => {
-    let status ="border-gray-500"
+    let status = "border-gray-500"
     user?.exams?.forEach((exam) => {
       if (exam.lessonId.toString() === id) {
         status =
@@ -149,7 +149,7 @@ const LearnPageSideDrawer = () => {
                 {/* Display lessons in each section */}
                 {section.lessons.map((lessonItem, lessonIndex) => (
                   <div key={lessonItem._id}>
-                    <Link href={`/learn/lesson/${lessonItem._id}`}>
+                    <Link href={`/app/lesson/${lessonItem._id}`}>
                       <div
                         key={lessonItem._id}
                         className={`flex flex-row hover:bg-primary justify-between items-center rounded-lg p-2 ${
@@ -165,7 +165,7 @@ const LearnPageSideDrawer = () => {
                         className={`${examStatus(
                           lessonItem._id as string
                         )} flex flex-row py-3 px-3 rounded-lg border-2  hover:bg-neutral`}
-                        href={`/learn/lesson/${lessonItem._id}/quiz`}
+                        href={`/app/lesson/${lessonItem._id}/quiz`}
                       >
                         Quiz
                       </Link>

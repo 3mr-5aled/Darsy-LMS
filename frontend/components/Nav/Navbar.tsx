@@ -143,7 +143,7 @@ const Navbar = () => {
                   <Link href="/account">My Profile</Link>
                 </li>
                 <li>
-                  <Link href="/learn">My Learning Page</Link>
+                  <Link href="/app">My Learning Page</Link>
                 </li>
                 <AdminOnlyLink>
                   <li>

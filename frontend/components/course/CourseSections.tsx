@@ -323,9 +323,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                       key={lesson._id}
                     >
                       <div
-                        onClick={() =>
-                          router.push(`/learn/lesson/${lesson._id}`)
-                        }
+                        onClick={() => router.push(`/app/lesson/${lesson._id}`)}
                         className="flex flex-row items-center cursor-pointer gap-x-3"
                       >
                         {index + 1}. {lesson.title}

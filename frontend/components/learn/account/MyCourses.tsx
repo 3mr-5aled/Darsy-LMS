@@ -21,7 +21,7 @@ const MyCourses = () => {
       const response = await axiosInstance.get(
         `/lesson/${courseId}/continue-lesson`
       )
-      router.push(`/learn/lesson/${response.data.nextLesson}`)
+      router.push(`/app/lesson/${response.data.nextLesson}`)
     } catch (error) {}
   }
 

@@ -6,7 +6,7 @@ const ClientOnlyRoute = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname()
   if (
     pathname.includes("admin") ||
-    (pathname.includes("learn") && !pathname.includes("learn/lesson"))
+    (pathname.includes("app") && !pathname.includes("app/lesson"))
   ) {
     return null
   } else {
