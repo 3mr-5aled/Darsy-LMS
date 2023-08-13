@@ -3,14 +3,16 @@ import axiosInstance from "@/axios.config"
 import { MembershipType } from "@/common.types"
 import ConfirmModal from "@/components/Features/ConfirmModal"
 import DataLoading from "@/components/Features/DataLoading"
-import useUser from "@/lib/FetchUser"
 import Loading from "@/app/loading"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify"
+import { useUserContext } from "@/contexts/userContext"
 
 const Membership = () => {
-  const [user] = useUser()
+  const { state } = useUserContext()
+  const { user } = state
+
   const [membershipData, setMembershipData] = useState<MembershipType[]>([])
   const [uniqueGrades, setUniqueGrades] = useState<string[]>([])
   const [selectedGrade, setSelectedGrade] = useState("all")

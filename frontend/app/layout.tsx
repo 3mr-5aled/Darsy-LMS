@@ -8,6 +8,7 @@ import { UserProvider } from "@/contexts/userContext"
 import ClientOnlyRoute from "@/components/Routes/ClientOnlyRoute"
 import { Suspense } from "react"
 import Loading from "./loading"
+import FetchUserOnLoad from "@/components/Features/FetchUserOnLoad"
 
 export const metadata = {
   title: WebsiteDetails.name,
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <Suspense fallback={<Loading />}>
             <main>{children}</main>
           </Suspense>
+          <FetchUserOnLoad />
         </UserProvider>
         <ClientOnlyRoute>
           <Footer />

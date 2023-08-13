@@ -17,9 +17,12 @@ import {
 import { toast } from "react-toastify"
 import DarkModeButton from "@/components/Nav/DarkModeButton"
 import Loading from "../loading"
+import { useUserContext } from "@/contexts/userContext"
 
 const StudentMainPage = () => {
-  const [user, isLoading] = useUser()
+  const { state } = useUserContext()
+  const { user, loading: isLoading } = state
+
   const router = useRouter()
 
   // Step 1: Define state variables

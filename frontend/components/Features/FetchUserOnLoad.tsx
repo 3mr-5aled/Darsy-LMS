@@ -1,30 +1,29 @@
-import { useState, useEffect } from "react"
+"use client"
 import axiosInstance from "@/axios.config"
+import { useUserContext } from "@/contexts/userContext"
+import { useEffect } from "react"
 import { toast } from "react-toastify"
-import { UserType } from "@/common.types"
 
-const useUser = (): [UserType | null, boolean] => {
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [user, setUser] = useState<UserType | null>(null)
+const FetchUserOnLoad = () => {
+  const { setUser } = useUserContext()
 
   const fetchUser = async () => {
-    setIsLoading(true)
     try {
       const response = await axiosInstance.get("/auth/profile")
       const userData = response.data // Assuming the response data is the user object
       setUser(userData)
-      setIsLoading(false)
     } catch (error: any) {
       toast.error(error)
-      setIsLoading(false)
     }
   }
 
   useEffect(() => {
-    fetchUser()
+    if (typeof window !== "undefined") {
+      fetchUser()
+    }
   }, [])
 
-  return [user, isLoading]
+  return null
 }
 
-export default useUser
+export default FetchUserOnLoad
