@@ -17,6 +17,7 @@ import DarkModeButton from "@/components/Nav/DarkModeButton"
 import Loading from "../loading"
 import { useUserContext } from "@/contexts/userContext"
 import WalletComponent from "@/components/learn/WalletComponent"
+import MembershipIcon from "@/components/learn/MembershipIcon"
 
 const StudentMainPage = () => {
   const { state } = useUserContext()
@@ -57,34 +58,6 @@ const StudentMainPage = () => {
 
   // Step 2: Define functions to handle modal visibility and payment submission
 
-  const renderMembershipIcon = () => {
-    const membershipName = user?.membership?.name?.toLowerCase()
-    if (membershipName && membershipName.includes("gold")) {
-      return (
-        <div className="flex flex-row">
-          <p className="font-bold text-amber-400">Gold</p>
-          <BsCircleFill className="text-amber-400" />
-        </div>
-      )
-    } else if (membershipName && membershipName.includes("platinum")) {
-      return (
-        <div className="flex flex-row">
-          <p className="font-bold text-cyan-500">Platinum</p>
-          <BsStars className="text-cyan-500" />
-        </div>
-      )
-    } else if (membershipName && membershipName.includes("diamond")) {
-      return (
-        <div className="flex flex-row">
-          <p className="font-bold text-blue-500">Diamond</p>
-          <BsDiamondFill className="text-blue-500" />
-        </div>
-      )
-    }
-
-    return <p className="font-bold text-gray-500">No current subscription</p> // Render nothing if the membership is not gold, platinum, or diamond
-  }
-
   const getUserInitials = (userName: string | undefined) => {
     if (!userName) {
       return null
@@ -107,7 +80,7 @@ const StudentMainPage = () => {
             >
               Membership:
               <span className="flex flex-row items-center gap-3 text-warning">
-                {renderMembershipIcon()}
+                <MembershipIcon membership={user?.membership} />
               </span>
             </Link>
             {user?.nextLesson || (user?.enrolledCourse?.length ?? 0) > 0 ? (
@@ -127,11 +100,11 @@ const StudentMainPage = () => {
             )}
           </div>
           {/* my homepage with nav */}
-          <div className="order-1 md:col-span-1 md:order-2">
-            <h1 className="mb-5 text-2xl font-bold text-center lg:text-4xl">
+          <div className="order-1 md:col-span-1 md:order-2 flexCenter flex-col gap-5">
+            <h1 className="text-2xl font-bold text-center lg:text-4xl">
               My Homepage
             </h1>
-            <div className="hidden w-full transition-all md:flexCenter">
+            <div className="hidden md:flex w-full transition-all flexCenter">
               <div className="flex flex-row items-center justify-around w-2/3 gap-5 p-3 text-2xl rounded-full flex-nowrap bg-base-200">
                 <div className="tooltip" data-tip="HomePage">
                   <Link
