@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify"
 import { useUserContext } from "@/contexts/userContext"
+import Link from "next/link"
 
 const Membership = () => {
   const { state } = useUserContext()
@@ -168,7 +169,7 @@ const Membership = () => {
         ) : (
           <select
             title="filter"
-            className="w-full p-3 mb-5 border rounded-md"
+            className="w-full p-3 mb-5 border rounded-md select select-bordered"
             value={selectedGrade} // Set the value to selectedGrade, not membershipData
             onChange={(e) => setSelectedGrade(e.target.value)}
           >
@@ -231,59 +232,68 @@ const Membership = () => {
                 </div>
                 <div className="mt-6 space-y-2">{membership.description}</div>
                 {/* Conditionally render the buttons */}
-                {user?.credit && membership.price > user.credit ? (
-                  <button
-                    className={`btn mt-5 ${
-                      membership.name.toLowerCase().includes("golden")
-                        ? "border-amber-400 hover:bg-amber-400 hover:text-white"
-                        : membership.name.toLowerCase().includes("platinum")
-                        ? "border-cyan-500 hover:bg-cyan-500 hover:text-white"
-                        : membership.name.toLowerCase().includes("diamond")
-                        ? "border-blue-500 hover:bg-blue-500 hover:text-white"
-                        : ""
-                    } `}
-                    onClick={() => {
-                      handleOpenCreditModal()
-                      setSelectedMembership(membership)
-                    }}
-                    disabled={
-                      !!(
-                        user?.membership?.memberId &&
-                        new Date(user.membership.expireTime) >= new Date()
-                      )
-                    }
-                  >
-                    {user?.membership?.memberId &&
-                    new Date(user.membership.expireTime) >= new Date()
-                      ? "You are already subscribed"
-                      : "Add Credit"}
-                  </button>
+                {user ? (
+                  user?.credit && membership.price > user.credit ? (
+                    <button
+                      className={`btn mt-5 ${
+                        membership.name.toLowerCase().includes("golden")
+                          ? "border-amber-400 hover:bg-amber-400 hover:text-white"
+                          : membership.name.toLowerCase().includes("platinum")
+                          ? "border-cyan-500 hover:bg-cyan-500 hover:text-white"
+                          : membership.name.toLowerCase().includes("diamond")
+                          ? "border-blue-500 hover:bg-blue-500 hover:text-white"
+                          : ""
+                      } `}
+                      onClick={() => {
+                        handleOpenCreditModal()
+                        setSelectedMembership(membership)
+                      }}
+                      disabled={
+                        !!(
+                          user?.membership?.memberId &&
+                          new Date(user.membership.expireTime) >= new Date()
+                        )
+                      }
+                    >
+                      {user?.membership?.memberId &&
+                      new Date(user.membership.expireTime) >= new Date()
+                        ? "You are already subscribed"
+                        : "Add Credit"}
+                    </button>
+                  ) : (
+                    <button
+                      className={`btn mt-5 ${
+                        membership.name.toLowerCase().includes("golden")
+                          ? "border-amber-400 hover:bg-amber-400 hover:text-white"
+                          : membership.name.toLowerCase().includes("platinum")
+                          ? "border-cyan-500 hover:bg-cyan-500 hover:text-white"
+                          : membership.name.toLowerCase().includes("diamond")
+                          ? "border-blue-500 hover:bg-blue-500 hover:text-white"
+                          : ""
+                      } `}
+                      onClick={() => {
+                        setShowConfirmModal(true)
+                        setSelectedMembership(membership)
+                      }}
+                      disabled={
+                        !!(
+                          user?.membership?.memberId &&
+                          new Date(user.membership.expireTime) >= new Date()
+                        )
+                      }
+                    >
+                      {user?.membership?.memberId &&
+                      new Date(user.membership.expireTime) >= new Date()
+                        ? "You are already subscribed"
+                        : "Subscribe now"}
+                    </button>
+                  )
                 ) : (
                   <button
-                    className={`btn mt-5 ${
-                      membership.name.toLowerCase().includes("golden")
-                        ? "border-amber-400 hover:bg-amber-400 hover:text-white"
-                        : membership.name.toLowerCase().includes("platinum")
-                        ? "border-cyan-500 hover:bg-cyan-500 hover:text-white"
-                        : membership.name.toLowerCase().includes("diamond")
-                        ? "border-blue-500 hover:bg-blue-500 hover:text-white"
-                        : ""
-                    } `}
-                    onClick={() => {
-                      setShowConfirmModal(true)
-                      setSelectedMembership(membership)
-                    }}
-                    disabled={
-                      !!(
-                        user?.membership?.memberId &&
-                        new Date(user.membership.expireTime) >= new Date()
-                      )
-                    }
+                    className="mt-5 btn btn-primary"
+                    onClick={() => router.push("/auth/login")}
                   >
-                    {user?.membership?.memberId &&
-                    new Date(user.membership.expireTime) >= new Date()
-                      ? "You are already subscribed"
-                      : "Subscribe now"}
+                    Sign In to Subscribe
                   </button>
                 )}
                 {/* Step 4: Render the ConfirmModal component conditionally */}
@@ -346,7 +356,9 @@ const Membership = () => {
         </DataLoading>
       </div>
       <div className="w-full p-12 flexCenter bg-base-300 ">
-        <button className="text-3xl btn btn-primary">Contact us</button>
+        <Link href="/contact" className="text-3xl btn btn-primary">
+          Contact us
+        </Link>
       </div>
     </div>
   )

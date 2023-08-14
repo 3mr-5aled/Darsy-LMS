@@ -16,18 +16,15 @@ import { toast } from "react-toastify"
 import DarkModeButton from "@/components/Nav/DarkModeButton"
 import Loading from "../loading"
 import { useUserContext } from "@/contexts/userContext"
+import WalletComponent from "@/components/learn/WalletComponent"
 
 const StudentMainPage = () => {
   const { state } = useUserContext()
   const { user, loading: isLoading } = state
 
   const router = useRouter()
-  const pathname = usePathname()
 
   // Step 1: Define state variables
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [amount, setAmount] = useState("")
-  const [amountError, setAmountError] = useState("")
 
   if (isLoading) {
     return <Loading /> // Assuming you have a Loading component
@@ -52,44 +49,14 @@ const StudentMainPage = () => {
 
   const handleContinueLearning = async () => {
     if (user) {
-      router.push(`/learn/lesson/${user.nextLesson}`)
+      router.push(`/app/lesson/${user.nextLesson}`)
     } else {
       toast.error("Something went wrong")
     }
   }
 
   // Step 2: Define functions to handle modal visibility and payment submission
-  const handleOpenModal = () => {
-    setIsModalOpen(true)
-  }
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false)
-  }
-
-  const handlePayment = async () => {
-    const isValidAmount = /^[0-9]*(\.[0-9]{1,2})?$/.test(amount)
-
-    if (!isValidAmount || parseFloat(amount) <= 0 || parseFloat(amount) > 250) {
-      setAmountError(
-        "Invalid amount. Please enter a valid value between 0 and 250."
-      )
-      return
-    }
-
-    try {
-      const response = await axiosInstance.post(`/payment/add-credit/`, {
-        amount: parseFloat(amount),
-      })
-      // Handle the payment response as needed
-      router.push(response.data.url)
-      setAmount("")
-      handleCloseModal()
-    } catch (error) {
-      toast.error("Payment failed. Please try again.")
-      console.log(error)
-    }
-  }
   const renderMembershipIcon = () => {
     const membershipName = user?.membership?.name?.toLowerCase()
     if (membershipName && membershipName.includes("gold")) {
@@ -207,104 +174,13 @@ const StudentMainPage = () => {
           </div>
           {/* wallet section */}
           <div className="relative flex-col order-2 p-5 bg-base-200 card flexCenter md:order-3">
-            <span className="absolute top-0 left-0 p-3 opacity-80">
-              My Wallet
-            </span>
-            <div className="p-3 text-5xl font-bold">
-              {user?.credit}
-              <span className="text-success">{" $"}</span>
-            </div>
-            {/* Step 3: Add modal trigger button */}
-            <button
-              className="flex flex-row items-center justify-center w-full gap-3 text-secondary"
-              onClick={handleOpenModal}
-            >
-              <div>Charge your credit</div>{" "}
-              <span className="rounded-full text-success">
-                <BsPlusCircleFill />
-              </span>
-            </button>
+            <WalletComponent credit={user?.credit || 0} />
           </div>
           <div className="order-8 w-full md:col-span-3">
             <MyCourses />
           </div>
         </div>
         {/* Step 4: Add the modal */}
-        {isModalOpen && (
-          <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-70">
-            <div className="w-11/12 p-4 bg-base-100 card">
-              <h3 className="mb-2 text-xl font-bold">
-                Enter the amount you want to charge
-              </h3>
-              <input
-                type="text"
-                placeholder="Amount"
-                className={`w-full mb-4 input input-bordered ${
-                  amountError ? "input-error" : ""
-                }`}
-                value={amount}
-                onChange={(e) => {
-                  setAmount(e.target.value)
-                  setAmountError("")
-                }}
-                min="0"
-                max="250"
-                pattern="^[0-9]*(\.[0-9]{1,2})?$"
-              />
-              {amountError && <p className="text-error">{amountError}</p>}
-              <div className="flex justify-end">
-                <button
-                  className="mr-2 btn btn-primary"
-                  onClick={handlePayment}
-                >
-                  Pay
-                </button>
-                <button
-                  className="btn btn-secondary"
-                  onClick={handleCloseModal}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="absolute w-full transition-all bottom-1 md:hidden flexCenter">
-        <div className="btm-nav">
-          <Link
-            className={
-              pathname === "/app" ? "active" : "" + `hover:text-secondary`
-            }
-            href="/app"
-          >
-            <BsHouseDoorFill size={20} />
-          </Link>
-          <Link
-            className={
-              pathname === "/courses" ? "active" : "" + `hover:text-secondary`
-            }
-            href="/courses"
-          >
-            <BsViewStacked size={20} />
-          </Link>
-          <DarkModeButton />
-          <Link
-            className={
-              pathname === "/account" ? "active" : "" + `hover:text-secondary`
-            }
-            href="/account"
-          >
-            <div className="avatar placeholder">
-              <div className="w-8 transition-all border-2 border-gray-800 rounded-full cursor-pointer bg-neutral-focus text-neutral-content hover:border-2 hover:border-secondary">
-                {" "}
-                <span className="text-sm font-bold">
-                  {getUserInitials(user?.name)}
-                </span>
-              </div>
-            </div>
-          </Link>
-        </div>
       </div>
     </div>
   )

@@ -14,6 +14,7 @@ const FetchUserOnLoad = () => {
       setUser(userData)
     } catch (error: any) {
       toast.error(error)
+      setUser(null)
     }
   }
 

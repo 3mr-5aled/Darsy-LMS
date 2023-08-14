@@ -16,7 +16,7 @@ const Navbar = () => {
   const pathname = usePathname()
   const [isSigningOut, setIsSigningOut] = useState<boolean>(false)
   const { state, clearUser } = useUserContext()
-  const { user, loading } = state
+  const { user, loading: isLoading } = state
 
   const signOut = async () => {
     setIsSigningOut(true)
@@ -42,7 +42,7 @@ const Navbar = () => {
 
   return (
     <nav className="relative z-20 navbar flexCenter w-full shadow-xl">
-      <div className="w-full md:container flexBetween">
+      <div className="w-full lg:container flexBetween">
         <div className="flexStart gap-1">
           <div className="drawer w-fit lg:hidden">
             <input
@@ -116,7 +116,7 @@ const Navbar = () => {
           {" "}
           {/* Container for the user avatar/sign-in button */}
           <DarkModeButton />
-          {loading ? (
+          {isLoading ? (
             <div className="avatar placeholder animate-pulse ">
               <div className="w-12 transition-all border-2 border-gray-800 rounded-full cursor-pointer bg-neutral-focus text-neutral-content hover:border-2 hover:border-secondary">
                 {" "}
