@@ -24,7 +24,7 @@ const OrdersList = ({
   return (
     <div className="overflow-x-auto">
       <table className="table table-pin-rows table-pin-cols">
-        <thead>
+        <thead className=" sticky top-5 text-2xl font-semibold">
           <tr>
             <th></th>
             <th>Type</th>
@@ -39,7 +39,7 @@ const OrdersList = ({
         </thead>
         <tbody>
           {orders.map((order, index) => (
-            <tr
+            <tr 
               key={order._id}
               onClick={() => {
                 admin
@@ -48,7 +48,7 @@ const OrdersList = ({
               }}
               className={`${
                 index % 2 === 0 ? "bg-secondary bg-opacity-20" : "bg-base-100"
-              }`}
+              } cursor-pointer`}
             >
               <th>{index + 1}</th>
               <td>{order.type || "---"}</td>

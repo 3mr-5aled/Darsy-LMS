@@ -15,4 +15,5 @@ router.put('/update-lesson/:lessonId',authintications,authintication,updateLesso
 router.put('/complete-lesson/:lessonId',authintications,completeLessonValidator,completeLesson)
 router.get('/previous-lesson/:lessonId',authintications,completeLessonValidator,previousLesson)
 router.get('/:courseId/continue-lesson',authintications,continueLessonValidator,continueLessons)
+
 module.exports=router

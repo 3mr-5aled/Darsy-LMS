@@ -1,9 +1,9 @@
 "use client"
-import Loading from "@/app/loading"
-import useUser from "@/lib/FetchUser"
+import { useUserContext } from "@/contexts/userContext"
 
 const UserComponent = () => {
-  const [user, isLoading] = useUser()
+  const { state } = useUserContext()
+  const { user, loading: isLoading } = state
 
   const getUserInitials = (userName: string) => {
     const nameArray = userName.split(" ")

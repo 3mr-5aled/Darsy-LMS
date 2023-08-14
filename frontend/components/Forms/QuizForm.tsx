@@ -324,7 +324,7 @@ const CreateQuizPage = ({
     <div className="container p-4 mx-auto">
       <button
         title="back button"
-        className="bg-base-100 rounded-full p-3 my-3 hover:text-primary"
+        className="bg-base-100 rounded-full p-3 mb-3 hover:text-primary"
         onClick={() => router.back()}
       >
         <BsArrowLeftCircleFill />
@@ -353,7 +353,7 @@ const CreateQuizPage = ({
             <input
               title="question title"
               type="text"
-              className="w-full p-2 border rounded input input-bordered"
+              className="md:w-full p-2 border rounded input input-bordered"
               value={q.question}
               onChange={(e) =>
                 handleQuestionChange(questionIndex, e.target.value)
@@ -365,7 +365,7 @@ const CreateQuizPage = ({
                 title="image"
                 type="file"
                 accept="image/*"
-                className="z-30 w-full h-full cursor-pointer absolute opacity-0"
+                className="z-30 w-fit md:w-full h-full cursor-pointer absolute opacity-0"
                 onChange={(e) =>
                   handleQuestionImageChange(
                     questionIndex,
@@ -382,112 +382,119 @@ const CreateQuizPage = ({
             <img
               alt={`Question ${questionIndex + 1} Image`}
               src={getImageURL(q.questionImage)}
-              className="max-w-md mt-2"
+              className="w-full max-w-md mt-2 rounded-md"
             />
           )}
 
           <div className="divider"></div>
-          <div className="mt-3 mb-4">
+          <div className="mt-3 mb-4 flex flex-row flex-wrap items-center gap-3">
             <label className="font-semibold">Select Quiz Type:</label>
-            {q.isCheckBoxQuiz ? (
-              <BsCheckSquareFill className="mx-3 mr-2 inline-block align-text-bottom" />
-            ) : (
-              <BsCircleFill className="mx-3 mr-2 inline-block align-text-bottom" />
-            )}
-            <select
-              title="question type"
-              className="px-8 py-2 ml-2 border rounded w-max select select-bordered"
-              value={q.isCheckBoxQuiz ? "checkbox" : "multiple-choice"}
-              onChange={(e) =>
-                handleQuestionTypeChange(
-                  questionIndex,
-                  e.target.value === "checkbox"
-                )
-              }
-            >
-              <option value="multiple-choice">Multiple Choice</option>
-              <option value="checkbox">Checkbox</option>
-            </select>
+            <div>
+              {q.isCheckBoxQuiz ? (
+                <BsCheckSquareFill className="mx-3 mr-2 inline-block align-text-bottom" />
+              ) : (
+                <BsCircleFill className="mx-3 mr-2 inline-block align-text-bottom" />
+              )}
+              <select
+                title="question type"
+                className="px-8 py-2 ml-2 border rounded w-max select select-bordered"
+                value={q.isCheckBoxQuiz ? "checkbox" : "multiple-choice"}
+                onChange={(e) =>
+                  handleQuestionTypeChange(
+                    questionIndex,
+                    e.target.value === "checkbox"
+                  )
+                }
+              >
+                <option value="multiple-choice">Multiple Choice</option>
+                <option value="checkbox">Checkbox</option>
+              </select>
+            </div>
           </div>
           <div className="flex flex-col gap-3">
             {q.answers.map((answer, answerIndex) => (
-              <div
-                key={answerIndex}
-                className="flex flex-row gap-3 items-center"
-              >
-                {q.isCheckBoxQuiz ? (
-                  <input
-                    title="Correct answer"
-                    type="checkbox"
-                    className="checkbox"
-                    checked={q.correctAnswer.includes(answer.text)}
-                    onChange={() =>
-                      handleCorrectAnswerChange(questionIndex, answerIndex)
-                    }
-                  />
-                ) : (
-                  <input
-                    title="Correct answer"
-                    type="radio"
-                    className="radio"
-                    name={`correctAnswer-${questionIndex}`}
-                    value={answerIndex}
-                    checked={q.correctAnswer[0] === answer.text}
-                    onChange={() =>
-                      handleCorrectAnswerChange(questionIndex, answerIndex)
-                    }
-                  />
-                )}
-                <input
-                  title="answer"
-                  type="text"
-                  className="p-2 border rounded input input-bordered"
-                  value={answer.text}
-                  onChange={(e) =>
-                    handleAnswerChange(
-                      questionIndex,
-                      answerIndex,
-                      e.target.value
-                    )
-                  }
-                />
-                {q.answers.length > 2 && (
-                  <button
-                    title="remove answer"
-                    className="hover:text-error"
-                    onClick={() => removeAnswer(questionIndex, answerIndex)}
-                  >
-                    <BsXCircleFill size={20} />
-                  </button>
-                )}
-                <div className="w-fit h-fit z-30 hover:bg-base-100 bg-base-200 shadow rounded-full relative cursor-pointer">
-                  <input
-                    title="image"
-                    type="file"
-                    accept="image/*"
-                    className="z-30 w-full h-full cursor-pointer absolute opacity-0"
-                    onChange={(e) =>
-                      handleAnswerImageChange(
-                        questionIndex,
-                        answerIndex,
-                        e.target.files ? e.target.files[0] : null
-                      )
-                    }
-                  />
-                  <div className="w-fit h-fit z-10 rounded-full cursor-pointer p-3 ">
-                    <BsImage />
+              <>
+                <div
+                  key={answerIndex}
+                  className="flex flex-col flex-wrap gap-3 items-start"
+                >
+                  <div className="flex flex-row flex-wrap gap-3">
+                    {q.isCheckBoxQuiz ? (
+                      <input
+                        title="Correct answer"
+                        type="checkbox"
+                        className="checkbox"
+                        checked={q.correctAnswer.includes(answer.text)}
+                        onChange={() =>
+                          handleCorrectAnswerChange(questionIndex, answerIndex)
+                        }
+                      />
+                    ) : (
+                      <input
+                        title="Correct answer"
+                        type="radio"
+                        className="radio"
+                        name={`correctAnswer-${questionIndex}`}
+                        value={answerIndex}
+                        checked={q.correctAnswer[0] === answer.text}
+                        onChange={() =>
+                          handleCorrectAnswerChange(questionIndex, answerIndex)
+                        }
+                      />
+                    )}
+                    <input
+                      title="answer"
+                      type="text"
+                      className="p-2 border rounded input input-bordered"
+                      value={answer.text}
+                      onChange={(e) =>
+                        handleAnswerChange(
+                          questionIndex,
+                          answerIndex,
+                          e.target.value
+                        )
+                      }
+                    />
+                    {q.answers.length > 2 && (
+                      <button
+                        title="remove answer"
+                        className="hover:text-error"
+                        onClick={() => removeAnswer(questionIndex, answerIndex)}
+                      >
+                        <BsXCircleFill size={20} />
+                      </button>
+                    )}
+                    <div className="w-fit h-fit z-30 hover:bg-base-100 bg-base-200 shadow rounded-full relative cursor-pointer">
+                      <input
+                        title="image"
+                        type="file"
+                        accept="image/*"
+                        className="z-30 w-full h-full cursor-pointer absolute opacity-0"
+                        onChange={(e) =>
+                          handleAnswerImageChange(
+                            questionIndex,
+                            answerIndex,
+                            e.target.files ? e.target.files[0] : null
+                          )
+                        }
+                      />
+                      <div className="w-fit h-fit z-10 rounded-full cursor-pointer p-3 ">
+                        <BsImage />
+                      </div>
+                    </div>
                   </div>
+                  {answer.image && (
+                    <img
+                      src={getImageURL(answer.image)}
+                      alt={`Question ${questionIndex + 1} Answer ${
+                        answerIndex + 1
+                      } Image`}
+                      className="max-w-xs mt-2 rounded-md"
+                    />
+                  )}
                 </div>
-                {answer.image && (
-                  <img
-                    src={getImageURL(answer.image)}
-                    alt={`Question ${questionIndex + 1} Answer ${
-                      answerIndex + 1
-                    } Image`}
-                    className="max-w-xs mt-2"
-                  />
-                )}
-              </div>
+                <div className="divider"></div>
+              </>
             ))}
           </div>
           <button

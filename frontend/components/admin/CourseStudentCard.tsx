@@ -26,7 +26,7 @@ const CourseStudentCard: React.FC<CourseStudentCardProps> = ({
   }
 
   return (
-    <li className="flex items-center justify-between mb-2 border p-4 rounded-md bg-base-100 shadow-md">
+    <li className="flex flex-row flex-wrap items-center justify-between gap-2 mb-2 border p-4 rounded-md bg-base-100 shadow-md">
       <span className="text-lg font-semibold">{student.name}</span>
       {isStudentEnrolled ? (
         <button
@@ -36,7 +36,7 @@ const CourseStudentCard: React.FC<CourseStudentCardProps> = ({
           Remove
         </button>
       ) : (
-        <div className="flex items-center">
+        <div className="flex flex-row gap-3 items-center flex-wrap w-fit">
           <input
             type="number"
             placeholder="Enter Amount paid ..."

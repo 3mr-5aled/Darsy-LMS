@@ -57,7 +57,7 @@ const register = asynchandler(async (req, res, next) => {
 const signout = asynchandler(async (req, res,next) => {
   // @api   Get /auth/signout
   // extract token
-  res.status(200).cookie("token", "").json({ msg: "signout is done" });
+  res.status(200).cookie("token", "",{ secure: true, sameSite: 'none'  }).json({ msg: "signout is done" });
 });
 const profile = asynchandler(async (req, res,next) => {
   // @api   Get /auth/profile

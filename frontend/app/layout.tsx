@@ -1,13 +1,14 @@
 import "./globals.css"
-import Navbar from "@/components/Navbar"
-import Footer from "@/components/Footer"
+import Navbar from "@/components/Nav/Navbar"
+import Footer from "@/components/Nav/Footer"
 import { WebsiteDetails } from "@/constant"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { UserProvider } from "@/contexts/userContext"
-import ClientOnlyRoute from "@/components/ClientOnlyRoute"
+import ClientOnlyRoute from "@/components/Routes/ClientOnlyRoute"
 import { Suspense } from "react"
 import Loading from "./loading"
+import FetchUserOnLoad from "@/components/Features/FetchUserOnLoad"
 
 export const metadata = {
   title: WebsiteDetails.name,
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <Suspense fallback={<Loading />}>
             <main>{children}</main>
           </Suspense>
+          <FetchUserOnLoad />
         </UserProvider>
         <ClientOnlyRoute>
           <Footer />

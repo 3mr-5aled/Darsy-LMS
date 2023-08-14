@@ -3,17 +3,18 @@
 import Loading from "@/app/loading"
 import axiosInstance from "@/axios.config"
 import { CourseType } from "@/common.types"
-import CourseSections from "@/components/CourseSections"
+import ConfirmModal from "@/components/Features/ConfirmModal"
+import CourseSections from "@/components/course/CourseSections"
 import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
-import CourseStudentsPage from "./students/page"
 
-const Course = () => {
+const AdminCourseView = () => {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [course, setCourse] = useState<CourseType | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
 
   const { courseId } = useParams()
   const fetchCourse = async () => {
@@ -35,12 +36,12 @@ const Course = () => {
 
   const deleteCourse = async () => {
     try {
-      if (window.confirm("Are you sure you want to delete this course?")) {
-        setIsLoading(true)
-        await axiosInstance.delete(`/course/delete-course/${courseId}`)
-        toast.success("Course deleted successfully")
-        router.push("/admin/courses") // Redirect to the courses page after deletion
-      }
+      // if (window.confirm("Are you sure you want to delete this course?")) {
+      setIsLoading(true)
+      await axiosInstance.delete(`/course/delete-course/${courseId}`)
+      toast.success("Course deleted successfully")
+      router.push("/admin/courses") // Redirect to the courses page after deletion
+      // }
     } catch (error: any) {
       setError(error)
       toast.error(error)
@@ -50,6 +51,14 @@ const Course = () => {
 
   if (!course) {
     return <Loading />
+  }
+
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true)
+  }
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false)
   }
 
   return (
@@ -89,7 +98,7 @@ const Course = () => {
             </button>
             <button
               className="mt-3 mb-5 btn btn-error btn-outline"
-              onClick={deleteCourse}
+              onClick={openDeleteModal}
             >
               Delete course
             </button>
@@ -111,8 +120,17 @@ const Course = () => {
           isAdmin={true}
         />
       </div>
+      {isDeleteModalOpen && (
+        <ConfirmModal
+          title="Confirm Course Deletion"
+          handleClick={deleteCourse}
+          handleClose={closeDeleteModal}
+        >
+          <p>Are you sure you want to delete this course?</p>
+        </ConfirmModal>
+      )}
     </>
   )
 }
 
-export default Course
+export default AdminCourseView

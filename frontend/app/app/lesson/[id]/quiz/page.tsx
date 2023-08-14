@@ -5,9 +5,9 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useParams, useRouter } from "next/navigation"
 import Loading from "@/app/loading"
-import ExamResults from "@/components/ExamResults"
+import ExamResults from "@/components/course/quizes/ExamResults"
 import { useUserContext } from "@/contexts/userContext"
-import Timer from "@/components/quizes/Timer"
+import Timer from "@/components/course/quizes/Timer"
 
 const StudentQuizPage = () => {
   const { state, setUser, clearUser } = useUserContext()

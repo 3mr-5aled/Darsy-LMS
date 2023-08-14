@@ -4,8 +4,8 @@ import useCourses from "@/lib/FetchCourses"
 import Loading from "../loading"
 import { CourseType } from "@/common.types"
 import { useRouter } from "next/navigation"
-import NotFoundComponent from "@/components/NotFoundComponent"
-import DataLoading from "@/components/DataLoading"
+import NotFoundComponent from "@/components/Features/NotFoundComponent"
+import DataLoading from "@/components/Features/DataLoading"
 import Image from "next/image"
 
 const Courses = () => {

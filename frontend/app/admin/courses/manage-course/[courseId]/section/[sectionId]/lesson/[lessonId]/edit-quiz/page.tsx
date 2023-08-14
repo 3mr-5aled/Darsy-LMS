@@ -2,7 +2,7 @@
 import Loading from "@/app/loading"
 import axiosInstance from "@/axios.config"
 import { Question } from "@/common.types"
-import QuizForm from "@/components/QuizForm"
+import QuizForm from "@/components/Forms/QuizForm"
 import { useParams } from "next/navigation"
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify"

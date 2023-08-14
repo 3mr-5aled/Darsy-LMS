@@ -6,7 +6,7 @@ import { UserType } from "@/common.types"
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 import Loading from "@/app/loading"
-import CreditModal from "@/components/AddCredit" // Import the CreditModal component
+import CreditModal from "@/components/Features/AddCredit" // Import the CreditModal component
 import { Line } from "react-chartjs-2"
 import {
   Chart as ChartJS,
@@ -20,8 +20,9 @@ import {
 } from "chart.js"
 import Image from "next/image"
 import { BsCircleFill, BsDiamondFill, BsStars } from "react-icons/bs"
-import PreviousPageButton from "@/components/PreviousPageButton"
+import PreviousPageButton from "@/components/Features/PreviousPageButton"
 import OrdersList from "@/components/orders/OrdersList"
+import ConfirmModal from "@/components/Features/ConfirmModal"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -79,6 +80,7 @@ const StudentPage = () => {
   const [formattedExpireTime, setFormattedExpireTime] = useState<string | null>(
     null
   )
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
 
   useEffect(() => {
     // Fetch user from the API
@@ -216,6 +218,15 @@ const StudentPage = () => {
 
     // return <p className="font-bold text-gray-500">No current subscription</p> // Render nothing if the membership is not gold, platinum, or diamond
   }
+
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true)
+  }
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false)
+  }
+
   return (
     <div className="px-5">
       <div className="my-3">
@@ -272,9 +283,18 @@ const StudentPage = () => {
         <Link href={`/admin/students/edit-student/${studentId}`} passHref>
           <button className="btn btn-primary">Edit</button>
         </Link>
-        <button className="btn btn-error" onClick={handleDelete}>
+        <button className="btn btn-error" onClick={openDeleteModal}>
           Delete
         </button>
+        {isDeleteModalOpen && (
+          <ConfirmModal
+            title="Confirm Student Deletion"
+            handleClick={handleDelete}
+            handleClose={closeDeleteModal}
+          >
+            <p>Are you sure you want to delete this student?</p>
+          </ConfirmModal>
+        )}
         <button
           className="btn btn-primary"
           onClick={() => setIsCreditModalOpen(true)}
@@ -286,7 +306,7 @@ const StudentPage = () => {
         <h1 className="text-4xl font-bold">Enrolled Courses</h1>
       </div>
       <div className="w-full grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {userEnrolledCourses &&
+        {userEnrolledCourses && userEnrolledCourses.length > 0 ? (
           userEnrolledCourses.map((course) => (
             <div
               onClick={() => viewCoursePage(course.courseId as string)}
@@ -315,9 +335,14 @@ const StudentPage = () => {
                 </div>
               </div>
             </div>
-          ))}
+          ))
+        ) : (
+          <div className="w-full flexCenter col-span-4">
+            <p className="text-center">Student isn't enrolled in any course</p>
+          </div>
+        )}
       </div>
-      <div className="mt-10">
+      <div className="mt-10 w-full flexCenter">
         <Line options={options} data={revenueChartDataUserDegree} />
       </div>
       <div className="mb-8 text-center">

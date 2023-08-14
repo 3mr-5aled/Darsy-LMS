@@ -12,7 +12,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   handleClose, // Receive the prop for closing the modal
 }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70">
+    <div className="fixed inset-0 flex items-center justify-center z-[100] bg-black bg-opacity-70">
       <div className="bg-base-100 rounded-lg p-5">
         <h3 className="text-xl font-bold mb-3">{title}</h3>
         <div className="mb-5">{children}</div>

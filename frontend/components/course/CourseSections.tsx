@@ -4,8 +4,8 @@ import axiosInstance from "@/axios.config"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
-import LessonForm from "./LessonForm"
-import SectionForm from "./SectionForm"
+import LessonForm from "../Forms/LessonForm"
+import SectionForm from "../Forms/SectionForm"
 import {
   BsCheckCircle,
   BsCheckCircleFill,
@@ -18,6 +18,7 @@ import LessonView from "./LessonView"
 import Link from "next/link"
 import Loading from "@/app/loading"
 import { SectionType } from "@/common.types"
+import ConfirmModal from "../Features/ConfirmModal"
 
 type Section = {
   _id: string
@@ -41,6 +42,9 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
   const [isLessonModalOpen, setIsLessonModalOpen] = useState<boolean>(false)
   const [modalIndex, setModalIndex] = useState<number | null>(null)
+  const [sectionToDelete, setSectionToDelete] = useState<string | null>(null)
+  const [lessonToDelete, setLessonToDelete] = useState<string | null>(null)
+
   const { state, setUser, clearUser } = useUserContext()
   const { user } = state
 
@@ -108,18 +112,16 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
 
   const deleteLesson = async (lessonId: string, sectionId: string) => {
     try {
-      if (window.confirm("Are you sure you want to delete this lesson?")) {
-        setIsLoading(true)
-        await axiosInstance.delete(
-          `/lesson/${sectionId}/delete-lesson/${lessonId}`
-        )
-        toast.success("Lesson Deleted")
-        setIsLoading(false)
-        const updatedLessons = lessons.filter(
-          (lesson) => lesson._id !== lessonId
-        )
-        setLessons(updatedLessons)
-      }
+      // if (window.confirm("Are you sure you want to delete this lesson?")) {
+      setIsLoading(true)
+      await axiosInstance.delete(
+        `/lesson/${sectionId}/delete-lesson/${lessonId}`
+      )
+      toast.success("Lesson Deleted")
+      setIsLoading(false)
+      const updatedLessons = lessons.filter((lesson) => lesson._id !== lessonId)
+      setLessons(updatedLessons)
+      // }
     } catch (error: any) {
       setError(error.message)
       setIsLoading(false)
@@ -134,16 +136,9 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
     setIsLessonModalOpen(false)
   }
 
-  // const closeLessonEditModal = () => {
-  //   setIsLessonModalOpen(false)
-  // }
   const closeLessonViewModal = () => {
     setIsLessonModalOpen(false)
   }
-
-  // const closeLessonModal = () => {
-  //   setIsLessonModalOpen(false)
-  // }
 
   const showSectionEditModal = (index: number) => {
     const modalId = `edit_section_modal_${index}` // Generate a dynamic ID for the modal
@@ -154,14 +149,6 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
     }
   }
 
-  // const showLessonEditModal = (index: number) => {
-  //   const modalId = `edit_modal_${index}` // Generate a dynamic ID for the modal
-  //   const modal = document.getElementById(modalId) as HTMLDialogElement | null
-  //   if (modal) {
-  //     modal.showModal() // Show the modal if it exists
-  //     modal.onclose = closeLessonEditModal // Set the onclose event to call closeLessonEditModal when the modal is closed
-  //   }
-  // }
   const showLessonViewModal = (index: number) => {
     const modalId = `view_modal_${index}` // Generate a dynamic ID for the modal
     const modal = document.getElementById(modalId) as HTMLDialogElement | null
@@ -170,15 +157,6 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
       modal.onclose = closeLessonViewModal // Set the onclose event to call closeLessonEditModal when the modal is closed
     }
   }
-
-  // const showLessonModal = (index: number) => {
-  //   const modalId = `modal_${index}` // Generate a dynamic ID for the modal
-  //   const modal = document.getElementById(modalId) as HTMLDialogElement | null
-  //   if (modal) {
-  //     modal.showModal() // Show the modal if it exists
-  //     modal.onclose = closeLessonModal // Set the onclose event to call closeLessonModal when the modal is closed
-  //   }
-  // }
 
   const isLessonDone = (lessonId: string) => {
     return user?.enrolledCourse[0]?.lessonsDone?.includes(lessonId) ?? false
@@ -242,7 +220,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
               name="my-accordion-4"
               readOnly
             />
-            <div className="flex flex-row justify-between text-xl font-medium collapse-title">
+            <div className="flex flex-row flex-wrap gap-3 justify-between text-xl font-medium collapse-title">
               <p>{section.title}</p>
               <div className="z-20 flex flex-row items-center gap-4">
                 {isAdmin && (
@@ -288,12 +266,21 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                       <button
                         title="delete"
                         type="button"
-                        className="cursor-pointer text-warning "
-                        onClick={() => deleteSection(section._id)}
+                        className="cursor-pointer text-error "
+                        onClick={() => setSectionToDelete(section._id)}
                       >
                         <BsTrashFill />
                       </button>
                     </div>
+                    {sectionToDelete === section._id && (
+                      <ConfirmModal
+                        title="Confirm Section Deletion"
+                        handleClick={() => deleteSection(section._id)}
+                        handleClose={() => setSectionToDelete(null)}
+                      >
+                        <p>Are you sure you want to delete this section?</p>
+                      </ConfirmModal>
+                    )}
                   </>
                 )}
 
@@ -301,7 +288,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
               </div>
             </div>
             <div className="flex flex-col collapse-content bg-base-100">
-              <div className="flex flex-row items-center justify-between p-3 my-3 rounded-md ">
+              <div className="flex flex-row flex-wrap gap-3 items-center justify-between p-3 my-3 rounded-md ">
                 {isLoading ? (
                   <div className=" my-2 mx-auto loading loading-lg loading-spinner"></div>
                 ) : (
@@ -312,7 +299,6 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                         <button
                           title="add lesson"
                           className="btn btn-primary"
-                          // onClick={() => showLessonModal(index)}
                           onClick={() =>
                             router.push(
                               `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/create-lesson`
@@ -321,25 +307,6 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                         >
                           Add Lesson
                         </button>
-
-                        {/* <dialog id={`modal_${index}`} className="z-0 modal">
-                      <form method="dialog" className="modal-box">
-                        <button
-                        title="close"
-                          className="absolute btn btn-sm btn-circle btn-ghost right-2 top-2"
-                          onClick={closeLessonModal}
-                          >
-                          ✕
-                          </button>
-                          <LessonForm
-                          PageTitle="Add Lesson"
-                          sectionId={section._id}
-                          courseId={courseId}
-                          type="create"
-                          onClose={closeLessonModal}
-                          />
-                          </form>
-                        </dialog> */}
                       </>
                     )}
                   </>
@@ -356,9 +323,7 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                       key={lesson._id}
                     >
                       <div
-                        onClick={() =>
-                          router.push(`/learn/lesson/${lesson._id}`)
-                        }
+                        onClick={() => router.push(`/app/lesson/${lesson._id}`)}
                         className="flex flex-row items-center cursor-pointer gap-x-3"
                       >
                         {index + 1}. {lesson.title}
@@ -406,14 +371,25 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                                 title="delete"
                                 type="button"
                                 className="cursor-pointer text-error "
-                                onClick={() =>
-                                  deleteLesson(lesson._id, section._id)
-                                }
+                                onClick={() => setLessonToDelete(lesson._id)}
                               >
                                 <BsTrashFill />
                               </button>
                             </div>
                           </div>
+                          {lessonToDelete === lesson._id && (
+                            <ConfirmModal
+                              title="Confirm Lesson Deletion"
+                              handleClick={() =>
+                                deleteLesson(lesson._id, section._id)
+                              }
+                              handleClose={() => setLessonToDelete(null)}
+                            >
+                              <p>
+                                Are you sure you want to delete this lesson?
+                              </p>
+                            </ConfirmModal>
+                          )}
                           <dialog id={`view_modal_${index}`} className="modal">
                             <form method="dialog" className="modal-box">
                               <button
@@ -433,29 +409,21 @@ const CourseSections = ({ courseId, sections, isAdmin }: Props) => {
                     {isAdmin ? (
                       <div>
                         {lesson.exams?.length > 0 ? (
-                          <button
+                          <Link
                             title="edit quiz"
                             className="btn btn-primary btn-outline"
-                            onClick={() =>
-                              router.push(
-                                `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/${lesson._id}/edit-quiz`
-                              )
-                            }
+                            href={`/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/${lesson._id}/edit-quiz`}
                           >
                             Edit Quiz
-                          </button>
+                          </Link>
                         ) : (
-                          <button
+                          <Link
                             title="add quiz"
                             className="btn btn-secondary"
-                            onClick={() =>
-                              router.push(
-                                `/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/${lesson._id}/create-quiz`
-                              )
-                            }
+                            href={`/admin/courses/manage-course/${courseId}/section/${section._id}/lesson/${lesson._id}/create-quiz`}
                           >
                             Add Quiz
-                          </button>
+                          </Link>
                         )}
                       </div>
                     ) : (

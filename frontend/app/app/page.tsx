@@ -1,26 +1,28 @@
 "use client"
 import React, { useEffect, useState } from "react"
 import axiosInstance from "@/axios.config"
-import MyCourses from "@/components/MyCourses"
-import useUser from "@/lib/FetchUser"
+import MyCourses from "@/components/learn/account/MyCourses"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import {
   BsHouseDoorFill,
   BsViewStacked,
-  BsPersonCircle,
   BsPlusCircleFill,
   BsDiamondFill,
   BsCircleFill,
   BsStars,
 } from "react-icons/bs"
 import { toast } from "react-toastify"
-import DarkModeButton from "@/components/DarkModeButton"
+import DarkModeButton from "@/components/Nav/DarkModeButton"
 import Loading from "../loading"
+import { useUserContext } from "@/contexts/userContext"
 
 const StudentMainPage = () => {
-  const [user, isLoading] = useUser()
+  const { state } = useUserContext()
+  const { user, loading: isLoading } = state
+
   const router = useRouter()
+  const pathname = usePathname()
 
   // Step 1: Define state variables
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -34,7 +36,7 @@ const StudentMainPage = () => {
   // If user is not logged in, show a message and button to navigate to login page
   if (!user) {
     return (
-      <div className="p-5 m-5 w-full h-96 flexCenter flex-col">
+      <div className="relative flex-col w-full m-5 md:p-5 h-96 flexCenter">
         <p className="text-xl font-semibold">You are not logged in.</p>
         <div>
           <Link href="/auth/login">
@@ -128,42 +130,41 @@ const StudentMainPage = () => {
   }
 
   return (
-    <div className="p-5 m-5 flexCenter">
+    <div className="px-5 py-3 mx-5 flexCenter">
       <div className="w-screen p-4 ">
-        <div className="grid w-full gap-3 md:grid-cols-3">
-          <div className="w-full flexCenter max-md:pt-3 bg-base-200 card">
+        <div className="grid w-full gap-3 md:grid-cols-3 ">
+          <div className="order-2 w-full flexCenter max-md:pt-3 bg-base-200 card md:order-1">
             <Link
               href={"/membership"}
               className="flex flex-row items-center gap-3 cursor-pointer"
             >
               Membership:
               <span className="flex flex-row items-center gap-3 text-warning">
-                {/* <p className="font-bold text-cyan-500">Platinum</p>
-                <BsDiamondFill className="text-blue-500" /> */}
                 {renderMembershipIcon()}
               </span>
             </Link>
             {user?.nextLesson || (user?.enrolledCourse?.length ?? 0) > 0 ? (
               <button
-                className="w-full p-3 mt-4 text-lg lg:text-2xl font-bold text-white transition-all duration-500 rounded-md bg-secondary flexCenter md:w-auto hover:bg-primary"
+                className="w-full p-3 mt-4 text-lg font-bold text-white transition-all duration-500 rounded-md lg:text-2xl bg-secondary flexCenter md:w-auto hover:bg-primary"
                 onClick={handleContinueLearning}
               >
                 Continue Learning
               </button>
             ) : (
               <button
-                className="w-full p-3 mt-4 text-lg lg:text-2xl font-bold text-white transition-all duration-500 rounded-md bg-secondary flexCenter md:w-auto hover:bg-primary"
+                className="w-full p-3 mt-4 text-lg font-bold text-white transition-all duration-500 rounded-md lg:text-2xl bg-secondary flexCenter md:w-auto hover:bg-primary"
                 onClick={() => router.push("/courses")}
               >
                 Enroll a course
               </button>
             )}
           </div>
-          <div className="md:col-span-1">
-            <h1 className="mb-5 text-2xl lg:text-4xl font-bold text-center">
+          {/* my homepage with nav */}
+          <div className="order-1 md:col-span-1 md:order-2">
+            <h1 className="mb-5 text-2xl font-bold text-center lg:text-4xl">
               My Homepage
             </h1>
-            <div className="w-full transition-all flexCenter">
+            <div className="hidden w-full transition-all md:flexCenter">
               <div className="flex flex-row items-center justify-around w-2/3 gap-5 p-3 text-2xl rounded-full flex-nowrap bg-base-200">
                 <div className="tooltip" data-tip="HomePage">
                   <Link
@@ -204,7 +205,8 @@ const StudentMainPage = () => {
               </div>
             </div>
           </div>
-          <div className="relative flex-col p-5 bg-base-200 card flexCenter ">
+          {/* wallet section */}
+          <div className="relative flex-col order-2 p-5 bg-base-200 card flexCenter md:order-3">
             <span className="absolute top-0 left-0 p-3 opacity-80">
               My Wallet
             </span>
@@ -223,14 +225,14 @@ const StudentMainPage = () => {
               </span>
             </button>
           </div>
-          <div className="w-full md:col-span-3">
+          <div className="order-8 w-full md:col-span-3">
             <MyCourses />
           </div>
         </div>
         {/* Step 4: Add the modal */}
         {isModalOpen && (
           <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-70">
-            <div className="p-4 bg-base-100 card">
+            <div className="w-11/12 p-4 bg-base-100 card">
               <h3 className="mb-2 text-xl font-bold">
                 Enter the amount you want to charge
               </h3>
@@ -267,6 +269,42 @@ const StudentMainPage = () => {
             </div>
           </div>
         )}
+      </div>
+      <div className="absolute w-full transition-all bottom-1 md:hidden flexCenter">
+        <div className="btm-nav">
+          <Link
+            className={
+              pathname === "/app" ? "active" : "" + `hover:text-secondary`
+            }
+            href="/app"
+          >
+            <BsHouseDoorFill size={20} />
+          </Link>
+          <Link
+            className={
+              pathname === "/courses" ? "active" : "" + `hover:text-secondary`
+            }
+            href="/courses"
+          >
+            <BsViewStacked size={20} />
+          </Link>
+          <DarkModeButton />
+          <Link
+            className={
+              pathname === "/account" ? "active" : "" + `hover:text-secondary`
+            }
+            href="/account"
+          >
+            <div className="avatar placeholder">
+              <div className="w-8 transition-all border-2 border-gray-800 rounded-full cursor-pointer bg-neutral-focus text-neutral-content hover:border-2 hover:border-secondary">
+                {" "}
+                <span className="text-sm font-bold">
+                  {getUserInitials(user?.name)}
+                </span>
+              </div>
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   )

@@ -1,8 +1,7 @@
 "use client"
-import useUser from "@/lib/FetchUser"
 import { BsCircleFill, BsDiamondFill, BsStars } from "react-icons/bs"
 import { useState, useEffect } from "react"
-import DataLoading from "@/components/DataLoading"
+import DataLoading from "@/components/Features/DataLoading"
 import { Line } from "react-chartjs-2"
 import {
   Chart as ChartJS,
@@ -19,6 +18,7 @@ import { UserType, userCourses, userDegrees, userOrders } from "@/common.types"
 import { toast } from "react-toastify"
 import { useRouter } from "next/navigation"
 import OrdersList from "@/components/orders/OrdersList"
+import { useUserContext } from "@/contexts/userContext"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -32,9 +32,11 @@ ChartJS.register(
 const Profile = () => {
   const router = useRouter()
 
-  const [student] = useUser()
+  const { state } = useUserContext()
+  const { user: student, loading } = state
+
   const [user, setUser] = useState<UserType | null>(null)
-  const [degress, setDegrees] = useState<userDegrees[] | null>(null)
+  const [degrees, setDegrees] = useState<userDegrees[] | null>(null)
   const [orders, setOrders] = useState<userOrders[] | null>(null)
   const [userEnrolledCourses, setUserEnrolledCourses] = useState<
     userCourses[] | null
@@ -54,7 +56,6 @@ const Profile = () => {
         const response = await axiosInstance.get(
           `/user/get-user/${student._id}`
         )
-        console.log(response.data)
         setUser(response.data.userDetails)
         setDegrees(response.data.userDegrees)
         setUserEnrolledCourses(response.data.userCourses)
@@ -136,11 +137,11 @@ const Profile = () => {
     },
   }
   const revenueChartDataUserDegree = {
-    labels: degress?.map((degree) => degree.lessonTitle),
+    labels: degrees?.map((degree) => degree.lessonTitle),
     datasets: [
       {
         label: `exam degree`,
-        data: degress?.map((degree) => degree.degree),
+        data: degrees?.map((degree) => degree.degree),
         borderColor: "rgba(192, 192, 75, 1)",
       },
     ],

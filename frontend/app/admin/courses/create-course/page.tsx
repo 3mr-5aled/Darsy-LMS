@@ -1,6 +1,6 @@
 "use client"
 
-import CourseForm from "@/components/CourseForm"
+import CourseForm from "@/components/Forms/CourseForm"
 
 export default function CreateCourse() {
   return (

@@ -3,7 +3,7 @@
 import Loading from "@/app/loading"
 import axiosInstance from "@/axios.config"
 import { CourseType } from "@/common.types"
-import CourseSections from "@/components/CourseSections"
+import CourseSections from "@/components/course/CourseSections"
 import { useUserContext } from "@/contexts/userContext"
 import Image from "next/image"
 import { useParams, useRouter } from "next/navigation"
@@ -98,7 +98,7 @@ const Course = () => {
       // const { order } = response.data
       toast.success("Course enrolled successfully")
       // Navigate to the Learn page passing the courseId as a query parameter
-      router.push(`/learn`)
+      router.push(`/app`)
     } catch (error) {
       console.error(error)
       // Handle errors if necessary
@@ -207,7 +207,7 @@ const Course = () => {
             <button
               className="my-5 btn btn-primary w-fit"
               onClick={() =>
-                router.push(`/learn/lesson/${course.sections?.[0]?.lessons[0]}`)
+                router.push(`/app/lesson/${course.sections?.[0]?.lessons[0]}`)
               }
             >
               Continue Learning

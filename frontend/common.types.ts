@@ -84,6 +84,7 @@ export interface UserType {
 
 export interface UserState {
   user: UserType | null
+  loading: boolean
 }
 
 export enum UserActionTypes {

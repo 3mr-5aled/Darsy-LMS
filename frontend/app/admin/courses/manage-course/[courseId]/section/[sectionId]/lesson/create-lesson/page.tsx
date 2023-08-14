@@ -1,5 +1,5 @@
 "use client"
-import LessonForm from "@/components/LessonForm"
+import LessonForm from "@/components/Forms/LessonForm"
 import { useParams } from "next/navigation"
 
 type ParamType = {
