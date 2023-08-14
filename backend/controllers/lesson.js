@@ -99,7 +99,6 @@ const getLesson = asynchandler(async (req, res, next) => {
   const sectionDuration = lesson.sectionId.duration
   const courseTitle = lesson.courseId.name
   const totalLessons = lesson.courseId.total
-  console.log(sectionTitle, sectionDuration, courseTitle, totalLessons)
   const sections = await Section.find({ courseId: lesson.courseId._id, total: { $gt: 0 } }).populate({
     path: "lessons",
     select: "title exams index", // Include only the 'title' property from the lessons object

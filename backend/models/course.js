@@ -62,12 +62,8 @@ const Courses = new mongoose.Schema(
 Courses.pre('findOneAndDelete', async function (next) {
   const course = await this.model.findOne({ _id: this.getQuery()._id })// Get the section ids associated with the course
   try {
-    const users = await mongoose.model('users').find({ ['enrolledCourse.courseId']: course._id })
-    if (users.length !== 0) {
-      users.map(async (user) => {
-        user.enrolledCourse.filter((userCourse) => userCourse.courseId.toString() !== course._id.toString())
-        await user.save()
-      })
+    if (!course) {
+      return next();
     }
     if (course.sections.length === 0) {
       return next();

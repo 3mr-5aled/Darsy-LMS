@@ -55,6 +55,7 @@ const User = new mongoose.Schema({
             type: mongoose.Schema.ObjectId,
             ref: 'courses'
         },
+        lastSignedInCourse: Number,
         lessonsDone: [{
             type: mongoose.Schema.ObjectId,
             ref: 'lessons'

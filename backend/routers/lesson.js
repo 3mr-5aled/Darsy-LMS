@@ -6,14 +6,13 @@ const { getLessonValidator, deleteLessonValidator, updateLessonValidator, addLes
 const { enrolledCourse } = require('../middlewares/enrolledcourses')
 
 const router = express.Router()
-const csrf = require('csurf')
-const csrfProtection = csrf({ cookie: true })
-router.post('/:sectionId/add-lesson',csrfProtection,authintications,authintication,addLessonValidator,addLesson)
-router.get('/get-lesson/:lessonId',csrfProtection,authintications,getLessonValidator,enrolledCourse,getLesson)
+
+router.post('/:sectionId/add-lesson',authintications,authintication,addLessonValidator,addLesson)
+router.get('/get-lesson/:lessonId',authintications,getLessonValidator,enrolledCourse,getLesson)
 router.get('/:sectionId/get-all-lessons/',getAllLessonValidator,getAllLesson)
-router.delete('/:sectionId/delete-lesson/:lessonId',csrfProtection,authintications,authintication,deleteLessonValidator,deleteLesson)
-router.put('/update-lesson/:lessonId',csrfProtection,authintications,authintication,updateLessonValidator,updateLesson)
-router.put('/complete-lesson/:lessonId',csrfProtection,authintications,completeLessonValidator,completeLesson)
-router.get('/previous-lesson/:lessonId',csrfProtection,authintications,completeLessonValidator,previousLesson)
-router.get('/:courseId/continue-lesson',csrfProtection,authintications,continueLessonValidator,continueLessons)
+router.delete('/:sectionId/delete-lesson/:lessonId',authintications,authintication,deleteLessonValidator,deleteLesson)
+router.put('/update-lesson/:lessonId',authintications,authintication,updateLessonValidator,updateLesson)
+router.put('/complete-lesson/:lessonId',authintications,completeLessonValidator,completeLesson)
+router.get('/previous-lesson/:lessonId',authintications,completeLessonValidator,previousLesson)
+router.get('/:courseId/continue-lesson',authintications,continueLessonValidator,continueLessons)
 module.exports=router

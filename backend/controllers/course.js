@@ -1,5 +1,6 @@
 const aynchandler = require('express-async-handler')
 const Course = require('../models/course')
+const User = require('../models/user')
 const ApiError = require('../utils/apierror')
 const slugify = require('slugify')
 const createCourse = aynchandler(async (req, res, next) => {
@@ -65,7 +66,12 @@ const deleteCourse = aynchandler(async (req, res, next) => {
     if (!course) {
         return next(new ApiError('no course with this id',8341, 400))
     }
+    await User.updateMany(
+        { 'enrolledCourse.courseId': course._id },
+        { $pull: { enrolledCourse: { courseId: course._id } } }
+    );
     res.status(200).json({ msg: 'course is deleted' })
+    
     // recieve {msg:'course is deleted'} if course is deleted
 })
 module.exports = { createCourse, updateCourse, getCourse, getAllCourses, deleteCourse }

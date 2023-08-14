@@ -135,23 +135,13 @@ const addMemberShip = aynchandler(async (req, res, next) => {
     const userCourses = courses.map(course => {
         const enrolledCourse = user.enrolledCourse.filter(userCourse =>  userCourse.courseId.toString() === course._id.toString());
         if (enrolledCourse.length > 0) {
-            return {
-                courseId: course._id,
-                lessonsDone: [],
-                name: course.name,
-                courseImg: course.courseImg,
-                lessonTotal: course.total,
-            };
+            return  course
+            
         } else {
-            return {
-                courseId: course._id,
-                lessonsDone: [],
-                name: course.name,
-                courseImg: course.courseImg,
-                lessonTotal: course.total,
-                memberId: member._id,
-                memberExpiredTime: Date.now() + member.expiredTime * 24 * 60 * 60 * 1000
-            };
+            course.memberId= member._id,
+            course.memberExpiredTime= Date.now() + member.expiredTime * 24 * 60 * 60 * 1000
+            return  course
+            
         }
 
     });

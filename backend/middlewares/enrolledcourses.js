@@ -15,15 +15,49 @@ const enrolledCourse = async (req, res, next) => {
   req.lesson = lesson
   const userFromDB = await User.findById(user._id)
   if (userFromDB.role === "tutor") {
+    userFromDB.enrolledCourse.map((course) =>{ 
+      console.log(course);
+      if(lesson.courseId._id.toString() === course.courseId.toString())
+      { 
+        course.lastSignedInCourse = Date.now()
+        return course
+    }
+    else{
+      return course
+    }})
+    await userFromDB.save()
+
     return next()
   }
   if (userFromDB.memberShip.memberId && userFromDB.memberShip.expiredTime > Date.now() && lesson.courseId.grade === userFromDB.grade ) {
+    userFromDB.enrolledCourse.map((course) =>{ 
+      console.log(course);
+      if(lesson.courseId._id.toString() === course.courseId.toString())
+      { 
+        course.lastSignedInCourse = Date.now()
+        return course
+    }
+    else{
+      return course
+    }})
+        await userFromDB.save()
     return next()
   }
   const enrolledCourses = userFromDB.enrolledCourse.filter(course => course.courseId.toString() === lesson.courseId._id.toString())
   if (enrolledCourses.length === 0) {
     return next(new ApiError("you are not enrolled in this course", 8364, 400));
   }
+  userFromDB.enrolledCourse.map((course) =>{ 
+    console.log(course);
+    if(lesson.courseId._id.toString() === course.courseId.toString())
+    { 
+      course.lastSignedInCourse = Date.now()
+      return course
+  }
+  else{
+    return course
+  }})
+  await userFromDB.save()
   next()
 }
 module.exports = { enrolledCourse }

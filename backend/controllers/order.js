@@ -77,7 +77,7 @@ const buyCourse = asynchandler(async (req, res, next) => {
     name: course.name,
     courseImg: course.courseImg,
     lessonTotal: course.total})
-  user.credit -= amount
+  user.credit -= parseInt(amount)
   await user.save()
   order.status = "paid"
   await order.save()

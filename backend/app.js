@@ -17,6 +17,7 @@ const payment = require("./middlewares/paytaps")
 const bodyParser = require("body-parser")
 // const fileUploader = require('express-fileupload')
 const helmet = require("helmet")
+const compression = require('compression')
 const uploaderRouter = require("./routers/uploader")
 const userRouter = require("./routers/user")
 const memberRouter = require("./routers/member")
@@ -27,24 +28,6 @@ const authintication = require("./middlewares/authintication")
 const ApiError = require("./utils/apierror")
 require("dotenv").config()
 const app = express()
-const csrf = require("csurf")
-app.use(cookie())
-
-// Increase payload limit to 10 kb
-const imageSize = bodyParser.json({ limit: "5mb" })
-const imageSizeUrl = bodyParser.urlencoded({ limit: "5mb", extended: true })
-const textSize = bodyParser.json({ limit: "10kb" })
-app.use(hpp())
-app.use(mongoSanitize())
-app.use(xss())
-app.use(helmet.xPoweredBy())
-const csrfProtection = csrf({ cookie: true })
-
-// middlewares
-// axios.defaults.baseurl=
-// axios.defaults.withcredintials=true
-
-// app.use(fileUploader())
 const isProduction = process.env.NODE_ENV === "production"
 const baseUrl = isProduction
   ? "https://darsy-lms-beta.vercel.app"
@@ -55,6 +38,26 @@ app.use(
     credentials: true,
   })
 )
+app.use(compression())
+app.use(cookie())
+
+// Increase payload limit to 10 kb
+const imageSize = bodyParser.json({ limit: "5mb" })
+const imageSizeUrl = bodyParser.urlencoded({ limit: "5mb", extended: true })
+const textSize = bodyParser.json({ limit: "10kb" })
+app.use(hpp())
+app.use(mongoSanitize())
+app.use(xss())
+app.use(helmet.xPoweredBy())
+// const csrfProtection = csrf({ cookie: true })
+
+// middlewares
+// axios.defaults.baseurl=
+// axios.defaults.withcredintials=true
+
+// app.use(fileUploader())
+
+
 
 // routes
 const limiter = rateLimit({
@@ -81,7 +84,6 @@ app.get(
 app.get(
   "/api/v1/total-money-per-period",
   textSize,
-  csrfProtection,
   authintication,
   authorization,
   getMoneyPerPeriod
