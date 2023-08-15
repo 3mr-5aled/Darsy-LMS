@@ -48,7 +48,7 @@ const WalletComponent = ({ credit }: WalletComponentProps) => {
   return (
     <>
       <span className="absolute top-0 left-0 p-3 opacity-80">My Wallet</span>
-      <div className="p-3 text-5xl font-bold">
+      <div className="p-3 pt-5 text-5xl font-bold">
         {credit}
         <span className="text-success">{" $"}</span>
       </div>

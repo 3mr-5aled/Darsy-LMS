@@ -24,22 +24,22 @@ const OrdersList = ({
   return (
     <div className="overflow-x-auto">
       <table className="table table-pin-rows table-pin-cols">
-        <thead className=" sticky top-5 text-2xl font-semibold">
+        <thead>
           <tr>
             <th></th>
-            <th>Type</th>
-            <th>Amount</th>
-            <th>Admin</th>
-            <th>Course</th>
-            <th>Trans Ref</th>
-            <th>Provider</th>
-            <th>Status</th>
-            <th>Date</th>
+            <th className="text-center">Type</th>
+            <th className="text-center">Amount</th>
+            <th className="text-center">Admin</th>
+            <th className="text-center">Course</th>
+            <th className="text-center">Trans Ref</th>
+            <th className="text-center">Provider</th>
+            <th className="text-center">Status</th>
+            <th className="text-center">Date</th>
           </tr>
         </thead>
         <tbody>
           {orders.map((order, index) => (
-            <tr 
+            <tr
               key={order._id}
               onClick={() => {
                 admin
@@ -50,12 +50,12 @@ const OrdersList = ({
                 index % 2 === 0 ? "bg-secondary bg-opacity-20" : "bg-base-100"
               } cursor-pointer`}
             >
-              <th>{index + 1}</th>
-              <td>{order.type || "---"}</td>
-              <td>{order.amount}</td>
+              <th className="text-center">{index + 1}</th>
+              <td className="text-center">{order.type || "---"}</td>
+              <td className="text-center">{order.amount}</td>
               <td
                 data-tip={order.adminId?.name}
-                className="cursor-default z-0 tooltip"
+                className="cursor-default z-0 tooltip text-center w-full"
               >
                 {order.adminId?.name.split(" ")[0] || "---"}
               </td>
@@ -65,16 +65,20 @@ const OrdersList = ({
                   order.courseId
                     ? "cursor-pointer hover:text-accent duration-200"
                     : ""
-                }`}
+                } text-center`}
               >
                 {order.courseId?.name || "---"}
               </td>
-              <td className="truncate">{order.tran_ref || "---"}</td>
-              <td>
+              <td className="truncate text-center">
+                {order.tran_ref || "---"}
+              </td>
+              <td className="text-center">
                 {order.tran_ref ? "paytabs" : order.adminId ? "admin" : "user"}
               </td>
-              <td>{order.status}</td>
-              <td>{getOrderTime(order.createdAt as string)}</td>
+              <td className="text-center">{order.status}</td>
+              <td className="text-center">
+                {getOrderTime(order.createdAt as string)}
+              </td>
             </tr>
           ))}
         </tbody>

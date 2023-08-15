@@ -4,8 +4,9 @@ import axiosInstance from "@/axios.config"
 import { CityOption, GenderOption, GradeOption } from "@/constant"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import React from "react"
+import React, { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
+import { BsEyeSlash, BsEye } from "react-icons/bs"
 
 type FormValues = {
   name: string
@@ -25,13 +26,15 @@ export default async function Register() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     watch,
   } = useForm<FormValues>()
+  // const [showPassword, setShowPassword] = useState(false)
+  // const [showPasswordC, setShowPasswordC] = useState(false)
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
-      await axiosInstance.get("/auth/csrf")
+      // await axiosInstance.get("/auth/csrf")
       const response = await axiosInstance.post("/auth/register", data)
       router.push("/auth/login")
     } catch (error) {
@@ -39,8 +42,12 @@ export default async function Register() {
     }
   }
 
-  const password = React.useRef({})
-  password.current = watch("password", "")
+  // const handleShowPassword = () => {
+  //   setShowPassword(!showPassword)
+  // }
+  // const handleShowPasswordC = () => {
+  //   setShowPasswordC(!showPasswordC)
+  // }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex-col p-8 flexCenter">
@@ -54,6 +61,7 @@ export default async function Register() {
               id="Name"
               type="text"
               placeholder="Name"
+              disabled={isSubmitting}
               {...register("name", {
                 required: true,
                 maxLength: { value: 80, message: "Name is too long" },
@@ -76,6 +84,7 @@ export default async function Register() {
               id="Email"
               type="text"
               placeholder="Email"
+              disabled={isSubmitting}
               {...register("email", {
                 required: true,
                 pattern: {
@@ -95,6 +104,7 @@ export default async function Register() {
               id="MobileNumber"
               type="tel"
               placeholder="Mobile number"
+              disabled={isSubmitting}
               {...register("phone", {
                 required: true,
                 minLength: { value: 10, message: "Mobile number is too short" },
@@ -119,6 +129,7 @@ export default async function Register() {
               id="ParentNumber"
               type="tel"
               placeholder="Parent number"
+              disabled={isSubmitting}
               {...register("parentsPhone", {
                 required: true,
                 pattern: {
@@ -190,46 +201,72 @@ export default async function Register() {
               <p className="text-sm text-error">Grade is required</p>
             )}
           </div>
-          <div className="w-full py-3 form-control">
+          <div className="relative">
             <label htmlFor="Password">Password</label>
-            <input
-              className="w-full input input-bordered"
-              id="Password"
-              type="password"
-              placeholder="Password"
-              {...register("password", {
-                required: true,
-                pattern: {
-                  value:
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i,
-                  message:
-                    "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one digit, and one special character.",
-                },
-              })}
-            />
+            <div className="relative">
+              <input
+                className="w-full input input-bordered pr-10"
+                id="Password"
+                // type={showPassword ? "text" : "password"} // Use showPassword state to toggle input type
+                type={"password"}
+                placeholder="Password"
+                disabled={isSubmitting}
+                {...register("password", {
+                  required: true,
+                  pattern: {
+                    value:
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i,
+                    message:
+                      "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one digit, and one special character.",
+                  },
+                  validate: (value) =>
+                    value !== watch("confirmPassword") ||
+                    "The confirm password does not match the password",
+                })}
+              />
+              {/* <button
+                type="button"
+                className="absolute inset-y-0 right-0 px-2 flex items-center"
+                onClick={handleShowPassword}
+                aria-label="Toggle password visibility"
+              >
+                {showPassword ? <BsEyeSlash /> : <BsEye />}
+              </button> */}
+            </div>
             {errors.password && (
               <p className="text-sm text-error">{errors.password.message}</p>
             )}
           </div>
           <div className="w-full py-3 form-control">
             <label htmlFor="ConfirmPassword">Confirm Password</label>
-            <input
-              className="w-full input input-bordered"
-              id="ConfirmPassword"
-              type="password"
-              placeholder="Confirm Password"
-              {...register("confirmPassword", {
-                required: true,
-                pattern: {
-                  value:
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i,
-                  message: "Passwords do not match",
-                },
-                validate: (value) =>
-                  value === password.current ||
-                  "The confirm password does not match the password",
-              })}
-            />
+            <div className="relative">
+              <input
+                className="w-full input input-bordered"
+                id="ConfirmPassword"
+                // type={showPasswordC ? "text" : "password"}
+                type={"password"}
+                placeholder="Confirm Password"
+                disabled={isSubmitting}
+                {...register("confirmPassword", {
+                  required: true,
+                  pattern: {
+                    value:
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/i,
+                    message: "Passwords do not match",
+                  },
+                  validate: (value) =>
+                    value !== watch("password") ||
+                    "The confirm password does not match the password",
+                })}
+              />
+              {/* <button
+                type="button"
+                className="absolute inset-y-0 right-0 px-2 flex items-center"
+                onClick={handleShowPasswordC} // Toggle password visibility on button click
+              >
+                {showPasswordC ? <BsEyeSlash /> : <BsEye />}{" "}
+              </button> */}
+            </div>
             {errors.confirmPassword && (
               <p className="text-sm text-error">
                 {errors.confirmPassword.message}
@@ -245,6 +282,7 @@ export default async function Register() {
               min="2000-01-01"
               max="2020-01-01"
               placeholder="Date of Birth"
+              disabled={isSubmitting}
               {...register("dateOfBirth", { required: true })}
             />
             {errors.dateOfBirth && (
