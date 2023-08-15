@@ -57,6 +57,8 @@ function calculateTotalMoneyPerDay(year, month, orders) {
     const firstDayOfMonth = new Date(parseInt(year), parseInt(month) - 1, 2);
     const lastDayOfMonth = new Date(parseInt(year), parseInt(month) , 1);
     const totalMoneyPerDay = [];
+    firstDayOfMonth.setUTCHours(0,0,0,0)
+    lastDayOfMonth.setUTCHours(0,0,0,0)
     console.log(firstDayOfMonth)
     console.log(lastDayOfMonth)
     let currentDate = new Date(firstDayOfMonth);
@@ -78,6 +80,8 @@ function calculateTotalMoneyPerWeek(year, month, day, orders) {
     const lastDayOfWeek = new Date(parseInt(year), parseInt(month) - 1, parseInt(day) + 1);
     const firstDayOfWeek = new Date(parseInt(year), parseInt(month) - 1, parseInt(day) - 5);
     const totalMoneyPerDay = [];
+    firstDayOfWeek.setUTCHours(0,0,0,0)
+    lastDayOfWeek.setUTCHours(0,0,0,0)
     console.log(firstDayOfWeek)
     console.log(lastDayOfWeek);
     let currentDate = new Date(firstDayOfWeek);
