@@ -33,7 +33,7 @@ const login = asynchandler(async (req, res, next) => {
   
   
   const {name,email,phone,parentsPhone,grade,city,gender,role,enrolledCourse} = user
-  res.status(201).cookie("token", token).json({email,name,phone,parentsPhone,grade,city,gender,role,enrolledCourse})
+  res.status(201).cookie("token", token,{ secure: true, sameSite: 'none'  }).json({email,name,phone,parentsPhone,grade,city,gender,role,enrolledCourse})
 });
 
 const register = asynchandler(async (req, res, next) => {
