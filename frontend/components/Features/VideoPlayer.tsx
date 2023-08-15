@@ -20,14 +20,25 @@ export default function VideoPlayer({ video }: Props) {
     return match ? match[1] : null
   }
 
-  const videoId =
-    video?.provider === "youtube" && video?.src
-      ? getYouTubeVideoId(video.src)
-      : null
-
-  if (video.provider === "youtube" && !videoId) {
-    return <div>Error: Invalid YouTube video URL</div>
+  const getYoutubeSource = async (): Promise<any[]> => {
+    if (video.provider === "youtube" && video.src) {
+      const videoId = getYouTubeVideoId(video.src)
+      if (videoId) {
+        return [
+          {
+            publicId: video.provider,
+            fileName: video.src,
+            src: videoId,
+            provider: "youtube",
+          },
+        ]
+      }
+    }
+    return []
   }
+
+  const [videoBlob, setVideoBlob] = useState<Blob | null>(null)
+  const [youtubeSource, setYoutubeSource] = useState<any[]>([])
 
   const loadVideoBlob = async (url: string): Promise<Blob | null> => {
     try {
@@ -40,14 +51,17 @@ export default function VideoPlayer({ video }: Props) {
     }
   }
 
-  const [videoBlob, setVideoBlob] = useState<Blob | null>(null)
-
   useEffect(() => {
     if (video.provider === "normal" && video.src) {
       loadVideoBlob(video.src).then((blob) => {
         if (blob) {
           setVideoBlob(blob)
         }
+      })
+    }
+    if (video.provider === "youtube") {
+      getYoutubeSource().then((source) => {
+        setYoutubeSource(source)
       })
     }
   }, [video.src, video.provider])
@@ -59,14 +73,7 @@ export default function VideoPlayer({ video }: Props) {
           id={video.provider}
           source={{
             type: "video",
-            sources: [
-              {
-                publicId: video?.provider,
-                fileName: video?.src,
-                src: videoId || "",
-                provider: "youtube",
-              },
-            ],
+            sources: youtubeSource,
           }}
           options={{
             controls: [
