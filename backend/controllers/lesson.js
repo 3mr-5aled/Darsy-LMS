@@ -24,22 +24,27 @@ const addLesson = asynchandler(async (req, res, next) => {
   const lesson = await Lesson.create({ ...req.body, courseId: section.courseId, sectionId })
   section.lessons.push(lesson._id)
   let index = 0;
+  await section.save();
 
   for (const sectionId of course.sections) {
     const section = await Section.findById(sectionId);
+    if (!section) {
+      continue
+    }else{
+
     let sectionTotal = 0;
     for (const lessonId of section.lessons) {
       try {
         const lesson = await Lesson.findById(lessonId);
         if (!lesson) {
           console.log(`Lesson not found for ID: ${lessonId}`);
-          continue; // Skip to the next iteration if lesson is not found
+        } else {
+          sectionTotal++;
+          index++;
+          lesson.index = index;
+          await lesson.save();
+          console.log(`Lesson ${lesson}`)
         }
-        sectionTotal++;
-        index++;
-        lesson.index = index;
-        await lesson.save();
-        console.log(`Lesson ${lesson}`)
       } catch (error) {
         console.error(`Error updating lesson with ID ${lessonId}: ${error.message}`);
         // Handle the error as needed
@@ -49,8 +54,10 @@ const addLesson = asynchandler(async (req, res, next) => {
     console.log(`Section Total for Section ${sectionId}: ${sectionTotal}`);
 
     // Update section total and save
-    section.total = sectionTotal + 1; // Adding 1 to account for the next lesson
+    section.total = sectionTotal; // Adding 1 to account for the next lesson
     await section.save();
+  }
+
   }
 
   // Update course total and save
@@ -94,7 +101,7 @@ const getLesson = asynchandler(async (req, res, next) => {
   // send lessonId in params
   // you must be enrolled in this lesson to get lesson
   const { lesson } = req
-  const { title, duration, material, video, _id, exams, description, courseId , index} = lesson
+  const { title, duration, material, video, _id, exams, description, courseId, index } = lesson
   const sectionTitle = lesson.sectionId.title
   const sectionDuration = lesson.sectionId.duration
   const courseTitle = lesson.courseId.name
@@ -104,7 +111,7 @@ const getLesson = asynchandler(async (req, res, next) => {
     select: "title exams index", // Include only the 'title' property from the lessons object
   }).select("title duration total")
 
-  res.status(200).json({ lesson: { title, duration, material, video, _id, exams, description , index }, sections, sectionTitle, sectionDuration, courseTitle, course: courseId, totalLessons });
+  res.status(200).json({ lesson: { title, duration, material, video, _id, exams, description, index }, sections, sectionTitle, sectionDuration, courseTitle, course: courseId, totalLessons });
 });
 
 const deleteLesson = asynchandler(async (req, res, next) => {
@@ -130,10 +137,15 @@ const deleteLesson = asynchandler(async (req, res, next) => {
   const section = await Section.findById(sectionId);
   const course = await Course.findOne({ _id: section.courseId });
   let index = 0;
-
+  section.lessons = section.lessons.filter((lesson) => lesson !== lessonId);
+  await section.save();
   for (const sectionId of course.sections) {
     const section = await Section.findById(sectionId);
     let sectionTotal = 0;
+    if (!section) {
+      continue
+    }else{
+
     for (const lessonId of section.lessons) {
       try {
         const lesson = await Lesson.findById(lessonId);
@@ -154,15 +166,16 @@ const deleteLesson = asynchandler(async (req, res, next) => {
     console.log(`Section Total for Section ${sectionId}: ${sectionTotal}`);
 
     // Update section total and save
-    section.total = sectionTotal + 1; // Adding 1 to account for the next lesson
+    section.total = sectionTotal; // Adding 1 to account for the next lesson
     await section.save();
+  }
+
   }
 
   // Update course total and save
   course.total = index;
   await course.save();
-  section.lessons = section.lessons.filter((lesson) => lesson !== lessonId);
-  await section.save();
+
 
 
   console.log(`Final Index: ${index}`);

@@ -93,7 +93,7 @@ const getUser = aynchandler(async (req, res, next) => {
     const { gender, role, name, grade, phone, parentsPhone, dateOfBirth, city , credit , email } = user
     const userDetails = { gender, role, name, grade, phone, parentsPhone, dateOfBirth, city , credit , email}
     const userDegrees = user.exams.map(exam => ({ degree: parseInt(exam.degree), lessonTitle: exam.lessonId.title, examDate: exam.createdAt, lessonId: exam.lessonId._id }))
-    const userCourses = user.enrolledCourse.map(course => ({ name: course.name, courseId: course.courseId, courseImg: course.courseImg, progress: Math.ceil(course.lessonsDone.length / course.lessonTotal) }))
+    const userCourses = user.enrolledCourse.map(course => ({ name: course.name, courseId: course.courseId, courseImg: course.courseImg, progress: (course.lessonsDone.length / course.lessonTotal) * 100  }))
     const userMembership = user.memberShip.memberId && user.memberShip.expiredTime > Date.now() ? { ...user.memberShip } : {}
     res.status(200).json({ userDetails: { ...userDetails }, userDegrees, userCourses, lastSignedIn: user.lastSignedIn, userMembership , userOrders})
 })
