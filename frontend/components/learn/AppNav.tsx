@@ -22,7 +22,7 @@ const AppNav = () => {
     return firstNameInitial + lastNameInitial
   }
   return (
-    <div className="absolute w-full transition-all bottom-1 md:hidden flexCenter">
+    <div className="absolute w-full z-50 transition-all bottom-1 md:hidden flexCenter">
       <div className="btm-nav">
         <Link
           className={

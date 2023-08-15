@@ -14,7 +14,6 @@ import {
 } from "chart.js"
 import { Line } from "react-chartjs-2"
 import Loading from "@/app/loading"
-import { data } from "autoprefixer"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -42,6 +41,8 @@ const Dashboard = () => {
       try {
         const response = await axiosInstance.get("/analysis")
         setAnalyticsData(response.data)
+        console.log(response.data)
+
         // Fetch revenue data for the year 2023
         const currentYear = new Date().getFullYear() // Months are 0-indexed, so we add 1
 
@@ -49,6 +50,7 @@ const Dashboard = () => {
           `/total-money-per-period?year=${currentYear}`
         )
         setRevenueDataYear(yearResponse.data)
+        console.log(yearResponse.data)
 
         // Fetch revenue data for the current month
         const currentMonth = new Date().getMonth() + 1 // Months are 0-indexed, so we add 1
@@ -150,13 +152,13 @@ const Dashboard = () => {
               <div className="p-4 rounded-lg bg-base-100">
                 <h2 className="text-xl font-semibold">Total Revenue</h2>
                 <p className="text-3xl font-bold text-success">
-                  ${analyticsData.allMoney}
+                  ${analyticsData.allMoney || "0"}
                 </p>
               </div>
               <div className="p-4 rounded-lg bg-base-100">
                 <h2 className="text-xl font-semibold">Today's Revenue</h2>
                 <p className="text-3xl font-bold text-success">
-                  ${analyticsData.todayMoney}
+                  ${analyticsData.todayMoney || "0"}
                 </p>
               </div>
               <div className="p-4 rounded-lg bg-base-100">
@@ -164,13 +166,13 @@ const Dashboard = () => {
                   Today's Signed-In Students
                 </h2>
                 <p className="text-3xl font-bold text-success">
-                  {analyticsData.todaySignedInStudents}
+                  {analyticsData.todaySignedInStudents || "0"}
                 </p>
               </div>
               <div className="p-4 rounded-lg bg-base-100">
                 <h2 className="text-xl font-semibold">Enrolled Students</h2>
                 <p className="text-3xl font-bold text-success">
-                  {analyticsData.enrolledStudents}
+                  {analyticsData.enrolledStudents || "0"}
                 </p>
               </div>
             </div>

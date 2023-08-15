@@ -3,10 +3,11 @@ import { toast } from "react-toastify"
 import axiosInstance from "@/axios.config"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import React from "react"
+import React, { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useUserContext } from "@/contexts/userContext"
 import { headers } from "next/dist/client/components/headers"
+import { BsEye, BsEyeSlash } from "react-icons/bs"
 
 interface IFormInput {
   email?: string
@@ -24,6 +25,7 @@ const Login = () => {
   } = useForm<IFormInput>()
 
   const router = useRouter()
+  const [showPassword, setShowPassword] = useState(false)
   const { setUser } = useUserContext()
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
@@ -97,22 +99,32 @@ const Login = () => {
             <label htmlFor="Password" className="label">
               <span className="label-text">Password</span>
             </label>
-            <input
-              className="input input-bordered w-full"
-              id="Password"
-              type="password"
-              placeholder="Password"
-              {...register("password", {
-                required: true,
-                pattern: {
-                  value:
-                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                  message:
-                    "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one digit, and one special character.",
-                },
-              })}
-              disabled={isSubmitting}
-            />
+            <div className="relative">
+              <input
+                className="input input-bordered w-full pr-10"
+                id="Password"
+                type={showPassword ? "text" : "password"} // Use showPassword state to toggle input type
+                placeholder="Password"
+                {...register("password", {
+                  required: true,
+                  pattern: {
+                    value:
+                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                    message:
+                      "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one digit, and one special character.",
+                  },
+                })}
+                disabled={isSubmitting}
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 px-2 flex items-center"
+                onClick={() => setShowPassword(!showPassword)} // Toggle password visibility on button click
+              >
+                {showPassword ? <BsEyeSlash /> : <BsEye />}{" "}
+                {/* Toggle button text */}
+              </button>
+            </div>
             {errors.password && (
               <p className="text-error">{errors.password.message}</p>
             )}

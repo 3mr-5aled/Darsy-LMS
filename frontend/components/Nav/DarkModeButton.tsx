@@ -37,7 +37,7 @@ const DarkModeButton = () => {
         {isLoading ? (
           <div className="animate-spin">
             <svg
-              className="w-6 h-6 text-gray-600 dark:text-gray-400"
+              className=" md:w-6 md:h-6 text-gray-600 dark:text-gray-400"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

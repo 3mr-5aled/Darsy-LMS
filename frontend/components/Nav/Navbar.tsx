@@ -41,7 +41,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="relative z-20 navbar flexCenter w-full shadow-xl">
+    <nav className="relative z-50 navbar flexCenter w-full shadow-xl">
       <div className="w-full lg:container flexBetween">
         <div className="flexStart gap-1">
           <div className="drawer w-fit lg:hidden">

@@ -27,9 +27,7 @@ const LessonPage = () => {
   const router = useRouter()
   const [currentLessonIndex, setCurrentLessonIndex] = useState<number>(0)
 
-  const [activeSectionIndex, setActiveSectionIndex] = useState<number>(0)
-  const [openSections, setOpenSections] = useState<boolean[]>([])
-  const { state, setUser, clearUser } = useUserContext()
+  const { state } = useUserContext()
   const { user } = state
 
   // useEffect(() => {

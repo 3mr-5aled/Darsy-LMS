@@ -104,7 +104,7 @@ const StudentMainPage = () => {
             <h1 className="text-2xl font-bold text-center lg:text-4xl">
               My Homepage
             </h1>
-            <div className="hidden md:flex w-full transition-all flexCenter">
+            <div className="hidden md:flex w-full transition-all md:flexCenter">
               <div className="flex flex-row items-center justify-around w-2/3 gap-5 p-3 text-2xl rounded-full flex-nowrap bg-base-200">
                 <div className="tooltip" data-tip="HomePage">
                   <Link
