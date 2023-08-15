@@ -139,6 +139,9 @@ const deleteLesson = asynchandler(async (req, res, next) => {
   for (const sectionId of course.sections) {
     const section = await Section.findById(sectionId);
     let sectionTotal = 0;
+    if (!section) {
+      continue
+    }
     for (const lessonId of section.lessons) {
       try {
         const lesson = await Lesson.findById(lessonId);
