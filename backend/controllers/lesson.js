@@ -28,6 +28,9 @@ const addLesson = asynchandler(async (req, res, next) => {
 
   for (const sectionId of course.sections) {
     const section = await Section.findById(sectionId);
+    if (!section) {
+      continue
+    }
     let sectionTotal = 0;
     for (const lessonId of section.lessons) {
       try {
@@ -156,14 +159,14 @@ const deleteLesson = asynchandler(async (req, res, next) => {
     console.log(`Section Total for Section ${sectionId}: ${sectionTotal}`);
 
     // Update section total and save
-    section.total = sectionTotal ; // Adding 1 to account for the next lesson
+    section.total = sectionTotal; // Adding 1 to account for the next lesson
     await section.save();
   }
 
   // Update course total and save
   course.total = index;
   await course.save();
-  
+
 
 
   console.log(`Final Index: ${index}`);
