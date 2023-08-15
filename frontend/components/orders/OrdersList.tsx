@@ -24,7 +24,7 @@ const OrdersList = ({
   return (
     <div className="overflow-x-auto">
       <table className="table table-pin-rows table-pin-cols">
-        <thead className=" sticky top-5 text-2xl font-semibold">
+        <thead className=" sticky top-0 text-lg font-semibold">
           <tr>
             <th></th>
             <th>Type</th>
