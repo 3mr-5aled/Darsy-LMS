@@ -30,7 +30,8 @@ const addLesson = asynchandler(async (req, res, next) => {
     const section = await Section.findById(sectionId);
     if (!section) {
       continue
-    }
+    }else{
+
     let sectionTotal = 0;
     for (const lessonId of section.lessons) {
       try {
@@ -55,6 +56,8 @@ const addLesson = asynchandler(async (req, res, next) => {
     // Update section total and save
     section.total = sectionTotal; // Adding 1 to account for the next lesson
     await section.save();
+  }
+
   }
 
   // Update course total and save
@@ -141,7 +144,8 @@ const deleteLesson = asynchandler(async (req, res, next) => {
     let sectionTotal = 0;
     if (!section) {
       continue
-    }
+    }else{
+
     for (const lessonId of section.lessons) {
       try {
         const lesson = await Lesson.findById(lessonId);
@@ -164,6 +168,8 @@ const deleteLesson = asynchandler(async (req, res, next) => {
     // Update section total and save
     section.total = sectionTotal; // Adding 1 to account for the next lesson
     await section.save();
+  }
+
   }
 
   // Update course total and save
