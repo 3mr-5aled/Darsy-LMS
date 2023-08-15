@@ -59,12 +59,19 @@ export default function VideoPlayer({ video }: Props) {
           id={video.provider}
           source={{
             type: "video",
-            sources: [{ src: videoId || "", provider: "youtube" }],
+            sources: [
+              {
+                publicId: video?.provider,
+                fileName: video?.src,
+                src: videoId || "",
+                provider: "youtube",
+              },
+            ],
           }}
           options={{
             controls: [
               "play-large", // The large play button in the center
-              "restart", // Restart playback
+              // "restart", // Restart playback
               "rewind", // Rewind by the seek time (default 10 seconds)
               "play", // Play/pause playback
               "fast-forward", // Fast forward by the seek time (default 10 seconds)
@@ -98,13 +105,18 @@ export default function VideoPlayer({ video }: Props) {
             source={{
               type: "video",
               sources: [
-                { src: URL.createObjectURL(videoBlob), type: "video/mp4" },
+                {
+                  publicId: video?.provider,
+                  fileName: URL.createObjectURL(videoBlob),
+                  src: URL.createObjectURL(videoBlob),
+                  type: "video/mp4",
+                },
               ],
             }}
             options={{
               controls: [
                 "play-large", // The large play button in the center
-                "restart", // Restart playback
+                // "restart", // Restart playback
                 "rewind", // Rewind by the seek time (default 10 seconds)
                 "play", // Play/pause playback
                 "fast-forward", // Fast forward by the seek time (default 10 seconds)
