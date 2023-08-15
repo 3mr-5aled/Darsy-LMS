@@ -258,13 +258,14 @@ const CreateQuizPage = ({
           ),
         }))
       )
+      console.log(exams)
 
       // Validate that all questions have at least one correct answer
 
       // Make the PUT request to the API endpoint using axiosInstance.put()
       const response = await axiosInstance.put(
-        `/exam/${lessonId}/add-exam`,
-        exams
+        `/exam/${lessonId}/add-exam`,{exams,totalTimerDuration}
+        
       )
 
       // Handle the response from the API
