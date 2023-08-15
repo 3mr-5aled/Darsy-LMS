@@ -24,7 +24,7 @@ const OrdersList = ({
   return (
     <div className="overflow-x-auto">
       <table className="table table-pin-rows table-pin-cols">
-        <thead className=" text-lg font-semibold">
+        <thead>
           <tr>
             <th></th>
             <th>Type</th>
