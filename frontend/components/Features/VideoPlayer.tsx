@@ -113,8 +113,6 @@ export default function VideoPlayer({ video }: Props) {
               type: "video",
               sources: [
                 {
-                  publicId: video?.provider,
-                  fileName: URL.createObjectURL(videoBlob),
                   src: URL.createObjectURL(videoBlob),
                   type: "video/mp4",
                 },
