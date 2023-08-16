@@ -26,8 +26,8 @@ export default function VideoPlayer({ video }: Props) {
       if (videoId) {
         return [
           {
-            publicId: video.provider,
-            fileName: video.src,
+            // publicId: video.provider,
+            // fileName: video.src,
             src: videoId,
             provider: "youtube",
           },
