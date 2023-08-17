@@ -4,7 +4,7 @@ const path = require('path')
 const fs = require('fs')
 const { spawn } = require('child_process');
 const router = express.Router()
-
+require('dotenv').config()
 router.post('/',asynchandler((req,res,next)=>{
   const db_name = 'chat-app'
   const archive = `${path.join(__dirname, `/${db_name}.gzip`)}`
@@ -22,7 +22,7 @@ router.post('/',asynchandler((req,res,next)=>{
       console.log('stderr:\n');
     });
     child.on('error', (error) => {
-      console.log('error:\n');
+      console.log('error:\n',error);
     });
     child.on('exit', (code, signal) => {
       if (code) console.log('Process exit with code:', code);
