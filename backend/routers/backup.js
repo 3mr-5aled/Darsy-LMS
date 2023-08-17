@@ -10,7 +10,7 @@ router.post('/',asynchandler((req,res,next)=>{
   const archive = `${path.join(__dirname, `/${db_name}.gzip`)}`
   const backup = function () {
     const child = spawn('mongodump', [
-      `--uri=${process.env.URL_BACKUP}`,
+      `--uri=${process.env.URL}`,
       `--db=${db_name}`,
       `--archive=${archive}`,
       '--gzip',
