@@ -9,6 +9,7 @@ import ClientOnlyRoute from "@/components/Routes/ClientOnlyRoute"
 import { Suspense } from "react"
 import Loading from "./loading"
 import FetchUserOnLoad from "@/components/Features/FetchUserOnLoad"
+import TawkToWidget from "@/components/Features/TawkToWidget"
 
 export const metadata = {
   title: WebsiteDetails.name,
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ar">
       <body>
+        <TawkToWidget />
         <ToastContainer />
         <UserProvider>
           <ClientOnlyRoute>

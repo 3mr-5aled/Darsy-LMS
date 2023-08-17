@@ -104,46 +104,6 @@ const StudentMainPage = () => {
             <h1 className="text-2xl font-bold text-center lg:text-4xl">
               My Homepage
             </h1>
-            <div className="hidden md:flex w-full transition-all md:flexCenter">
-              <div className="flex flex-row items-center justify-around w-2/3 gap-5 p-3 text-2xl rounded-full flex-nowrap bg-base-200">
-                <div className="tooltip" data-tip="HomePage">
-                  <Link
-                    className="hover:text-secondary hover:rounded-full"
-                    href="/"
-                  >
-                    <BsHouseDoorFill />
-                  </Link>
-                </div>
-                <div className="tooltip" data-tip="Courses">
-                  <Link
-                    className="hover:text-secondary hover:rounded-full"
-                    href="/courses"
-                  >
-                    <BsViewStacked />
-                  </Link>
-                </div>
-                <div className="tooltip" data-tip="Dark Mode">
-                  <DarkModeButton />
-                </div>
-                <div className="tooltip" data-tip="my account">
-                  <Link
-                    className="hover:text-secondary hover:rounded-full"
-                    href="/account"
-                  >
-                    {/* <BsPersonCircle /> */}
-                    <div className="avatar placeholder">
-                      <div className="w-8 transition-all border-2 border-gray-800 rounded-full cursor-pointer bg-neutral-focus text-neutral-content hover:border-2 hover:border-secondary">
-                        {" "}
-                        {/* Apply transition to the border color */}
-                        <span className="text-sm font-bold">
-                          {getUserInitials(user?.name)}
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-            </div>
           </div>
           {/* wallet section */}
           <div className="relative flex-col order-2 p-5 bg-base-200 card flexCenter md:order-3">

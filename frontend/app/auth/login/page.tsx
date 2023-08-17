@@ -21,7 +21,6 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setValue,
   } = useForm<IFormInput>()
 
   const router = useRouter()
@@ -107,12 +106,12 @@ const Login = () => {
                 placeholder="Password"
                 {...register("password", {
                   required: true,
-                  pattern: {
-                    value:
-                      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                    message:
-                      "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one digit, and one special character.",
-                  },
+                  // pattern: {
+                  //   value:
+                  //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                  //   message:
+                  //     "Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one digit, and one special character.",
+                  // },
                 })}
                 disabled={isSubmitting}
               />

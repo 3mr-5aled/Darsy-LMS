@@ -275,7 +275,7 @@ const LessonPage = () => {
             </>
           )}
 
-          <div className="flex flex-row">
+          <div className="flex flex-row mb-16">
             <button
               className="my-8 mr-2 btn btn-primary"
               onClick={handlePreviousLesson}

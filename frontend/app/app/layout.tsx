@@ -20,9 +20,9 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <>
+    <div className="relative">
       <AppNav />
       <main>{children}</main>
-    </>
+    </div>
   )
 }

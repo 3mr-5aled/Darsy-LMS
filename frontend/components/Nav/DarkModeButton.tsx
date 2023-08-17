@@ -28,7 +28,7 @@ const DarkModeButton = () => {
 
   return (
     <label
-      className={`swap swap-rotate hover:text-secondary ${
+      className={`swap swap-rotate h-fit hover:text-secondary ${
         isDarkMode === null ? "loading" : isDarkMode ? "switch" : ""
       }`}
     >
