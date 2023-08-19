@@ -29,17 +29,13 @@ const DarkModeButton = () => {
   return (
     <label
       className={`swap swap-rotate h-fit hover:text-secondary ${
-        isDarkMode === null
-          ? "loading loading-spinner loading-sm"
-          : isDarkMode
-          ? "switch"
-          : "loading loading-spinner loading-sm"
+        isDarkMode ? "switch" : ""
       }`}
     >
       <button onClick={toggleDarkMode} disabled={isLoading}>
         {/* loading or sun/moon icon */}
         {isLoading ? (
-          ""
+          <span className="loading loading-spinner loading-sm"></span>
         ) : (
           <>
             {/* sun icon */}
