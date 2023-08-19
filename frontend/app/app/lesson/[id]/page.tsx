@@ -124,7 +124,7 @@ const LessonPage = () => {
         `/lesson/complete-lesson/${lesson?._id}`
       )
       toast.success("Lesson Completed")
-      router.push(`/learn/lesson/${response.data.newLessonId}`)
+      router.push(`/app/lesson/${response.data.newLessonId}`)
     } catch (error: any) {
       if (error.response.data.errCode === 5241) {
         if (lessonsDone === data.totalLessons) {
@@ -143,7 +143,7 @@ const LessonPage = () => {
       const response = await axiosInstance.get(
         `/lesson/previous-lesson/${lesson?._id}`
       )
-      router.push(`/learn/lesson/${response.data.previousLessonId}`)
+      router.push(`/app/lesson/${response.data.previousLessonId}`)
     } catch (error: any) {
       if (error.response.data.errCode === 5241) {
         toast.info("you are currently in the first lesson")
@@ -240,8 +240,6 @@ const LessonPage = () => {
           {lesson && isBrowser && (
             <>
               <VideoPlayer video={lesson.video} />
-              {/* <VideoPlayer videoId="LH7LPMXv8Lg" /> */}
-              {/* Only render Plyr in the browser environment */}
               <div className="flex flex-row justify-between w-full paddings ">
                 <h1 className="flex flex-row items-center text-2xl font-bold gap-x-3">
                   <span>{lesson.title}</span>
@@ -270,22 +268,26 @@ const LessonPage = () => {
                     </span>
                   </Link>
                 )}
+                <div className="flex flex-row justify-around mb-16 w-full">
+                  <div>
+                    <button
+                      className="my-8 mr-2 btn btn-primary"
+                      onClick={handlePreviousLesson}
+                    >
+                      Previous Lesson
+                    </button>
+                    <button
+                      className="my-8 btn btn-primary"
+                      onClick={handleNextLesson}
+                    >
+                      Next Lesson
+                    </button>
+                  </div>
+                </div>
               </div>
               {/* Add more elements to display other lesson details as needed */}
             </>
           )}
-
-          <div className="flex flex-row mb-16">
-            <button
-              className="my-8 mr-2 btn btn-primary"
-              onClick={handlePreviousLesson}
-            >
-              Previous Lesson
-            </button>
-            <button className="my-8 btn btn-primary" onClick={handleNextLesson}>
-              Next Lesson
-            </button>
-          </div>
         </>
       )}
     </>

@@ -135,6 +135,8 @@ export type Material = {
 
 export interface LessonType {
   _id: string
+  index: number
+  timer: number
   title: string
   video: {
     publicId: string

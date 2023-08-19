@@ -11,6 +11,7 @@
 }
 :root {
   --plyr-color-main: hsl(var(--p));
+  --tawk-header-background-color: hsl(var(--p)) !important;
 }
 
 body {
