@@ -28,7 +28,6 @@ const authorization = require("./middlewares/authorization")
 const rateLimit = require("express-rate-limit")
 const authintication = require("./middlewares/authintication")
 const ApiError = require("./utils/apierror");
-const router = require("./routers/backup");
 require("dotenv").config()
 const app = express()
 const isProduction = process.env.NODE_ENV === "production"
@@ -77,7 +76,6 @@ app.use("/api/v1/exam", textSize, /*csrfProtection,*/ examRouter)
 app.use("/api/v1/upload", imageSizeUrl, imageSize, uploaderRouter)
 app.use("/api/v1/user", textSize, userRouter)
 app.use("/api/v1/member", textSize, memberRouter)
-app.use("/api/v1/backup", textSize, router)
 app.get(
   "/api/v1/analysis",
   textSize,

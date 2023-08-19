@@ -54,7 +54,7 @@ const Lesson = new mongoose.Schema(
         }],
         correctAnswer: [String],
         questionImage:String,
-        isCheckBoxQuiz:Boolean
+        isCheckBoxQuiz:Boolean,
       },
       { timestamps: true },
     ],

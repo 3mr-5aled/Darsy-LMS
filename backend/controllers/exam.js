@@ -32,10 +32,11 @@ const getExam = aynchandler(async (req, res, next) => {
     // @api   get api/v1/exam/:lessonId/get-exam
     const exam = req.lesson.exams
     const title = req.lesson.title
+    const timer = req.lesson.timer
     if (!exam) {
         return next(new ApiError('exam not found', 6141, 404))
     }
-    res.status(200).json({ exam, title })
+    res.status(200).json({ exam, title , timer })
     //  you will recieve new lesson object
 })
 const getExamResult = aynchandler(async (req, res, next) => {
