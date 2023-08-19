@@ -2,12 +2,9 @@
 import { useEffect, useState } from "react"
 import axiosInstance from "@/axios.config"
 import { toast } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
 import { useParams, useRouter } from "next/navigation"
 import Loading from "@/app/loading"
 import ExamResults from "@/components/course/quizes/ExamResults"
-import LearnPageAppMenu from "@/components/learn/LearnPageAppMenu"
-import LearnPageSideDrawer from "@/components/learn/LearnPageSideDrawer"
 const ExamResult = () => {
   const { id } = useParams()
   const router = useRouter()
@@ -38,22 +35,7 @@ const ExamResult = () => {
 
   return (
     <>
-      <LearnPageAppMenu />
-      <div className="z-50 drawer lg:drawer-open">
-        <input
-          title="drawer-toggle"
-          id="my-drawer-2"
-          type="checkbox"
-          className="drawer-toggle"
-        />
-        <div className="flex flex-col items-center drawer-content">
-          <ExamResults />
-        </div>
-
-        <div className="drawer-side">
-          <LearnPageSideDrawer />
-        </div>
-      </div>
+      <ExamResults />
     </>
   )
 }

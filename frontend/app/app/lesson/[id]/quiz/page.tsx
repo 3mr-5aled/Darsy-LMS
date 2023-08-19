@@ -143,7 +143,7 @@ const StudentQuizPage = () => {
         const { data } = await axiosInstance.get(`/auth/profile`)
         setUser(data)
         // Redirect the user to the exam page with the results
-        router.push(`/exam-results/${id}`)
+        router.push(`/app/lesson/${id}/exam-results`)
       } else {
         toast.error("Error submitting the quiz. Please try again.")
       }
@@ -154,7 +154,7 @@ const StudentQuizPage = () => {
   }
 
   if (error) {
-    return <ExamResults />
+    return router.push(`/app/lesson/${id}/exam-results`)
   }
 
   const handleTimeout = () => {

@@ -30,10 +30,10 @@ const DarkModeButton = () => {
     <label
       className={`swap swap-rotate h-fit hover:text-secondary ${
         isDarkMode === null
-          ? "loading loading-spinner loading-sm md:loading-lg"
+          ? "loading loading-spinner loading-sm"
           : isDarkMode
           ? "switch"
-          : "loading loading-spinner loading-sm md:loading-lg"
+          : "loading loading-spinner loading-sm"
       }`}
     >
       <button onClick={toggleDarkMode} disabled={isLoading}>
