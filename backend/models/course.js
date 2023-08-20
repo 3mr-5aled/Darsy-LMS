@@ -8,6 +8,10 @@ const Courses = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    owner: {
+      type: String,
+      required: true,
+    },
     slug: {
       type: String,
     },

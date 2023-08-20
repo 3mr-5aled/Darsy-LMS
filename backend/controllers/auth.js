@@ -47,7 +47,9 @@ const register = asynchandler(async (req, res, next) => {
     // hash password
     const hashedpassword = await bcrypt.hash(password, salt);
     req.body.password = hashedpassword
-    const user = await User.create({...req.body,lastSignedIn:new Date()});
+  const {owner} = req.query
+
+    const user = await User.create({...req.body,lastSignedIn:new Date(),owner});
   // use jsonwebtoken to get token
     const token = jwt.sign({_id:user._id,name:user.name},process.env.JWT );
     // send response with all user details and token as cookie

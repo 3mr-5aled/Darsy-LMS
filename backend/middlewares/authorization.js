@@ -5,7 +5,7 @@ require('dotenv').config()
 const authintication =async(req,res,next)=>{
     const {user} = req 
     const userFromDB =await User.findById(user._id)
-    if (userFromDB.role === 'tutor') {
+    if (userFromDB.role === 'tutor' || userFromDB.role === 'owner')  {
         req.user = userFromDB
         return next()
     }else{
