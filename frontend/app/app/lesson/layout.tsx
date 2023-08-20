@@ -25,22 +25,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <Suspense fallback={<Loading />}>
       <main>
         <LearnPageAppMenu />
-        <div className="z-50 drawer lg:drawer-open">
-          <input
-            title="drawer-toggle"
-            id="my-drawer-2"
-            type="checkbox"
-            className="drawer-toggle"
-          />
-
-          <div className="flex flex-col items-center drawer-content">
-            {children}
-          </div>
-
-          <div className="drawer-side">
-            <LearnPageSideDrawer />
-          </div>
-        </div>
+        <LearnPageSideDrawer children={children} />
       </main>
     </Suspense>
   )

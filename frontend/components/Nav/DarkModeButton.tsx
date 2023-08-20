@@ -29,27 +29,13 @@ const DarkModeButton = () => {
   return (
     <label
       className={`swap swap-rotate h-fit hover:text-secondary ${
-        isDarkMode === null ? "loading" : isDarkMode ? "switch" : ""
+        isDarkMode ? "switch" : ""
       }`}
     >
       <button onClick={toggleDarkMode} disabled={isLoading}>
         {/* loading or sun/moon icon */}
         {isLoading ? (
-          <div className="animate-spin">
-            <svg
-              className=" md:w-6 md:h-6 text-gray-600 dark:text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 4v.01M12 8v.01M12 12v.01M12 16v.01M4.93 4.93l.02.02M7.76 7.76l.02.02M4.93 19.07l.02-.02M7.76 16.24l.02-.02M16.24 16.24l-.02-.02M19.07 19.07l-.02-.02M16.24 7.76l-.02.02M19.07 4.93l-.02.02"
-              />
-            </svg>
-          </div>
+          <span className="loading loading-spinner loading-sm"></span>
         ) : (
           <>
             {/* sun icon */}

@@ -8,7 +8,7 @@ import React, { useEffect, useState } from "react"
 import { BsCheckCircle, BsCheckCircleFill } from "react-icons/bs"
 import { toast } from "react-toastify"
 
-const LearnPageSideDrawer = () => {
+const LearnPageSideDrawer = ({ children }: { children: React.ReactNode }) => {
   const { id } = useParams()
   const [data, setData] = useState<any | null>(null)
   const [lesson, setLesson] = useState<LessonType | null>(null)
@@ -19,7 +19,7 @@ const LearnPageSideDrawer = () => {
 
   const [activeSectionIndex, setActiveSectionIndex] = useState<number>(0)
   const [openSections, setOpenSections] = useState<boolean[]>([])
-  const { state, setUser, clearUser } = useUserContext()
+  const { state } = useUserContext()
   const { user } = state
 
   useEffect(() => {
@@ -120,61 +120,90 @@ const LearnPageSideDrawer = () => {
     return status
   }
 
+  const closeMobileSidebar = () => {
+    const checkbox = document.getElementById("my-drawer-2") as HTMLInputElement
+    if (window.innerWidth <= 768) {
+      if (checkbox) {
+        checkbox.checked = false
+      }
+    }
+  }
+
   return (
     <>
-      {" "}
-      <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-      <div className="h-full p-4 menu w-80 bg-base-200 text-base-content">
-        {/* Display related sections */}
-        <div className="w-full join join-vertical">
-          {sections.map((section, index) => (
-            <div
-              className="border collapse collapse-arrow join-item border-base-300"
-              key={section._id}
-            >
-              <input
-                title="accordion"
-                type="checkbox"
-                name={`my-accordion-${index}`}
-                checked={openSections[index]}
-                onChange={() => handleSectionToggle(index)}
-              />
-              <div className="text-lg font-medium collapse-title">
-                {index + 1}
-                {". "}
-                {section.title}
-                {section.duration}
-              </div>
-              <div className="flex flex-col gap-3 collapse-content">
-                {/* Display lessons in each section */}
-                {section.lessons.map((lessonItem, lessonIndex) => (
-                  <div key={lessonItem._id}>
-                    <Link href={`/app/lesson/${lessonItem._id}`}>
-                      <div
-                        key={lessonItem._id}
-                        className={`flex flex-row hover:bg-primary justify-between items-center rounded-lg p-2 ${
-                          lessonItem._id === lesson?._id ? "bg-base-100" : ""
-                        }`}
-                      >
-                        {lessonIndex + 1}. {lessonItem.title}
-                        {renderDoneIcon(lessonItem._id)}
-                      </div>
-                    </Link>
-                    {lessonItem?.exams && lessonItem.exams.length > 0 && (
-                      <Link
-                        className={`${examStatus(
-                          lessonItem._id as string
-                        )} flex flex-row py-3 px-3 rounded-lg border-2  hover:bg-neutral`}
-                        href={`/app/lesson/${lessonItem._id}/quiz`}
-                      >
-                        Quiz
-                      </Link>
-                    )}
+      <div className="z-50 drawer lg:drawer-open">
+        <input
+          title="drawer-toggle"
+          id="my-drawer-2"
+          type="checkbox"
+          className="drawer-toggle"
+        />
+
+        <div className="flex flex-col items-center drawer-content">
+          {children}
+        </div>
+
+        <div className="drawer-side">
+          <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
+          <div className="h-full p-4 menu w-80 bg-base-200 text-base-content">
+            {/* Display related sections */}
+            <div className="w-full join join-vertical">
+              {sections.map((section, index) => (
+                <div
+                  className="border collapse collapse-arrow join-item border-base-300"
+                  key={section._id}
+                >
+                  <input
+                    title="accordion"
+                    type="checkbox"
+                    name={`my-accordion-${index}`}
+                    checked={openSections[index]}
+                    onChange={() => handleSectionToggle(index)}
+                  />
+                  <div className="text-lg font-medium collapse-title">
+                    {index + 1}
+                    {". "}
+                    {section.title}
+                    {section.duration}
                   </div>
-                ))}
-              </div>
+                  <div className="flex flex-col gap-3 collapse-content">
+                    {/* Display lessons in each section */}
+                    {section.lessons.map((lessonItem, lessonIndex) => (
+                      <div key={lessonItem._id}>
+                        <Link
+                          href={`/app/lesson/${lessonItem._id}`}
+                          onClick={closeMobileSidebar}
+                        >
+                          <div
+                            key={lessonItem._id}
+                            className={`flex flex-row hover:bg-primary justify-between items-center rounded-lg p-2 ${
+                              lessonItem._id === lesson?._id
+                                ? "bg-base-100"
+                                : ""
+                            }`}
+                          >
+                            {lessonItem.index}. {lessonItem.title}
+                            {renderDoneIcon(lessonItem._id)}
+                          </div>
+                        </Link>
+                        {lessonItem?.exams && lessonItem.exams.length > 0 && (
+                          <Link
+                            className={`${examStatus(
+                              lessonItem._id as string
+                            )} flex flex-row py-3 px-3 rounded-lg border-2  hover:bg-neutral`}
+                            href={`/app/lesson/${lessonItem._id}/quiz`}
+                            onClick={closeMobileSidebar}
+                          >
+                            Quiz
+                          </Link>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </>

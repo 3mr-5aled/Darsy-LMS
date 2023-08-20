@@ -10,11 +10,12 @@ import { useUserContext } from "@/contexts/userContext"
 import Timer from "@/components/course/quizes/Timer"
 
 const StudentQuizPage = () => {
-  const { state, setUser, clearUser } = useUserContext()
+  const { setUser } = useUserContext()
   const { id } = useParams()
   const router = useRouter()
   const [questions, setQuestions] = useState<any[]>([])
   const [title, setTitle] = useState<string | null>(null)
+  const [timer, setTimer] = useState<number>(30)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState<Boolean>(true)
   const [selectedAnswers, setSelectedAnswers] = useState<any[]>([])
@@ -32,6 +33,7 @@ const StudentQuizPage = () => {
         const response = await axiosInstance.get(`/exam/${id}/get-exam`)
         setQuestions(response.data.exam)
         setTitle(response.data.title)
+        setTimer(response.data.timer)
         // Initialize selectedAnswers array with null values for each question
         const exam = response.data.exam.map((e: any) => ({
           id: e._id,
@@ -141,7 +143,7 @@ const StudentQuizPage = () => {
         const { data } = await axiosInstance.get(`/auth/profile`)
         setUser(data)
         // Redirect the user to the exam page with the results
-        router.push(`/exam-results/${id}`)
+        router.push(`/app/lesson/${id}/exam-results`)
       } else {
         toast.error("Error submitting the quiz. Please try again.")
       }
@@ -152,7 +154,7 @@ const StudentQuizPage = () => {
   }
 
   if (error) {
-    return <ExamResults />
+    return router.push(`/app/lesson/${id}/exam-results`)
   }
 
   const handleTimeout = () => {
@@ -176,9 +178,7 @@ const StudentQuizPage = () => {
           <h1 className="mb-4 mt-4 text-3xl font-semibold text-center">
             Quiz Name: {title}
           </h1>
-          <p className="mb-4 text-lg text-center">
-            Duration: {/* display your duration here */}
-          </p>
+          <p className="mb-4 text-lg text-center">Duration: {timer}</p>
           <button className="btn btn-primary" onClick={handleStartQuiz}>
             Start Quiz
           </button>
@@ -188,7 +188,7 @@ const StudentQuizPage = () => {
           <h1 className="mb-4 mt-4 underline text-3xl font-semibold text-center">
             Quiz
           </h1>
-          <Timer initialTime={100} onTimeout={handleTimeout} />
+          <Timer initialTime={timer} onTimeout={handleTimeout} />
           {questions.map((q, questionIndex) => (
             <div key={questionIndex} className="mb-6">
               <p className="block mb-2 font-semibold">

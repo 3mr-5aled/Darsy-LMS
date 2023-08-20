@@ -40,6 +40,14 @@ const Navbar = () => {
     return firstNameInitial + lastNameInitial
   }
 
+  // Function to close the mobile sidebar
+  const closeMobileSidebar = () => {
+    const checkbox = document.getElementById("my-drawer-2") as HTMLInputElement
+    if (checkbox) {
+      checkbox.checked = false
+    }
+  }
+
   return (
     <nav className="relative z-50 navbar flexCenter w-full shadow-xl">
       <div className="w-full lg:container flexBetween">
@@ -74,6 +82,17 @@ const Navbar = () => {
                 </label>
               </div>
               <ul className="h-full w-full flex flex-col justify-center gap-5 p-4 menu bg-base-200 bg-opacity-90 text-base-content">
+                <li
+                  key={`Home`}
+                  className={`transition-colors flexCenter text-xl w-full hover:text-secondary-focus ${
+                    pathname === "/" ? "text-secondary" : ""
+                  }`}
+                >
+                  {/* Apply transition to the hover and active state */}
+                  <Link href={`/`} onClick={closeMobileSidebar}>
+                    Home
+                  </Link>
+                </li>
                 {NavLinks.map((link) => (
                   <li
                     key={link.text}
@@ -82,7 +101,9 @@ const Navbar = () => {
                     }`}
                   >
                     {/* Apply transition to the hover and active state */}
-                    <Link href={link.href}>{link.text}</Link>
+                    <Link href={link.href} onClick={closeMobileSidebar}>
+                      {link.text}
+                    </Link>
                   </li>
                 ))}
               </ul>
