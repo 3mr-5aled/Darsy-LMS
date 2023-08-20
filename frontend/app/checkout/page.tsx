@@ -1,4 +1,4 @@
-import { WebsiteDetails } from "@/constant"
+import { Owner.WebsiteDetails } from "@/constant"
 
 const CheckoutPage = () => {
   return (
@@ -11,7 +11,7 @@ const CheckoutPage = () => {
             <div className="flex items-center gap-4">
               <span className="h-10 w-10 rounded-full bg-blue-700"></span>
 
-              <h2 className="font-medium ">{WebsiteDetails.name}</h2>
+              <h2 className="font-medium ">{Owner.WebsiteDetails.name}</h2>
             </div>
 
             <div>

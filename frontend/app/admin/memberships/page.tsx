@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import axiosInstance from "@/axios.config"
 import Loading from "@/app/loading"
 import { MembershipType } from "@/common.types" // Make sure to import MembershipType from the correct path
-import { GradeOption } from "@/constant"
+import { Options } from "@/constant"
 
 const MembershipAdminView = () => {
   const [memberships, setMemberships] = useState<MembershipType[]>([])
@@ -57,7 +57,7 @@ const MembershipAdminView = () => {
       >
         <option value="">All Grades</option>
         {/* Replace the options below with the actual grade options */}
-        {GradeOption.options.map((option) => (
+        {Options.GradeOption.options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.title}
           </option>

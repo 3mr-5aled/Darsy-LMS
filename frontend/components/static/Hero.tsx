@@ -1,4 +1,4 @@
-import { WebsiteDetails } from "@/constant"
+import { Owner } from "@/constant"
 import Link from "next/link"
 import { BsFacebook, BsInstagram, BsTwitter, BsWhatsapp } from "react-icons/bs"
 
@@ -13,43 +13,45 @@ const Hero = () => {
       <span className="w-4/12 lg:w-2/12 aspect-square bg-gradient-to-tr from-primary to-secondary absolute -top-5 lg:left-0 rounded-full skew-y-12 blur-2xl opacity-40 skew-x-12 rotate-90"></span>
       <div className="container relative flex flex-row items-center flex-wrap">
         <div className="relative order-2 md:order-1 px-5 py-5 -top-24 md:top-0 flex flex-col items-center text-center lg:text-left lg:py-7 xl:py-8 lg:items-start lg:max-w-none max-w-3xl mx-auto lg:mx-0 lg:flex-1 lg:w-1/2">
-          <h1 className="text-3xl/tight sm:text-4xl/tight md:text-5xl/tight xl:text-6xl/tight font-bold text-heading-1">
+          {/* <h1 className="text-3xl/tight sm:text-4xl/tight md:text-5xl/tight xl:text-6xl/tight font-bold text-heading-1">
             Darsy LMS{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-br from-secondary from-20% via-primary via-30% to-secondary">
               Platform
             </span>{" "}
             is the Best Ever.
-          </h1>
+          </h1> */}
+          // select middle word and apply the style
+          {Owner.WebsiteDetails.hero.heading}
           <p className="md:text-lg text-heading-3 mt-8">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolores
-            repellat perspiciatis aspernatur quis voluptatum porro incidunt,
-            libero sequi quos eos velit
+            {Owner.WebsiteDetails.hero.body}
           </p>
           <div className="mt-10 w-full flex max-w-md mx-auto lg:mx-0">
             <div className="flexCenter lg:justify-start gap-5 w-full">
               <button className="min-w-max text-white btn btn-primary">
-                <span className="flex relative z-[5]">Get Started</span>
+                <span className="flex relative z-[5]">
+                  {Owner.WebsiteDetails.hero.button}
+                </span>
               </button>
               <Link
-                href={WebsiteDetails.whatsappLink}
+                href={Owner.WebsiteDetails.whatsappLink}
                 className="text-xl transition-all hover:text-secondary rounded-full"
               >
                 <BsWhatsapp />
               </Link>
               <Link
-                href={WebsiteDetails.facebookLink}
+                href={Owner.WebsiteDetails.facebookLink}
                 className="text-xl transition-all hover:text-secondary rounded-full"
               >
                 <BsFacebook />
               </Link>
               <Link
-                href={WebsiteDetails.instagramLink}
+                href={Owner.WebsiteDetails.instagramLink}
                 className="text-xl transition-all hover:text-secondary rounded-full"
               >
                 <BsInstagram />
               </Link>
               <Link
-                href={WebsiteDetails.twitterLink}
+                href={Owner.WebsiteDetails.twitterLink}
                 className="text-xl transition-all hover:text-secondary rounded-full"
               >
                 <BsTwitter />
@@ -60,7 +62,8 @@ const Hero = () => {
 
         <div className="flex flex-1 order-1 -top-20 md:top-0 md:order-2 py-0 px-5 md:p-5 w-full lg:w-1/2 h-1/2 my-0 lg:h-auto relative lg:max-w-none lg:mx-0 mx-auto max-w-3xl">
           {/* <Image
-          src="/undraw_Online_learning_re_qw08.png"
+          // src="/undraw_Online_learning_re_qw08.png"
+          // src={Owner.hero.image}
           alt="Hero image"
           width={2350}
           height={2359}

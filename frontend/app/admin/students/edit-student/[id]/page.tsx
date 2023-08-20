@@ -6,7 +6,7 @@ import { UserType } from "@/common.types"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { toast } from "react-toastify"
 import Loading from "@/app/loading"
-import { CityOption, GenderOption, GradeOption, RoleOption } from "@/constant"
+import { Options } from "@/constant"
 
 const EditStudent = () => {
   const router = useRouter()
@@ -155,7 +155,7 @@ const EditStudent = () => {
             {...register("grade", { required: true })}
           >
             <option value="">Choose Grade</option>
-            {GradeOption.options.map((option) => (
+            {Options.GradeOption.options.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.title}
               </option>
@@ -173,7 +173,7 @@ const EditStudent = () => {
             {...register("gender", { required: true })}
           >
             <option value="">Choose Gender</option>
-            {GenderOption.options.map((option) => (
+            {Options.GenderOption.options.map((option) => (
               <option key={option} value={option}>
                 {option}
               </option>
@@ -191,7 +191,7 @@ const EditStudent = () => {
             {...register("role", { required: true })}
           >
             <option value="">Choose Role</option>
-            {RoleOption.options.map((option) => (
+            {Options.RoleOption.options.map((option) => (
               <option key={option} value={option}>
                 {option}
               </option>
@@ -210,7 +210,7 @@ const EditStudent = () => {
             {...register("city", { required: true })}
           >
             <option value="">Choose City</option>
-            {CityOption.options.map((option) => (
+            {Options.CityOption.options.map((option) => (
               <option key={option} value={option}>
                 {option}
               </option>

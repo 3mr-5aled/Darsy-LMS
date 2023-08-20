@@ -1,5 +1,5 @@
 "use client"
-import { WebsiteDetails, AdminNavLinks } from "@/constant"
+import { Owner, Navigation } from "@/constant"
 import Link from "next/link"
 import DarkModeButton from "../Nav/DarkModeButton"
 import { usePathname } from "next/navigation"
@@ -56,13 +56,13 @@ const AdminSideBar = ({ children }: { children: React.ReactNode }) => {
         <div className="h-full flex flex-col p-4 menu z-50 w-80 bg-base-200 text-base-content">
           <div className="flex flex-row items-center justify-between mb-5">
             <div className="text-2xl font-bold">
-              <Link href="/">{WebsiteDetails.name}</Link>
+              <Link href="/">{Owner.WebsiteDetails.name}</Link>
             </div>
             <DarkModeButton />
           </div>
           {/* Sidebar content here */}
           <div>
-            {AdminNavLinks.map((section) => (
+            {Navigation.AdminNavLinks.map((section) => (
               <div key={section.name}>
                 <p className="font-bold text-gray-600 my-2">{section.name}</p>
                 <ul>
