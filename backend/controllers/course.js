@@ -12,6 +12,7 @@ const createCourse = aynchandler(async (req, res, next) => {
     appearenceDate = appearenceDate.getTime()
     body.appearenceDate = appearenceDate
     body.slug=slugify(body.name)
+    body.owner = req.user.name
     // image must be base 64 to upload on cloudinary
     const course = await Course.create({ ...body })
     res.status(200).json(course)
@@ -32,20 +33,21 @@ const updateCourse = aynchandler(async (req, res, next) => {
 const getAllCourses = aynchandler(async (req, res, next) => {
     // @api   get api/v1/course/getallcourses
     const {grade} = req.params
-    const course = grade === 'all' ? await Course.find({ }) : await Course.find({grade})
+    const {owner} = req.query
+    const course = grade === 'all' ? await Course.find({owner}) : await Course.find({grade,owner})
     if (course.length === 0) {
         return next(new ApiError('no courses are found',8341, 404))
     } 
-    const courses = course.map(oneCourse =>{
-        if (oneCourse.appearenceDate < Date.now()) {
-            oneCourse.isShown = true
-            return oneCourse
-        }else{
-            oneCourse.isShown = false
-            return oneCourse
-        } 
-    })
-    res.status(200).json(courses)
+    // const courses = course.map(oneCourse =>{
+    //     if (oneCourse.appearenceDate < Date.now()) {
+    //         oneCourse.isShown = true
+    //         return oneCourse
+    //     }else{
+    //         oneCourse.isShown = false
+    //         return oneCourse
+    //     } 
+    // })
+    res.status(200).json(course)
 })
 const getCourse = aynchandler(async (req, res, next) => {
     // @api   get api/v1/course/get-course/:id

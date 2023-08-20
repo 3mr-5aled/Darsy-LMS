@@ -15,6 +15,10 @@ const Sections = new mongoose.Schema(
       type: Number,
       default:0
     },
+    owner: {
+      type: String,
+      required: true,
+    },
     courseId: { type: mongoose.Types.ObjectId, ref: 'courses' },
     lessons: [{ type: mongoose.Types.ObjectId, ref: 'lessons' }]
   },

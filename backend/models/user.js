@@ -17,19 +17,21 @@ const User = new mongoose.Schema({
     forgetpasswordexpired: Date,
     forgetpasswordvalidation: Boolean,
     city: {
-        required: true,
         type: String,
     },
     parentsPhone: {
-        required: true,
-        type: String
+        type: String,
+        unique:false
     },
+    owner: {
+        type: String,
+        required: true,
+      },
     phone: {
         required: true,
         type: String
     },
-    dateOfBirth: {
-        required: true,
+    dateOfBirth: {        
         type: String
     },
     password: {
@@ -47,7 +49,6 @@ const User = new mongoose.Schema({
     },
     grade: {
         type: String,
-        required: true,
         enum: ['sec-1', 'sec-2', 'sec-3', 'prep-1', 'prep-2', 'prep-3']
     },
     enrolledCourse: [{

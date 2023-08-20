@@ -7,11 +7,13 @@ const addSection = asynchandler(async (req, res, next) => {
   // send courseId as params and title sectionImg , description in body
   const { title, duration } = req.body
   const { courseId } = req.params
-  const course = await Course.findOne({ _id: courseId })
+  const {owner} = req.query
+
+  const course = await Course.findOne({ _id: courseId , owner})
   if (!course) {
     return next(new ApiError("no course with this id",8341, 400))
   }
-  const section = await Section.create({ title, courseId, duration })
+  const section = await Section.create({ owner,title, courseId, duration })
   course.sections.push(section._id)
   await course.save()
   res.status(200).json(section)
@@ -29,8 +31,10 @@ const getSection = asynchandler(async (req, res, next) => {
 const getAllSections = asynchandler(async (req, res, next) => {
   // @api   get api/v1/get-all-sections
   // send courseId as params 
-  const {courseId} = req.params
-  const section = await Section.find({courseId}).populate("lessons")
+  const {courseId} = req.params  
+    const {owner} = req.query
+
+  const section = await Section.find({courseId,owner}).populate("lessons")
   if (!section.length === 0) {
     return next(new ApiError("no sections in this course",7341, 404))
   }

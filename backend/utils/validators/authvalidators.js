@@ -3,9 +3,13 @@ const User = require('../../models/user')
 const usermiddleware=require('../../middlewares/validator')
 const ApiError = require('../apierror')
 
-
 const registervalidator=[
     check('name').notEmpty().withMessage('name is required').isLength({max:30,min:4}).withMessage("name must be between 4 and 30"),
+    check('grade').notEmpty().withMessage('grade is required').withMessage("grade must be between 4 and 30"),
+    check('gender').notEmpty().withMessage('gender is required').withMessage("gender must be between 4 and 30"),
+    check('gender').notEmpty().withMessage('gender is required').withMessage("gender must be between 4 and 30"),
+    check('city').notEmpty().withMessage('city is required').withMessage("city must be between 4 and 30"),
+    check('dateOfBirth').notEmpty().withMessage('dateOfBirth is required').withMessage("dateOfBirth must be between 4 and 30"),
     check('email').notEmpty().withMessage('email is required').isEmail().withMessage("invalid email address")
     .custom(async(val)=>{
         const user = await User.findOne({email:val})

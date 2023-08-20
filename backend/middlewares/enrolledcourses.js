@@ -4,7 +4,8 @@ const ApiError = require('../utils/apierror')
 require('dotenv').config()
 const enrolledCourse = async (req, res, next) => {
   const { user } = req
-  console.log(user);
+  const {owner} = req.query
+
   const { lessonId } = req.params;
   const lesson = await Lesson.findById(lessonId)
   if (!lesson) {
@@ -14,7 +15,7 @@ const enrolledCourse = async (req, res, next) => {
   await lesson.populate('courseId')
   req.lesson = lesson
   const userFromDB = await User.findById(user._id)
-  if (userFromDB.role === "tutor") {
+  if (userFromDB.role === "tutor" || userFromDB.role === "owner") {
     userFromDB.enrolledCourse.map((course) =>{ 
       console.log(course);
       if(lesson.courseId._id.toString() === course.courseId.toString())
@@ -48,7 +49,6 @@ const enrolledCourse = async (req, res, next) => {
     return next(new ApiError("you are not enrolled in this course", 8364, 400));
   }
   userFromDB.enrolledCourse.map((course) =>{ 
-    console.log(course);
     if(lesson.courseId._id.toString() === course.courseId.toString())
     { 
       course.lastSignedInCourse = Date.now()

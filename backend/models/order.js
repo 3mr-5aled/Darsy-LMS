@@ -14,6 +14,10 @@ const Order =new mongoose.Schema({
         type:String,
         required:true
     },
+    owner: {
+        type: String,
+        required: true,
+      },
     courseId:{
         type:mongoose.Schema.Types.ObjectId,   
         ref:"courses"
