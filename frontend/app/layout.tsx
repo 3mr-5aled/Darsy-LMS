@@ -1,7 +1,7 @@
 import "./globals.css"
 import Navbar from "@/components/Nav/Navbar"
 import Footer from "@/components/Nav/Footer"
-import { Owner.WebsiteDetails } from "@/constant"
+import { Owner } from "@/constant"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { UserProvider } from "@/contexts/userContext"
