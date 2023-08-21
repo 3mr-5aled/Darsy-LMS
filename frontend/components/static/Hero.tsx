@@ -3,6 +3,25 @@ import Link from "next/link"
 import { BsFacebook, BsInstagram, BsTwitter, BsWhatsapp } from "react-icons/bs"
 
 const Hero = () => {
+  const text = Owner.WebsiteDetails.hero.heading
+  const words = text.split(" ")
+  const randomIndex = Math.floor(Math.random() * words.length)
+  const randomWord = words[randomIndex]
+
+  const coloredText = words.map((word, index) => {
+    if (index === randomIndex) {
+      return (
+        <span
+          key={index}
+          className="text-transparent bg-clip-text bg-gradient-to-br from-secondary from-20% via-primary via-30% to-secondary"
+        >
+          {word}
+        </span>
+      )
+    } else {
+      return <span key={index}>{word}</span>
+    }
+  })
   return (
     <>
       <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 mx-auto max-w-7xl w-full px-5 sm:px-8 md:px-14 lg:px-5"></div>
@@ -13,15 +32,9 @@ const Hero = () => {
       <span className="w-4/12 lg:w-2/12 aspect-square bg-gradient-to-tr from-primary to-secondary absolute -top-5 lg:left-0 rounded-full skew-y-12 blur-2xl opacity-40 skew-x-12 rotate-90"></span>
       <div className="container relative flex flex-row items-center flex-wrap">
         <div className="relative order-2 md:order-1 px-5 py-5 -top-24 md:top-0 flex flex-col items-center text-center lg:text-left lg:py-7 xl:py-8 lg:items-start lg:max-w-none max-w-3xl mx-auto lg:mx-0 lg:flex-1 lg:w-1/2">
-          {/* <h1 className="text-3xl/tight sm:text-4xl/tight md:text-5xl/tight xl:text-6xl/tight font-bold text-heading-1">
-            Darsy LMS{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-br from-secondary from-20% via-primary via-30% to-secondary">
-              Platform
-            </span>{" "}
-            is the Best Ever.
-          </h1> */}
-          // select middle word and apply the style
-          {Owner.WebsiteDetails.hero.heading}
+          <h1 className="text-3xl/tight sm:text-4xl/tight md:text-5xl/tight xl:text-6xl/tight font-bold text-heading-1 flex flex-row flex-wrap gap-3">
+            {coloredText}
+          </h1>
           <p className="md:text-lg text-heading-3 mt-8">
             {Owner.WebsiteDetails.hero.body}
           </p>

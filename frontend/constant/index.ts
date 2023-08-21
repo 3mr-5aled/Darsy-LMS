@@ -20,6 +20,18 @@ export const Owner = {
   description: "Mr Mohammed the best teacher",
   WebsiteDetails: {
     name: "Darsy LMS" as string,
+    theme: {
+      light: {
+        primaryColor: "#38bdf8",
+        secondaryColor: "#2dd4bf",
+        accentColor: "#f471b5",
+      },
+      dark: {
+        primaryColor: "#5616c5",
+        secondaryColor: "#db2777",
+        accentColor: "#1fa475",
+      },
+    },
     url: "https://darsy-lms-beta.vercel.app/" as string,
     description:
       "this is the description for the website where you can find all you need" as string,
