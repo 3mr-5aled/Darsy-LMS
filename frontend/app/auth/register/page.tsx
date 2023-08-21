@@ -1,7 +1,7 @@
 "use client"
 
 import axiosInstance from "@/axios.config"
-import { CityOption, GenderOption, GradeOption } from "@/constant"
+import { Options.CityOption, Options.GenderOption, Options.GradeOption } from "@/constant"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import React, { useState } from "react"
@@ -155,7 +155,7 @@ export default async function Register() {
               {...register("gender", { required: true })}
             >
               <option value="">Choose Gender</option>
-              {GenderOption.options.map((option) => (
+              {Options.GenderOption.options.map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>
@@ -173,7 +173,7 @@ export default async function Register() {
               {...register("city", { required: true })}
             >
               <option value="">Choose City</option>
-              {CityOption.options.map((option) => (
+              {Options.CityOption.options.map((option) => (
                 <option key={option} value={option}>
                   {option}
                 </option>
@@ -191,7 +191,7 @@ export default async function Register() {
               {...register("grade", { required: true })}
             >
               <option value="">Choose Grade</option>
-              {GradeOption.options.map((option) => (
+              {Options.GradeOption.options.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.title}
                 </option>

@@ -18,6 +18,7 @@ import Loading from "../loading"
 import { useUserContext } from "@/contexts/userContext"
 import WalletComponent from "@/components/learn/WalletComponent"
 import MembershipIcon from "@/components/learn/MembershipIcon"
+import { Owner } from "@/constant"
 
 const StudentMainPage = () => {
   const { state } = useUserContext()
@@ -74,7 +75,8 @@ const StudentMainPage = () => {
       <div className="w-screen p-4 ">
         <div className="grid w-full gap-3 md:grid-cols-3 ">
           <div className="order-2 w-full flexCenter max-md:pt-3 bg-base-200 card md:order-1">
-            <Link
+            {Owner.premium.membership &&
+              <Link
               href={"/membership"}
               className="flex flex-row items-center gap-3 cursor-pointer"
             >
@@ -82,7 +84,7 @@ const StudentMainPage = () => {
               <span className="flex flex-row items-center gap-3 text-warning">
                 <MembershipIcon membership={user?.membership} />
               </span>
-            </Link>
+            </Link>}
             {user?.nextLesson || (user?.enrolledCourse?.length ?? 0) > 0 ? (
               <button
                 className="w-full p-3 mt-4 text-lg font-bold text-white transition-all duration-500 rounded-md lg:text-2xl bg-secondary flexCenter md:w-auto hover:bg-primary"

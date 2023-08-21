@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { MembershipType } from "@/common.types" // Make sure to import MembershipType from the correct path
 import axiosInstance from "@/axios.config"
 import { toast } from "react-toastify"
-import { GradeOption } from "@/constant"
+import { Options } from "@/constant"
 import { useRouter } from "next/navigation"
 
 type MembershipFormProps = {
@@ -122,7 +122,7 @@ const MembershipForm: React.FC<MembershipFormProps> = ({
             {...register("grade", { required: true })}
           >
             <option value="">Choose Grade</option>
-            {GradeOption.options.map((option) => (
+            {Options.GradeOption.options.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.title}
               </option>

@@ -1,5 +1,5 @@
 import "@/app/globals.css"
-import { WebsiteDetails } from "@/constant"
+import { Owner.WebsiteDetails } from "@/constant"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { UserProvider } from "@/contexts/userContext"
@@ -10,8 +10,8 @@ import React from "react"
 import AppNav from "@/components/learn/AppNav"
 
 export const metadata = {
-  title: WebsiteDetails.name,
-  description: WebsiteDetails.description,
+  title: Owner.WebsiteDetails.name,
+  description: Owner.WebsiteDetails.description,
 }
 
 interface RootLayoutProps {

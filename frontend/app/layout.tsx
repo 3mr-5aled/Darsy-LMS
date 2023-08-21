@@ -1,7 +1,7 @@
 import "./globals.css"
 import Navbar from "@/components/Nav/Navbar"
 import Footer from "@/components/Nav/Footer"
-import { WebsiteDetails } from "@/constant"
+import { Owner.WebsiteDetails } from "@/constant"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { UserProvider } from "@/contexts/userContext"
@@ -13,8 +13,8 @@ import TawkToWidget from "@/components/Features/TawkToWidget"
 import TawkOnlyRoute from "@/components/Routes/TawkOnlyRoute"
 
 export const metadata = {
-  title: WebsiteDetails.name,
-  description: WebsiteDetails.description,
+  title: Owner.WebsiteDetails.name,
+  description: Owner.WebsiteDetails.description,
 }
 
 interface RootLayoutProps {

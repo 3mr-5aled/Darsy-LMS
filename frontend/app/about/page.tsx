@@ -1,4 +1,4 @@
-import { WebsiteDetails } from "@/constant"
+import { Owner } from "@/constant"
 
 const About = () => {
   return (
@@ -8,17 +8,20 @@ const About = () => {
           <h2 className="text-4xl text-center font-bold">About</h2>
         </div>
         <div className="mb-2">
-          <span className="font-semibold">Website:</span> {WebsiteDetails.name}
+          <span className="font-semibold">Website:</span>{" "}
+          {Owner.WebsiteDetails.name}
         </div>
         <div className="mb-2">
-          <span className="font-semibold">Author:</span> {WebsiteDetails.author}
+          <span className="font-semibold">Author:</span>{" "}
+          {Owner.WebsiteDetails.author}
         </div>
         <div className="mb-2">
           <span className="font-semibold">Description:</span>{" "}
-          {WebsiteDetails.description}
+          {Owner.WebsiteDetails.description}
         </div>
         <div>
-          <span className="font-semibold">Phone:</span> {WebsiteDetails.phone}
+          <span className="font-semibold">Phone:</span>{" "}
+          {Owner.WebsiteDetails.phone}
         </div>
       </div>
     </div>

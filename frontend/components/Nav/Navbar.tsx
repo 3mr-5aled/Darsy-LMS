@@ -3,7 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import axiosInstance from "@/axios.config"
-import { NavLinks, WebsiteDetails } from "@/constant"
+import { Navigation, Owner } from "@/constant"
 import DarkModeButton from "./DarkModeButton"
 import { toast } from "react-toastify"
 import { useUserContext } from "@/contexts/userContext"
@@ -93,7 +93,7 @@ const Navbar = () => {
                     Home
                   </Link>
                 </li>
-                {NavLinks.map((link) => (
+                {Navigation.NavLinks.map((link) => (
                   <li
                     key={link.text}
                     className={`transition-colors flexCenter text-xl w-full hover:text-secondary-focus ${
@@ -112,16 +112,17 @@ const Navbar = () => {
           <Link href="/" className="p-3 bg-white rounded-md">
             <Image
               src="/next.svg"
+              // src={Owner.WebsiteDetails.logo}
               width={115}
               height={38}
-              alt={WebsiteDetails.name}
+              alt={Owner.WebsiteDetails.name}
             />
           </Link>
         </div>
         <ul className="lg:items-center hidden space-x-4 font-bold lg:flex">
           {" "}
           {/* Container for the links */}
-          {NavLinks.map((link) => (
+          {Navigation.NavLinks.map((link) => (
             <li
               key={link.text}
               className={`transition-colors hover:text-secondary-focus ${

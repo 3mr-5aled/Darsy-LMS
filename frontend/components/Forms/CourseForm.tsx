@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { CourseType } from "@/common.types"
 import axiosInstance from "@/axios.config"
 import { toast } from "react-toastify"
-import { GradeOption } from "@/constant"
+import { Options.GradeOption } from "@/constant"
 import UploadImageButton from "./UploadImageButton"
 import Image from "next/image"
 
@@ -255,7 +255,7 @@ const CourseForm = ({ title, type, course }: Props) => {
               {...register("grade", { required: true })}
             >
               <option value="">Choose Grade</option>
-              {GradeOption.options.map((option) => (
+              {Options.GradeOption.options.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.title}
                 </option>
