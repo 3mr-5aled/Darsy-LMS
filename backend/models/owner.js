@@ -13,7 +13,11 @@ const featureSchema = new mongoose.Schema({
 });
 const Owner = new mongoose.Schema(
     {
-        name: String,
+        name:  {
+            type: String,
+            require: true,
+            unique: true
+        },
         ownerName: String,
         description: String,
         password: {
