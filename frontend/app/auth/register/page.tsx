@@ -1,7 +1,7 @@
 "use client"
 
 import axiosInstance from "@/axios.config"
-import { Options.CityOption, Options.GenderOption, Options.GradeOption } from "@/constant"
+import { Options } from "@/constant"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import React, { useState } from "react"

@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { CourseType } from "@/common.types"
 import axiosInstance from "@/axios.config"
 import { toast } from "react-toastify"
-import { Options.GradeOption } from "@/constant"
+import { Options } from "@/constant"
 import UploadImageButton from "./UploadImageButton"
 import Image from "next/image"
 
