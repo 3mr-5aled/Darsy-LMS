@@ -1,6 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-const themeConfig = require("./themeConfig")
-
 module.exports = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -29,43 +27,33 @@ module.exports = {
 
     themes: [
       {
-        // mytheme: {
-        //   primary: themeConfig.primaryColor,
-        //   secondary: themeConfig.secondaryColor,
-        //   accent: themeConfig.accentColor,
-        //   // primary: "#38bdf8",
+        mytheme: {
+          primary: "#38bdf8",
 
-        //   // secondary: "#2dd4bf",
+          secondary: "#2dd4bf",
 
-        //   // accent: "#f471b5",
+          accent: "#f471b5",
 
-        //   neutral: "#1d283a",
+          neutral: "#1d283a",
 
-        //   "base-100": "#f3f4f6",
-        //   "base-200": "#FAFAFB",
+          "base-100": "#f3f4f6",
+          "base-200": "#FAFAFB",
 
-        //   info: "#0ca6e9",
+          info: "#0ca6e9",
 
-        //   success: "#22c55e",
+          success: "#22c55e",
 
-        //   warning: "#facc15",
+          warning: "#facc15",
 
-        //   error: "#ef4444",
+          error: "#ef4444",
+        },
+        // dark: {
+        //   ...require("daisyui/src/theming/themes")["[data-theme=dark]"],
+        //   //   // "base-100": "#f3f4f6",
+        //   //   //   "base-200": "#FAFAFB",
         // },
-        light: {
-          ...require("daisyui/src/theming/themes")["[data-theme=light]"],
-          primary: themeConfig.lightPrimaryColor,
-          secondary: themeConfig.lightSecondaryColor,
-          accent: themeConfig.lightAccentColor,
-        },
-        dark: {
-          ...require("daisyui/src/theming/themes")["[data-theme=dark]"],
-          primary: themeConfig.darkPrimaryColor,
-          secondary: themeConfig.darkSecondaryColor,
-          accent: themeConfig.darkAccentColor,
-        },
       },
-      // "dark",
+      "dark",
     ],
   },
 }
