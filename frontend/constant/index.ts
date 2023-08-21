@@ -107,6 +107,7 @@ export const Owner = {
     membership: true,
   },
   plugins: {
+    // example data not real
     paytabs: {
       profileId: 598623,
       serverKey: "SJ5468LJWDDR-J6NJ9G4846D-MJ2asd53G",

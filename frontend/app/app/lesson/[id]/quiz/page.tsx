@@ -5,9 +5,10 @@ import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { useParams, useRouter } from "next/navigation"
 import Loading from "@/app/loading"
-import ExamResults from "@/components/course/quizes/ExamResults"
 import { useUserContext } from "@/contexts/userContext"
 import Timer from "@/components/course/quizes/Timer"
+import StartQuiz from "@/components/course/quizes/StartQuiz"
+import QuizGuard from "@/components/course/quizes/QuizGuard" // Import the QuizGuard component
 
 const StudentQuizPage = () => {
   const { setUser } = useUserContext()
@@ -173,112 +174,115 @@ const StudentQuizPage = () => {
           {title}
         </h1>
       )}
-      {!quizStarted ? (
-        <div className="flex flex-col items-center">
-          <h1 className="mb-4 mt-4 text-3xl font-semibold text-center">
-            Quiz Name: {title}
-          </h1>
-          <p className="mb-4 text-lg text-center">Duration: {timer}</p>
-          <button className="btn btn-primary" onClick={handleStartQuiz}>
-            Start Quiz
-          </button>
-        </div>
-      ) : (
-        <>
-          <h1 className="mb-4 mt-4 underline text-3xl font-semibold text-center">
-            Quiz
-          </h1>
-          <Timer initialTime={timer} onTimeout={handleTimeout} />
-          {questions.map((q, questionIndex) => (
-            <div key={questionIndex} className="mb-6">
-              <p className="block mb-2 font-semibold">
-                Question {questionIndex + 1}: {q.question}
-              </p>
-              {q.questionImage && (
-                <img
-                  alt={`Question ${questionIndex + 1} Image`}
-                  src={q.questionImage}
-                  className="max-w-md mt-2"
-                />
-              )}
-              <div className="divider"></div>
-              <div className="mt-3 mb-4">
-                <label className="font-semibold">
-                  Select {q.correctAnswer.length} Answer
-                  {q.correctAnswer.length > 1 && "s"}:
-                </label>
-                <div className="flex flex-col gap-3">
-                  {q.answers.map((answer: any, answerIndex: number) => (
-                    <div
-                      key={answerIndex}
-                      className={`flex flex-row gap-3 items-center bg-base-200 ${
-                        selectedAnswers[
-                          questionIndex
-                        ]?.selectedAnswer?.includes(answer.text)
-                          ? "bg-primary text-white"
-                          : "bg-base-200"
-                      } card p-5`}
-                    >
-                      {q.isCheckBoxQuiz ? (
-                        <input
-                          title="Correct answer"
-                          type="checkbox"
-                          className="checkbox"
-                          checked={selectedAnswers[
+      <QuizGuard
+        quizStarted={quizStarted}
+        timerFinished={timerFinished}
+        handleSubmit={handleSubmit}
+        quizDurationMinutes={timer}
+      >
+        {!quizStarted ? (
+          <StartQuiz
+            title={title}
+            timer={timer}
+            handleStartQuiz={handleStartQuiz}
+          />
+        ) : (
+          <>
+            <h1 className="mb-4 mt-4 underline text-3xl font-semibold text-center">
+              Quiz
+            </h1>
+            <Timer initialTime={timer} onTimeout={handleTimeout} />
+            {questions.map((q, questionIndex) => (
+              <div key={questionIndex} className="mb-6">
+                <p className="block mb-2 font-semibold">
+                  Question {questionIndex + 1}: {q.question}
+                </p>
+                {q.questionImage && (
+                  <img
+                    alt={`Question ${questionIndex + 1} Image`}
+                    src={q.questionImage}
+                    className="max-w-md mt-2"
+                  />
+                )}
+                <div className="divider"></div>
+                <div className="mt-3 mb-4">
+                  <label className="font-semibold">
+                    Select {q.correctAnswer.length} Answer
+                    {q.correctAnswer.length > 1 && "s"}:
+                  </label>
+                  <div className="flex flex-col gap-3">
+                    {q.answers.map((answer: any, answerIndex: number) => (
+                      <div
+                        key={answerIndex}
+                        className={`flex flex-row gap-3 items-center bg-base-200 ${
+                          selectedAnswers[
                             questionIndex
-                          ]?.selectedAnswer?.includes(answer.text)}
-                          onChange={() =>
-                            handleAnswerChange(
-                              questionIndex,
-                              answer.text,
-                              q.isCheckBoxQuiz,
-                              q.correctAnswer,
-                              q._id
-                            )
-                          }
-                        />
-                      ) : (
-                        <input
-                          title="Correct answer"
-                          type="radio"
-                          className="radio"
-                          name={`correctAnswer-${questionIndex}`}
-                          value={answerIndex}
-                          checked={selectedAnswers[
-                            questionIndex
-                          ]?.selectedAnswer?.includes(answer.text)}
-                          onChange={() =>
-                            handleAnswerChange(
-                              questionIndex,
-                              answer.text,
-                              q.isCheckBoxQuiz,
-                              q.correctAnswer,
-                              q._id
-                            )
-                          }
-                        />
-                      )}
-                      <span>{answer.text}</span>
-                      {answer.image && (
-                        <img
-                          src={answer.image}
-                          alt={`Question ${questionIndex + 1} Answer ${
-                            answerIndex + 1
-                          } Image`}
-                          className="max-w-xs rounded-md mt-2"
-                        />
-                      )}
-                    </div>
-                  ))}
+                          ]?.selectedAnswer?.includes(answer.text)
+                            ? "bg-primary text-white"
+                            : "bg-base-200"
+                        } card p-5`}
+                      >
+                        {q.isCheckBoxQuiz ? (
+                          <input
+                            title="Correct answer"
+                            type="checkbox"
+                            className="checkbox"
+                            checked={selectedAnswers[
+                              questionIndex
+                            ]?.selectedAnswer?.includes(answer.text)}
+                            onChange={() =>
+                              handleAnswerChange(
+                                questionIndex,
+                                answer.text,
+                                q.isCheckBoxQuiz,
+                                q.correctAnswer,
+                                q._id
+                              )
+                            }
+                          />
+                        ) : (
+                          <input
+                            title="Correct answer"
+                            type="radio"
+                            className="radio"
+                            name={`correctAnswer-${questionIndex}`}
+                            value={answerIndex}
+                            checked={selectedAnswers[
+                              questionIndex
+                            ]?.selectedAnswer?.includes(answer.text)}
+                            onChange={() =>
+                              handleAnswerChange(
+                                questionIndex,
+                                answer.text,
+                                q.isCheckBoxQuiz,
+                                q.correctAnswer,
+                                q._id
+                              )
+                            }
+                          />
+                        )}
+                        <span>{answer.text}</span>
+                        {answer.image && (
+                          <img
+                            src={answer.image}
+                            alt={`Question ${questionIndex + 1} Answer ${
+                              answerIndex + 1
+                            } Image`}
+                            className="max-w-xs rounded-md mt-2"
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-          <button className="btn btn-primary" onClick={handleSubmit}>
-            Submit Quiz
-          </button>
-        </>
-      )}
+            ))}
+            <button className="btn btn-primary" onClick={handleSubmit}>
+              Submit Quiz
+            </button>
+          </>
+        )}
+      </QuizGuard>
     </div>
   )
 }
