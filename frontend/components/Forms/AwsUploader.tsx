@@ -1,48 +1,52 @@
-import { useState } from "react";
-import { Upload } from "@aws-sdk/lib-storage";
-import { getSignedUrl } from"@aws-sdk/s3-request-presigner"
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import React, { useState } from "react";
+import aws from "aws-sdk";
+const s3 = new aws.S3({
+  accessKeyId: "",
+  secretAccessKey: "",
+  region: "",
+});
+const AwsUploader: React.FC = () => {
+  const [uploadedObject, setUploadedObject] = useState<any>(null);
 
-function VideoUpload() {
-  const [progress, setProgress] = useState<null | string>(null);
-  const client = new S3Client({
-    region: "region",
-    credentials: {
-      accessKeyId: "",
-      secretAccessKey: "",
-    },
-  });
-  const handleFileChange = async (e: any) => {
-    const file = e.target.files[0];
-    try {
-      const parallelUploads3 = new Upload({
-        client,
-        params: { Bucket: "bucket name", Key: "file name", Body: file },
-        leavePartsOnError: false, // optional manually handle dropped parts
-      });
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file?.name) {
+      return;
+    }
+    const Key = Date.now() + file?.name;
+    if (file) {
+      try {
+        const uploadParams = {
+          Bucket: "lessons-videos",
+          Key,
+          Body: file,
+Z        };
 
-      parallelUploads3.on("httpUploadProgress", (progress: any) => {
-        setProgress(progress.loaded / progress.total + "%");
-      });
+        const url = (await s3.upload(uploadParams).promise()).Location
+        console.log(url)
+        
 
-      await parallelUploads3.done();
-      const command = new GetObjectCommand({
-        Bucket: "bucket name",
-        Key: "file name",
-      });
-      const url = await getSignedUrl(client, command);
-      console.log("success");
-      return url
-    } catch (e) {
-      console.log(e);
+        // try {
+        //   const objectResponse = await s3.getObject(getObjectParams).promise()
+        //   const objectKey = getObjectParams.Key; // Assuming you have the object's key
+        //   const bucketName = getObjectParams.Bucket; // Assuming you have the bucket name
+        //   const params = { Bucket: bucketName, Key: objectKey }; // Expires after 1 hour
+        //   const objectUrl = await s3.getSignedUrlPromise("getObject", params);
+        //   console.log(objectUrl);
+        // } catch (error) {
+        //   console.error("Error getting object:", error);
+        // }
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
     }
   };
 
   return (
     <div>
-      <input type="file" hidden onChange={(e) => handleFileChange(e as any)} />
+      <input type="file" onChange={handleFileChange} />
     </div>
   );
-}
+};
 
-export default VideoUpload;
+export default AwsUploader;
