@@ -5,7 +5,6 @@ const Course = require("../models/course")
 const User = require("../models/user")
 const createOrder = asynchandler(async (req, res, next) => {
   let { courseId } = req.body
-  const {owner} = req.query
   const userFromDB  = await User.findById(req.user._id)
   const course = await Course.findById(courseId)
   const courses = userFromDB.enrolledCourse.filter(enrolledCourse => enrolledCourse.courseId === course._id)
@@ -21,7 +20,7 @@ const createOrder = asynchandler(async (req, res, next) => {
     course.discount !== undefined
       ? price - price * (course.discount / 100)
       : price
-  const order = await Order.create({ owner,amount, userId: req.user._id, courseId , type:'enroll' })
+  const order = await Order.create({ amount, userId: req.user._id, courseId , type:'enroll' })
   req.cart_id = order._id
   req.amount = amount
   next()
@@ -55,9 +54,8 @@ const checkOrder = asynchandler(async (req, res, next) => {
 })
 const addCredit = asynchandler(async (req, res, next) => {
   const {amount} = req.body
-  const {owner} = req.query
   const user = await User.findById(req.user._id)
-  const order = await Order.create({ owner,amount , userId:req.user._id  , type:'credit' })
+  const order = await Order.create({ amount , userId:req.user._id  , type:'credit' })
   req.cart_id = order._id
   req.amount = amount
   req.user =  user
@@ -92,17 +90,16 @@ const getSingleOrder = asynchandler(async(req,res,next)=>{
 })
 const getAllOrdersByDay = asynchandler(async(req,res,next)=>{
   console.log(req.query.date)
-  const {owner} = req.query
   const date = req.query.date || new Date();
   const startDate = new Date(date);
   startDate.setDate(req.query.date ? startDate.getDate() + 1 :startDate.getDate() );
   startDate.setUTCHours(0, 0, 0, 0);
   const endDate = new Date(startDate);
   endDate.setDate(endDate.getDate() + 1);  
-  const todayOrders = req.user.role ==="tutor" ? await Order.find({owner, createdAt: { $gte: startDate, $lt: endDate }}).populate([{path:'userId',select:'name'},{path:'adminId',select:'name'},{path:'courseId',select:'name'}]).sort("-createdAt") :
-  await Order.find({owner, userId:req.user._id, createdAt: { $gte: startDate, $lt: endDate }}).populate({path:"userId",select:'name'}).select(' -adminId -courseId  ').sort("-createdAt")
-  const orders = req.user.role ==="tutor" ? await Order.find({ $or: [{owner, createdAt: { $lt: startDate } }, {owner, createdAt: { $gt: endDate } }] }).populate([{path:'userId',select:'name'},{path:'adminId',select:'name'},{path:'courseId',select:'name'}]).sort("-createdAt") :
-  await Order.find({ $or: [{owner, userId:req.user._id,createdAt: { $lt: startDate } }, { owner,userId:req.user._id, createdAt: { $gt: endDate } }] }).populate({path:"userId",select:'name'}).select(' -adminId -courseId  ').sort("-createdAt");
+  const todayOrders = req.user.role ==="tutor" ? await Order.find({ createdAt: { $gte: startDate, $lt: endDate }}).populate([{path:'userId',select:'name'},{path:'adminId',select:'name'},{path:'courseId',select:'name'}]).sort("-createdAt") :
+  await Order.find({ userId:req.user._id, createdAt: { $gte: startDate, $lt: endDate }}).populate({path:"userId",select:'name'}).select(' -adminId -courseId  ').sort("-createdAt")
+  const orders = req.user.role ==="tutor" ? await Order.find({ $or: [{ createdAt: { $lt: startDate } }, { createdAt: { $gt: endDate } }] }).populate([{path:'userId',select:'name'},{path:'adminId',select:'name'},{path:'courseId',select:'name'}]).sort("-createdAt") :
+  await Order.find({ $or: [{ userId:req.user._id,createdAt: { $lt: startDate } }, { userId:req.user._id, createdAt: { $gt: endDate } }] }).populate({path:"userId",select:'name'}).select(' -adminId -courseId  ').sort("-createdAt");
   res.status(200).json({orders,todayOrders});
 })
 module.exports = { createOrder, checkOrder , addCredit , buyCourse , getSingleOrder , getAllOrdersByDay}

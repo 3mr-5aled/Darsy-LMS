@@ -13,7 +13,6 @@ const addLesson = asynchandler(async (req, res, next) => {
   // @api  post    /sectionId:/add-lesson
   // send sectionId and courseId in params and title , duration , material , video in body
   const { sectionId } = req.params;
-  const {owner} = req.query
 
   const section = await Section.findById(sectionId);
   if (!section) {
@@ -23,7 +22,7 @@ const addLesson = asynchandler(async (req, res, next) => {
   if (!course) {
     return next(new ApiError("no course or section is found", 9341, 404));
   }
-  const lesson = await Lesson.create({ ...req.body,owner, courseId: section.courseId, sectionId })
+  const lesson = await Lesson.create({ ...req.body, courseId: section.courseId, sectionId })
   section.lessons.push(lesson._id)
   let index = 0;
   await section.save();
@@ -67,7 +66,7 @@ const addLesson = asynchandler(async (req, res, next) => {
   await course.save();
 
   console.log(`Final Index: ${index}`);
-  const users = await User.find({ ['enrolledCourse.courseId']: course._id ,owner})
+  const users = await User.find({ ['enrolledCourse.courseId']: course._id })
   users.map(async (user) => {
     user.enrolledCourse.map(userCourse => {
       if (userCourse.courseId.toString() === section.courseId.toString()) {
@@ -79,7 +78,7 @@ const addLesson = asynchandler(async (req, res, next) => {
     })
     await user.save()
   })
-  const allUsers = await User.find({ grade: course.grade , owner })
+  const allUsers = await User.find({ grade: course.grade  })
   allUsers.map(async (user) => {
     let text = ''
     const courses = user.enrolledCourse.filter(userCourse => userCourse.courseId.toString() === section.courseId.toString())
@@ -125,7 +124,6 @@ const deleteLesson = asynchandler(async (req, res, next) => {
   if (!lesson) {
     return next(new ApiError("no lesson is found", 6341, 404));
   }
-  const {owner} = req.query
 
   await Lesson.deleteMany({ _id: lessonId });
   if (lesson.video.provider !== "youtube") {
@@ -184,7 +182,7 @@ const deleteLesson = asynchandler(async (req, res, next) => {
 
   console.log(`Final Index: ${index}`);
 
-  const users = await User.find({ ['enrolledCourse.courseId']: course._id , owner})
+  const users = await User.find({ ['enrolledCourse.courseId']: course._id })
   users.map(async (user) => {
     user.enrolledCourse.map(userCourse => {
       if (userCourse.courseId.toString() === section.courseId.toString()) {
@@ -202,8 +200,7 @@ const getAllLesson = asynchandler(async (req, res, next) => {
   // @api get    /:sectionId/get-all-lesson
   // send sectionId  in params
   const { sectionId } = req.params;
-  const {owner} = req.query
-  const lesson = await Lesson.find({ sectionId , owner });
+  const lesson = await Lesson.find({ sectionId  });
   if (lesson.length === 0) {
     return next(new ApiError("no lessons are found in this section", 6341, 404));
   }

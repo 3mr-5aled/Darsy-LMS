@@ -6,17 +6,17 @@ const Order = require('../models/order')
 const Lesson = require('../models/lesson')
 
 const getAnalysis = aynchandler(async (req, res, next) => {
-  const {owner} = req.query
+  
 
-    const students = await User.find({owner, role: 'student' }).select('-password -city -gender -credit -exams -dateOfBirth -phone -parentsPhone')
-    const courses = await Course.find({owner}).length
-    const lessons = await Lesson.find({owner}).lenght
+    const students = await User.find({ role: 'student' }).select('-password -city -gender -credit -exams -dateOfBirth -phone -parentsPhone')
+    const courses = await Course.find({}).length
+    const lessons = await Lesson.find({}).lenght
     const todaySignedInStudents = students.filter(student => student.lastSignedIn?.toDateString() === new Date().toDateString()).length
     const enrolledStudents = students.filter(student => student.enrolledCourse.length >= 1).length
     const studentsInMembership = students.filter(student => student.memberShip.expiredTime > Date.now()).length
     const studentsWithNoMembership = students.filter(student =>  student.memberShip.memberId === undefined || student.memberShip.expiredTime < Date.now()).length
     const studentsWithNoEnrolledCourse = students.filter(student => student.enrolledCourse.length === 0).length
-    const orders = await Order.find({owner})
+    const orders = await Order.find({})
     let allMoney = 0
     orders.forEach(order => allMoney += parseInt(order.amount))
     let todayMoney = 0
@@ -27,9 +27,9 @@ const getAnalysis = aynchandler(async (req, res, next) => {
 
 const getMoneyPerPeriod = aynchandler(async (req, res, next) => {
     const { year, month, day } = req.query
-  const {owner} = req.query
+  
 
-    const orders = await Order.find({owner})
+    const orders = await Order.find({})
     let totalMoney = []
     if (year && month && day) {
         totalMoney = calculateTotalMoneyPerWeek(year, month, day ,orders)
