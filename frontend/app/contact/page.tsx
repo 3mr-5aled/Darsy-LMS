@@ -1,4 +1,4 @@
-import SocialMediaIcons from "@/components/static/SocialMediaIcons"
+import SocialMediaComponent from "@/components/static/SocialMediaComponent"
 
 const Contact = () => {
   return (
@@ -6,7 +6,7 @@ const Contact = () => {
       <div className="bg-base-300 card p-10 flex flex-col gap-5">
         <h2 className="text-4xl font-bold text-center">Contact us</h2>
 
-        <SocialMediaIcons type="button" />
+        <SocialMediaComponent type="button" />
       </div>
     </div>
   )
