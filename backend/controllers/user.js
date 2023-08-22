@@ -9,8 +9,7 @@ const Member = require('../models/member')
 const getAllUsers = aynchandler(async (req, res, next) => {
     // @api   get api/v1/user/get-all-users
     const { courseId } = req.query
-    const {owner} = req.query
-    const users = await User.find({owner}).select('-password').sort('createdAt')
+    const users = await User.find({}).select('-password').sort('createdAt')
     if (courseId) {
         const enrolledUsers = await User.find({ ['enrolledCourse.courseId']: courseId })
         const unEnrolledUsers = users.filter(user => user.enrolledCourse.every(course => course.courseId.toString() !== courseId))
@@ -35,7 +34,6 @@ const addCourseToUser = aynchandler(async (req, res, next) => {
     // send userId as params and courseId and amount(price) in body
     const { userId } = req.params
     const admin = req.user
-    const {owner} = req.query
     const { courseId, amount } = req.body
     const user = await User.findById(userId)
     if (!user) {
@@ -54,7 +52,7 @@ const addCourseToUser = aynchandler(async (req, res, next) => {
     }
     user.enrolledCourse.push({ courseId, lessonsDone: [], name: course.name, courseImg: course.courseImg, lessonTotal: course.total })
     await user.save()
-    const order = await Order.create({owner, userId, courseId, status: 'paid', amount, adminId: admin._id, type: 'enroll' })
+    const order = await Order.create({userId, courseId, status: 'paid', amount, adminId: admin._id, type: 'enroll' })
     res.status(200).json({ user, order })
 })
 const removeUserFromCourse = aynchandler(async (req, res, next) => {
@@ -104,11 +102,10 @@ const editCredit = aynchandler(async (req, res, next) => {
     const { amount } = req.body
     const user = await User.findById(userId)
     const price = user.credit + amount
-    const {owner} = req.query
     if (price < 0) {
         return next(new ApiError('you dont have enough credit', 1341, 404))
     }
-    const order = await Order.create({ owner,amount, userId: userId, status: 'paid', adminId: req.user._id, type: 'credit' })
+    const order = await Order.create({ amount, userId: userId, status: 'paid', adminId: req.user._id, type: 'credit' })
     user.credit += amount
     await user.save()
     res.status(200).send({ user, order })
@@ -116,7 +113,6 @@ const editCredit = aynchandler(async (req, res, next) => {
 const addMemberShip = aynchandler(async (req, res, next) => {
     const { memberId } = req.params
     const user = await User.findById(req.user._id)
-    const {owner} = req.query
     const member = await Member.findById(memberId)
     if (!member) {
         return next(new ApiError("member not found", 8532, 400))
@@ -131,10 +127,10 @@ const addMemberShip = aynchandler(async (req, res, next) => {
     if (totalPrice < 0) {
         return next(new ApiError('you dont have enough credit', 1341, 404))
     }
-    const order = await Order.create({ owner,amount: member.price, userId: req.user._id, status: 'paid', type: 'member' })
+    const order = await Order.create({ amount: member.price, userId: req.user._id, status: 'paid', type: 'member' })
     member.userId.push(user._id)
     await member.save()
-    const courses = await Course.find({owner, grade: member.grade })
+    const courses = await Course.find({ grade: member.grade })
     console.log(courses.length)
     const userCourses = courses.map(course => {
         const enrolledCourse = user.enrolledCourse.filter(userCourse =>  userCourse.courseId.toString() === course._id.toString());

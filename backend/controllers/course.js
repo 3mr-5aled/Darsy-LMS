@@ -12,7 +12,6 @@ const createCourse = aynchandler(async (req, res, next) => {
     appearenceDate = appearenceDate.getTime()
     body.appearenceDate = appearenceDate
     body.slug=slugify(body.name)
-    body.owner = req.user.name
     // image must be base 64 to upload on cloudinary
     const course = await Course.create({ ...body })
     res.status(200).json(course)
@@ -33,8 +32,7 @@ const updateCourse = aynchandler(async (req, res, next) => {
 const getAllCourses = aynchandler(async (req, res, next) => {
     // @api   get api/v1/course/getallcourses
     const {grade} = req.params
-    const {owner} = req.query
-    const course = grade === 'all' ? await Course.find({owner}) : await Course.find({grade,owner})
+    const course = grade === 'all' ? await Course.find({}) : await Course.find({grade})
     if (course.length === 0) {
         return next(new ApiError('no courses are found',8341, 404))
     } 

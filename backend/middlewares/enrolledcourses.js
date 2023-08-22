@@ -4,7 +4,6 @@ const ApiError = require('../utils/apierror')
 require('dotenv').config()
 const enrolledCourse = async (req, res, next) => {
   const { user } = req
-  const {owner} = req.query
 
   const { lessonId } = req.params;
   const lesson = await Lesson.findById(lessonId)
