@@ -20,7 +20,7 @@ const AwsUploader: React.FC = () => {
           Bucket: "lessons-videos",
           Key,
           Body: file,
-Z        };
+       };
 
         const url = (await s3.upload(uploadParams).promise()).Location
         console.log(url)

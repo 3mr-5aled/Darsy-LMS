@@ -23,10 +23,6 @@ const User = new mongoose.Schema({
         type: String,
         unique:false
     },
-    owner: {
-        type: String,
-        required: true,
-      },
     phone: {
         required: true,
         type: String

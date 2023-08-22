@@ -12,6 +12,7 @@ import dynamic from "next/dynamic"
 import "react-quill/dist/quill.snow.css"
 import QuillEditorLoading from "./QuillEditorLoading"
 import PreviousPageButton from "../Features/PreviousPageButton"
+import AwsUploader from "./AwsUploader"
 
 const QuillEditor = React.lazy(() => import("react-quill"))
 
@@ -291,7 +292,7 @@ const LessonForm = ({
                   {...register("video.src")}
                 />
                 <UploadVideoButton onVideoUpload={handleVideoUpload} />
-
+                <AwsUploader/>
                 {errors.file && <span>This field is required</span>}
               </div>
             ) : (

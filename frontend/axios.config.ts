@@ -6,7 +6,7 @@ const baseUrl = isProduction
   : `http://localhost:${process.env.NEXT_PUBLIC_BACKEND_PORT}` // Set your development base URL
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: `${baseUrl}/api/v1/`, // Set your base URL
+  baseURL: `http://localhost:3000/api/v1/`, // Set your base URL
   withCredentials: true,
 })
 

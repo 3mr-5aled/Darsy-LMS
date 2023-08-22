@@ -11,10 +11,7 @@ const Member = new mongoose.Schema(
             required: true,
             enum: ['sec-1', 'sec-2', 'sec-3', 'prep-1', 'prep-2', 'prep-3']
         },
-        owner: {
-      type: String,
-      required: true,
-    },
+        
         expiredTime: {
             type: Number,
             required: true,

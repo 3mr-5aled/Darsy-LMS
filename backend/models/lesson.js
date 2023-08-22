@@ -45,10 +45,6 @@ const Lesson = new mongoose.Schema(
       ref: "sections",
       required: true,
     },
-    owner: {
-      type: String,
-      required: true,
-    },
     exams: [
       {
         question: String,
