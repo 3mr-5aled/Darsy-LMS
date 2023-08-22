@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { toast } from "react-toastify"
 import axiosInstance from "@/axios.config"
+import { Owner } from "@/constant"
 
 type CreditModalProps = {
   isOpen: boolean
@@ -50,43 +51,55 @@ const AddCredit: React.FC<CreditModalProps> = ({
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="p-8 rounded-lg bg-base-100">
         <h2 className="mb-4 text-xl font-bold">Add Credit</h2>
-        <p className="mb-4 text-sm">
-          Add the amount to decrease or increase
-        </p>
-        <input
-          type='number'
-          value={creditAmount}
-          min={-250}
-          max={250}
-          onChange={(e) => {
-            setCreditAmount(Number(e.target.value))
-            setCreditError("") // Clear any existing error when the user starts typing
-          }}
-          className={`w-full p-2 mb-4 border border-gray-300 rounded-md ${
-            creditError ? "border-red-500" : ""
-          }`}
-          placeholder="Enter credit amount"
-          disabled={loading} // Disable the input when loading is true
-        />
-        {creditError && (
-          <p className="mb-4 text-sm text-red-500">{creditError}</p>
+        {!Owner.premium.paytabs ? (
+          <>
+            <p className="mb-4 text-sm">Contact us to add credit</p>
+            <button
+              className="mr-2 btn btn-secondary"
+              onClick={() => onClose()}
+              disabled={loading} // Disable the button when loading is true
+            >
+              Close
+            </button>
+          </>
+        ) : (
+          <>
+            <input
+              type="number"
+              value={creditAmount}
+              min={-250}
+              max={250}
+              onChange={(e) => {
+                setCreditAmount(Number(e.target.value))
+                setCreditError("") // Clear any existing error when the user starts typing
+              }}
+              className={`w-full p-2 mb-4 border border-gray-300 rounded-md ${
+                creditError ? "border-red-500" : ""
+              }`}
+              placeholder="Enter credit amount"
+              disabled={loading} // Disable the input when loading is true
+            />
+            {creditError && (
+              <p className="mb-4 text-sm text-red-500">{creditError}</p>
+            )}
+            <div className="flex justify-end">
+              <button
+                className="mr-2 btn btn-secondary"
+                onClick={() => onClose()}
+                disabled={loading} // Disable the button when loading is true
+              >
+                Cancel
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={() => onAddCredit(creditAmount)}
+                disabled={loading} // Disable the button when loading is true
+              >
+                {loading ? "Adding..." : "Add Credit"}
+              </button>
+            </div>
+          </>
         )}
-        <div className="flex justify-end">
-          <button
-            className="mr-2 btn btn-secondary"
-            onClick={() => onClose()}
-            disabled={loading} // Disable the button when loading is true
-          >
-            Cancel
-          </button>
-          <button
-            className="btn btn-primary"
-            onClick={() => onAddCredit(creditAmount)}
-            disabled={loading} // Disable the button when loading is true
-          >
-            {loading ? "Adding..." : "Add Credit"}
-          </button>
-        </div>
       </div>
     </div>
   )

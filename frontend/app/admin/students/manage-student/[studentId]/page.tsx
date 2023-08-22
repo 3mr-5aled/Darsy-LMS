@@ -23,6 +23,7 @@ import { BsCircleFill, BsDiamondFill, BsStars } from "react-icons/bs"
 import PreviousPageButton from "@/components/Features/PreviousPageButton"
 import OrdersList from "@/components/orders/OrdersList"
 import ConfirmModal from "@/components/Features/ConfirmModal"
+import { PremiumOnlyComponent } from "@/components/Routes/PremiumOnlyRoute"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -249,18 +250,20 @@ const StudentPage = () => {
         <div>{user?.credit.toFixed(0)}</div>
 
         {/* // TODO */}
-        <div className="flex flex-row items-center gap-1">
-          <span className="font-bold mr-2">Membership:</span>
-          {renderMembershipIcon()}
-        </div>
-        {user?.membership?.expireTime ? (
-          <div className="mb-3">
-            <span className="font-bold">Membership expireTime:</span>{" "}
-            {formattedExpireTime} (in {daysLeft} days) from now
+        <PremiumOnlyComponent feature="membership">
+          <div className="flex flex-row items-center gap-1">
+            <span className="font-bold mr-2">Membership:</span>
+            {renderMembershipIcon()}
           </div>
-        ) : (
-          <div className="mb-3 font-bold">No current subscription</div>
-        )}
+          {user?.membership?.expireTime ? (
+            <div className="mb-3">
+              <span className="font-bold">Membership expireTime:</span>{" "}
+              {formattedExpireTime} (in {daysLeft} days) from now
+            </div>
+          ) : (
+            <div className="mb-3 font-bold">No current subscription</div>
+          )}
+        </PremiumOnlyComponent>
 
         <div className="font-bold">Parents' Phone:</div>
         <div>{user?.parentsPhone}</div>

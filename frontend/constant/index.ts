@@ -119,6 +119,7 @@ export const Owner = {
   },
   premium: {
     membership: true,
+    paytabs: true,
   },
   plugins: {
     // example data not real

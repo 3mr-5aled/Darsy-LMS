@@ -1,11 +1,14 @@
 "use client"
 
 import MembershipForm from "@/components/Forms/MembershipForm"
+import PremiumOnlyRoute from "@/components/Routes/PremiumOnlyRoute"
 
 export default function CreateMembership() {
   return (
-    <div className="flexCenter">
-      <MembershipForm title="Create Membership" type="create" />
-    </div>
+    <PremiumOnlyRoute feature="membership">
+      <div className="flexCenter">
+        <MembershipForm title="Create Membership" type="create" />
+      </div>
+    </PremiumOnlyRoute>
   )
 }

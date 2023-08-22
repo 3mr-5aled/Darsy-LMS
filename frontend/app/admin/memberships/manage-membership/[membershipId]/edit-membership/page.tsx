@@ -8,6 +8,7 @@ import Loading from "@/app/loading"
 import { MembershipType } from "@/common.types"
 import MembershipForm from "@/components/Forms/MembershipForm"
 import PreviousPageButton from "@/components/Features/PreviousPageButton"
+import PremiumOnlyRoute from "@/components/Routes/PremiumOnlyRoute"
 
 export default function EditCourse() {
   const { membershipId } = useParams()
@@ -36,12 +37,14 @@ export default function EditCourse() {
   }
 
   return (
-    <div className="flexCenter">
-      <MembershipForm
-        title="Edit Membership"
-        type="edit"
-        membership={membership}
-      />
-    </div>
+    <PremiumOnlyRoute feature="membership">
+      <div className="flexCenter">
+        <MembershipForm
+          title="Edit Membership"
+          type="edit"
+          membership={membership}
+        />
+      </div>
+    </PremiumOnlyRoute>
   )
 }
