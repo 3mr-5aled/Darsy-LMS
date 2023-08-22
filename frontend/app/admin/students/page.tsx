@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import axiosInstance from "@/axios.config"
 import { UserType } from "@/common.types"
 import Loading from "@/app/loading"
+import PremiumOnlyRoute from "@/components/Routes/PremiumOnlyRoute"
 
 const Students = () => {
   const [users, setUsers] = useState<any>([])
@@ -67,7 +68,9 @@ const Students = () => {
             </h3>
             <div className="flex flex-row flex-wrap items-center gap-3">
               <p className="p-3 rounded-full bg-base-100">
-                {user.membership ? user.membership.name : "No subscription"}
+                <PremiumOnlyRoute feature="membership">
+                  {user.membership ? user.membership.name : "No subscription"}
+                </PremiumOnlyRoute>
               </p>
               <p className="text-success">{user.email}</p>
             </div>

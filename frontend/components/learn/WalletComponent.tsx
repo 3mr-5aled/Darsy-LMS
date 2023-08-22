@@ -1,5 +1,6 @@
 "use client"
 import axiosInstance from "@/axios.config"
+import { Owner } from "@/constant"
 import router from "next/router"
 import { useState } from "react"
 import { BsPlusCircleFill } from "react-icons/bs"
@@ -62,39 +63,56 @@ const WalletComponent = ({ credit }: WalletComponentProps) => {
           <BsPlusCircleFill />
         </span>
       </button>
-      {isModalOpen && (
-        <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-70">
-          <div className="w-11/12 p-4 bg-base-100 card">
-            <h3 className="mb-2 text-xl font-bold">
-              Enter the amount you want to charge
-            </h3>
-            <input
-              type="text"
-              placeholder="Amount"
-              className={`w-full mb-4 input input-bordered ${
-                amountError ? "input-error" : ""
-              }`}
-              value={amount}
-              onChange={(e) => {
-                setAmount(e.target.value)
-                setAmountError("")
-              }}
-              min="0"
-              max="250"
-              pattern="^[0-9]*(\.[0-9]{1,2})?$"
-            />
-            {amountError && <p className="text-error">{amountError}</p>}
-            <div className="flex justify-end">
-              <button className="mr-2 btn btn-primary" onClick={handlePayment}>
-                Pay
-              </button>
-              <button className="btn btn-secondary" onClick={handleCloseModal}>
-                Cancel
-              </button>
+      {isModalOpen &&
+        (!Owner.premium.paytabs ? (
+          <>
+            <p className="mb-4 text-sm">Contact us to add credit</p>
+            <button
+              className="mr-2 btn btn-secondary"
+              onClick={handleCloseModal}
+            >
+              Close
+            </button>
+          </>
+        ) : (
+          <div className="fixed top-0 left-0 flex items-center justify-center w-full h-full bg-black bg-opacity-70">
+            <div className="w-11/12 p-4 bg-base-100 card">
+              <h3 className="mb-2 text-xl font-bold">
+                Enter the amount you want to charge
+              </h3>
+              <input
+                type="text"
+                placeholder="Amount"
+                className={`w-full mb-4 input input-bordered ${
+                  amountError ? "input-error" : ""
+                }`}
+                value={amount}
+                onChange={(e) => {
+                  setAmount(e.target.value)
+                  setAmountError("")
+                }}
+                min="0"
+                max="250"
+                pattern="^[0-9]*(\.[0-9]{1,2})?$"
+              />
+              {amountError && <p className="text-error">{amountError}</p>}
+              <div className="flex justify-end">
+                <button
+                  className="mr-2 btn btn-primary"
+                  onClick={handlePayment}
+                >
+                  Pay
+                </button>
+                <button
+                  className="btn btn-secondary"
+                  onClick={handleCloseModal}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        ))}
     </>
   )
 }

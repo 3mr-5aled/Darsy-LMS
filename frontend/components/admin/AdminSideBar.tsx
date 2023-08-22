@@ -8,6 +8,12 @@ import { BsHouseDoorFill } from "react-icons/bs"
 
 const AdminSideBar = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname()
+  const isMembershipEnabled = Owner.premium.membership // Check if membership feature is enabled
+
+  // Filter out the "Membership" link if it's not enabled
+  const filteredNavLinks = Navigation.AdminNavLinks.filter(
+    (section) => section.name !== "Memberships" || isMembershipEnabled
+  )
 
   // Function to close the mobile sidebar
   const closeMobileSidebar = () => {
@@ -62,7 +68,7 @@ const AdminSideBar = ({ children }: { children: React.ReactNode }) => {
           </div>
           {/* Sidebar content here */}
           <div>
-            {Navigation.AdminNavLinks.map((section) => (
+            {filteredNavLinks.map((section) => (
               <div key={section.name}>
                 <p className="font-bold text-gray-600 my-2">{section.name}</p>
                 <ul>

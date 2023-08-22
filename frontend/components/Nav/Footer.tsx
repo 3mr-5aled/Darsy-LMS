@@ -1,7 +1,7 @@
 import { Owner } from "@/constant"
 import Image from "next/image"
 import Link from "next/link"
-import SocialMediaIcons from "../static/SocialMediaIcons"
+import SocialMediaComponent from "../static/SocialMediaComponent"
 
 type ColumnProps = {
   title: string
@@ -59,7 +59,7 @@ const Footer = async () => {
       </div>
       <div className="transition-all">
         <span className="footer-title ">Social</span>
-        <SocialMediaIcons type="icon" />
+        <SocialMediaComponent type="icon" />
       </div>
     </footer>
   )

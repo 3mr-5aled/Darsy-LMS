@@ -19,6 +19,9 @@ import { toast } from "react-toastify"
 import { useRouter } from "next/navigation"
 import OrdersList from "@/components/orders/OrdersList"
 import { useUserContext } from "@/contexts/userContext"
+import PremiumOnlyRoute, {
+  PremiumOnlyComponent,
+} from "@/components/Routes/PremiumOnlyRoute"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -172,22 +175,25 @@ const Profile = () => {
               <div className="text-success">{user?.credit}</div>
             </div>
           </li>
-          <li className="mb-3 list-item">
-            <div className="flex flex-row items-center gap-1">
-              <span className="font-bold mr-2">Membership:</span>
-              {renderMembershipIcon()}
-            </div>
-          </li>
-          <li className="mb-3 flex flex-row items-center gap-3">
-            <span className="font-bold">Membership expireTime:</span>{" "}
-            {user?.membership?.expireTime ? (
-              `${formattedExpireTime} (in ${daysLeft} days) from now`
-            ) : (
-              <div className="font-bold text-gray-500">
-                No current subscription
+          <PremiumOnlyComponent feature="membership">
+            <li className="mb-3 list-item">
+              <div className="flex flex-row items-center gap-1">
+                <span className="font-bold mr-2">Membership:</span>
+                {renderMembershipIcon()}
               </div>
-            )}
-          </li>
+            </li>
+            <li className="mb-3 flex flex-row items-center gap-3">
+              <span className="font-bold">Membership expireTime:</span>{" "}
+              {user?.membership?.expireTime ? (
+                `${formattedExpireTime} (in ${daysLeft} days) from now`
+              ) : (
+                <div className="font-bold text-gray-500">
+                  No current subscription
+                </div>
+              )}
+            </li>
+          </PremiumOnlyComponent>
+
           <li className="mb-3">
             <span className="font-bold">Parent Phone:</span>{" "}
             {user?.parentsPhone}

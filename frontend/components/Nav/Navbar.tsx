@@ -17,6 +17,12 @@ const Navbar = () => {
   const [isSigningOut, setIsSigningOut] = useState<boolean>(false)
   const { state, clearUser } = useUserContext()
   const { user, loading: isLoading } = state
+  const isMembershipEnabled = Owner.premium.membership // Check if membership feature is enabled
+
+  // Filter out the "Membership" link if it's not enabled
+  const filteredNavLinks = Navigation.NavLinks.filter(
+    (link) => link.text !== "Membership" || isMembershipEnabled
+  )
 
   const signOut = async () => {
     setIsSigningOut(true)
@@ -93,7 +99,7 @@ const Navbar = () => {
                     Home
                   </Link>
                 </li>
-                {Navigation.NavLinks.map((link) => (
+                {filteredNavLinks.map((link) => (
                   <li
                     key={link.text}
                     className={`transition-colors flexCenter text-xl w-full hover:text-secondary-focus ${
@@ -122,7 +128,7 @@ const Navbar = () => {
         <ul className="lg:items-center hidden space-x-4 font-bold lg:flex">
           {" "}
           {/* Container for the links */}
-          {Navigation.NavLinks.map((link) => (
+          {filteredNavLinks.map((link) => (
             <li
               key={link.text}
               className={`transition-colors hover:text-secondary-focus ${

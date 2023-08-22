@@ -14,7 +14,7 @@ import {
 } from "react-icons/bs"
 import Link from "next/link"
 
-const SocialMediaIcons = ({ type }: { type: "button" | "icon" }) => {
+const SocialMediaComponent = ({ type }: { type: "button" | "icon" }) => {
   // Extract the social media links
   const {
     whatsappLink,
@@ -29,6 +29,7 @@ const SocialMediaIcons = ({ type }: { type: "button" | "icon" }) => {
   } = Owner.WebsiteDetails
 
   // Create an array of objects for each social media icon and link
+  const numberOfIcons = 4 as number
   const socialMediaLinks = [
     {
       icon: <BsWhatsapp />,
@@ -113,24 +114,26 @@ const SocialMediaIcons = ({ type }: { type: "button" | "icon" }) => {
   ))
 
   // Render the icons, limiting to the first three
-  const renderedIcons = filteredLinks.slice(0, 3).map((item, index) => (
-    <Link
-      key={index}
-      href={item.link}
-      className="text-xl transition-all hover:text-secondary rounded-full"
-    >
-      {item.icon}
-    </Link>
-  ))
+  const renderedIcons = filteredLinks
+    .slice(0, numberOfIcons)
+    .map((item, index) => (
+      <Link
+        key={index}
+        href={item.link}
+        className="text-xl transition-all hover:text-secondary rounded-full"
+      >
+        {item.icon}
+      </Link>
+    ))
 
   // Render a dropdown if there are more than three links
-  const dropdown = filteredLinks.length > 3 && (
+  const dropdown = filteredLinks.length > numberOfIcons && (
     <div className="dropdown dropdown-hover dropdown-top dropdown-end">
       <label tabIndex={0} className="btn btn-circle">
         <BsThreeDots />
       </label>
       <ul className="dropdown-content mb-1 text-xl z-[1] menu menu-horizontal bg-base-200 rounded-box p-2 shadow w-max">
-        {filteredLinks.slice(3).map((item, index) => (
+        {filteredLinks.slice(numberOfIcons).map((item, index) => (
           <li key={index}>
             <Link href={item.link}>{item.icon}</Link>
           </li>
@@ -153,4 +156,4 @@ const SocialMediaIcons = ({ type }: { type: "button" | "icon" }) => {
   )
 }
 
-export default SocialMediaIcons
+export default SocialMediaComponent

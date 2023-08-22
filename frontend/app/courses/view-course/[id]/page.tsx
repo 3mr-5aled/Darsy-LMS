@@ -3,6 +3,7 @@
 import Loading from "@/app/loading"
 import axiosInstance from "@/axios.config"
 import { CourseType } from "@/common.types"
+import { PremiumOnlyComponent } from "@/components/Routes/PremiumOnlyRoute"
 import CourseSections from "@/components/course/CourseSections"
 import { useUserContext } from "@/contexts/userContext"
 import Image from "next/image"
@@ -226,12 +227,14 @@ const Course = () => {
                 </>
               ) : (
                 <div className="flex flex-row gap-3">
-                  <button
-                    className="my-5 btn btn-primary w-fit"
-                    onClick={handlePayment}
-                  >
-                    Pay and Enroll Now
-                  </button>
+                  <PremiumOnlyComponent feature="paytabs">
+                    <button
+                      className="my-5 btn btn-primary w-fit"
+                      onClick={handlePayment}
+                    >
+                      Pay and Enroll Now
+                    </button>
+                  </PremiumOnlyComponent>
                   <button
                     className="my-5 btn btn-secondary w-fit"
                     onClick={handleCreditPayment}

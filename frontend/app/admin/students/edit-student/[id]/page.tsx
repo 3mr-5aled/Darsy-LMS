@@ -222,7 +222,7 @@ const EditStudent = () => {
         </div>
 
         {/* // TODO */}
-        {/* add membership to student aith select  */}
+        {/* add membership to student and select  */}
 
         {/* Add other form fields here with appropriate validation */}
 

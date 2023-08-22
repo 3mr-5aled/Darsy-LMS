@@ -1,7 +1,7 @@
 import { Owner } from "@/constant"
 import Link from "next/link"
 import { BsFacebook, BsInstagram, BsTwitter, BsWhatsapp } from "react-icons/bs"
-import SocialMediaIcons from "./SocialMediaIcons"
+import SocialMediaComponent from "./SocialMediaComponent"
 
 const Hero = () => {
   const text = Owner.WebsiteDetails.hero.heading
@@ -46,7 +46,7 @@ const Hero = () => {
                   {Owner.WebsiteDetails.hero.button}
                 </span>
               </button>
-              <SocialMediaIcons type="icon" />
+              <SocialMediaComponent type="icon" />
               {/* <Link
                 href={Owner.WebsiteDetails.whatsappLink}
                 className="text-xl transition-all hover:text-secondary rounded-full"
