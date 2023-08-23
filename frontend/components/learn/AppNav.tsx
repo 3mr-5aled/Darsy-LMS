@@ -35,7 +35,7 @@ const AppNav = () => {
       {/* desktop nav */}
       <div className="hidden md:block">
         <div
-          className={`fixed left-1/2 bottom-2 transform -translate-x-1/2 z-[99999] transition-transform duration-300 shadow-xl ${
+          className={`fixed left-1/2 bottom-2 transform -translate-x-1/2 z-[999] transition-transform duration-300 shadow-xl ${
             isNavVisible ? "" : "translate-y-3/4"
           }`}
         >
@@ -108,7 +108,7 @@ const AppNav = () => {
         </div>
       </div>
       {/* Mobile Navbar */}
-      <div className="absolute w-full z-[99999] transition-all bottom-1 md:hidden flexCenter shadow-xl">
+      <div className="absolute w-full z-[999] transition-all bottom-1 md:hidden flexCenter shadow-xl">
         <div className="btm-nav">
           <Link
             className={

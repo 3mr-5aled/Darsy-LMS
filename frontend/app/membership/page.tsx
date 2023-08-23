@@ -331,15 +331,14 @@ const Membership = () => {
                   )}
                   {isCreditModalOpen &&
                     (!Owner.premium.paytabs ? (
-                      <>
-                        <p className="mb-4 text-sm">Contact us to add credit</p>
-                        <button
-                          className="mr-2 btn btn-secondary"
-                          onClick={handleCloseCreditModal}
-                        >
-                          Close
-                        </button>
-                      </>
+                      <ConfirmModal
+                        title="Enter the amount you want to charge"
+                        handleClose={handleCloseCreditModal}
+                      >
+                        <p className="py-4">
+                          Please Contact the support team to add credit
+                        </p>
+                      </ConfirmModal>
                     ) : (
                       <ConfirmModal
                         title="Enter the amount you want to charge"

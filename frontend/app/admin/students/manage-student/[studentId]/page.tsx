@@ -6,7 +6,7 @@ import { UserType } from "@/common.types"
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 import Loading from "@/app/loading"
-import CreditModal from "@/components/Features/AddCredit" // Import the CreditModal component
+import CreditModal from "@/components/Features/AddCreditToStudent" // Import the CreditModal component
 import { Line } from "react-chartjs-2"
 import {
   Chart as ChartJS,

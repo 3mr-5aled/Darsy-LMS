@@ -126,8 +126,16 @@ const Navbar = () => {
           </Link>
         </div>
         <ul className="lg:items-center hidden space-x-4 font-bold lg:flex">
-          {" "}
-          {/* Container for the links */}
+          <li
+            key={`Home`}
+            className={`transition-colors flexCenter text-xl w-full hover:text-secondary-focus ${
+              pathname === "/" ? "text-secondary" : ""
+            }`}
+          >
+            <Link href={`/`} onClick={closeMobileSidebar}>
+              Home
+            </Link>
+          </li>
           {filteredNavLinks.map((link) => (
             <li
               key={link.text}
