@@ -2,6 +2,7 @@ import { Owner } from "@/constant"
 import Image from "next/image"
 import Link from "next/link"
 import SocialMediaComponent from "../static/SocialMediaComponent"
+import Logo from "../static/Logo"
 
 type ColumnProps = {
   title: string
@@ -25,15 +26,7 @@ const Footer = async () => {
   return (
     <footer className="footer">
       <div>
-        <Link href="/" className="p-3 prose bg-white rounded-md">
-          <Image
-            src="/next.svg"
-            // src={Owner.WebsiteDetails.logo}
-            width={115}
-            height={38}
-            alt={Owner.WebsiteDetails.name}
-          />
-        </Link>
+        <Logo />
         <div className="transition-all">
           <span className="font-extrabold text-secondary">
             {Owner.WebsiteDetails.name}

@@ -10,6 +10,7 @@ import { useUserContext } from "@/contexts/userContext"
 import { useEffect, useState } from "react"
 import { AdminOnlyLink } from "../Routes/AdminOnlyRoutes"
 import { BsList, BsXCircle } from "react-icons/bs"
+import Logo from "../static/Logo"
 
 const Navbar = () => {
   const router = useRouter()
@@ -115,15 +116,7 @@ const Navbar = () => {
               </ul>
             </div>
           </div>
-          <Link href="/" className="p-3 bg-white rounded-md">
-            <Image
-              src="/next.svg"
-              // src={Owner.WebsiteDetails.logo}
-              width={115}
-              height={38}
-              alt={Owner.WebsiteDetails.name}
-            />
-          </Link>
+          <Logo />
         </div>
         <ul className="lg:items-center hidden space-x-4 font-bold lg:flex">
           <li
