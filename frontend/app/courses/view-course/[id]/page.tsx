@@ -162,7 +162,7 @@ const Course = () => {
         {course.courseImg ? (
           <Image
             className="rounded-lg"
-            src={course.courseImg.src || "/no-course-image.png"}
+            src={course.courseImg.src || "/images/no-course-image.png"}
             alt={course.name}
             width={450}
             height={150}

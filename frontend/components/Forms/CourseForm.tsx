@@ -76,7 +76,7 @@ const CourseForm = ({ title, type, course }: Props) => {
       setValue("courseImg.publicId", course?.courseImg.publicId)
       setValue("courseImg.fileName", course?.courseImg.fileName)
       // setValue("expiredTime", course?.expiredTime)
-      setImageURL(course?.courseImg.src || "/no-course-image.png") // Handle undefined case here
+      setImageURL(course?.courseImg.src || "/images/no-course-image.png") // Handle undefined case here
     }
   }, [course, setValue])
 

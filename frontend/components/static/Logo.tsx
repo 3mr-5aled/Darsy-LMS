@@ -6,7 +6,7 @@ const Logo = () => {
   return (
     <Link href="/" className="p-2 bg-white rounded-md">
       <Image
-        src="/logo.svg"
+        src="/images/logo.svg"
         // src={Owner.WebsiteDetails.logo}
         width={150}
         height={65}

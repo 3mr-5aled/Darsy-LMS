@@ -67,7 +67,7 @@ const AdminCourseView = () => {
         <div className="flex flex-row flex-wrap gap-5">
           <img
             className="rounded-lg"
-            src={course.courseImg.src || "/no-course-image.png"}
+            src={course.courseImg.src || "/images/no-course-image.png"}
             alt={course.name}
             width={400}
             height={400}

@@ -1,15 +1,19 @@
-"use client"
-import { useState, useEffect } from "react"
+import { CourseType } from "@/common.types"
 import useCourses from "@/lib/FetchCourses"
 import Loading from "../loading"
-import { CourseType } from "@/common.types"
-import { useRouter } from "next/navigation"
 import NotFoundComponent from "@/components/Features/NotFoundComponent"
 import DataLoading from "@/components/Features/DataLoading"
 import Image from "next/image"
+import { GetServerSideProps } from "next"
+import { useRouter } from "next/router"
 
-const Courses = () => {
-  const [courses, isLoading, error] = useCourses()
+interface CoursesProps {
+  courses: CourseType[]
+  isLoading: boolean
+  error: boolean
+}
+
+const Courses = ({ courses, isLoading, error }: CoursesProps) => {
   const router = useRouter()
 
   if (isLoading) {
@@ -19,10 +23,12 @@ const Courses = () => {
   if (error) {
     return <NotFoundComponent message="Error loading courses." />
   }
+
   const getLaunchDate = (date: number) => {
     const time = new Date(date)
     return time.toLocaleString().replace(",", " ")
   }
+
   return (
     <DataLoading data={courses} loadingTime={10000} message="Courses Not Found">
       <div className="m-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 overflow-x-hidden">
@@ -42,7 +48,7 @@ const Courses = () => {
                 <div>
                   <Image
                     className="rounded-lg"
-                    src={item.courseImg.src || "/no-course-image.png"}
+                    src={item.courseImg.src || "/images/no-course-image.png"}
                     alt={item.name}
                     width={350}
                     height={350}
@@ -86,3 +92,16 @@ const Courses = () => {
 }
 
 export default Courses
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { default: useCourses } = await import("@/lib/FetchCourses")
+  const [courses, isLoading, error] = useCourses()
+
+  return {
+    props: {
+      courses,
+      isLoading,
+      error,
+    },
+  }
+}

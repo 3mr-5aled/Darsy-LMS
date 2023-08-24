@@ -39,7 +39,7 @@ const MyCourses = () => {
                 >
                   <Image
                     className="rounded-md"
-                    src={course.courseImg || "/no-course-image.png"}
+                    src={course.courseImg || "/images/no-course-image.png"}
                     alt={course.name}
                     width={250}
                     height={250}

@@ -35,7 +35,7 @@ export const Owner = {
     url: "https://darsy-lms-beta.vercel.app/" as string,
     description:
       "this is the description for the website where you can find all you need" as string,
-    logo: "/1.png" as string,
+    logo: "/logo.png" as string,
     keywords: "" as string,
     author: "Mr.Unknown" as string,
     email: "test@gmail.com" as string,
