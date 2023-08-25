@@ -1,19 +1,20 @@
+"use client"
 import { CourseType } from "@/common.types"
 import useCourses from "@/lib/FetchCourses"
 import Loading from "../loading"
 import NotFoundComponent from "@/components/Features/NotFoundComponent"
 import DataLoading from "@/components/Features/DataLoading"
 import Image from "next/image"
-import { GetServerSideProps } from "next"
 import { useRouter } from "next/router"
 
-interface CoursesProps {
-  courses: CourseType[]
-  isLoading: boolean
-  error: boolean
-}
+// interface CoursesProps {
+//   courses: CourseType[]
+//   isLoading: boolean
+//   error: boolean
+// }
 
-const Courses = ({ courses, isLoading, error }: CoursesProps) => {
+const Courses = () => {
+  const [courses, isLoading, error] = useCourses()
   const router = useRouter()
 
   if (isLoading) {
@@ -92,16 +93,3 @@ const Courses = ({ courses, isLoading, error }: CoursesProps) => {
 }
 
 export default Courses
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const { default: useCourses } = await import("@/lib/FetchCourses")
-  const [courses, isLoading, error] = useCourses()
-
-  return {
-    props: {
-      courses,
-      isLoading,
-      error,
-    },
-  }
-}
