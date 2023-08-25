@@ -47,30 +47,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  twitter: {
-    card: "app",
-    title: Owner.WebsiteDetails.name,
-    description: Owner.WebsiteDetails.description,
-    siteId: "1467725550533754880",
-    creator: "@taskedo",
-    creatorId: "1467725550533754880",
-    images: {
-      url: "https://darsy-lms-beta.vercel.app/images/logo.png",
-      alt: "Site Logo",
-    },
-    // app: {
-    //   name: "twitter_app",
-    //   id: {
-    //     iphone: "twitter_app://iphone",
-    //     ipad: "twitter_app://ipad",
-    //     googleplay: "twitter_app://googleplay",
-    //   },
-    //   url: {
-    //     iphone: "https://iphone_url",
-    //     ipad: "https://ipad_url",
-    //   },
-    // },
-  },
+
   viewport: {
     width: "device-width",
     initialScale: 1,
