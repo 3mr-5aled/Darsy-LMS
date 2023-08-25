@@ -5,7 +5,7 @@ import Loading from "../loading"
 import NotFoundComponent from "@/components/Features/NotFoundComponent"
 import DataLoading from "@/components/Features/DataLoading"
 import Image from "next/image"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 
 // interface CoursesProps {
 //   courses: CourseType[]
