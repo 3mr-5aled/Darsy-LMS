@@ -2,7 +2,7 @@ import "./globals.css"
 import Navbar from "@/components/Nav/Navbar"
 import Footer from "@/components/Nav/Footer"
 import { Owner } from "@/constant"
-import { ToastContainer } from "react-toastify/dist"
+import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { UserProvider } from "@/contexts/userContext"
 import ClientOnlyRoute from "@/components/Routes/ClientOnlyRoute"
@@ -62,9 +62,9 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="ar">
+    <>
       <Head>
-        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
         <link
           href="splashscreens/iphone5_splash.png"
           media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
@@ -134,6 +134,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <Footer />
         </ClientOnlyRoute>
       </body>
-    </html>
+    </>
   )
 }

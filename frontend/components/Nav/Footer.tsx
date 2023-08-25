@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import SocialMediaComponent from "../static/SocialMediaComponent"
 import Logo from "../static/Logo"
+import PWAInstallButton from "../Features/PWAinstallButton"
 
 type ColumnProps = {
   title: string
@@ -50,6 +51,7 @@ const Footer = async () => {
           </div>
         </div>
       </div>
+      <PWAInstallButton />
       <div className="transition-all">
         <span className="footer-title ">Social</span>
         <SocialMediaComponent type="icon" />

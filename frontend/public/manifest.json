@@ -529,5 +529,19 @@
     }
   ],
   "lang": "en",
-  "prefer_related_applications": false
+  "prefer_related_applications": false,
+  "display_override": ["standalone", "window-controls-overlay"],
+  "edge_side_panel": {
+    "preferred_width": 1280
+  },
+  "id": "darsylms",
+  "share_target": {
+    "method": "GET",
+    "action": "/share-app",
+    "params": {
+      "title": "Darsy LMS",
+      "text": "Best LMS platform",
+      "url": "https://darsy-lms-beta.vercel.app/"
+    }
+  }
 }
