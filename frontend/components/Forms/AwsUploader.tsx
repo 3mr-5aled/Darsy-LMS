@@ -1,30 +1,29 @@
-import React, { useState } from "react";
-import aws from "aws-sdk";
+import React, { useState } from "react"
+import aws from "aws-sdk"
 const s3 = new aws.S3({
-  accessKeyId: "",
-  secretAccessKey: "",
-  region: "",
-});
+  region: process.env.NEXT_PUBLIC_REGION,
+  accessKeyId: process.env.NEXT_PUBLIC_ACCESS_KEY_ID,
+  secretAccessKey: process.env.NEXT_PUBLIC_SECRET_ACCESS_KEY,
+})
 const AwsUploader: React.FC = () => {
-  const [uploadedObject, setUploadedObject] = useState<any>(null);
+  const [uploadedObject, setUploadedObject] = useState<any>(null)
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]
     if (!file?.name) {
-      return;
+      return
     }
-    const Key = Date.now() + file?.name;
+    const Key = Date.now() + file?.name
     if (file) {
       try {
         const uploadParams = {
           Bucket: "lessons-videos",
           Key,
           Body: file,
-      };
+        }
 
         const url = (await s3.upload(uploadParams).promise()).Location
         console.log(url)
-        
 
         // try {
         //   const objectResponse = await s3.getObject(getObjectParams).promise()
@@ -37,16 +36,22 @@ const AwsUploader: React.FC = () => {
         //   console.error("Error getting object:", error);
         // }
       } catch (error) {
-        console.error("Error uploading file:", error);
+        console.error("Error uploading file:", error)
       }
     }
-  };
+  }
 
   return (
     <div>
-      <input type="file" onChange={handleFileChange} />
+      <label htmlFor="video-upload">Upload Video</label>
+      <input
+        title="video-upload"
+        className="input input-bordered"
+        type="file"
+        onChange={handleFileChange}
+      />
     </div>
-  );
-};
+  )
+}
 
-export default AwsUploader;
+export default AwsUploader

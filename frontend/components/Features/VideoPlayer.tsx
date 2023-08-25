@@ -67,7 +67,7 @@ export default function VideoPlayer({ video }: Props) {
   }, [video.src, video.provider])
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full aspect-video">
       {video.provider === "youtube" ? (
         <Plyr
           id={video.provider}
