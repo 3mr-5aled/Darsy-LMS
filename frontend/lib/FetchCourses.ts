@@ -21,8 +21,8 @@ const useCourses = (): [CourseType[] | null, boolean, string | null] => {
       )
       setCourses(response.data)
     } catch (error: any) {
-      setError("Error fetching courses") // Provide a general error message
-      toast.error("Error fetching courses") // Show a toast with a user-friendly error message
+      console.log("error:", error)
+      setError(error.response.data.message) // Provide a general error message
     } finally {
       setIsLoading(false)
     }

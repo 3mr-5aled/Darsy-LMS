@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo -p 8080",
-    "dev-pwa": "next dev -p 8080",
     "build": "next build",
     "start": "next start -p 8080",
     "lint": "next lint",

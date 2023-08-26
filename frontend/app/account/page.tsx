@@ -31,6 +31,12 @@ ChartJS.register(
   Tooltip,
   Legend
 )
+import { Metadata } from "next"
+import { Owner } from "@/constant"
+
+export const metadata: Metadata = {
+  title: `Account - ${Owner.WebsiteDetails.name}`,
+}
 
 const Profile = () => {
   const router = useRouter()

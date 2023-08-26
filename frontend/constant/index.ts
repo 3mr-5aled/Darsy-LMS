@@ -13,6 +13,10 @@ import {
 import { FaRoute } from "react-icons/fa"
 
 // owner website data
+const isProduction = process.env.NODE_ENV === "production"
+export const baseUrl = isProduction
+  ? `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}` // Set your production base URL
+  : `${process.env.NEXT_PUBLIC_BACKEND_LOCAL_BASE_URL}` // Set your development base URL
 
 export const Owner = {
   name: "Mr Mohammed",
@@ -169,17 +173,16 @@ export const Navigation = {
       name: "Courses",
       links: [
         {
-          href: "/admin/courses/create-course",
-          icon: BsPlusCircle,
-          key: "Create Course",
-          text: "Create Course",
-        },
-
-        {
           href: "/admin/courses",
           icon: BsStack,
           key: "Manage Courses",
           text: "Manage Courses",
+        },
+        {
+          href: "/admin/courses/create-course",
+          icon: BsPlusCircle,
+          key: "Create Course",
+          text: "Create Course",
         },
       ],
     },
