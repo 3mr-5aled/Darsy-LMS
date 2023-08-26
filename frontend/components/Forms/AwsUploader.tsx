@@ -5,12 +5,17 @@ const s3 = new aws.S3({
   accessKeyId: process.env.NEXT_PUBLIC_ACCESS_KEY_ID,
   secretAccessKey: process.env.NEXT_PUBLIC_SECRET_ACCESS_KEY,
 })
-const AwsUploader: React.FC = () => {
+type UploadButtonProps = {
+  onVideoUpload: (url: string, publicId: string, fileName: string) => void
+}
+const AwsUploader= ({ onVideoUpload }: UploadButtonProps) => {
   const [uploadedObject, setUploadedObject] = useState<any>(null)
+  const [progress, setProgress] = useState<string | null>(null)
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
-    if (!file?.name) {
+    console.log(file?.type)
+    if (!file?.name || file?.type !== "video/mp4") {
       return
     }
     const Key = Date.now() + file?.name
@@ -21,20 +26,12 @@ const AwsUploader: React.FC = () => {
           Key,
           Body: file,
         }
-
-        const url = (await s3.upload(uploadParams).promise()).Location
-        console.log(url)
-
-        // try {
-        //   const objectResponse = await s3.getObject(getObjectParams).promise()
-        //   const objectKey = getObjectParams.Key; // Assuming you have the object's key
-        //   const bucketName = getObjectParams.Bucket; // Assuming you have the bucket name
-        //   const params = { Bucket: bucketName, Key: objectKey }; // Expires after 1 hour
-        //   const objectUrl = await s3.getSignedUrlPromise("getObject", params);
-        //   console.log(objectUrl);
-        // } catch (error) {
-        //   console.error("Error getting object:", error);
-        // }
+        const uploadedVideo = await s3.upload(uploadParams).on("httpUploadProgress",(progress)=>{
+          setProgress((progress.loaded / progress.total).toFixed(0))
+        }).promise()
+        console.log(uploadedVideo)
+        onVideoUpload(uploadedVideo.Location, uploadedVideo.Key , uploadedVideo.Key)
+        setProgress('100')
       } catch (error) {
         console.error("Error uploading file:", error)
       }
@@ -42,15 +39,23 @@ const AwsUploader: React.FC = () => {
   }
 
   return (
-    <div>
-      <label htmlFor="video-upload">Upload Video</label>
+    <>
+    {progress === null ?  (<label className="btn btn-primary">
+            Upload a Video
       <input
         title="video-upload"
         className="input input-bordered"
         type="file"
+        hidden
         onChange={handleFileChange}
       />
-    </div>
+      </label>):(
+        <div className=" flex gap-2 items-center">
+       <progress className="progress h-10 progress-primary bg-transparent w-full" value={progress} max="100"></progress>
+       <span>{progress}%</span>
+        </div>
+      )}
+      </>
   )
 }
 

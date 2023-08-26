@@ -291,8 +291,7 @@ const LessonForm = ({
                   disabled={true}
                   {...register("video.src")}
                 />
-                <UploadVideoButton onVideoUpload={handleVideoUpload} />
-                <AwsUploader/>
+                <AwsUploader onVideoUpload={handleVideoUpload}/>
                 {errors.file && <span>This field is required</span>}
               </div>
             ) : (
