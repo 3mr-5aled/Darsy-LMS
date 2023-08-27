@@ -36,15 +36,15 @@ const getAllCourses = aynchandler(async (req, res, next) => {
     if (course.length === 0) {
         return next(new ApiError('no courses are found',8341, 404))
     } 
-    // const courses = course.map(oneCourse =>{
-    //     if (oneCourse.appearenceDate < Date.now()) {
-    //         oneCourse.isShown = true
-    //         return oneCourse
-    //     }else{
-    //         oneCourse.isShown = false
-    //         return oneCourse
-    //     } 
-    // })
+    const courses = course.map(oneCourse =>{
+        if (oneCourse.appearenceDate < Date.now()) {
+            oneCourse.isShown = true
+            return oneCourse
+        }else{
+            oneCourse.isShown = false
+            return oneCourse
+        } 
+    })
     res.status(200).json(course)
 })
 const getCourse = aynchandler(async (req, res, next) => {
