@@ -13,7 +13,7 @@ import TawkToWidget from "@/components/Features/TawkToWidget"
 import TawkOnlyRoute from "@/components/Routes/TawkOnlyRoute"
 import { Metadata } from "next"
 import Head from "next/head"
-import DownloadManagerDetectionWrapper from "@/components/Features/DownloadManagerDetectionWrapper "
+import DownloadManagerDetectionWrapper from "@/components/Features/DownloadManagerDetectionWrapper"
 
 export const metadata: Metadata = {
   title: Owner.WebsiteDetails.name,
