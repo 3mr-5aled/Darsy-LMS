@@ -13,6 +13,7 @@ import TawkToWidget from "@/components/Features/TawkToWidget"
 import TawkOnlyRoute from "@/components/Routes/TawkOnlyRoute"
 import { Metadata } from "next"
 import Head from "next/head"
+import DownloadManagerDetectionWrapper from "@/components/Features/DownloadManagerDetectionWrapper"
 
 export const metadata: Metadata = {
   title: Owner.WebsiteDetails.name,
@@ -117,22 +118,26 @@ export default function RootLayout({ children }: RootLayoutProps) {
         />
       </Head>
       <body>
-        <TawkOnlyRoute>
-          <TawkToWidget />
-        </TawkOnlyRoute>
-        <ToastContainer />
-        <UserProvider>
-          <ClientOnlyRoute>
-            <Navbar />
-          </ClientOnlyRoute>
-          <Suspense fallback={<Loading />}>
-            <main>{children}</main>
-          </Suspense>
-          <FetchUserOnLoad />
-        </UserProvider>
-        <ClientOnlyRoute>
-          <Footer />
-        </ClientOnlyRoute>
+        <DownloadManagerDetectionWrapper>
+          <>
+            <TawkOnlyRoute>
+              <TawkToWidget />
+            </TawkOnlyRoute>
+            <ToastContainer />
+            <UserProvider>
+              <ClientOnlyRoute>
+                <Navbar />
+              </ClientOnlyRoute>
+              <Suspense fallback={<Loading />}>
+                <main>{children}</main>
+              </Suspense>
+              <FetchUserOnLoad />
+            </UserProvider>
+            <ClientOnlyRoute>
+              <Footer />
+            </ClientOnlyRoute>
+          </>
+        </DownloadManagerDetectionWrapper>
       </body>
     </>
   )

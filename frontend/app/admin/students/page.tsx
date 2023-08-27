@@ -74,6 +74,9 @@ const Students = () => {
                   {user.membership ? user.membership.name : "No subscription"}
                 </p>
               </PremiumOnlyComponent>
+              <p className="p-3 rounded-full bg-base-100 text-error">
+                {user.role === "tutor" ? "tutor" : ""}
+              </p>
               <p className="text-success">{user.email}</p>
             </div>
           </Link>

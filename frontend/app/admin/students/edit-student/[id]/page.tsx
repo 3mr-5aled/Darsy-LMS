@@ -34,12 +34,12 @@ const EditStudent = () => {
           `/user/get-user/${id}`
         )
         // @ts-ignore
-        setUser(response.data.user)
+        setUser(response.data.userDetails)
         setIsLoading(false)
 
         // Pre-fill form fields with user data
         // @ts-ignore
-        if (response.data.user) {
+        if (response.data.userDetails) {
           const {
             name,
             email,
@@ -51,7 +51,7 @@ const EditStudent = () => {
             grade,
             city,
             // @ts-ignore
-          } = response.data.user
+          } = response.data.userDetails
           setValue("name", name)
           setValue("email", email)
           setValue("phone", phone)

@@ -6,7 +6,7 @@ import AdminOnlyRoute from "@/components/Routes/AdminOnlyRoutes"
 import AdminSideBar from "@/components/admin/AdminSideBar"
 
 export const metadata = {
-  title: Owner.WebsiteDetails.name,
+  title: `Admin - ${Owner.WebsiteDetails.name}`,
   description: Owner.WebsiteDetails.description,
 }
 

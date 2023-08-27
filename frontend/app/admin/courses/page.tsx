@@ -26,9 +26,9 @@ const CoursesAdminView = () => {
   }
 
   return (
-    <div className="grid grid-flow-col gap-5 m-5 overflow-x-hidden md:grid-cols-4">
+    <div className="grid grid-flow-col gap-5 m-5 overflow-x-hidden md:grid-cols-3">
       {courses.map((item: CourseType, index: number) => (
-        <div key={index} className="p-5 card bg-base-300">
+        <div key={index} className="p-5 w-fit card bg-base-100">
           <Link href={`/admin/courses/manage-course/${item._id}`}>
             <div>
               <img
@@ -40,7 +40,7 @@ const CoursesAdminView = () => {
               />
             </div>
             <div className="flex flex-col gap-3 my-3">
-              <h3 className="text-2xl font-bold">{item.name}</h3>
+              <h3 className="text-xl font-bold">{item.name}</h3>
               <div className="flex flex-row justify-between gap-5 mx-1">
                 <span className="block">{item.price}$</span>
                 <span className="block">{item.duration}h</span>

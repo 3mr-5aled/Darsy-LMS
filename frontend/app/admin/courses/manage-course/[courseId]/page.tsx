@@ -4,6 +4,7 @@ import Loading from "@/app/loading"
 import axiosInstance from "@/axios.config"
 import { CourseType } from "@/common.types"
 import ConfirmModal from "@/components/Features/ConfirmModal"
+import NotFoundComponent from "@/components/Features/NotFoundComponent"
 import CourseSections from "@/components/course/CourseSections"
 import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -15,8 +16,8 @@ const AdminCourseView = () => {
   const [course, setCourse] = useState<CourseType | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false)
-
   const { courseId } = useParams()
+
   const fetchCourse = async () => {
     setIsLoading(true)
     try {
@@ -43,14 +44,18 @@ const AdminCourseView = () => {
       router.push("/admin/courses") // Redirect to the courses page after deletion
       // }
     } catch (error: any) {
-      setError(error)
-      toast.error(error)
+      setError(error.message || "An error occurred") // Handle cases where 'error' does not have a 'message' property
+      console.error(error || "An error occurred") // Display an error message
       setIsLoading(false)
     }
   }
 
-  if (!course) {
+  if (isLoading) {
     return <Loading />
+  }
+
+  if (error) {
+    return <NotFoundComponent message={error} />
   }
 
   const openDeleteModal = () => {
@@ -67,22 +72,22 @@ const AdminCourseView = () => {
         <div className="flex flex-row flex-wrap gap-5">
           <img
             className="rounded-lg"
-            src={course.courseImg.src || "/images/no-course-image.png"}
-            alt={course.name}
+            src={course?.courseImg.src || "/images/no-course-image.png"}
+            alt={course?.name}
             width={400}
             height={400}
           />
           <div className="flex flex-col justify-center">
-            <h1 className="my-5 text-2xl font-bold">{course.name}</h1>
-            <p>Description: {course.description}</p>
-            <p>Duration: {course.duration} hours</p>
-            <p>Price: {course.price}$</p>
-            <p>Discount: {course.discount}%</p>
-            <p>Grade: {course.grade}</p>
+            <h1 className="my-5 text-2xl font-bold">{course?.name}</h1>
+            <p>Description: {course?.description}</p>
+            <p>Duration: {course?.duration} hours</p>
+            <p>Price: {course?.price}$</p>
+            <p>Discount: {course?.discount}%</p>
+            <p>Grade: {course?.grade}</p>
 
             <button
               className="mt-5 mb-3 btn btn-primary btn-outline"
-              onClick={() => router.push(`/courses/view-course/${course._id}`)}
+              onClick={() => router.push(`/courses/view-course/${course?._id}`)}
             >
               View Course
             </button>
@@ -90,7 +95,7 @@ const AdminCourseView = () => {
               className="mt-5 mb-3 btn btn-secondary btn-outline"
               onClick={() =>
                 router.push(
-                  `/admin/courses/manage-course/${course._id}/edit-course`
+                  `/admin/courses/manage-course/${course?._id}/edit-course`
                 )
               }
             >
@@ -106,7 +111,7 @@ const AdminCourseView = () => {
               className="mt-3 mb-5 btn btn-accent btn-outline"
               onClick={() =>
                 router.push(
-                  `/admin/courses/manage-course/${course._id}/students`
+                  `/admin/courses/manage-course/${course?._id}/students`
                 )
               }
             >
@@ -115,8 +120,8 @@ const AdminCourseView = () => {
           </div>
         </div>
         <CourseSections
-          courseId={course._id}
-          sections={course.sections}
+          courseId={course?._id}
+          sections={course?.sections}
           isAdmin={true}
         />
       </div>

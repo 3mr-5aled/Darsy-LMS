@@ -45,7 +45,7 @@ const getAllCourses = aynchandler(async (req, res, next) => {
             return oneCourse
         } 
     })
-    res.status(200).json(course)
+    res.status(200).json(courses)
 })
 const getCourse = aynchandler(async (req, res, next) => {
     // @api   get api/v1/course/get-course/:id

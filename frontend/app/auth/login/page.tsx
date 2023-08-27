@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useUserContext } from "@/contexts/userContext"
-import { headers } from "next/dist/client/components/headers"
 import { BsEye, BsEyeSlash } from "react-icons/bs"
 
 interface IFormInput {
@@ -25,7 +24,41 @@ const Login = () => {
 
   const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
-  const { setUser } = useUserContext()
+  const [isSigningOut, setIsSigningOut] = useState<boolean>(false)
+
+  const { state, setUser, clearUser } = useUserContext()
+  const { user } = state
+
+  if (user) {
+    const signOut = async () => {
+      setIsSigningOut(true)
+      try {
+        await axiosInstance.get("/auth/signout")
+        clearUser()
+        toast.success("Signed out successfully")
+        setIsSigningOut(false)
+        router.push("/")
+      } catch (error: any) {
+        toast.error(error.message)
+        setIsSigningOut(false)
+      }
+    }
+    return (
+      <div className="flexCenter flex-col p-8 h-screen">
+        <div className="flexCenter flex-col w-full md:w-96 prose py-5">
+          <p className="text-xl font-bold">You are already Signed in</p>
+          <div className="space-x-4">
+            <button className="btn btn-primary btn-outline" onClick={signOut}>
+              Sign out
+            </button>
+            <Link href="/" className="btn btn-primary">
+              Back to HomePage
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {

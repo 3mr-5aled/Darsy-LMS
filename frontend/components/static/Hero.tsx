@@ -47,30 +47,6 @@ const Hero = () => {
                 </span>
               </button>
               <SocialMediaComponent type="icon" />
-              {/* <Link
-                href={Owner.WebsiteDetails.whatsappLink}
-                className="text-xl transition-all hover:text-secondary rounded-full"
-              >
-                <BsWhatsapp />
-              </Link>
-              <Link
-                href={Owner.WebsiteDetails.facebookLink}
-                className="text-xl transition-all hover:text-secondary rounded-full"
-              >
-                <BsFacebook />
-              </Link>
-              <Link
-                href={Owner.WebsiteDetails.instagramLink}
-                className="text-xl transition-all hover:text-secondary rounded-full"
-              >
-                <BsInstagram />
-              </Link>
-              <Link
-                href={Owner.WebsiteDetails.twitterLink}
-                className="text-xl transition-all hover:text-secondary rounded-full"
-              >
-                <BsTwitter />
-              </Link> */}
             </div>
           </div>
         </div>

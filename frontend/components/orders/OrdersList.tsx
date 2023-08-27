@@ -38,49 +38,61 @@ const OrdersList = ({
           </tr>
         </thead>
         <tbody>
-          {orders.map((order, index) => (
-            <tr
-              key={order._id}
-              onClick={() => {
-                admin
-                  ? router.push("/admin/orders/single-order/" + order._id)
-                  : router.push("/account/single-order/" + order._id)
-              }}
-              className={`${
-                index % 2 === 0 ? "bg-secondary bg-opacity-20" : "bg-base-100"
-              } cursor-pointer`}
-            >
-              <th className="text-center">{index + 1}</th>
-              <td className="text-center">{order.type || "---"}</td>
-              <td className="text-center">{order.amount}</td>
-              <td
-                data-tip={order.adminId?.name}
-                className="cursor-default z-0 tooltip text-center w-full"
-              >
-                {order.adminId?.name.split(" ")[0] || "---"}
-              </td>
-              <td
-                onClick={() => viewCoursePage(order.courseId?._id as string)}
-                className={`${
-                  order.courseId
-                    ? "cursor-pointer hover:text-accent duration-200"
-                    : ""
-                } text-center`}
-              >
-                {order.courseId?.name || "---"}
-              </td>
-              <td className="truncate text-center">
-                {order.tran_ref || "---"}
-              </td>
-              <td className="text-center">
-                {order.tran_ref ? "paytabs" : order.adminId ? "admin" : "user"}
-              </td>
-              <td className="text-center">{order.status}</td>
-              <td className="text-center">
-                {getOrderTime(order.createdAt as string)}
+          {orders.length <= 0 ? (
+            <tr>
+              <td colSpan={9} className="text-center p-5 font-bold bg-base-100">
+                No Orders done
               </td>
             </tr>
-          ))}
+          ) : (
+            orders.map((order, index) => (
+              <tr
+                key={order._id}
+                onClick={() => {
+                  admin
+                    ? router.push("/admin/orders/single-order/" + order._id)
+                    : router.push("/account/single-order/" + order._id)
+                }}
+                className={`${
+                  index % 2 === 0 ? "bg-secondary bg-opacity-20" : "bg-base-100"
+                } cursor-pointer`}
+              >
+                <th className="text-center">{index + 1}</th>
+                <td className="text-center">{order.type || "---"}</td>
+                <td className="text-center">{order.amount}</td>
+                <td
+                  data-tip={order.adminId?.name}
+                  className="cursor-default z-0 tooltip text-center w-full"
+                >
+                  {order.adminId?.name.split(" ")[0] || "---"}
+                </td>
+                <td
+                  onClick={() => viewCoursePage(order.courseId?._id as string)}
+                  className={`${
+                    order.courseId
+                      ? "cursor-pointer hover:text-accent duration-200"
+                      : ""
+                  } text-center`}
+                >
+                  {order.courseId?.name || "---"}
+                </td>
+                <td className="truncate text-center">
+                  {order.tran_ref || "---"}
+                </td>
+                <td className="text-center">
+                  {order.tran_ref
+                    ? "paytabs"
+                    : order.adminId
+                    ? "admin"
+                    : "user"}
+                </td>
+                <td className="text-center">{order.status}</td>
+                <td className="text-center">
+                  {getOrderTime(order.createdAt as string)}
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

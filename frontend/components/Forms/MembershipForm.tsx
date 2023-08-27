@@ -72,6 +72,7 @@ const MembershipForm: React.FC<MembershipFormProps> = ({
             )
             if (response?.data) {
               toast.success("Membership Created")
+              router.push("/admin/memberships")
               // Handle the appropriate redirection here
             } else {
               toast.error("An error occurred during membership creation")
@@ -82,6 +83,7 @@ const MembershipForm: React.FC<MembershipFormProps> = ({
               formData
             )
             toast.success("Membership updated successfully")
+            router.push("/admin/memberships")
             // Handle the appropriate redirection here
           }
         })()

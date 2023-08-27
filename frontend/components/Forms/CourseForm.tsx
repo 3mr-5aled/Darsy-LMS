@@ -88,9 +88,9 @@ const CourseForm = ({ title, type, course }: Props) => {
       grade: data.grade,
       isShown: false,
       courseImg: {
-        src: imageURL!,
-        publicId: publicId,
-        fileName: fileName!,
+        src: data.courseImg.src!,
+        publicId: data.courseImg.publicId,
+        fileName: data.courseImg.fileName,
       },
       duration: data.duration,
       price: data.price,

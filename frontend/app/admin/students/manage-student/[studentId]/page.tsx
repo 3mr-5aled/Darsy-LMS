@@ -351,7 +351,7 @@ const StudentPage = () => {
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold">Student Orders</h1>
       </div>
-      <div className="w-80 md:w-full">
+      <div className="w-80 md:w-full mb-10">
         {orders ? (
           <OrdersList orders={orders} admin={true} />
         ) : (

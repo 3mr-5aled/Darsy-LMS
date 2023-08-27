@@ -91,11 +91,11 @@ const LessonForm = ({
   const videoType = useWatch({
     control,
     name: "video.provider",
-    defaultValue: "normal",
+    defaultValue: "local",
   })
 
   // const uploadVideo = async () => {
-  //   if (videoType === "normal" && file) {
+  //   if (videoType === "local" && file) {
   //     try {
   //       const formData = new FormData()
   //       formData.append("file", file)
@@ -136,8 +136,8 @@ const LessonForm = ({
       setValue("video.publicId", publicId) // Use "video.src" instead of "video"
       setValue("video.fileName", fileName) // Use "video.src" instead of "video"
 
-      if (videoType === "normal") {
-        // if (videoType === "normal" && file) {
+      if (videoType === "local") {
+        // if (videoType === "local" && file) {
         //   try {
         //     const formData = new FormData()
         //     formData.append("file", file)
@@ -148,7 +148,7 @@ const LessonForm = ({
         //     })
         //     toast.success("Video uploaded")
         //     setValue("video.src", response.data.secure_url)
-        //     setValue("video.provider", "normal")
+        //     setValue("video.provider", "local")
         //     setValue("video.public_id", response.data.public_id)
         //   } catch (error) {
         //     console.error(error)
@@ -158,7 +158,7 @@ const LessonForm = ({
         // }
 
         // if (videoUrl === null) {
-        //   if (videoType === "normal" && type === "create") {
+        //   if (videoType === "local" && type === "create") {
         //     toast.error("Please select a file to upload.")
         //     return
         //   }
@@ -277,11 +277,11 @@ const LessonForm = ({
                 disabled={isSubmitting}
                 {...register("video.provider")}
               >
-                <option value="normal">Normal Video</option>
+                <option value="local">Normal Video</option>
                 <option value="youtube">YouTube Video</option>
               </select>
             </div>
-            {videoType === "normal" ? (
+            {videoType === "local" ? (
               <div className="space-y-4 form-control">
                 <input
                   type="text"

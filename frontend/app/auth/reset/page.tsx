@@ -3,6 +3,7 @@ import React, { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import axiosInstance from "@/axios.config"
 import { useRouter } from "next/navigation"
+import { toast } from "react-toastify"
 
 interface IFormInput {
   email: string
@@ -28,8 +29,10 @@ const Reset = () => {
     try {
       await axiosInstance.post("/auth/forget-password", data)
       setCurrentStep(2)
-    } catch (error) {
+      toast.success("Email is sent check your inbox and spams")
+    } catch (error: any) {
       console.error(error)
+      toast.success("Error occured ,Please try again")
     } finally {
       setIsLoading(false) // End loading state
     }
@@ -39,9 +42,11 @@ const Reset = () => {
     setIsLoading(true) // Start loading state
     try {
       await axiosInstance.post("/auth/verify-code", data)
+      toast.success("Now you can create a new password.")
       setCurrentStep(3)
     } catch (error) {
       console.error(error)
+      toast.success("Error occured ,Please try again")
     } finally {
       setIsLoading(false) // End loading state
     }
@@ -51,10 +56,11 @@ const Reset = () => {
     setIsLoading(true) // Start loading state
     try {
       await axiosInstance.put("/auth/reset-password", data)
-
+      toast.success("Password reset done successfully")
       router.push("/auth/login")
     } catch (error) {
       console.error(error)
+      toast.success("Error occured ,Please try again")
     } finally {
       setIsLoading(false) // End loading state
     }

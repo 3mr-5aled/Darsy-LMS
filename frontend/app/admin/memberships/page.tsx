@@ -6,6 +6,7 @@ import Loading from "@/app/loading"
 import { MembershipType } from "@/common.types" // Make sure to import MembershipType from the correct path
 import { Options } from "@/constant"
 import PremiumOnlyRoute from "@/components/Routes/PremiumOnlyRoute"
+import NotFoundComponent from "@/components/Features/NotFoundComponent"
 
 const MembershipAdminView = () => {
   const [memberships, setMemberships] = useState<MembershipType[]>([])
@@ -22,7 +23,7 @@ const MembershipAdminView = () => {
         setMemberships(response.data)
         setIsLoading(false)
       } catch (error: any) {
-        setError("An error occurred while fetching memberships.")
+        setError("Memberships Not Found")
         setIsLoading(false)
       }
     }
@@ -35,7 +36,7 @@ const MembershipAdminView = () => {
   }
 
   if (error) {
-    return <div>Error: {error}</div>
+    return <NotFoundComponent message={error} />
   }
 
   // Step 3: Filter memberships based on the selected grade

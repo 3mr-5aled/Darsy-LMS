@@ -2,11 +2,13 @@
 
 import axiosInstance from "@/axios.config"
 import { Options } from "@/constant"
+import { useUserContext } from "@/contexts/userContext"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import React, { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { BsEyeSlash, BsEye } from "react-icons/bs"
+import { toast } from "react-toastify"
 
 type FormValues = {
   name: string
@@ -42,12 +44,41 @@ export default async function Register() {
     }
   }
 
-  // const handleShowPassword = () => {
-  //   setShowPassword(!showPassword)
-  // }
-  // const handleShowPasswordC = () => {
-  //   setShowPasswordC(!showPasswordC)
-  // }
+  const [isSigningOut, setIsSigningOut] = useState<boolean>(false)
+
+  const { state, setUser, clearUser } = useUserContext()
+  const { user } = state
+
+  if (user) {
+    const signOut = async () => {
+      setIsSigningOut(true)
+      try {
+        await axiosInstance.get("/auth/signout")
+        clearUser()
+        toast.success("Signed out successfully")
+        setIsSigningOut(false)
+        router.push("/")
+      } catch (error: any) {
+        toast.error(error.message)
+        setIsSigningOut(false)
+      }
+    }
+    return (
+      <div className="flexCenter flex-col p-8 h-screen">
+        <div className="flexCenter flex-col w-full md:w-96 prose py-5">
+          <p className="text-xl font-bold">You are already Signed in</p>
+          <div className="space-x-4">
+            <button className="btn btn-primary btn-outline" onClick={signOut}>
+              Sign out
+            </button>
+            <Link href="/" className="btn btn-primary">
+              Back to HomePage
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex-col p-8 flexCenter">
