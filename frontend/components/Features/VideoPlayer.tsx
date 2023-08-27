@@ -157,7 +157,7 @@ export default function VideoPlayer({ video }: Props) {
                 type: "video",
                 sources: [
                   {
-                    src: URL.createObjectURL(videoBlob),
+                    src: "https://darsy-lms-beta.vercel.app/app/lesson/64ebcfbd69c8d50e4e0539a1",
                     type: "video/mp4",
                   },
                 ],
