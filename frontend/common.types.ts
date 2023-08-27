@@ -142,7 +142,7 @@ export interface LessonType {
     publicId: string
     fileName: string
     src: string
-    provider: "normal" | "youtube"
+    provider: "local" | "youtube"
   }
   file: any
   videotype: string
