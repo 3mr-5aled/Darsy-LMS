@@ -44,8 +44,8 @@ const AdminCourseView = () => {
       router.push("/admin/courses") // Redirect to the courses page after deletion
       // }
     } catch (error: any) {
-      setError(error)
-      toast.error(error)
+      setError(error.message || "An error occurred") // Handle cases where 'error' does not have a 'message' property
+      console.error(error || "An error occurred") // Display an error message
       setIsLoading(false)
     }
   }
@@ -55,7 +55,7 @@ const AdminCourseView = () => {
   }
 
   if (error) {
-    return <NotFoundComponent message={error.message || "An error occurred"} />
+    return <NotFoundComponent message={error} />
   }
 
   const openDeleteModal = () => {
