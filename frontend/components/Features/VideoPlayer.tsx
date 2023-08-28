@@ -157,7 +157,7 @@ export default function VideoPlayer({ video }: Props) {
                 type: "video",
                 sources: [
                   {
-                    src: URL.createObjectURL(videoBlob),
+                    src: "https://d1k22yu2kwwfth.cloudfront.net/VID-20230718-WA0048.mp4",
                     type: "video/mp4",
                   },
                 ],
