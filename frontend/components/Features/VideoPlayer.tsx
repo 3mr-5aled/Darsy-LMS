@@ -162,6 +162,7 @@ export default function VideoPlayer({ video }: Props) {
                   },
                 ],
               }}
+              
               options={{
                 controls: [
                   "play-large", // The large play button in the center
