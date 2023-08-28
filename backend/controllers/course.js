@@ -7,14 +7,14 @@ const createCourse = aynchandler(async (req, res, next) => {
   // @api   post api/v1/course/create-course
   //  you will send name ,description,duration,price,(discount => (optional)) in body
   const { body } = req
-  let appearenceDate = body.appearenceDate
-  appearenceDate = new Date(appearenceDate)
-  appearenceDate = appearenceDate.getTime()
-  body.appearenceDate = appearenceDate
-  body.slug = slugify(body.name)
+  let appearanceDate = body.appearenceDate
+  appearanceDate = new Date(appearanceDate)
+  appearanceDate = appearanceDate.getTime()
+  body.appearenceDate = appearanceDate
+  body.slug = slug.toLowerCase()
+  res.status(200).json("done")
   // image must be base 64 to upload on cloudinary
   const course = await Course.create({ ...body })
-  res.status(200).json(course)
   //  you will recieve course object
 })
 const updateCourse = aynchandler(async (req, res, next) => {
