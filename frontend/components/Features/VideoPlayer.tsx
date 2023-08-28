@@ -157,7 +157,7 @@ export default function VideoPlayer({ video }: Props) {
                 type: "video",
                 sources: [
                   {
-                    src: "https://lessons-videos.s3.amazonaws.com/1692738341574VID-20230718-WA0048.mp4",
+                    src: URL.createObjectURL(videoBlob),
                     type: "video/mp4",
                   },
                 ],
