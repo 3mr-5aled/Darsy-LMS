@@ -6,7 +6,7 @@ const enrolledCourse = async (req, res, next) => {
   const { user } = req
 
   const { lessonId } = req.params;
-  const lesson = await Lesson.findById(lessonId)
+  const lesson = await Lesson.findById(lessonId).select('-video.src')
   if (!lesson) {
     return next(new ApiError("no lesson is found", 6341, 404));
   }

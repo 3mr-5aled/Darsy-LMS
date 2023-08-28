@@ -6,8 +6,8 @@ const Course = require("../models/course");
 const fs = require('fs')
 const path = require('path')
 const Section = require("../models/section");
-const { deleteVideo } = require("./videouploader");
 const sendemail = require("../utils/sendemail");
+const deleteVideo = require("../utils/deleteVideo");
 
 const addLesson = asynchandler(async (req, res, next) => {
   // @api  post    /sectionId:/add-lesson
@@ -126,15 +126,17 @@ const deleteLesson = asynchandler(async (req, res, next) => {
   }
 
   await Lesson.deleteMany({ _id: lessonId });
-  if (lesson.video.provider !== "youtube") {
-    await deleteVideo(lesson.video.provider)
-    console.log(lesson.video.fileName);
-    const videoPath = path.join(__dirname, `/../uploads/${lesson.video.fileName}`)
-    fs.unlink(videoPath, (err) => {
-      if (err) {
-        return next(new ApiError("error in deleting video", 6341, 404));
-      }
-    })
+  if (lesson.video.provider === "local") {
+  //   await deleteVideo(lesson.video.provider)
+  console.log(lesson.video)
+  await deleteVideo(lesson.video.fileName)
+  //   console.log(lesson.video.fileName);
+  //   const videoPath = path.join(__dirname, `/../uploads/${lesson.video.fileName}`)
+  //   fs.unlink(videoPath, (err) => {
+  //     if (err) {
+  //       return next(new ApiError("error in deleting video", 6341, 404));
+  //     }
+  //   })
   }
   const section = await Section.findById(sectionId);
   const course = await Course.findOne({ _id: section.courseId });
@@ -210,13 +212,19 @@ const updateLesson = asynchandler(async (req, res, next) => {
   // @api put    /update-lesson/:lessonId
   // send lessonId in params and any data to update in body
   const { lessonId } = req.params;
-  const lesson = await Lesson.findByIdAndUpdate(lessonId, req.body, {
-    new: true,
-  });
+  const lesson = await Lesson.findById(lessonId)
   if (!lesson) {
     return next(new ApiError("no lesson is found", 6341, 404));
   }
-  res.status(200).json(lesson);
+  if(lesson.video.fileName){
+  if(lesson.video.fileName !== req.body.video.fileName){
+    await deleteVideo(lesson.video.fileName)
+  }
+}
+  const newLesson = await Lesson.findByIdAndUpdate(lessonId, req.body, {
+    new: true,
+  });
+  res.status(200).json(newLesson);
 });
 const completeLesson = asynchandler(async (req, res, next) => {
   // @api put    /complete-lesson/:lessonId
