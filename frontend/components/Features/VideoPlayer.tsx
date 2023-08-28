@@ -3,7 +3,7 @@ import { useUserContext } from "@/contexts/userContext"
 import Plyr from "plyr-react"
 import "plyr-react/plyr.css"
 import { useState, useEffect } from "react"
-
+import ReactPlayer from 'react-player'
 type Props = {
   video: {
     publicId: string
@@ -13,6 +13,7 @@ type Props = {
   }
 }
 
+
 export default function VideoPlayer({ video }: Props) {
   const getYouTubeVideoId = (url: string): string | null => {
     const videoIdRegex =
@@ -20,7 +21,8 @@ export default function VideoPlayer({ video }: Props) {
     const match = url.match(videoIdRegex)
     return match ? match[1] : null
   }
-
+  const [VideoPlayer,setVideo]=useState<any>(null)
+  
   const getYoutubeSource = async (): Promise<any[]> => {
     if (video.provider === "youtube" && video.src) {
       const videoId = getYouTubeVideoId(video.src)
@@ -108,7 +110,9 @@ export default function VideoPlayer({ video }: Props) {
       clearInterval(watermarkInterval)
     }
   }, [])
-
+useEffect(()=>{
+    videoBlob && setVideo(<ReactPlayer url={ URL.createObjectURL(videoBlob)} controls={true}/>)
+  },[videoBlob])
   return (
     <div className="relative w-full aspect-video">
       <div className="video-container">
@@ -150,43 +154,43 @@ export default function VideoPlayer({ video }: Props) {
             }}
           />
         ) : (
-          videoBlob && (
-            <Plyr
-              id={video.provider}
-              source={{
-                type: "video",
-                sources: [
-                  {
-                    src: "https://d978tnwvgt47t.cloudfront.net/VID-20230718-WA0048.mp4",
-                    type: "video/mp4",
-                  },
-                ],
-              }}
-              
-              options={{
-                controls: [
-                  "play-large", // The large play button in the center
-                  // "restart", // Restart playback
+          VideoPlayer && (
+            // <Plyr
+            //   id={video.provider}
+            //   source={{
+            //     type: "video",
+            //     sources: [
+            //       {
+            //         src: URL.createObjectURL(videoBlob),
+            //         type: "video/mp4",
+            //       },
+            //     ],
+            //   }}
+            //   options={{
+            //     controls: [
+            //       "play-large", // The large play button in the center
+            //       // "restart", // Restart playback
                   
-                  "rewind", // Rewind by the seek time (default 10 seconds)
-                  "play", // Play/pause playback
-                  "fast-forward", // Fast forward by the seek time (default 10 seconds)
-                  "progress", // The progress bar and scrubber for playback and buffering
-                  "current-time", // The current time of playback
-                  "duration", // The full duration of the media
-                  "mute", // Toggle mute
-                  "volume", // Volume control
-                  "captions", // Toggle captions
-                  "settings", // Settings menu
-                  "pip", // Picture-in-picture (currently Safari only)
-                  "airplay", // Airplay (currently Safari only)
-                  "download", // Show a download button with a link to either the current source or a custom URL you specify in your options
-                  "fullscreen", // Toggle fullscreen
-                ],
-                settings: ["quality", "speed", "loop"],
-                seekTime: 10,
-              }}
-            />
+            //       "rewind", // Rewind by the seek time (default 10 seconds)
+            //       "play", // Play/pause playback
+            //       "fast-forward", // Fast forward by the seek time (default 10 seconds)
+            //       "progress", // The progress bar and scrubber for playback and buffering
+            //       "current-time", // The current time of playback
+            //       "duration", // The full duration of the media
+            //       "mute", // Toggle mute
+            //       "volume", // Volume control
+            //       "captions", // Toggle captions
+            //       "settings", // Settings menu
+            //       "pip", // Picture-in-picture (currently Safari only)
+            //       "airplay", // Airplay (currently Safari only)
+            //       "download", // Show a download button with a link to either the current source or a custom URL you specify in your options
+            //       "fullscreen", // Toggle fullscreen
+            //     ],
+            //     settings: ["quality", "speed", "loop"],
+            //     seekTime: 10,
+            //   }}
+            // />
+            {VideoPlayer}
           )
         )}
       </div>
