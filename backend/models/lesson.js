@@ -7,7 +7,7 @@ const Lesson = new mongoose.Schema(
       type: String,
       required: true,
     },
-    index:Number,
+    index: Number,
     video: {
       src: {
         type: String,
@@ -38,7 +38,7 @@ const Lesson = new mongoose.Schema(
         type: String,
       },
     },
-    timer:Number,
+    timer: Number,
     courseId: { type: mongoose.Types.ObjectId, ref: "courses", required: true },
     sectionId: {
       type: mongoose.Types.ObjectId,
@@ -49,12 +49,12 @@ const Lesson = new mongoose.Schema(
       {
         question: String,
         answers: [{
-          text:String,
-          image:String
+          text: String,
+          image: String
         }],
         correctAnswer: [String],
-        questionImage:String,
-        isCheckBoxQuiz:Boolean,
+        questionImage: String,
+        isCheckBoxQuiz: Boolean,
       },
       { timestamps: true },
     ],
@@ -63,16 +63,20 @@ const Lesson = new mongoose.Schema(
 )
 Lesson.pre("deleteMany", async function (next) {
   const lesson = await this.model.findOne({ _id: this.getQuery()._id })
-  if(!lesson){
+  if (!lesson) {
     return next()
   }
   // Get the section ids associated with the course
 
   try {
+
     // Delete all sections associated with this course
     // Assuming you have a 'sections' model defined in your code
     await mongoose.model("users").updateMany({}, { $pull: { exams: { lessonId: lesson._id } } })
-    await deleteVideo(lesson.video.fileName)
+    if (lesson.video.provider === "local" && lesson.video.fileName) {
+      console.log(lesson.video)
+      await deleteVideo(lesson.video.fileName)
+    }
     const section = await mongoose.model("sections").findById(lesson.sectionId)
     section.lessons.filter((lesson) => lesson !== lesson._id.toString())
     await section.save()

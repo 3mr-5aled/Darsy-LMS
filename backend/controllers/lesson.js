@@ -126,10 +126,10 @@ const deleteLesson = asynchandler(async (req, res, next) => {
   }
 
   await Lesson.deleteMany({ _id: lessonId });
-  if (lesson.video.provider === "local") {
-  //   await deleteVideo(lesson.video.provider)
-  console.log(lesson.video)
-  await deleteVideo(lesson.video.fileName)
+  // if (lesson.video.provider === "local") {
+  // //   await deleteVideo(lesson.video.provider)
+  // console.log(lesson.video)
+  // await deleteVideo(lesson.video.fileName)
   //   console.log(lesson.video.fileName);
   //   const videoPath = path.join(__dirname, `/../uploads/${lesson.video.fileName}`)
   //   fs.unlink(videoPath, (err) => {
@@ -137,7 +137,7 @@ const deleteLesson = asynchandler(async (req, res, next) => {
   //       return next(new ApiError("error in deleting video", 6341, 404));
   //     }
   //   })
-  }
+  // }
   const section = await Section.findById(sectionId);
   const course = await Course.findOne({ _id: section.courseId });
   let index = 0;
