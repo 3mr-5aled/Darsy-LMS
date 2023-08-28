@@ -110,9 +110,7 @@ export default function VideoPlayer({ video }: Props) {
       clearInterval(watermarkInterval)
     }
   }, [])
-useEffect(()=>{
-     setVideo(<ReactPlayer url={video.src} controls={true}/>)
-  },[video])
+
   return (
     <div className="relative w-full aspect-video">
       <div className="video-container">
@@ -191,7 +189,7 @@ useEffect(()=>{
             //   }}
             // />
             <div>
-              {VideoPlayer}
+<ReactPlayer url={video.src} controls={true}/>
             </div>
           )
         )}
