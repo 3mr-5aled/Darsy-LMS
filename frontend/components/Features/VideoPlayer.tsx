@@ -111,8 +111,8 @@ export default function VideoPlayer({ video }: Props) {
     }
   }, [])
 useEffect(()=>{
-     setVideo(<ReactPlayer url={video.src} controls={true}/>)
-  },[video])
+    videoBlob && setVideo(<ReactPlayer url={ URL.createObjectURL(videoBlob)} controls={true}/>)
+  },[videoBlob])
   return (
     <div className="relative w-full aspect-video">
       <div className="video-container">
@@ -191,7 +191,7 @@ useEffect(()=>{
             //   }}
             // />
             <div>
-              {VideoPlayer}
+            {VideoPlayer}
             </div>
           )
         )}
