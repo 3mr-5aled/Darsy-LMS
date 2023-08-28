@@ -2,7 +2,6 @@
   "name": "darsy",
   "version": "1.0.0",
   "description": "Courses LMS website\r learning easier than before",
-  "main": "index.js",
   "scripts": {
     "start:dev": "concurrently \"cd backend && npm start\" \"cd frontend && npm run dev\"",
     "npm-i-PKG": "concurrently \"cd backend && npm i\" \"cd frontend && npm i\"",

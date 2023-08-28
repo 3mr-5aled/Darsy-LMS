@@ -1,35 +1,35 @@
-"use client"
-import React, { ChangeEvent, useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { SubmitHandler, useForm } from "react-hook-form"
-import { CourseType } from "@/common.types"
-import axiosInstance from "@/axios.config"
-import { toast } from "react-toastify"
-import { Options } from "@/constant"
-import UploadImageButton from "./UploadImageButton"
-import Image from "next/image"
+"use client";
+import React, { ChangeEvent, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { CourseType } from "@/common.types";
+import axiosInstance from "@/axios.config";
+import { toast } from "react-toastify";
+import { Options } from "@/constant";
+import UploadImageButton from "./UploadImageButton";
+import Image from "next/image";
 
 type Props = {
-  title: string
-  type: string
-  course?: CourseType | null
-}
+  title: string;
+  type: string;
+  course?: CourseType | null;
+};
 
 type FormValues = {
-  name: string
-  appearenceDate: number
-  description: string
-  duration: number
-  price: number
-  grade: string
-  discount: number
+  name: string;
+  appearenceDate: number;
+  description: string;
+  duration: number;
+  price: number;
+  grade: string;
+  discount: number;
   courseImg: {
-    src: string
-    publicId: string
-    fileName: string
-  }
+    src: string;
+    publicId: string;
+    fileName: string;
+  };
   // expiredTime?: Date
-}
+};
 
 const CourseForm = ({ title, type, course }: Props) => {
   const {
@@ -37,53 +37,55 @@ const CourseForm = ({ title, type, course }: Props) => {
     handleSubmit,
     formState: { errors, isSubmitting },
     setValue,
-  } = useForm<FormValues>() // Specify the generic type for useForm
+  } = useForm<FormValues>(); // Specify the generic type for useForm
 
-  const [imageURL, setImageURL] = useState("")
-  const [publicId, setPublicId] = useState("")
-  const [fileName, setFileName] = useState("")
+  const [imageURL, setImageURL] = useState("");
+  const [publicId, setPublicId] = useState("");
+  const [fileName, setFileName] = useState("");
 
   const handleImageUpload = (url: string, Id: string, file: string) => {
-    setValue("courseImg.src", url)
-    setValue("courseImg.publicId", Id)
-    setValue("courseImg.fileName", file)
+    setValue("courseImg.src", url);
+    setValue("courseImg.publicId", Id);
+    setValue("courseImg.fileName", file);
 
-    setImageURL(url)
-    setPublicId(Id)
-    setFileName(file)
-  }
+    setImageURL(url);
+    setPublicId(Id);
+    setFileName(file);
+  };
 
-  const [minDate, setMinDate] = useState<string | number | undefined>(undefined)
+  const [minDate, setMinDate] = useState<string | number | undefined>(
+    undefined,
+  );
 
   useEffect(() => {
     // Get tomorrow's date and set it as the minimum date for the date picker
-    const tomorrow = new Date()
-    tomorrow.setDate(tomorrow.getDate() + 1) // Add one day to today's date
-    setMinDate(tomorrow.toISOString().split("T")[0])
-  }, [])
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1); // Add one day to today's date
+    setMinDate(tomorrow.toISOString().split("T")[0]);
+  }, []);
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     if (course) {
-      setValue("name", course?.name)
-      setValue("appearenceDate", course?.appearenceDate)
-      setValue("description", course?.description)
-      setValue("duration", course?.duration)
-      setValue("price", course?.price)
-      setValue("discount", course?.discount)
-      setValue("courseImg.src", course?.courseImg.src)
-      setValue("courseImg.publicId", course?.courseImg.publicId)
-      setValue("courseImg.fileName", course?.courseImg.fileName)
+      setValue("name", course?.name);
+      setValue("appearenceDate", course?.appearanceDate);
+      setValue("description", course?.description);
+      setValue("duration", course?.duration);
+      setValue("price", course?.price);
+      setValue("discount", course?.discount);
+      setValue("courseImg.src", course?.courseImg.src);
+      setValue("courseImg.publicId", course?.courseImg.publicId);
+      setValue("courseImg.fileName", course?.courseImg.fileName);
       // setValue("expiredTime", course?.expiredTime)
-      setImageURL(course?.courseImg.src || "/images/no-course-image.png") // Handle undefined case here
+      setImageURL(course?.courseImg.src || "/images/no-course-image.png"); // Handle undefined case here
     }
-  }, [course, setValue])
+  }, [course, setValue]);
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formData: CourseType = {
       name: data.name,
-      appearenceDate: data.appearenceDate,
+      appearanceDate: data.appearenceDate,
       description: data.description,
       grade: data.grade,
       isShown: false,
@@ -96,57 +98,57 @@ const CourseForm = ({ title, type, course }: Props) => {
       price: data.price,
       discount: data?.discount,
       // expiredTime: data?.expiredTime,
-    }
-    console.log(formData.appearenceDate)
+    };
+    console.log(formData.appearanceDate);
     try {
       if (isSubmitting) {
-        return
+        return;
       }
 
       try {
         if (!imageURL) {
           // If the image URL is empty, display an error message or take appropriate action
-          toast.error("Please upload an image")
-          return
+          toast.error("Please upload an image");
+          return;
         }
         await handleSubmit(async () => {
           if (type === "create") {
             const response = await axiosInstance.post(
               "/course/create-course",
-              formData
-            )
+              formData,
+            );
             if (response?.data) {
-              toast.success("Course Created")
-              router.push(`/admin/courses/manage-course/${response.data._id}`)
+              toast.success("Course Created");
+              router.push(`/admin/courses/manage-course/${response.data._id}`);
             } else {
-              toast.error("An error occurred during course creation")
+              toast.error("An error occurred during course creation");
             }
           } else if (type === "edit" && course?._id) {
             await axiosInstance.put(
               `/course/update-course/${course._id}`,
-              formData
-            )
-            toast.success("Course updated successfully")
-            router.push(`/admin/courses/manage-course/${course._id}`)
+              formData,
+            );
+            toast.success("Course updated successfully");
+            router.push(`/admin/courses/manage-course/${course._id}`);
           }
-        })()
+        })();
       } catch (error: any) {
-        console.error(error)
-        toast.error(error.response?.data?.message || "An error occurred")
+        console.error(error);
+        toast.error(error.response?.data?.message || "An error occurred");
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full p-5 m-5 prose flexCenter card bg-base-300"
+      className="flexCenter prose card m-5 w-full bg-base-300 p-5"
     >
       <h1>{title}</h1>
-      <div className="flex-col gap-5 flexCenter">
-        <div className="flex-col flexCenter form_image-container">
+      <div className="flexCenter flex-col gap-5">
+        <div className="flexCenter form_image-container flex-col">
           {!imageURL && (
             <label htmlFor="image" className="flexCenter form_image-label">
               {!imageURL && "Choose a poster for your project"}
@@ -158,14 +160,14 @@ const CourseForm = ({ title, type, course }: Props) => {
               alt="Uploaded"
               width={300}
               height={300}
-              className="z-20 object-contain p-3 border-2 border-gray-500 border-dashed sm:p-10"
+              className="z-20 border-2 border-dashed border-gray-500 object-contain p-3 sm:p-10"
             />
           )}
           <div className="my-3">
             <UploadImageButton onImageUpload={handleImageUpload} />
           </div>
         </div>
-        <div className="flex flex-wrap justify-around w-full gap-5">
+        <div className="flex w-full flex-wrap justify-around gap-5">
           <div className="form-control w-full">
             <label htmlFor="name">Name:</label>
             <input
@@ -219,7 +221,7 @@ const CourseForm = ({ title, type, course }: Props) => {
             {errors.price && <span>This field is required</span>}
             {/* Display error message if the "price" field is not filled */}
           </div>
-          <div className="w-full md:w-2/6 form-control">
+          <div className="form-control w-full md:w-2/6">
             <label htmlFor="discount">discount:</label>
             <input
               type="number"
@@ -234,7 +236,7 @@ const CourseForm = ({ title, type, course }: Props) => {
             {errors.discount && <span>This field is required</span>}
             {/* Display error message if the "discount" field is not filled */}
           </div>
-          <div className="w-full md:w-2/6 form-control">
+          <div className="form-control w-full md:w-2/6">
             <label htmlFor="appearenceDate">Launch Date:</label>
             <input
               type="datetime-local"
@@ -247,7 +249,7 @@ const CourseForm = ({ title, type, course }: Props) => {
             {errors.appearenceDate && <span>This field is required</span>}
             {/* Display error message if the "discount" field is not filled */}
           </div>
-          <div className="w-full form-control">
+          <div className="form-control w-full">
             <label htmlFor="grade">Grade</label>
             <select
               className="select select-bordered"
@@ -283,7 +285,7 @@ const CourseForm = ({ title, type, course }: Props) => {
         </div>
       </div>
 
-      <div className="w-full my-5 flexCenter">
+      <div className="flexCenter my-5 w-full">
         <button type="submit" className="btn btn-primary">
           {isSubmitting
             ? `${type === "create" ? "Creating" : "Editing"}`
@@ -291,7 +293,7 @@ const CourseForm = ({ title, type, course }: Props) => {
         </button>
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default CourseForm
+export default CourseForm;
