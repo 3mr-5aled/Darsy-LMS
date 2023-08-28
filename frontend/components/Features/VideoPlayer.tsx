@@ -157,11 +157,12 @@ export default function VideoPlayer({ video }: Props) {
                 type: "video",
                 sources: [
                   {
-                    src: URL.createObjectURL(videoBlob),
+                    src: "https://d978tnwvgt47t.cloudfront.net/VID-20230718-WA0048.mp4",
                     type: "video/mp4",
                   },
                 ],
               }}
+              
               options={{
                 controls: [
                   "play-large", // The large play button in the center
