@@ -190,7 +190,9 @@ useEffect(()=>{
             //     seekTime: 10,
             //   }}
             // />
-            {VideoPlayer}
+            <div>
+              {VideoPlayer}
+            </div>
           )
         )}
       </div>
