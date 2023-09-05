@@ -1,0 +1,109 @@
+<html lang="en">
+  <head>
+    <title>Darsy LMS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        background-color: #f9f9fa;
+        background-image: linear-gradient(#1d004e, #5d00ff);
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      .flex {
+        -webkit-box-flex: 1;
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+      }
+      .loader {
+        border: 5px solid #641ae6;
+        border-radius: 50%;
+        border-top: 5px solid #ffffff;
+        width: 40px;
+        height: 40px;
+        -webkit-animation: spin 1s linear infinite;
+        /* Safari */
+        animation: spin 1s linear infinite;
+        margin: auto;
+        left: 0;
+        right: 0;
+        top: 0px;
+        bottom: 0;
+        position: fixed;
+      }
+
+      /* Safari */
+      @-webkit-keyframes spin {
+        0% {
+          -webkit-transform: rotate(0deg);
+        }
+
+        100% {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .center {
+        border: none !important;
+        text-align: center;
+        width: 100%;
+      }
+      .heading {
+        margin: auto;
+        left: 0;
+        right: 0;
+        top: 30px;
+        position: fixed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        text-align: center;
+        color: white;
+        font-family: "Courier New", Courier, monospace;
+      }
+      .devBy {
+        margin: auto;
+        left: 0;
+        right: 0;
+        bottom: 20px;
+        position: fixed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        text-align: center;
+        color: white;
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="loader"></div>
+    <div>
+      <h2 class="heading">
+        <img src="images/app-icon.ico" alt="" /> Darsy LMS
+      </h2>
+      <p class="devBy">
+        Developed by Taskedo
+        <img
+          width="20"
+          alt="Eo circle green checkmark"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Eo_circle_green_checkmark.svg/512px-Eo_circle_green_checkmark.svg.png"
+        />
+      </p>
+    </div>
+  </body>
+</html>
