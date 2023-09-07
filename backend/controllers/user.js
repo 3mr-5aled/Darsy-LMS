@@ -5,6 +5,7 @@ const Order = require('../models/order')
 const Course = require('../models/course')
 const ApiError = require('../utils/apierror')
 const Member = require('../models/member')
+const Section = require('../models/section')
 
 const getAllUsers = aynchandler(async (req, res, next) => {
     // @api   get api/v1/user/get-all-users
@@ -41,8 +42,32 @@ const addCourseToUser = aynchandler(async (req, res, next) => {
     }
     const courses = user.enrolledCourse.filter(course => course.courseId.toString() === courseId.toString())
     const course = await Course.findById(courseId)
+    let lessons = []
+    for (const sectionId of course.sections) {
+        const section = await Section.findById(sectionId);
+        if (!section) {
+          continue
+        }else{
+        for (const lessonId of section.lessons) {
+          try {
+            const lesson = await Lesson.findById(lessonId);
+            if (!lesson) {
+              console.log(`Lesson not found for ID: ${lessonId}`);
+            } else {
+                const userLesson = {
+                    lessonId:lesson._id.toString(),
+                    views:lesson.views
+                }
+                lessons.push(userLesson)
+            }
+          } catch (error) {
+            console.error(`Error updating lesson with ID ${lessonId}: ${error.message}`);
+          }
+        }
+      }
+      }
     if (courses.length > 0) {
-        user.enrolledCourse.map(courses => courses.courseId.toString() === courseId.toString() ? { ...courses, lessonTotal: course.total } : courses)
+        user.enrolledCourse.map(courses => courses.courseId.toString() === courseId.toString() ? { ...courses , lessons , lessonTotal: course.total } : courses)
         await user.save()
         const order = await Order.create({ userId, courseId, status: 'paid', amount, adminId: admin._id })
         return res.status(200).json({ order, msg: "user already bougth this coursse" })
@@ -50,7 +75,7 @@ const addCourseToUser = aynchandler(async (req, res, next) => {
     if (!course) {
         return next(new ApiError('course not found', 1341, 404))
     }
-    user.enrolledCourse.push({ courseId, lessonsDone: [], name: course.name, courseImg: course.courseImg, lessonTotal: course.total })
+    user.enrolledCourse.push({ courseId, lessons ,lessonsDone: [], name: course.name, courseImg: course.courseImg, lessonTotal: course.total })
     await user.save()
     const order = await Order.create({userId, courseId, status: 'paid', amount, adminId: admin._id, type: 'enroll' })
     res.status(200).json({ user, order })
@@ -132,16 +157,40 @@ const addMemberShip = aynchandler(async (req, res, next) => {
     await member.save()
     const courses = await Course.find({ grade: member.grade })
     console.log(courses.length)
-    const userCourses = courses.map(course => {
+    const userCourses = courses.map(async(course) => {
+    let lessons = []
+    for (const sectionId of course.sections) {
+        const section = await Section.findById(sectionId);
+        if (!section) {
+          continue
+        }else{
+        for (const lessonId of section.lessons) {
+          try {
+            const lesson = await Lesson.findById(lessonId);
+            if (!lesson) {
+              console.log(`Lesson not found for ID: ${lessonId}`);
+            } else {
+                const userLesson = {
+                    lessonId:lesson._id.toString(),
+                    views:lesson.views
+                }
+                lessons.push(userLesson)
+            }
+          } catch (error) {
+            console.error(`Error updating lesson with ID ${lessonId}: ${error.message}`);
+          }
+        }
+      }
+      }
         const enrolledCourse = user.enrolledCourse.filter(userCourse =>  userCourse.courseId.toString() === course._id.toString());
         if (enrolledCourse.length > 0) {
+            course.lessons = lessons
             return  course
-            
         } else {
-            course.memberId= member._id,
+            course.lessons = lessons
+            course.memberId= member._id
             course.memberExpiredTime= Date.now() + member.expiredTime * 24 * 60 * 60 * 1000
             return  course
-            
         }
 
     });

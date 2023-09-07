@@ -28,6 +28,13 @@ const Courses = new mongoose.Schema(
       type: String,
       required: true,
     },
+    lessons: [{
+      views: Number,
+      lessonId: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'lessons'
+      }
+    }],
     courseImg: {
       src: {
         type: String,
