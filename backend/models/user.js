@@ -23,6 +23,10 @@ const User = new mongoose.Schema({
         type: String,
         unique:false
     },
+    blocked:{
+        type:Boolean,
+        default:false
+    },
     phone: {
         required: true,
         type: String
@@ -53,9 +57,18 @@ const User = new mongoose.Schema({
             ref: 'courses'
         },
         lastSignedInCourse: Number,
-        lessonsDone: [{
+        lessonsDone: [
+            {
             type: mongoose.Schema.ObjectId,
             ref: 'lessons'
+        }
+        ],
+        lessons:[{
+            views:Number,
+            lessonId: {
+                type: mongoose.Schema.ObjectId,
+                ref: 'lessons'
+            }
         }],
         nextLesson: {
             type: mongoose.Schema.ObjectId,

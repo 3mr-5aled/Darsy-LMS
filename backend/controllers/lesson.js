@@ -13,6 +13,7 @@ const addLesson = asynchandler(async (req, res, next) => {
   // @api  post    /sectionId:/add-lesson
   // send sectionId and courseId in params and title , duration , material , video in body
   const { sectionId } = req.params;
+  const { views } = req.body
 
   const section = await Section.findById(sectionId);
   if (!section) {
@@ -71,6 +72,11 @@ const addLesson = asynchandler(async (req, res, next) => {
     user.enrolledCourse.map(userCourse => {
       if (userCourse.courseId.toString() === section.courseId.toString()) {
         userCourse.lessonTotal = course.total
+        const newLesson ={
+          views:lesson.views,
+          lessonId:lesson._id
+        }
+        userCourse.lessons.push(newLesson)
         return userCourse
       } else {
         return userCourse
@@ -119,7 +125,7 @@ const deleteLesson = asynchandler(async (req, res, next) => {
   // @api delete /:sectionId/delete-lesson/:lessonId
   // send sectionId and courseId and lessonId in params
   const { sectionId, lessonId } = req.params;
-
+  
   const lesson = await Lesson.findById(lessonId)
   if (!lesson) {
     return next(new ApiError("no lesson is found", 6341, 404));
@@ -138,52 +144,8 @@ const deleteLesson = asynchandler(async (req, res, next) => {
   //     }
   //   })
   // }
-  const section = await Section.findById(sectionId);
-  const course = await Course.findOne({ _id: section.courseId });
-  let index = 0;
-  section.lessons = section.lessons.filter((lesson) => lesson !== lessonId);
-  await section.save();
-  for (const sectionId of course.sections) {
-    const section = await Section.findById(sectionId);
-    let sectionTotal = 0;
-    if (!section) {
-      continue
-    }else{
-
-    for (const lessonId of section.lessons) {
-      try {
-        const lesson = await Lesson.findById(lessonId);
-        if (!lesson) {
-          console.log(`Lesson not found for ID: ${lessonId}`);
-          continue; // Skip to the next iteration if lesson is not found
-        }
-        sectionTotal++;
-        index++;
-        lesson.index = index;
-        await lesson.save();
-      } catch (error) {
-        console.error(`Error updating lesson with ID ${lessonId}: ${error.message}`);
-        // Handle the error as needed
-      }
-    }
-
-    console.log(`Section Total for Section ${sectionId}: ${sectionTotal}`);
-
-    // Update section total and save
-    section.total = sectionTotal; // Adding 1 to account for the next lesson
-    await section.save();
-  }
-
-  }
-
-  // Update course total and save
-  course.total = index;
-  await course.save();
-
-
-
-  console.log(`Final Index: ${index}`);
-
+  const section = await Section.findById(sectionId)
+  const course = await Course.findById(section.courseId)  
   const users = await User.find({ ['enrolledCourse.courseId']: course._id })
   users.map(async (user) => {
     user.enrolledCourse.map(userCourse => {
@@ -307,6 +269,10 @@ const continueLessons = asynchandler(async (req, res, next) => {
   }
   if (course.lessonsDone.lengtht === course.lessonTotal) {
     return res.status(200).json({ nextLesson: course.nextLesson, courseTitle: courseFromDB.name, coureseImg: courseFromDB.courseImg })
+  }
+  const lessonFromDB  = await Lesson.findById(course.nextLesson)
+  if (!lessonFromDB) {
+    return res.status(200).json({ nextLesson: courseFromDB.sections[0].lessons[0], courseTitle: courseFromDB.name, coureseImg: courseFromDB.courseImg })
   }
   res.status(200).json({ nextLesson: course.nextLesson, courseTitle: courseFromDB.name, coureseImg: courseFromDB.courseImg })
 })

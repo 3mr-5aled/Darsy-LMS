@@ -69,12 +69,38 @@ const buyCourse = asynchandler(async (req, res, next) => {
   }
   const order = await Order.findById(cart_id)
   const course = await Course.findById(order.courseId)
+  let lessons = []
+    for (const sectionId of course.sections) {
+        const section = await Section.findById(sectionId);
+        if (!section) {
+          continue
+        }else{
+        for (const lessonId of section.lessons) {
+          try {
+            const lesson = await Lesson.findById(lessonId);
+            if (!lesson) {
+              console.log(`Lesson not found for ID: ${lessonId}`);
+            } else {
+                const userLesson = {
+                    lessonId:lesson._id.toString(),
+                    views:lesson.views
+                }
+                lessons.push(userLesson)
+            }
+          } catch (error) {
+            console.error(`Error updating lesson with ID ${lessonId}: ${error.message}`);
+          }
+        }
+      }
+    }
   user.enrolledCourse.push({
     courseId: order.courseId,
     lessonsDone: [],
     name: course.name,
+    lessons,
     courseImg: course.courseImg,
-    lessonTotal: course.total})
+    lessonTotal: course.total
+  })
   user.credit -= parseInt(amount)
   await user.save()
   order.status = "paid"
