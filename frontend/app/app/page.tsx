@@ -1,5 +1,5 @@
 "use client"
-import React from "react"
+import React, { useEffect } from "react"
 import MyCourses from "@/components/learn/account/MyCourses"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -18,6 +18,19 @@ const StudentMainPage = () => {
   const { user, loading: isLoading } = state
 
   const router = useRouter()
+
+  useEffect(() => {
+    const handleContextMenu = (event:any) => {
+        event.preventDefault();
+    };
+
+    window.addEventListener('contextmenu', handleContextMenu);
+
+    // Clean up the event listener on component unmount
+    return () => {
+        window.removeEventListener('contextmenu', handleContextMenu);
+    };
+}, []);
 
   // Step 1: Define state variables
 
