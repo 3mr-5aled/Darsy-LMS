@@ -11,7 +11,7 @@ const createCourse = aynchandler(async (req, res, next) => {
   appearanceDate = new Date(appearanceDate)
   appearanceDate = appearanceDate.getTime()
   body.appearenceDate = appearanceDate
-  body.slug = slug.toLowerCase()
+  body.slug = slugify.toLowerCase()
   res.status(200).json("done")
   // image must be base 64 to upload on cloudinary
   const course = await Course.create({ ...body })
