@@ -100,7 +100,7 @@ const start = async () => {
   try {
     port = process.env.PORT || 3000
     await connect(process.env.URL)
-    app.listen(port, () => {
+    app.listen(3000, () => {
       console.log(`server is running on port ${port}`)
     })
   } catch (error) {
