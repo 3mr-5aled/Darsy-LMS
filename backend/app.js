@@ -1,7 +1,5 @@
 const express = require("express")
 const cors = require("cors")
-const { spawn } = require('child_process');
-const path = require('path')
 const hpp = require("hpp")
 const cookie = require("cookie-parser")
 const authRrouter = require("./routers/auth")
@@ -43,7 +41,6 @@ app.use(
 )
 app.use(compression())
 app.use(cookie())
-
 // Increase payload limit to 10 kb
 const imageSize = bodyParser.json({ limit: "5mb" })
 const imageSizeUrl = bodyParser.urlencoded({ limit: "5mb", extended: true })
@@ -53,15 +50,10 @@ app.use(mongoSanitize())
 app.use(xss())
 app.use(helmet.xPoweredBy())
 // const csrfProtection = csrf({ cookie: true })
-
 // middlewares
 // axios.defaults.baseurl=
 // axios.defaults.withcredintials=true
-
 // app.use(fileUploader())
-
-
-
 // routes
 const limiter = rateLimit({
   windowMs: 5 * 60 * 1000,
