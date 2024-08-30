@@ -9,7 +9,7 @@ const uploadImage = require('../middlewares/imageupload')
 const router = express.Router()
 router.post('/create-course',authintications,authintication,createCourseValidator,createCourse)
 router.get('/get-all-courses/:grade',getAllCourses)
-router.get('/get-course/:id',getCourse)
+router.get('/get-course/:id',authintications,getCourse)
 router.put('/update-course/:id',authintications,authintication,updateCourse)
 router.delete('/delete-course/:id',authintications,authintication,deleteCourse)
 

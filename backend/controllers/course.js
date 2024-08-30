@@ -48,15 +48,17 @@ const getAllCourses = aynchandler(async (req, res, next) => {
 const getCourse = aynchandler(async (req, res, next) => {
   // @api   get api/v1/course/get-course/:id
   //  send id as params
+  const {user} = req   
   const { id } = req.params
   const course = await Course.findById(id).populate("sections")
   if (!course) {
     return next(new ApiError("no course with this id", 8341, 400))
-  } else if (course.appearanceDate > Date.now()) {
+  } else if (course.appearanceDate > Date.now() && user.role !== 'tutor' ) {
     next(new ApiError("Course isn't launched yet", 8342, 400))
   }
   res.status(200).json(course)
   // get specific course
+
 })
 const deleteCourse = aynchandler(async (req, res, next) => {
   // @api   delete api/v1/course/delete-course/:id
