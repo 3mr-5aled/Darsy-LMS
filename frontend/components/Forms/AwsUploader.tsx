@@ -22,7 +22,7 @@ const AwsUploader = ({ onVideoUpload }: UploadButtonProps) => {
     if (file) {
       try {
         const uploadParams = {
-          Bucket: process.env.NEXT_PUBLIC_BUCKET_NAME!,
+          Bucket: process.env.NEXT_PUBLIC_BUCKET_NAME,
           Key,
           Body: file,
         };
