@@ -44,6 +44,7 @@
     "@types/js-cookie": "^3.0.3",
     "@types/react-datepicker": "^4.15.0",
     "daisyui": "^3.6.3",
+    "esbuild": "^0.23.1",
     "prettier": "^3.0.2",
     "prettier-plugin-tailwindcss": "^0.5.3"
   }

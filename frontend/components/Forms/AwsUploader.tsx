@@ -27,8 +27,8 @@ const AwsUploader = ({ onVideoUpload }: UploadButtonProps) => {
           Body: file,
         };
         const uploadedVideo = await s3
-          .upload(uploadParams)
-          .on("httpUploadProgress", (progress) => {
+          .upload(uploadParams as any)
+          .on("httpUploadProgress", (progress : any) => {
             setProgress((progress.loaded / progress.total).toFixed(0));
           })
           .promise();
