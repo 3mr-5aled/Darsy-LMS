@@ -280,7 +280,7 @@ const LessonForm = ({
                 <option value="youtube">YouTube Video</option>
               </select>
             </div>
-            {videoType === "normal" ? (
+            {videoType === "local" ? (
               <div className="space-y-4 form-control">
                 <input
                   type="text"
@@ -290,8 +290,7 @@ const LessonForm = ({
                   disabled={true}
                   {...register("video.src")}
                 />
-                <UploadVideoButton onVideoUpload={handleVideoUpload} />
-
+                <AwsUploader onVideoUpload={handleVideoUpload}/>
                 {errors.file && <span>This field is required</span>}
               </div>
             ) : (
