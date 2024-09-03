@@ -110,6 +110,33 @@ const User = new mongoose.Schema({
             default: Date.now()
             }
         }],
+        homeWork: [
+            {
+                lessonId: {
+                    type: mongoose.Types.ObjectId,
+                    ref: 'lessons'
+                },
+                degree: {
+                    type: String
+                },
+                homeWorkAnswer:[
+                   { 
+                    question: String,
+                    questionImage:String,
+                    answers: [ {
+                        text: String,
+                        image: String
+                    }],
+                    correctAnswer: [ String ],
+                    isCheckBoxQuiz: Boolean,
+                    selectedAnswer: [ String ]
+                }
+                ],
+                createdAt: {
+                type: Date,
+                default: Date.now()
+                }
+            }],
     memberShip: {
         expiredTime: Date,
         name: String,
@@ -122,6 +149,23 @@ const User = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    startSesionTime:[
+        {
+            lessonId: {
+                type: mongoose.Schema.ObjectId,
+                ref: 'lessons'
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now()
+            },
+            type:{
+                enum: ['exam','homeWork'],
+                type: String
+            }
+
+        }
+    ],
     lastSignedIn: Date,
     nextLesson:{
         type: mongoose.Schema.ObjectId,

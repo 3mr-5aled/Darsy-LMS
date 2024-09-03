@@ -39,7 +39,8 @@ const Lesson = new mongoose.Schema(
         type: String,
       },
     },
-    timer: Number,
+    examTimer: Number,
+    homeWorkTimer: Number,
     courseId: { type: mongoose.Types.ObjectId, ref: "courses", required: true },
     sectionId: {
       type: mongoose.Types.ObjectId,
@@ -59,6 +60,19 @@ const Lesson = new mongoose.Schema(
       },
       { timestamps: true },
     ],
+    homeWork: [
+      {
+        question: String,
+        answers: [{
+          text: String,
+          image: String
+        }],
+        correctAnswer: [String],
+        questionImage: String,
+        isCheckBoxQuiz: Boolean,
+      },
+      { timestamps: true }
+    ]
   },
   { timestamps: true }
 )
