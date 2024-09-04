@@ -9,6 +9,13 @@ const enrolledCourse = async (req, res, next) => {
   if (!lesson) {
     return next(new ApiError("no lesson is found", 6341, 404));
   }
+  if (userFromDB.role === "tutor") {
+    return next()
+  }
+  const enrolledCourses = userFromDB.enrolledCourse.filter(course => course.courseId.toString() === lesson.courseId._id.toString())
+  if (enrolledCourses.length === 0) {
+    return next(new ApiError("you are not enrolled in this course", 8364, 400));
+  }
   await lesson.populate('sectionId')
   await lesson.populate('courseId')
   req.lesson = lesson
@@ -63,10 +70,6 @@ const enrolledCourse = async (req, res, next) => {
     })
     await userFromDB.save()
     return next()
-  }
-  const enrolledCourses = userFromDB.enrolledCourse.filter(course => course.courseId.toString() === lesson.courseId._id.toString())
-  if (enrolledCourses.length === 0) {
-    return next(new ApiError("you are not enrolled in this course", 8364, 400));
   }
   userFromDB.enrolledCourse.map((course) => {
     if (lesson.courseId._id.toString() === course.courseId.toString()) {

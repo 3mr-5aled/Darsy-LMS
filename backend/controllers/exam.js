@@ -32,7 +32,7 @@ const getExam = aynchandler(async (req, res, next) => {
     // @api   get api/v1/exam/:lessonId/get-exam
     const exam = req.lesson.exams
     const title = req.lesson.title
-    const timer = req.lesson.examTimer
+    const examTimer = req.lesson.examTimer
     const lessonId = req.lesson._id
     const user = await User.findById(req.user._id)
     if (!req.timer) {   
@@ -42,7 +42,9 @@ const getExam = aynchandler(async (req, res, next) => {
     if (!exam) {
         return next(new ApiError('exam not found', 6141, 404))
     }
-    res.status(200).json({ exam , title , timer : req.timer ? Math.floor(req.timer / 1000) : timer })
+    const timer = req.timer ? Math.floor(req.timer / 1000) : examTimer
+    cosnole.log(timer , req.timer , examTimer) 
+    res.status(200).json({ exam , title , timer  })
 })
 const getExamResult = aynchandler(async (req, res, next) => {
     // @api   get api/v1/exam/:lessonId/get-exam

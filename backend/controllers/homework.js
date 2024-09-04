@@ -32,7 +32,7 @@ const getHomeWork = aynchandler(async (req, res, next) => {
     // @api   get api/v1/exam/:lessonId/get-exam
     const homeWork = req.lesson.homeWork
     const title = req.lesson.title
-    const timer = req.lesson.homeWorkTimer
+    const homeWorkTimer = req.lesson.homeWorkTimer
     const lessonId = req.lesson._id
     const user = await User.findById(req.user._id)
     if (!req.timer) {   
@@ -42,7 +42,8 @@ const getHomeWork = aynchandler(async (req, res, next) => {
     if (!homeWork) {
         return next(new ApiError('homeWork not found', 6141, 404))
     }
-    res.status(200).json({ homeWork , title , timer : req.timer ? Math.floor(req.timer / 1000) : timer })
+    const timer = req.timer ? Math.floor(req.timer / 1000) : homeWorkTimer
+    res.status(200).json({ homeWork , title , timer })
     //  you will recieve new lesson object
 })
 const getHomeWorkResult = aynchandler(async (req, res, next) => {
