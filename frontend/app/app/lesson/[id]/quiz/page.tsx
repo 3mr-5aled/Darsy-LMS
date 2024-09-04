@@ -153,13 +153,12 @@ const StudentQuizPage = () => {
       console.error(error)
     }
   }
-  // commented by abdelrhman
-  // if (error) {
-  //   return router.push(`/app/lesson/${id}/exam-results`)
-  // }
+
+  if (error === 'you have already submitted this exam') {
+    return router.push(`/app/lesson/${id}/exam-results`)
+  }
 
   const handleTimeout = () => {
-    console.log('in');
     toast.error("Time is up! The quiz will be submitted.")
     setTimerFinished(true)
   }
