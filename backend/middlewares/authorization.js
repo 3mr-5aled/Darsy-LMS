@@ -4,6 +4,10 @@ const ApiError = require('../utils/apierror')
 require('dotenv').config()
 const authintication =async(req,res,next)=>{
     const {user} = req 
+    const { userId } = req.params
+    if (user._id.toString() === userId) {
+        return next()
+    }
     const userFromDB =await User.findById(user._id)
     if (userFromDB.role === 'tutor' || userFromDB.role === 'owner')  {
         req.user = userFromDB

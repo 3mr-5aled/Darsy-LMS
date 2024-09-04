@@ -82,11 +82,12 @@ Lesson.pre("deleteMany", async function (next) {
     return next()
   }
   // Get the section ids associated with the course
-
   try {
     // Delete all sections associated with this course
     // Assuming you have a 'sections' model defined in your code
     await mongoose.model("users").updateMany({}, { $pull: { exams: { lessonId: lesson._id } } })
+    await mongoose.model("users").updateMany({}, { $pull: { homeWork: { lessonId: lesson._id } } })
+    await mongoose.model("users").updateMany({}, { $pull: { startSesionTime: { lessonId: lesson._id } } })
     if (lesson.video.provider === "local" && lesson.video.fileName) {
       console.log(lesson.video)
       await deleteVideo(lesson.video.fileName)
@@ -94,7 +95,7 @@ Lesson.pre("deleteMany", async function (next) {
     const section = await mongoose.model("sections").findById(lesson.sectionId)
     section.lessons.filter((lesson) => lesson !== lesson._id.toString())
     await section.save()
-    const course = await mongoose.model("sections").findOne({ _id: section.courseId });
+    const course = await mongoose.model("courses").findOne({ _id: section.courseId });
     let index = 0;
     section.lessons.filter((lesson) => lesson !== lesson._id);
     await section.save();
@@ -104,7 +105,6 @@ Lesson.pre("deleteMany", async function (next) {
       if (!section) {
         continue
       }else{
-  
       for (const lessonId of section.lessons) {
         try {
           const lesson = await Lesson.findById(lessonId);
@@ -123,7 +123,7 @@ Lesson.pre("deleteMany", async function (next) {
       }
       
       console.log(`Section Total for Section ${sectionId}: ${sectionTotal}`);
-  
+
       // Update section total and save
       section.total = sectionTotal; // Adding 1 to account for the next lesson
       await section.save();
@@ -133,6 +133,7 @@ Lesson.pre("deleteMany", async function (next) {
     // Update course total and save
     const users = await mongoose.model("users").find({ ['enrolledCourse.courseId']: course._id })
     users.map(async (user) => {
+      user.enrolledCourse.filter((userCourse) => userCourse.courseId !== course._id);
       user.enrolledCourse.map(userCourse => {
         return userCourse.lessons.filter((lesson) => lesson.lessonId !== lesson._id);
       })
