@@ -2,6 +2,8 @@ const asynchandler = require("express-async-handler")
 const ApiError = require("../utils/apierror")
 const Order = require("../models/order")
 const Course = require("../models/course")
+const Lesson = require("../models/lesson")
+const Section = require("../models/section")
 const User = require("../models/user")
 const createOrder = asynchandler(async (req, res, next) => {
   let { courseId } = req.body

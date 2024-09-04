@@ -32,8 +32,8 @@ const login = asynchandler(async (req, res, next) => {
   // send response with all user details and token as cookie
   
   
-  const {name,email,phone,parentsPhone,grade,city,gender,role,enrolledCourse} = user
-  res.status(201).cookie("token", token,{ secure: true, sameSite: 'none'  }).json({email,name,phone,parentsPhone,grade,city,gender,role,enrolledCourse})
+  const {name,email,phone,parentsPhone,grade,city,gender,role,enrolledCourse,_id} = user
+  res.status(201).cookie("token", token,{ secure: true, sameSite: 'none'  }).json({_id,email,name,phone,parentsPhone,grade,city,gender,role,enrolledCourse})
 });
 
 const register = asynchandler(async (req, res, next) => {

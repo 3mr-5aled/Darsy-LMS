@@ -9,7 +9,6 @@ router.put("/:lessonId/add-exam", authintications, authintication, createHomeWor
 router.get(
   "/:lessonId/get-exam",
   authintications,
-  authintication,
   enrolledCourse,
   checkHomeWork,
   getHomeWork

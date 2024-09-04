@@ -11,7 +11,6 @@ router.put("/:lessonId/add-exam", authintications, authintication, createExam)
 router.get(
   "/:lessonId/get-exam",
   authintications,
-  authintication,
   enrolledCourse,
   checkExam,
   getExam
