@@ -40,7 +40,7 @@ const getHomeWork = aynchandler(async (req, res, next) => {
     if (!homeWork) {
         return next(new ApiError('homeWork not found', 6141, 404))
     }
-    res.status(200).json({ homeWork , title , timer })
+    res.status(200).json({ homeWork , title , timer : req.timer ? req.timer * 1000 : timer })
     //  you will recieve new lesson object
 })
 const getHomeWorkResult = aynchandler(async (req, res, next) => {

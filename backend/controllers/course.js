@@ -58,7 +58,6 @@ const getCourse = aynchandler(async (req, res, next) => {
   }
   res.status(200).json(course)
   // get specific course
-
 })
 const deleteCourse = aynchandler(async (req, res, next) => {
   // @api   delete api/v1/course/delete-course/:id
