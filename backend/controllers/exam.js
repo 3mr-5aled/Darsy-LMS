@@ -37,8 +37,8 @@ const getExam = aynchandler(async (req, res, next) => {
     const user = await User.findById(req.user._id)
     if (!req.timer) {   
         user.startSesionTime.push({ lessonId , type:'exam' })
+        await user.save()
     }    
-    await user.save()
     if (!exam) {
         return next(new ApiError('exam not found', 6141, 404))
     }

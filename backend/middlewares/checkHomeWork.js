@@ -9,11 +9,11 @@ const checkExam = async (req, res, next) => {
     }
     const {user} = req  
     const userHomeWork = user.startSesionTime.filter(homeWork => homeWork.lessonId.toString() === lessonId && homeWork.type === "homeWork")[0]
-    // add exam session timer here
+    const userDegree =user.exams.filter(exam => exam.lessonId.toString() === lessonId)[0]
     if(userHomeWork?.createdAt){
       if (Date.now() > (userHomeWork.createdAt.getTime() + (lesson.homeWorkTimer * 1000))) {
         return next(new ApiError('you already have submitted the exam before',6342, 400 ))
-      }else if(Date.now() < (userHomeWork.createdAt.getTime() + (lesson.homeWorkTimer * 1000))){
+      }else if(Date.now() < (userHomeWork.createdAt.getTime() + (lesson.homeWorkTimer * 1000)) && !userDegree?.degree){
         req.timer = Date.now() - (userHomeWork.createdAt.getTime() + (lesson.homeWorkTimer * 1000))
         return next()
       }
