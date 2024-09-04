@@ -153,12 +153,13 @@ const StudentQuizPage = () => {
       console.error(error)
     }
   }
-
-  if (error) {
-    return router.push(`/app/lesson/${id}/exam-results`)
-  }
+  // commented by abdelrhman
+  // if (error) {
+  //   return router.push(`/app/lesson/${id}/exam-results`)
+  // }
 
   const handleTimeout = () => {
+    console.log('in');
     toast.error("Time is up! The quiz will be submitted.")
     setTimerFinished(true)
   }
