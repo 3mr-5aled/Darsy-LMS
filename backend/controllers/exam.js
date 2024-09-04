@@ -32,7 +32,7 @@ const getExam = aynchandler(async (req, res, next) => {
     // @api   get api/v1/exam/:lessonId/get-exam
     const exam = req.lesson.exams
     const title = req.lesson.title
-    const timer = req.lesson.timer
+    const timer = req.lesson.examTimer
     const lessonId = req.lesson._id
     const user = await User.findById(req.user._id)
     user.startSesionTime.push({ lessonId , type:'exam' })
