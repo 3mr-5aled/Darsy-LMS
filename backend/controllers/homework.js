@@ -35,7 +35,9 @@ const getHomeWork = aynchandler(async (req, res, next) => {
     const timer = req.lesson.homeWorkTimer
     const lessonId = req.lesson._id
     const user = await User.findById(req.user._id)
-    user.startSesionTime.push({ lessonId , type:'homeWork' })
+    if (!req.timer) {   
+        user.startSesionTime.push({ lessonId , type:'homeWork' })
+    }
     await user.save()
     if (!homeWork) {
         return next(new ApiError('homeWork not found', 6141, 404))
