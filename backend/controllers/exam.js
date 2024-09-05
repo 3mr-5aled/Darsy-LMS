@@ -58,7 +58,7 @@ const getExamResult = aynchandler(async (req, res, next) => {
     }
     const exam = user.exams.filter(exam => exam.lessonId.toString() === lessonId.toString())[0]
     const userExam = user.startSesionTime.filter(exam => exam.lessonId.toString() === lessonId && exam.type === "exam")[0]
-    const lesson = await Lesson.findById(lessonId).select('examTimer exams')
+    const lesson = await Lesson.findById(lessonId).select('examTimer')
     if ( !userExam || (Date.now() < (userExam?.createdAt.getTime() + (lesson.examTimer * 1000)) && !exam )) {
         return next(new ApiError('submit exam first', 6141, 404))
     }
@@ -83,7 +83,7 @@ const addExamDegree = aynchandler(async (req, res, next) => {
         return next(new ApiError('lesson not found', 6141, 404))
     }
     const user = await User.findById(req.user._id)
-    const { degree, examAnswer } = addExamDegreeFunction(exam)
+    const { degree, examAnswer } = addExamDegreeFunction(exam , lesson)
     user.exams.push({ degree: degree, lessonId, examAnswer })
     await user.save()
     res.status(200).json(user.exams)

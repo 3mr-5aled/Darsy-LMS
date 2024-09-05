@@ -81,7 +81,7 @@ const addHomeWorkDegree = aynchandler(async (req, res, next) => {
         return next(new ApiError('lesson not found', 6141, 404))
     }
     const user = await User.findById(req.user._id)
-    const {degree , examAnswer} = addExamDegreeFunction(homeWork)
+    const {degree , examAnswer} = addExamDegreeFunction(homeWork , lesson)
     user.exams.push({ degree , lessonId, homeWorkAnswer: examAnswer})
     await user.save()
     res.status(200).json( user.homeWork )
