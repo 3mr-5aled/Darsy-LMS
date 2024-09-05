@@ -43,7 +43,7 @@ const getExam = aynchandler(async (req, res, next) => {
         return next(new ApiError('exam not found', 6141, 404))
     }
     const timer = req.timer ? Math.floor(req.timer / 1000) : examTimer
-    cosnole.log(timer , req.timer , examTimer) 
+    console.log(timer , req.timer , examTimer) 
     res.status(200).json({ exam , title , timer  })
 })
 const getExamResult = aynchandler(async (req, res, next) => {
