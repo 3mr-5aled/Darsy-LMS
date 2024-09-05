@@ -36,7 +36,7 @@ const getHomeWork = aynchandler(async (req, res, next) => {
     const lessonId = req.lesson._id
     const user = await User.findById(req.user._id)
     if (!req.timer) {   
-        user.startSesionTime.push({ lessonId , type:'homeWork' })
+        user.startSesionTime.push({ createdAt:Date.now() , lessonId , type:'homeWork' })
     }
     await user.save()
     if (!homeWork) {

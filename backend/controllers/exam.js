@@ -38,7 +38,7 @@ const getExam = aynchandler(async (req, res, next) => {
     const lessonId = req.lesson._id
     const user = await User.findById(req.user._id)
     if (!req.timer) {
-        user.startSesionTime.push({ lessonId, type: 'exam' })
+        user.startSesionTime.push({ createdAt:Date.now() , lessonId, type: 'exam' })
         await user.save()
     }
     if (!exam) {
