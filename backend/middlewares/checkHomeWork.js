@@ -1,7 +1,7 @@
 const User = require('../models/user')
 const Lesson = require('../models/lesson')
 const ApiError = require('../utils/apierror')
-const checkExam = async (req, res, next) => {
+const checkHomeWork = async (req, res, next) => {
     const {lessonId} = req.params
     const {lesson} = req
     if (lesson.homeWork.length === 0) {

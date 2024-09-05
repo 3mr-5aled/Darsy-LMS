@@ -55,7 +55,18 @@ const getHomeWorkResult = aynchandler(async (req, res, next) => {
         return next(new ApiError('homeWork not found', 6141, 404))
     }
     const homeWork = user.homeWork.filter(homeWork => homeWork.lessonId.toString() === lessonId.toString())[0]
-    res.status(200).json( homeWork )
+    if (!homeWork) {
+        var lesson = await Lesson.findById(lessonId).select('homeWork')
+        const lessonHomeWork = lesson.homeWork
+        var userHomeWork = lessonHomeWork.map(homeWork =>  {
+            const answer = {selectedAnswer:[],isCheckBoxQuiz:homeWork.isCheckBoxQuiz,correctAnswer:homeWork.correctAnswer,id:homeWork._id}
+            return answer
+        })
+    }
+    const {degree , examAnswer} = addExamDegreeFunction(userHomeWork , lesson)
+    user.homeWork.push({ degree: degree, lessonId, homeWorkAnswer:examAnswer })
+    await user.save()  
+    res.status(200).json( user.homeWork )
 })
 const addHomeWorkDegree = aynchandler(async (req, res, next) => {
     const { homeWork } = req.body
@@ -65,29 +76,8 @@ const addHomeWorkDegree = aynchandler(async (req, res, next) => {
         return next(new ApiError('lesson not found', 6141, 404))
     }
     const user = await User.findById(req.user._id)
-    let degree = 0
-    homeWork.map(item => {
-        if (item.isCheckBoxQuiz) {
-            const correct = item.selectedAnswer.map(answer => item.correctAnswer.includes(answer) ? true : false)
-            const trueAnswers = correct.filter(item => item === true)
-            degree = degree + (trueAnswers.length / item.correctAnswer.length)
-        }
-        else {
-            if (item.selectedAnswer[0] === item.correctAnswer[0]) {
-                degree++
-            }
-        }
-        return degree
-    })
-    const homeWorkAnswer = homeWork.map(singleExam => {
-        const filteredExam = lesson.homeWork.filter(e => e._id.toString() === singleExam.id);
-        if (filteredExam.length > 0) {
-            return {question:filteredExam[0].question,questionImage:filteredExam[0].questionImage,answers:filteredExam[0].answers,correctAnswer:filteredExam[0].correctAnswer,isCheckBoxQuiz:filteredExam[0].isCheckBoxQuiz || singleExam.isCheckBoxQuiz,selectedAnswer:singleExam.selectedAnswer}
-        }
-        return singleExam
-    });
-    degree = Math.round((degree / homeWork.length) * 100)
-    user.exams.push({ degree: degree, lessonId, homeWorkAnswer })
+    const {degree , examAnswer} = addExamDegreeFunction(homeWork)
+    user.exams.push({ degree , lessonId, homeWorkAnswer: examAnswer})
     await user.save()
     res.status(200).json( user.homeWork )
 })
