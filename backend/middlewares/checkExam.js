@@ -15,7 +15,7 @@ const checkExam = async (req, res, next) => {
       if (Date.now() > (userExam.createdAt.getTime() + (lesson.examTimer * 1000))) {
         return next(new ApiError('you have already submitted the exam before',6342, 400 ))
       }else if(Date.now() < (userExam.createdAt.getTime() + (lesson.examTimer * 1000)) && !userDegree?.degree){
-        req.timer = Date.now() - (userExam.createdAt.getTime() + (lesson.examTimer * 1000))
+        req.timer = (userExam.createdAt.getTime() + (lesson.examTimer * 1000)) - Date.now()
         return next()
       }
     }
