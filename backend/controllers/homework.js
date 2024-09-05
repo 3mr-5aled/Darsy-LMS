@@ -70,8 +70,8 @@ const getHomeWorkResult = aynchandler(async (req, res, next) => {
         user.homeWork.push({ degree, lessonId, homeWorkAnswer })
         await user.save()  
     }
-    const lessonHomeWorkUser = user.homeWork.filter(exam => exam.lessonId.toString() === lessonId.toString()) 
-    res.status(200).json( user.lessonHomeWorkUser )
+    const lessonHomeWorkUser = user.homeWork.filter(exam => exam.lessonId.toString() === lessonId.toString())[0]
+    res.status(200).json( lessonHomeWorkUser )
 })
 const addHomeWorkDegree = aynchandler(async (req, res, next) => {
     const { homeWork } = req.body

@@ -72,7 +72,7 @@ const getExamResult = aynchandler(async (req, res, next) => {
         user.exams.push({ degree, lessonId, examAnswer })
         await user.save()
     }
-    const lessonExamUser = user.exams.filter(exam => exam.lessonId.toString() === lessonId.toString()) 
+    const lessonExamUser = user.exams.filter(exam => exam.lessonId.toString() === lessonId.toString())[0]
     res.status(200).json(lessonExamUser)
 })
 const addExamDegree = aynchandler(async (req, res, next) => {
