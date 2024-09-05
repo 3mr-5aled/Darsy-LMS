@@ -14,8 +14,10 @@ const addExamDegreeFunction = (exam , lesson)=>{
         return degree
     })
     const examAnswer = exam.map(singleExam => {
+        console.log('in')
         const filteredExam = lesson.exams.filter(e => e._id.toString() === singleExam.id);
         if (filteredExam.length > 0) {
+            console.log('in')
             return {question:filteredExam[0].question,questionImage:filteredExam[0].questionImage,answers:filteredExam[0].answers,correctAnswer:filteredExam[0].correctAnswer,isCheckBoxQuiz:filteredExam[0].isCheckBoxQuiz || singleExam.isCheckBoxQuiz,selectedAnswer:singleExam.selectedAnswer}
         }
         return singleExam

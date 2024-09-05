@@ -58,7 +58,7 @@ const getExamResult = aynchandler(async (req, res, next) => {
     }
     const exam = user.exams.filter(exam => exam.lessonId.toString() === lessonId.toString())[0]
     const userExam = user.startSesionTime.filter(exam => exam.lessonId.toString() === lessonId && exam.type === "exam")[0]
-    const lesson = await Lesson.findById(lessonId).select('examTimer')
+    const lesson = await Lesson.findById(lessonId)
     if ( !userExam || (Date.now() < (userExam?.createdAt.getTime() + (lesson.examTimer * 1000)) && !exam )) {
         return next(new ApiError('submit exam first', 6141, 404))
     }

@@ -56,7 +56,7 @@ const getHomeWorkResult = aynchandler(async (req, res, next) => {
     }
     const homeWork = user.homeWork.filter(homeWork => homeWork.lessonId.toString() === lessonId.toString())[0]
     const userHomeWork = user.startSesionTime.filter(exam => exam.lessonId.toString() === lessonId && exam.type === "homeWork")[0]
-    const lesson = await Lesson.findById(lessonId).select('homeWorkTimer homeWork')
+    const lesson = await Lesson.findById(lessonId)
     if ( !userHomeWork || (Date.now() < (userHomeWork?.createdAt.getTime() + (lesson.homeWorkTimer * 1000)) && !homeWork )) {
         return next(new ApiError('submit exam first', 6141, 404))
     }
@@ -67,7 +67,7 @@ const getHomeWorkResult = aynchandler(async (req, res, next) => {
             return answer
         })
         const {degree , examAnswer} = addExamDegreeFunction(userHomeWork , lesson)
-        user.homeWork.push({ degree, lessonId, homeWorkAnswer })
+        user.homeWork.push({ degree, lessonId, homeWorkAnswer:examAnswer })
         await user.save()  
     }
     const lessonHomeWorkUser = user.homeWork.filter(exam => exam.lessonId.toString() === lessonId.toString())[0]
