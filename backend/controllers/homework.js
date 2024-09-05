@@ -55,18 +55,23 @@ const getHomeWorkResult = aynchandler(async (req, res, next) => {
         return next(new ApiError('homeWork not found', 6141, 404))
     }
     const homeWork = user.homeWork.filter(homeWork => homeWork.lessonId.toString() === lessonId.toString())[0]
+    const userHomeWork = user.startSesionTime.filter(exam => exam.lessonId.toString() === lessonId && exam.type === "hpmeWork")[0]
+    const lesson = await Lesson.findById(lessonId).select('homeWorkTimer homeWork')
+    if ( !userHomeWork || (Date.now() > (userHomeWork?.createdAt.getTime() + (lesson.homeWorkTimer * 1000)) && !homeWork.degree )) {
+        return next(new ApiError('submit exam first', 6141, 404))
+    }
     if (!homeWork) {
-        var lesson = await Lesson.findById(lessonId).select('homeWork')
         const lessonHomeWork = lesson.homeWork
-        var userHomeWork = lessonHomeWork.map(homeWork =>  {
+        const userHomeWork = lessonHomeWork.map(homeWork =>  {
             const answer = {selectedAnswer:[],isCheckBoxQuiz:homeWork.isCheckBoxQuiz,correctAnswer:homeWork.correctAnswer,id:homeWork._id}
             return answer
         })
+        const {degree , examAnswer} = addExamDegreeFunction(userHomeWork , lesson)
+        user.homeWork.push({ degree, lessonId, homeWorkAnswer })
+        await user.save()  
     }
-    const {degree , examAnswer} = addExamDegreeFunction(userHomeWork , lesson)
-    user.homeWork.push({ degree: degree, lessonId, homeWorkAnswer:examAnswer })
-    await user.save()  
-    res.status(200).json( user.homeWork )
+    const lessonHomeWorkUser = user.homeWork.filter(exam => exam.lessonId.toString() === lessonId.toString()) 
+    res.status(200).json( user.lessonHomeWorkUser )
 })
 const addHomeWorkDegree = aynchandler(async (req, res, next) => {
     const { homeWork } = req.body

@@ -7,6 +7,7 @@ const enrolledCourse = async (req, res, next) => {
   const { lessonId } = req.params;
   const userFromDB = await User.findById(user._id)
   const lesson = await Lesson.findById(lessonId)
+  req.lesson = lesson
   if (!lesson) {
     return next(new ApiError("no lesson is found", 6341, 404));
   }
@@ -19,7 +20,6 @@ const enrolledCourse = async (req, res, next) => {
   }
   await lesson.populate('sectionId')
   await lesson.populate('courseId')
-  req.lesson = lesson
   if (userFromDB.role !== "tutor" || userFromDB.role === "owner") {
     userFromDB.enrolledCourse.map((course) => {
       if (lesson.courseId._id.toString() === course.courseId.toString()) {
