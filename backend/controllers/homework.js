@@ -57,7 +57,7 @@ const getHomeWorkResult = aynchandler(async (req, res, next) => {
     const homeWork = user.homeWork.filter(homeWork => homeWork.lessonId.toString() === lessonId.toString())[0]
     const userHomeWork = user.startSesionTime.filter(exam => exam.lessonId.toString() === lessonId && exam.type === "hpmeWork")[0]
     const lesson = await Lesson.findById(lessonId).select('homeWorkTimer homeWork')
-    if ( !userHomeWork || (Date.now() > (userHomeWork?.createdAt.getTime() + (lesson.homeWorkTimer * 1000)) && !homeWork.degree )) {
+    if ( !userHomeWork || (Date.now() > (userHomeWork?.createdAt.getTime() + (lesson.homeWorkTimer * 1000)) && !homeWork )) {
         return next(new ApiError('submit exam first', 6141, 404))
     }
     if (!homeWork) {
