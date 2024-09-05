@@ -41,7 +41,6 @@ const getExam = aynchandler(async (req, res, next) => {
         user.startSesionTime.push({ createdAt:Date.now() , lessonId, type: 'exam' })
         await user.save()
     }
-    console.log(Date.now().toLocaleString())
     if (!exam) {
         return next(new ApiError('exam not found', 6141, 404))
     }
