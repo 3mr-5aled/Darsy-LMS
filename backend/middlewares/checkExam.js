@@ -12,9 +12,9 @@ const checkExam = async (req, res, next) => {
     const userDegree =user.exams.filter(exam => exam.lessonId.toString() === lessonId)[0]
 
     if(userExam?.createdAt){
-      if (Date.now() < (userExam.createdAt.getTime() + (lesson.examTimer * 1000))) {
-        return next(new ApiError('you already have submitted the exam before',6342, 400 ))
-      }else if(Date.now() > (userExam.createdAt.getTime() + (lesson.examTimer * 1000)) && !userDegree?.degree){
+      if (Date.now() > (userExam.createdAt.getTime() + (lesson.examTimer * 1000))) {
+        return next(new ApiError('you have already submitted the exam before',6342, 400 ))
+      }else if(Date.now() < (userExam.createdAt.getTime() + (lesson.examTimer * 1000)) && !userDegree?.degree){
         req.timer = Date.now() - (userExam.createdAt.getTime() + (lesson.examTimer * 1000))
         return next()
       }
