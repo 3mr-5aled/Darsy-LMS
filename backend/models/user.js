@@ -106,7 +106,7 @@ const User = new mongoose.Schema({
             }
             ],
             createdAt: {
-            type: Date,
+            type: Number,
             default: Date.now()
             }
         }],
