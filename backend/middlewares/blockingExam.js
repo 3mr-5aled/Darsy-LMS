@@ -1,6 +1,5 @@
 const Lesson = require("../models/lesson");
 const ApiError = require("../utils/apierror");
-
 const blockingExam = async (req, res, next) => {
     const { user } = req
     const { lessonId } = req.params;
@@ -13,7 +12,7 @@ const blockingExam = async (req, res, next) => {
     }
     const userExam = user.exams.find(exam => exam.lessonId.toString() === lesson.blockingExamId.toString())
     if (!userExam) {
-        return next (new ApiError('please solve exam first', 400 , 654)) 
+        return next (new ApiError('please solve exam first', 456 , 400)) 
     }
     next()
 }
