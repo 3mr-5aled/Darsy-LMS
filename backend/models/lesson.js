@@ -7,6 +7,10 @@ const Lesson = new mongoose.Schema(
       type: String,
       required: true,
     },
+    blockingExamId:{
+      typee: mongoose.Types.ObjectId,
+      ref: "lessons"
+    },
     index: Number,
     views: Number,
     video: {
