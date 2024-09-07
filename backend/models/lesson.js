@@ -8,7 +8,7 @@ const Lesson = new mongoose.Schema(
       required: true,
     },
     blockingExamId:{
-      typee: mongoose.Types.ObjectId,
+      type: mongoose.Types.ObjectId,
       ref: "lessons"
     },
     index: Number,
@@ -132,7 +132,6 @@ Lesson.pre("deleteMany", async function (next) {
       section.total = sectionTotal; // Adding 1 to account for the next lesson
       await section.save();
     }
-  
     }
     // Update course total and save
     const users = await mongoose.model("users").find({ ['enrolledCourse.courseId']: course._id })
