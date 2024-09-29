@@ -28,6 +28,7 @@ const createHomeWork = aynchandler(async (req, res, next) => {
     res.status(200).json(lesson.exams)
     //  you will recieve new lesson object
 })
+
 const getHomeWork = aynchandler(async (req, res, next) => {
     // @api   get api/v1/exam/:lessonId/get-exam
     const homeWork = req.lesson.homeWork
