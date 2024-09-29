@@ -1,19 +1,19 @@
-import "./globals.css"
-import Navbar from "@/components/Nav/Navbar"
-import Footer from "@/components/Nav/Footer"
-import { Owner } from "@/constant"
-import { ToastContainer } from "react-toastify"
-import "react-toastify/dist/ReactToastify.css"
-import { UserProvider } from "@/contexts/userContext"
-import ClientOnlyRoute from "@/components/Routes/ClientOnlyRoute"
-import { Suspense } from "react"
-import Loading from "./loading"
-import FetchUserOnLoad from "@/components/Features/FetchUserOnLoad"
-import TawkToWidget from "@/components/Features/TawkToWidget"
-import TawkOnlyRoute from "@/components/Routes/TawkOnlyRoute"
-import { Metadata } from "next"
-import Head from "next/head"
-import DownloadManagerDetectionWrapper from "@/components/Features/DownloadManagerDetectionWrapper"
+import "./globals.css";
+import Navbar from "@/components/Nav/Navbar";
+import Footer from "@/components/Nav/Footer";
+import { Owner } from "@/constant";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { UserProvider } from "@/contexts/userContext";
+import ClientOnlyRoute from "@/components/Routes/ClientOnlyRoute";
+import { Suspense } from "react";
+import Loading from "./loading";
+import FetchUserOnLoad from "@/components/Features/FetchUserOnLoad";
+import TawkToWidget from "@/components/Features/TawkToWidget";
+import TawkOnlyRoute from "@/components/Routes/TawkOnlyRoute";
+import { Metadata } from "next";
+import Head from "next/head";
+import DownloadManagerDetectionWrapper from "@/components/Features/DownloadManagerDetectionWrapper";
 
 export const metadata: Metadata = {
   title: Owner.WebsiteDetails.name,
@@ -55,15 +55,15 @@ export const metadata: Metadata = {
     initialScale: 1,
     maximumScale: 1,
   },
-}
+};
 
 interface RootLayoutProps {
-  children: React.ReactElement
+  children: React.ReactElement;
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <>
+    <html>
       <Head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <link
@@ -139,6 +139,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
           </>
         </DownloadManagerDetectionWrapper>
       </body>
-    </>
-  )
+    </html>
+  );
 }

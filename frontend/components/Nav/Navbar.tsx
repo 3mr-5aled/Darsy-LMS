@@ -39,13 +39,16 @@ const Navbar = () => {
     }
   }
 
-  const getUserInitials = (userName: string) => {
-    const nameArray = userName.split(" ")
-    const firstNameInitial = nameArray[0].charAt(0).toUpperCase()
+  const getUserInitials = (userName: string | undefined) => {
+    if (!userName) return "";
+
+    const nameArray = userName.split(" ");
+    const firstNameInitial = nameArray[0].charAt(0).toUpperCase();
     const lastNameInitial =
-      nameArray.length > 1 ? nameArray[1].charAt(0).toUpperCase() : ""
-    return firstNameInitial + lastNameInitial
-  }
+      nameArray.length > 1 ? nameArray[1].charAt(0).toUpperCase() : "";
+    return firstNameInitial + lastNameInitial;
+  };
+
 
   // Function to close the mobile sidebar
   const closeMobileSidebar = () => {
