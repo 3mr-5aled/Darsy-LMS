@@ -63,7 +63,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html>
+    <html lang="en">
       <Head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <link
