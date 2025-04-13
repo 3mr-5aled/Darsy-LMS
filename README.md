@@ -1,4 +1,4 @@
-# 📚 Darsy – Courses LMS Website  
+# 📚 Darsy – Courses LMS Website  (Under Development)
 **Learning made easier than ever.**
 
 Darsy is a full-featured Learning Management System (LMS) designed to provide an engaging educational experience for students while offering powerful tools for admins. With modern UI, smart analytics, and integrated payment systems, Darsy makes online education accessible and efficient.
