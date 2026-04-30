@@ -1,4 +1,4 @@
-import { Owner.WebsiteDetails } from "@/constant"
+import { Owner } from "@/constant"
 
 const CheckoutPage = () => {
   return (

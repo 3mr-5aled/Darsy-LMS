@@ -1,3 +1,4 @@
+"use client"
 import { CldUploadWidget } from "next-cloudinary"
 
 type UploadButtonProps = {

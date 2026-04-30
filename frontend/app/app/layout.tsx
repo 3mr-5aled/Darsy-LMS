@@ -1,5 +1,5 @@
 import "@/app/globals.css"
-import { Owner.WebsiteDetails } from "@/constant"
+import { Owner } from "@/constant"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { UserProvider } from "@/contexts/userContext"
