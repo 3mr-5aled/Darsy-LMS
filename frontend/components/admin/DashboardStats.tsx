@@ -1,7 +1,7 @@
 "use client"
 import React from "react"
 import { AnalyticsData } from "@/common.types"
-import { BsCash, BsPeople, BsPersonCheck, BsMortarboard } from "react-icons/bs"
+import { BsCash, BsPersonCheck, BsMortarboard } from "react-icons/bs"
 
 interface DashboardStatsProps {
   data: AnalyticsData
@@ -9,10 +9,10 @@ interface DashboardStatsProps {
 
 const DashboardStats = ({ data }: DashboardStatsProps) => {
   const stats = [
-    { label: "Total Revenue", value: `$${data.allMoney}`, icon: <BsCash className="text-success" /> },
-    { label: "Today's Revenue", value: `$${data.todayMoney}`, icon: <BsCash className="text-info" /> },
-    { label: "Enrolled Students", value: data.enrolledStudents, icon: <BsMortarboard /> },
-    { label: "Active Members", value: data.studentsInMembership, icon: <BsPersonCheck className="text-primary" /> },
+    { label: "Total Revenue", value: `$${data.allMoney.toLocaleString()}`, icon: <BsCash className="text-success" aria-hidden="true" /> },
+    { label: "Today's Revenue", value: `$${data.todayMoney.toLocaleString()}`, icon: <BsCash className="text-info" aria-hidden="true" /> },
+    { label: "Enrolled Students", value: data.enrolledStudents.toLocaleString(), icon: <BsMortarboard aria-hidden="true" /> },
+    { label: "Active Members", value: data.studentsInMembership.toLocaleString(), icon: <BsPersonCheck className="text-primary" aria-hidden="true" /> },
   ]
 
   return (
